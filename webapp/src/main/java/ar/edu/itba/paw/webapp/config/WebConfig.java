@@ -1,0 +1,28 @@
+package ar.edu.itba.paw.webapp.config;
+
+import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.UserServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+
+@ComponentScan({"ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.service"})
+@EnableWebMvc
+@Configuration
+public class WebConfig {
+
+    @Bean
+    public ViewResolver viewResolver() {
+        final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setViewClass(JstlView.class);
+        resolver.setPrefix("WEB-INF/jsp/");
+        resolver.setSuffix(".jsp");
+
+        return resolver;
+    }
+
+}
