@@ -37,7 +37,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>service</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
