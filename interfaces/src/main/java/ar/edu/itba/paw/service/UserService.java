@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.User;
+
+import java.util.Optional;
+
 public interface UserService {
 
-    String getUsername();
+    Optional<User> getUserById(long id);
 
 }
