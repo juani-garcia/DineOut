@@ -4,15 +4,16 @@ import java.time.LocalDateTime;
 
 public class Reservation {
     private final long reservationId, restaurantId;
-    private final char amount;
+    private final int amount;
     private final LocalDateTime dateTime;
-    private final String comments;
+    private final String userMail, comments;
 
-    public Reservation(long reservationId, long restaurantId, char amount, LocalDateTime dateTime, String comments) {
+    public Reservation(long reservationId, long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         this.reservationId = reservationId;
         this.restaurantId = restaurantId;
         this.amount = amount;
         this.dateTime = dateTime;
+        this.userMail = userMail;
         this.comments = comments;
     }
 
@@ -24,7 +25,7 @@ public class Reservation {
         return restaurantId;
     }
 
-    public char getAmount() {
+    public int getAmount() {
         return amount;
     }
 
@@ -34,5 +35,9 @@ public class Reservation {
 
     public String getComments() {
         return comments;
+    }
+
+    public String getMail() {
+        return userMail;
     }
 }
