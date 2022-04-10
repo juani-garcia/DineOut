@@ -146,8 +146,12 @@ footer.page-footer {
     background-color: transparent;
 }
 
-
 /* Style cards */
+
+.row {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
 
 .card {
     border-radius: 20px;

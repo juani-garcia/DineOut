@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html lang="en">
@@ -12,13 +12,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="${pageContext.request.contextPath}/resources/css/materialize.css" type="text/css" rel="stylesheet"
+          media="screen,projection"/>
+    <link href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css" rel="stylesheet"
+          media="screen,projection"/>
 </head>
 <body>
 <nav class="default_dark" role="navigation">
     <div class="nav-wrapper container">
-        <a id="logo-container" href="#" class="brand-logo megabold">Dine Out  &#127836;</a>
+        <a id="logo-container" href="#" class="brand-logo megabold">Dine Out &#127836;</a>
         <ul class="right hide-on-small-and-down">
             <li><a href="#" class="restaurant-register light">¡Registra tu restaurante!</a></li>
         </ul>
@@ -39,7 +41,8 @@
             </div>
         </div>
     </div>
-    <div class="parallax"><img src="${pageContext.request.contextPath}/resources/media/background1.jpg" alt="Unsplashed background img 1"></div>
+    <div class="parallax"><img src="${pageContext.request.contextPath}/resources/media/background1.jpg"
+                               alt="Unsplashed background img 1"></div>
 </div>
 
 
@@ -53,7 +56,8 @@
                     <h2 class="center brown-text"><i class="material-icons">group</i></h2>
                     <h5 class="center">Restaurantes recomendados</h5>
 
-                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos Aires.</p>
+                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos
+                        Aires.</p>
                 </div>
             </div>
         </div>
@@ -65,55 +69,18 @@
     <div class="row">
         <div class="col s6 offset-s3">
             <div class="card">
-                <div class="card-image">
-                    <img src="" alt="">
-                </div>
+                <%--                <div class="card-image">--%>
+                <%--                    <img src="" alt="">--%>
+                <%--                </div>--%>
                 <div class="card-content black-text">
-                    <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+                    <p>I am a very simple card. I am good at containing small bits of information. I am convenient
+                        because I require little markup to use effectively.</p>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-image">
-                    <img src="" alt="">
-                </div>
-                <div class="card-content black-text">
-                    <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="container">
-                    <div class="card-image">
-                        <img src="" alt="">
-                    </div>
-                    <div class="card-content black-text">
-                        <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="container">
-                    <div class="card-image">
-                        <img src="" alt="">
-                    </div>
-                    <div class="card-content black-text">
-                        <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="container">
-                    <div class="card-image">
-                        <img src="" alt="">
-                    </div>
-                    <div class="card-content black-text">
-                        <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
-    <div class="parallax"><img src="https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg" alt="Unsplashed background img 1"></div>
+    <div class="parallax"><img src="https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg"
+                               alt="Unsplashed background img 1"></div>
 </div>
 
 
@@ -148,7 +115,9 @@
     </div>
     <div class="footer-copyright">
         <div class="container">
-            Un proyecto de <text class="bold">Graphene<text>.
+            Un proyecto de
+            <text class="bold">Graphene
+                <text>.
         </div>
     </div>
 </footer>
