@@ -4,7 +4,11 @@
 <html>
     <title>Dine Out</title>
     <body>
-        <h2>Hello <c:out value="${restaurant.name}"/>!</h2>
-        <h4>The restaurant's id is <c:out value="${restaurant.id}"/></h4>
+        <h2>All restaurants</h2>
+        <c:forEach items="${restaurants}" var="restaurant">
+            <a href="<c:url value="/reserve/${restaurant.id}"/>" >
+                <h4><c:out value="${restaurant.name}"/></h4>
+            </a>
+        </c:forEach>
     </body>
 </html>
