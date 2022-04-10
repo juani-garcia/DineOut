@@ -47,25 +47,14 @@ public class WebappController {
     public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalDate localDate = null;
-        LocalTime localTime = null;
-
-        try {
-            localDate = LocalDate.parse(form.getDate(), dateFormatter);
-        } catch (DateTimeParseException e) {
-            errors.addError(new FieldError("date", "date", e.getMessage()));
-        }
-        try {
-            localTime = LocalTime.parse(form.getTime(), timeFormatter);
-        } catch (DateTimeParseException e) {
-            errors.addError(new FieldError("time", "time", e.getMessage()));
-        }
 
         if (errors.hasErrors()) {
             return reservation(resId, form);
         }
 
-        reservationService.createReservation(resId, form.getMail(), form.getAmount(), LocalDateTime.of(localDate, localTime), form.getComments());
+        LocalDateTime dateTime = LocalDateTime.of(LocalDate.parse(form.getDate(), dateFormatter), LocalTime.parse(form.getTime(), timeFormatter));
+
+        reservationService.createReservation(resId, form.getMail(), form.getAmount(), dateTime, form.getComments());
         return new ModelAndView("redirect:/");
     }
 
