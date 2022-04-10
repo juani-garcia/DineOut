@@ -11,12 +11,8 @@ import java.time.LocalDateTime;
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
-    private final ReservationDao reservationDao;
-
     @Autowired
-    public ReservationServiceImpl(final ReservationDao reservationDao) {
-        this.reservationDao = reservationDao;
-    }
+    private ReservationDao reservationDao;
 
     @Override
     public Reservation createReservation(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
