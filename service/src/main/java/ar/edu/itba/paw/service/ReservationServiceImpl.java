@@ -14,7 +14,7 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationDao reservationDao;
 
     @Override
-    public Reservation createReservation(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         if(dateTime.isBefore(LocalDateTime.now())) {
             // Reservation was made in the past.
         }

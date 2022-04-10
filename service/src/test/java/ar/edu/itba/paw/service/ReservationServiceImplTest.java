@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Reservation;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.persistence.ReservationDao;
-import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
@@ -43,7 +39,7 @@ public class ReservationServiceImplTest {
 
         // 2. Ejercitar
         try {
-            Reservation r = reservationService.createReservation(RESTAURANT_ID, MAIL, AMOUNT, DATETIME, COMMENTS);
+            Reservation r = reservationService.create(RESTAURANT_ID, MAIL, AMOUNT, DATETIME, COMMENTS);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create reservation" + e.getMessage());
