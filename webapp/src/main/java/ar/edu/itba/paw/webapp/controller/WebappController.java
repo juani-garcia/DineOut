@@ -20,14 +20,11 @@ import java.time.format.DateTimeParseException;
 @Controller
 public class WebappController {
 
-    private final RestaurantService restaurantService;
-    private final ReservationService reservationService;
+    @Autowired
+    private RestaurantService restaurantService;
 
-     @Autowired
-     public WebappController(final RestaurantService restaurantService, ReservationService reservationService) {
-         this.restaurantService = restaurantService;
-         this.reservationService = reservationService;
-     }
+    @Autowired
+    private ReservationService reservationService;
 
     @RequestMapping(value = "/")
     public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
