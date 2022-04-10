@@ -15,8 +15,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     private RestaurantDao restaurantDao;
 
     @Override
-    public Optional<Restaurant> getRestaurantById(long id) {
-        return restaurantDao.getRestaurantById(id);
+    public Optional<Restaurant> getById(long id) {
+        return restaurantDao.getById(id);
     }
 
     @Override

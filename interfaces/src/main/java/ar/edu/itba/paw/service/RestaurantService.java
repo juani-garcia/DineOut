@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface RestaurantService {
 
-    Optional<Restaurant> getRestaurantById(long id);
+    Optional<Restaurant> getById(long id);
 
     List<Restaurant> getAll(int page);
 

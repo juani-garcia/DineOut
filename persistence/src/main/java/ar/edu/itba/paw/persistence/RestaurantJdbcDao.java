@@ -24,7 +24,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public Optional<Restaurant> getRestaurantById(long id) {
+    public Optional<Restaurant> getById(long id) {
         List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE id = ?", new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();
     }

@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,10 +77,11 @@ public class RestaurantJdbcDaoTest {
         restaurantData.put("address", RESTAURANT_ADDRESS);
         restaurantData.put("mail", RESTAURANT_MAIL);
         restaurantData.put("detail", RESTAURANT_DETAIL);
-        jdbcInsert.execute(restaurantData);
+
+        int id = jdbcInsert.executeAndReturnKey(restaurantData).intValue();
 
         // ejercitacion
-        Optional<Restaurant> maybeRestaurant = restaurantDao.getRestaurantById(1);
+        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(id);
 
         // postcondiciones
         assertTrue(maybeRestaurant.isPresent());
@@ -96,7 +95,7 @@ public class RestaurantJdbcDaoTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "restaurant");
 
         // ejercitacion
-        Optional<Restaurant> maybeRestaurant = restaurantDao.getRestaurantById(1);
+        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(1);
 
         // postcondiciones
         assertFalse(maybeRestaurant.isPresent());
