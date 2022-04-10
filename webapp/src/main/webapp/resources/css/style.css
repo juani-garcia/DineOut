@@ -1,7 +1,169 @@
-.back {
-    background: red;
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+/* Brand logo style and aniamtion */
+nav ul a,
+nav .brand-logo {
+    color: #FFFFFF;
+    transition: all 0.2s ease-in-out;
+    padding: 0 15px;
 }
 
-h2 {
-    color: blue;
+.brand-logo:hover {
+    transform: scale(1.1)
+}
+
+p {
+    line-height: 2rem;
+}
+
+/* Smaller screens */
+.sidenav-trigger {
+    color: #FFFFFF;
+}
+
+.parallax-container {
+    min-height: 280px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255,255,255,.9);
+}
+.parallax-container .section {
+    width: 100%;
+}
+
+@media only screen and (max-width : 992px) {
+    .parallax-container .section {
+        position: absolute;
+        top: 40%;
+    }
+    #index-banner .section {
+        top: 10%;
+    }
+}
+
+@media only screen and (max-width : 600px) {
+    #index-banner .section {
+        top: 0;
+    }
+}
+
+.icon-block {
+    padding: 0 15px;
+}
+.icon-block .material-icons {
+    font-size: inherit;
+}
+
+footer.page-footer {
+    margin: 0;
+}
+
+/* Default color scheme */
+.default_dark {
+    background-color: #242B2A !important;
+}
+
+.default_red {
+    background-color: #FF1B1B !important;
+}
+
+/* Font types */
+.thin {
+    /* Montserrat Thin = 100 */
+    font-weight: 100;
+}
+
+.extralight {
+    /* Montserrat Extra Light = 200 */
+    font-weight: 200;
+}
+
+
+.light {
+    /* Montserrat Light = 300 */
+    font-weight: 300;
+}
+
+
+.regular {
+    /* Montserrat Regular = 400 */
+    font-weight: 400;
+}
+
+
+.medium {
+    /* Montserrat Medium = 500 */
+    font-weight: 500;
+}
+
+
+.semibold {
+    /* Montserrat Semi-bold = 600 */
+    font-weight: 600;
+}
+
+
+.bold {
+    /* Montserrat Bold = 700 */
+    font-weight: 700;
+}
+
+
+.extrabold {
+    /* Montserrat Extra Bold = 800 */
+    font-weight: 800;
+}
+
+
+.megabold {
+    /* Montserrat Black = 900 */
+    font-weight: 900;
+}
+
+/* Restaurant register button style and animation */
+.restaurant-register {
+    text-decoration: underline;
+    transition: all 0.2s ease-in-out;
+}
+
+.restaurant-register:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+}
+
+.btn-large {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-large:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+}
+
+
+/* Style cards */
+
+.card {
+    border-radius: 20px;
+    transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+.card-image {
+    padding: 10px;
+    float: left;
+    width: 150px;
+    height: 100%;
+}
+.card-image img {
+    height: 100%;
 }
