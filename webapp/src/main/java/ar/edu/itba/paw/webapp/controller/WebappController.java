@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -33,40 +30,31 @@ public class WebappController {
      }
 
     @RequestMapping(value = "/")
-    public ModelAndView webapp(@RequestParam(name = "resId", defaultValue = "1") final long id) {
+    public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
         final ModelAndView mav = new ModelAndView("index");
-//        mav.addObject("restaurant", restaurantService.getRestaurantById(id).orElseThrow(RuntimeException::new));
+        mav.addObject("restaurants", restaurantService.getAll(page));
         return mav;
     }
 
-    @RequestMapping("/reserve")
-    public ModelAndView reservation(@ModelAttribute("reservationForm") final ReservationForm form) {
-            return new ModelAndView("reservation");
+    @RequestMapping("/reserve/{resId}")
+    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
+         final ModelAndView mav = new ModelAndView("reservation");
+         mav.addObject("resId", resId);
+         return mav;
     }
 
-    @RequestMapping(value = "/create", method = { RequestMethod.POST })
-    public ModelAndView create(@Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
+    @RequestMapping(value = "/create/{resId}", method = { RequestMethod.POST })
+    public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalDate localDate = null;
-        LocalTime localTime = null;
-
-        try {
-            localDate = LocalDate.parse(form.getDate(), dateFormatter);
-        } catch (DateTimeParseException e) {
-            errors.addError(new FieldError("date", "date", e.getMessage()));
-        }
-        try {
-            localTime = LocalTime.parse(form.getTime(), timeFormatter);
-        } catch (DateTimeParseException e) {
-            errors.addError(new FieldError("time", "time", e.getMessage()));
-        }
 
         if (errors.hasErrors()) {
-            return reservation(form);
+            return reservation(resId, form);
         }
 
-        reservationService.createReservation(1, form.getMail(), form.getAmount(), LocalDateTime.of(localDate, localTime), form.getComments());
+        LocalDateTime dateTime = LocalDateTime.of(LocalDate.parse(form.getDate(), dateFormatter), LocalTime.parse(form.getTime(), timeFormatter));
+
+        reservationService.createReservation(resId, form.getMail(), form.getAmount(), dateTime, form.getComments());
         return new ModelAndView("redirect:/");
     }
 

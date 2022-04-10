@@ -8,7 +8,7 @@
 </head>
 <body>
 <h2>Reserve</h2>
-<c:url value="/create" var="postPath"/>
+<c:url value="/create/${resId}" var="postPath"/>
 
 <form:form modelAttribute="reservationForm" action="${postPath}" method="post">
     <div>
