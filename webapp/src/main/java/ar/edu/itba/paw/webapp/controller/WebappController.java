@@ -30,9 +30,9 @@ public class WebappController {
      }
 
     @RequestMapping(value = "/")
-    public ModelAndView webapp(@RequestParam(name = "resId", defaultValue = "1") final long id) {
+    public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
         final ModelAndView mav = new ModelAndView("index");
-        mav.addObject("restaurant", restaurantService.getRestaurantById(id).orElseThrow(RuntimeException::new));
+        mav.addObject("restaurants", restaurantService.getAll(page));
         return mav;
     }
 
