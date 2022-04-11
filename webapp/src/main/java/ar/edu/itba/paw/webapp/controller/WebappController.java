@@ -40,16 +40,13 @@ public class WebappController {
 
     @RequestMapping(value = "/create/{resId}", method = { RequestMethod.POST })
     public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         if (errors.hasErrors()) {
             return reservation(resId, form);
         }
 
-        LocalDateTime dateTime = LocalDateTime.of(LocalDate.parse(form.getDate(), dateFormatter), LocalTime.parse(form.getTime(), timeFormatter));
-
-        reservationService.create(resId, form.getMail(), form.getAmount(), dateTime, form.getComments());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        reservationService.create(resId, form.getMail(), form.getAmount(), LocalDateTime.parse(form.getDateTime(), formatter), form.getComments());
         return new ModelAndView("redirect:/");
     }
 
