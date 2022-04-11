@@ -51,15 +51,9 @@
             </div>
 
             <div>
-                <form:label path="date">Date: </form:label>
-                <form:input path="date" type="text"/>
-                <form:errors path="date" cssClass="isa_error" element="p"/>
-            </div>
-
-            <div>
-                <form:label path="time">Time: </form:label>
-                <form:input path="time" type="text"/>
-                <form:errors path="time" cssClass="isa_error" element="p"/>
+                <form:label path="dateTime">Date and time: </form:label>
+                <form:input path="dateTime" type="datetime-local"/>
+                <form:errors path="dateTime" cssClass="isa_error" element="p"/>
             </div>
 
             <div>
