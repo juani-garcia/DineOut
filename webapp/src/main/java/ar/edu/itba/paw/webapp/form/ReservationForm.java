@@ -1,15 +1,14 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.validations.Date;
-import ar.edu.itba.paw.webapp.validations.Time;
+import ar.edu.itba.paw.webapp.validations.Format;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 public class ReservationForm {
 
@@ -24,13 +23,9 @@ public class ReservationForm {
     @Range(min = 1, max = 20)
     private Integer amount;
 
-    @Date(format = "dd/MM/yyyy")
-    @NotEmpty
-    private String date;
-
-    @Time(format = "HH:mm")
-    @NotEmpty
-    private String time;
+    @NotNull
+    @Format(pattern = "yyyy-MM-dd'T'HH:mm")
+    private String dateTime;
 
     public String getMail() {
         return mail;
@@ -48,20 +43,12 @@ public class ReservationForm {
         this.comments = comments;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Integer getAmount() {
