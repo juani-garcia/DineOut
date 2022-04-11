@@ -13,12 +13,21 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ReservationDao reservationDao;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         if(dateTime.isBefore(LocalDateTime.now())) {
             // Reservation was made in the past.
         }
 
-        return reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
+        Reservation reservation = reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
+
+        // TODO: fetch restaurant's email from the DB.
+        emailService.sendReservationToRestaurant(
+                reservation.getReservationId(), "juanigarcia@itba.edu.ar", userMail, amount, dateTime, comments);
+
+        return reservation;
     }
 }
