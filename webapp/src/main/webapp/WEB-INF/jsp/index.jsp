@@ -29,10 +29,11 @@
             <div class="col s6 offset-s3">
                 <div class="icon-block">
                     <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-                    <h5 class="center">Restaurantes recomendados</h5>
+                    <h5 class="center">Por el momento no hay restaurantes disponibles.</h5>
+                    <%--                    <h5 class="center">Restaurantes recomendados</h5>--%>
 
-                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos
-                        Aires.</p>
+                    <%--                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos--%>
+                    <%--                        Aires.</p>--%>
                 </div>
             </div>
         </div>
@@ -47,10 +48,10 @@
                 <%--                <div class="card-image">--%>
                 <%--                    <img src="" alt="">--%>
                 <%--                </div>--%>
-                <div class="card-content black-text">
-                    <p>I am a very simple card. I am good at containing small bits of information. I am convenient
-                        because I require little markup to use effectively.</p>
-                </div>
+                <%--                <div class="card-content black-text">--%>
+                <%--                    <p>I am a very simple card. I am good at containing small bits of information. I am convenient--%>
+                <%--                        because I require little markup to use effectively.</p>--%>
+                <%--                </div>--%>
             </div>
         </div>
     </div>
