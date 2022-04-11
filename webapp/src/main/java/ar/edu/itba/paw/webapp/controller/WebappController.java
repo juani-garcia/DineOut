@@ -45,8 +45,7 @@ public class WebappController {
             return reservation(resId, form);
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        reservationService.create(resId, form.getMail(), form.getAmount(), LocalDateTime.parse(form.getDateTime(), formatter), form.getComments());
+        reservationService.create(resId, form.getMail(), form.getAmount(), form.getLocalDateTime(), form.getComments());
         return new ModelAndView("redirect:/");
     }
 
