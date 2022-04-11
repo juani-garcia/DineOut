@@ -18,19 +18,19 @@ import javax.validation.Payload;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {DateValidator.class})
-public @interface Date {
+@Constraint(validatedBy = {FormatValidator.class})
+public @interface Format {
 
     String message() default "Invalid date: violates format {format}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 
-    String format();
+    String pattern();
 
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        Date[] format();
+        Format[] format();
     }
 }
