@@ -11,16 +11,12 @@ import java.util.Optional;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
-    private final RestaurantDao restaurantDao;
-
     @Autowired
-    public RestaurantServiceImpl(final RestaurantDao restaurantDao) {
-        this.restaurantDao = restaurantDao;
-    }
+    private RestaurantDao restaurantDao;
 
     @Override
-    public Optional<Restaurant> getRestaurantById(long id) {
-        return restaurantDao.getRestaurantById(id);
+    public Optional<Restaurant> getById(long id) {
+        return restaurantDao.getById(id);
     }
 
     @Override

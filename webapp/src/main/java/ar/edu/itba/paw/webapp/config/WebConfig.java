@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -23,7 +26,11 @@ import javax.sql.DataSource;
 })
 @EnableWebMvc
 @Configuration
+@PropertySource("classpath:application.properties")
 public class WebConfig {
+
+    @Autowired
+    private Environment env;
 
     @Value ("classpath:sql/schema.sql")
     private Resource schemaSql;
@@ -43,9 +50,9 @@ public class WebConfig {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost:5432/dine_out");
-        ds.setUsername("paw-2022a-10");
-        ds.setPassword("paw-2022a-10");
+        ds.setUrl(env.getProperty("database.path"));
+        ds.setUsername(env.getProperty("database.username"));
+        ds.setPassword(env.getProperty("database.password"));
 
         return ds;
     }

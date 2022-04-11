@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface RestaurantDao {
 
-    Optional<Restaurant> getRestaurantById(long id);
+    Optional<Restaurant> getById(long id);
 
     List<Restaurant> getAll(int page);
 

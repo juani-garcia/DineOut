@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 
 public interface ReservationService {
 
-    Reservation createReservation(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments);
+    Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments);
 
 }
