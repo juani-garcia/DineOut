@@ -14,6 +14,9 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationDao reservationDao;
 
     @Autowired
+    private RestaurantService restaurantService;
+
+    @Autowired
     private EmailService emailService;
 
     @Override
@@ -24,9 +27,10 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation = reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
 
-        // TODO: fetch restaurant's email from the DB.
+        String restaurantMail =  restaurantService.getById(restaurantId).orElseThrow(RuntimeException::new).getMail();
+
         emailService.sendReservationToRestaurant(
-                reservation.getReservationId(), "juanigarcia@itba.edu.ar", userMail, amount, dateTime, comments);
+                reservation.getReservationId(), restaurantMail, userMail, amount, dateTime, comments);
 
         return reservation;
     }
