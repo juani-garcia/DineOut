@@ -29,10 +29,11 @@
             <div class="col s6 offset-s3">
                 <div class="icon-block">
                     <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-                    <h5 class="center">Restaurantes recomendados</h5>
+                    <h5 class="center">Por el momento no hay restaurantes disponibles.</h5>
+                    <%--                    <h5 class="center">Restaurantes recomendados</h5>--%>
 
-                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos
-                        Aires.</p>
+                    <%--                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos--%>
+                    <%--                        Aires.</p>--%>
                 </div>
             </div>
         </div>
