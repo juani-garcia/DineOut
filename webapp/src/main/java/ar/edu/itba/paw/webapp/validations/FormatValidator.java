@@ -17,6 +17,8 @@ public class FormatValidator implements ConstraintValidator<Format, String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        if(s == null) return false;
+
         try {
             LocalDateTime.parse(s, formatter);
         } catch (DateTimeParseException e) {
