@@ -31,23 +31,25 @@ p {
     min-height: 280px;
     line-height: 0;
     height: auto;
-    color: rgba(255,255,255,.9);
+    color: rgba(255, 255, 255, .9);
 }
+
 .parallax-container .section {
     width: 100%;
 }
 
-@media only screen and (max-width : 992px) {
+@media only screen and (max-width: 992px) {
     .parallax-container .section {
         position: absolute;
         top: 40%;
     }
+
     #index-banner .section {
         top: 10%;
     }
 }
 
-@media only screen and (max-width : 600px) {
+@media only screen and (max-width: 600px) {
     #index-banner .section {
         top: 0;
     }
@@ -56,6 +58,7 @@ p {
 .icon-block {
     padding: 0 15px;
 }
+
 .icon-block .material-icons {
     font-size: inherit;
 }
@@ -67,6 +70,10 @@ footer.page-footer {
 /* Default color scheme */
 .default_dark {
     background-color: #242B2A !important;
+}
+
+.default_dark_text {
+    color: #242B2A !important;
 }
 
 .default_red {
@@ -138,6 +145,7 @@ footer.page-footer {
 }
 
 .btn-large {
+    border-radius: 5px;
     transition: all 0.2s ease-in-out;
 }
 
@@ -168,6 +176,7 @@ footer.page-footer {
     width: 150px;
     height: 100%;
 }
+
 .card-image img {
     height: 100%;
 }
@@ -175,26 +184,36 @@ footer.page-footer {
 /* Form error */
 .isa_info, .isa_success, .isa_warning, .isa_error {
     margin: 10px 0px;
-    padding:12px;
+    padding: 12px;
 }
+
 .isa_info {
     color: #00529B;
     background-color: #BDE5F8;
 }
+
 .isa_success {
     color: #4F8A10;
     background-color: #DFF2BF;
 }
+
 .isa_warning {
     color: #9F6000;
     background-color: #FEEFB3;
 }
+
 .isa_error {
     color: #D8000C;
     background-color: #FFD2D2;
 }
+
 .isa_info i, .isa_success i, .isa_warning i, .isa_error i {
-    margin:10px 22px;
-    font-size:2em;
-    vertical-align:middle;
+    margin: 10px 22px;
+    font-size: 2em;
+    vertical-align: middle;
+}
+
+/* Round */
+.rounded {
+    border-radius: 24px;
 }

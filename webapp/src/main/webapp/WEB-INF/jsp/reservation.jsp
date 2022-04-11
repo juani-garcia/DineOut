@@ -20,19 +20,17 @@
 
 <div class="container">
     <div class="section">
-
         <!--   Icon Section   -->
-        <div class="row">
+        <div class="row default_dark rounded">
             <div class="col s6 offset-s3">
                 <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">food</i></h2>
-                    <h5 class="center">Descripcion del rest.</h5>
+                    <h2 class="center white-text"><i class="material-icons">restaurant_menu</i></h2>
+                    <h5 class="center white-text">Descripcion del rest.</h5>
 
-                    <p class="center light">desc.</p>
+                    <p class="center light white-text">desc.</p>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
