@@ -16,7 +16,9 @@ public class RestaurantJdbcDao implements RestaurantDao {
     private final JdbcTemplate jdbcTemplate;
     private static final int PAGE_SIZE = 10;
     /* private X default=package-private for testing */
-    static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) -> new Restaurant(rs.getLong("id"), rs.getString("name"), rs.getString("address"), rs.getString("detail"), null);
+    static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
+            new Restaurant(rs.getLong("id"), rs.getString("name"), rs.getString("address"),
+            rs.getString("mail"), rs.getString("detail"), null);
 
     @Autowired
     public RestaurantJdbcDao(final DataSource ds) {
