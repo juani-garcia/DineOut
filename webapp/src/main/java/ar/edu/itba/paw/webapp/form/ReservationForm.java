@@ -1,16 +1,19 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validations.Format;
+import ar.edu.itba.paw.webapp.validations.FutureString;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ReservationForm {
+
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
     @NotEmpty
     @Email
@@ -24,7 +27,8 @@ public class ReservationForm {
     private Integer amount;
 
     @NotNull
-    @Format(pattern = "yyyy-MM-dd'T'HH:mm")
+    @FutureString(pattern = DATE_TIME_FORMAT)
+    @Format(pattern = DATE_TIME_FORMAT)
     private String dateTime;
 
     public String getMail() {
@@ -57,6 +61,10 @@ public class ReservationForm {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
     }
 
 }
