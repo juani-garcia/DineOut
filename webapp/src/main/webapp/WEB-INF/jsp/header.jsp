@@ -14,6 +14,6 @@
       media="screen,projection"/>
 
 <!-- Scripts-->
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script src="<c:url value="${pageContext.request.contextPath}/resources/js/materialize.js"/>"></script>
 <script src="<c:url value="${pageContext.request.contextPath}/resources/js/init.js"/>"></script>
