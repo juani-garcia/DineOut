@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS reservation (
     user_mail TEXT NOT NULL,
     amount INTEGER NOT NULL,
     date_time TIMESTAMP NOT NULL,
-    comments TIMESTAMP NOT NULL,
+    comments TEXT NOT NULL,
     PRIMARY KEY (reservation_id),
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(id)
 );
