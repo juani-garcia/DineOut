@@ -16,8 +16,8 @@
             </div>
         </div>
     </div>
-    <div class="parallax"><img src="${pageContext.request.contextPath}/resources/media/background1.jpg"
-                               alt="Unsplashed background img 1"></div>
+    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
+                               alt=""></div>
 </div>
 
 
@@ -59,8 +59,8 @@
             </c:forEach>
         </div>
     </div>
-    <div class="parallax"><img src="https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg"
-                               alt="Unsplashed background img 1"></div>
+    <div class="parallax"><img src="<c:url value="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg"/>"
+                               alt=""></div>
 </div>
 <%@ include file="footer.jsp" %>
 </body>

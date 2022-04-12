@@ -80,6 +80,10 @@ footer.page-footer {
     background-color: #FF1B1B !important;
 }
 
+.default_light {
+    background-color: #E6E6E6 !important;
+}
+
 /* Font types */
 .thin {
     /* Montserrat Thin = 100 */
@@ -155,11 +159,10 @@ footer.page-footer {
 }
 
 .outline-black {
-    text-shadow:
-            -2px -2px 0 #000,
-            2px -2px 0 #000,
-            -2px 2px 0 #000,
-            2px 2px 0 #000;
+    text-shadow: -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000;
 }
 
 /* Style cards */
@@ -224,4 +227,20 @@ footer.page-footer {
 /* Round */
 .rounded {
     border-radius: 24px;
+}
+
+.shadowed {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* Label override */
+.label-text-size {
+    font-size: 1.2rem;
+}
+
+/* btn-large override*/
+.btn-large {
+    height: 59px;
+    line-height: 59px;
+    font-size: 25px;
 }
