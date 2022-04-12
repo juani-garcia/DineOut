@@ -30,7 +30,7 @@ public class WebappController {
     @ExceptionHandler(RestaurantNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView noSuchRestaurant() {
-        return new ModelAndView("restaurant_not_foundgit ");
+        return new ModelAndView("restaurant_not_found");
     }
 
     @RequestMapping(value = "/")
