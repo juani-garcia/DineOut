@@ -33,11 +33,11 @@ public class ReservationServiceImplTest {
 
     @Test
     public void testCreateReservation() {
-        // 1. Precondiciones
+//        // 1. Precondiciones
 //        Reservation reservation = new Reservation(ID, RESTAURANT_ID, MAIL, AMOUNT, DATETIME, COMMENTS);
 //        when(reservationDao.create(anyLong(), anyString(), anyInt(), any(LocalDateTime.class), anyString())).thenReturn(reservation);
-
-        // 2. Ejercitar
+//
+//        // 2. Ejercitar
 //        try {
 //            Reservation r = reservationService.create(RESTAURANT_ID, MAIL, AMOUNT, DATETIME, COMMENTS);
 //        } catch (Exception e) {
