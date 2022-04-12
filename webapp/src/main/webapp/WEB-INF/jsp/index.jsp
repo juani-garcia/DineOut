@@ -28,12 +28,11 @@
         <div class="row">
             <div class="col s6 offset-s3">
                 <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-                    <h5 class="center">Por el momento no hay restaurantes disponibles.</h5>
-                    <%--                    <h5 class="center">Restaurantes recomendados</h5>--%>
+                    <h2 class="center brown-text"><i class="material-icons">restaurant</i></h2>
+                    <h5 class="center">Restaurantes recomendados</h5>
 
-                    <%--                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos--%>
-                    <%--                        Aires.</p>--%>
+                    <p class="center light">Esta es una seleccion de algunos de los mejores restaurantes de Buenos
+                        Aires.</p>
                 </div>
             </div>
         </div>
@@ -44,7 +43,7 @@
 <div id="restaurant-parallax-container" class="parallax-container">
     <div class="row">
         <div class="col s6 offset-s3">
-            <c:forEach items="${restaurants}" var = "restaurant">
+            <c:forEach items="${restaurants}" var="restaurant">
 
                 <a href="<c:url value ="/reserve/${restaurant.id}"/>">
                     <div class="card">
@@ -52,7 +51,8 @@
                             <%--                    <img src="" alt="">--%>
                             <%--                </div>--%>
                         <div class="card-content black-text">
-                            <p><c:out value="${restaurant.name}"/></p>
+                            <h2><c:out value="${restaurant.name}"/></h2>
+                            <p><c:out value="${restaurant.detail}"/></p>
                         </div>
                     </div>
                 </a>

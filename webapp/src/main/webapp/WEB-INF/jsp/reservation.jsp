@@ -11,7 +11,7 @@
 <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold">Nombre del restaurante</h1>
+            <h1 class="header center white-text bold"><c:out value="${restaurant.name}"/></h1>
         </div>
     </div>
     <div class="parallax"><img src="${pageContext.request.contextPath}/resources/media/background1.jpg"
@@ -25,9 +25,7 @@
             <div class="col s6 offset-s3">
                 <div class="icon-block">
                     <h2 class="center white-text"><i class="material-icons">restaurant_menu</i></h2>
-                    <h5 class="center white-text">Descripcion del rest.</h5>
-
-                    <p class="center light white-text">desc.</p>
+                    <h5 class="center white-text"><c:out value="${restaurant.detail}"/></h5>
                 </div>
             </div>
         </div>
@@ -38,25 +36,26 @@
 <form:form id="reservation_form" modelAttribute="reservationForm" action="${postPath}" method="post">
     <div class="row">
         <div class="col s6 offset-s3">
-            <div>
+            <h2 class="white bold center">Completa el formulario para finalizar la reserva:</h2>
+            <div class="row">
                 <form:label path="mail">Mail: </form:label>
                 <form:input type="text" path="mail"/>
                 <form:errors path="mail" cssClass="isa_error" element="p"/>
             </div>
 
-            <div>
+            <div class="row">
                 <form:label path="amount">Amount: </form:label>
                 <form:input path="amount" type="number"/>
                 <form:errors path="amount" cssClass="isa_error" element="p"/>
             </div>
 
-            <div>
+            <div class="row">
                 <form:label path="dateTime">Date and time: </form:label>
                 <form:input path="dateTime" type="datetime-local"/>
                 <form:errors path="dateTime" cssClass="isa_error" element="p"/>
             </div>
 
-            <div>
+            <div class="row">
                 <form:label path="comments">Comments: </form:label>
                 <form:input path="comments" type="text"/>
                 <form:errors path="comments" cssClass="isa_error" element="p"/>

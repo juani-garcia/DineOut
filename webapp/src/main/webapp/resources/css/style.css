@@ -154,6 +154,14 @@ footer.page-footer {
     background-color: transparent;
 }
 
+.outline-black {
+    text-shadow:
+            -2px -2px 0 #000,
+            2px -2px 0 #000,
+            -2px 2px 0 #000,
+            2px 2px 0 #000;
+}
+
 /* Style cards */
 
 .row {
