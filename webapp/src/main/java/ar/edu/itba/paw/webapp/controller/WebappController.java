@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,12 @@ public class WebappController {
     @Autowired
     private ReservationService reservationService;
 
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView noSuchRestaurant() {
+        return new ModelAndView("restaurant_not_found");
+    }
+
     @RequestMapping(value = "/")
     public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
         final ModelAndView mav = new ModelAndView("index");
@@ -34,7 +43,8 @@ public class WebappController {
     @RequestMapping("/reserve/{resId}")
     public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
          final ModelAndView mav = new ModelAndView("reservation");
-         mav.addObject("resId", resId);
+
+         mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new));
          return mav;
     }
 
