@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html lang="en">
@@ -10,7 +11,7 @@
 <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold">¡Busca, reserva y disfruta!</h1>
+            <h1 class="header center white-text bold"><spring:message code="webapp.index.header" /></h1>
             <div class="row center">
                 <h5 class="header col s12 medium">La solucion a tus comidas afuera</h5>
             </div>
