@@ -3,6 +3,7 @@
 
 <html lang="en">
 <head>
+    <title>500 - Pagina no encontrada</title>
     <%@ include file="header.jsp" %>
 </head>
 <body>
