@@ -4,6 +4,7 @@
 
 <html>
 <head>
+    <title>Dine Out</title>
     <%@ include file="header.jsp" %>
 </head>
 <body class="default_light">

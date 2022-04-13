@@ -28,10 +28,12 @@ p {
 }
 
 .parallax-container {
-    min-height: 280px;
+    min-height: 380px;
     line-height: 0;
     height: auto;
     color: rgba(255, 255, 255, .9);
+    display: flex;
+    align-items: center;
 }
 
 .parallax-container .section {

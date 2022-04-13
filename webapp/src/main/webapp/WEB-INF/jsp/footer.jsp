@@ -30,9 +30,9 @@
 <%--    </div>--%>
     <div class="footer-copyright">
         <div class="container">
-            Un proyecto de
-            <text class="bold">Graphene
-                <text>.
+            <spring:message code="webapp.footer.project" />
+            <text class="bold"><spring:message code="company.name" />
+                </text>.
         </div>
     </div>
 </footer>

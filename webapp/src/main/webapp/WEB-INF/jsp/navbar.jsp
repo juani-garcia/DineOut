@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="default_dark" role="navigation">
     <div class="nav-wrapper container">
-        <a id="logo-container" href="<c:url value="/"/>"  class="brand-logo megabold">Dine Out &#127836;</a>
+        <a id="logo-container" href="<c:url value="/"/>"  class="brand-logo megabold"><spring:message code="navbar.logo" /></a>
 <%--        <ul class="right hide-on-small-and-down">--%>
 <%--            <li><a href="#" class="restaurant-register light">¡Registra tu restaurante!</a></li>--%>
 <%--        </ul>--%>
