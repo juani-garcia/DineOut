@@ -174,9 +174,19 @@ footer.page-footer {
     padding-bottom: 25px;
 }
 
+.align_center {
+    display: flex;
+    align-items: center;
+}
+
 .card {
     border-radius: 20px;
     transition: all 0.2s ease-in-out;
+}
+
+.card_wrapper {
+    width: 100%;
+    min-width: 1000px;
 }
 
 .card:hover {

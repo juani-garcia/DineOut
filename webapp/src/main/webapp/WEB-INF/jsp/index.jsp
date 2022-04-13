@@ -27,12 +27,12 @@
 <!-- Recommended -->
 <div class="container">
     <div class="section">
-        <div class="row">
+        <div class="row align_center">
             <div class="col s6 offset-2">
                 <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">restaurant</i></h2>
-                    <h5 class="center"><spring:message code="webapp.index.recommended.title" /></h5>
-                    <p class="center light"><spring:message code="webapp.index.recommended.description" /></p>
+                    <h2 class="center brown-text"><i class="material-icons">group</i></h2>
+                    <h5 class="center"><spring:message code="webapp.index.info.title" /></h5>
+                    <p class="center light"><spring:message code="webapp.index.info.description" /></p>
                 </div>
             </div>
             <div class="col s6 offset-2">
@@ -49,12 +49,12 @@
 </div>
 
 <div id="restaurant-parallax-container" class="parallax-container">
-    <div class="row">
-        <div class="col s6 offset-s3">
+    <div class="row align_center">
+        <div class="col">
             <c:forEach items="${restaurants}" var="restaurant">
 
                 <a href="<c:url value ="/reserve/${restaurant.id}"/>">
-                    <div class="card">
+                    <div class="card card_wrapper">
                             <%--                <div class="card-image">--%>
                             <%--                    <img src="" alt="">--%>
                             <%--                </div>--%>
