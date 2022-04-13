@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -26,7 +27,8 @@
             <div class="col s6 offset-s3">
                 <div class="icon-block">
                     <h2 class="center white-text"><i class="material-icons">restaurant_menu</i></h2>
-                    <h5 class="center white-text"><c:out value="${restaurant.detail}"/></h5>
+                    <h5 class="center white-text semibold"><c:out value="${restaurant.detail}"/></h5>
+                    <h5 class="center white-text">&#128205;<c:out value="${restaurant.address}"/></h5>
                 </div>
             </div>
         </div>
@@ -40,30 +42,32 @@
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
                     <div class="row">
-                        <h5 class="white bold">Completa el formulario para finalizar la reserva:</h5>
+                        <h5 class="white bold"><spring:message code="webapp.reservation.form.header" /></h5>
                     </div>
                     <div class="row">
-                        <form:label path="mail" cssClass="semibold label-text-size">Mail: </form:label>
+                        <form:label path="mail" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.mail" />*</form:label>
                         <form:input type="text" path="mail"/>
                         <form:errors path="mail" cssClass="isa_error" element="p"/>
                     </div>
 
                     <div class="row">
-                        <form:label path="amount" cssClass="semibold label-text-size">Amount: </form:label>
+                        <form:label path="amount" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.amount" />*</form:label>
                         <form:input path="amount" type="number"/>
                         <form:errors path="amount" cssClass="isa_error" element="p"/>
                     </div>
 
                     <div class="row">
-                        <form:label path="dateTime" cssClass="semibold label-text-size">Date and time: </form:label>
+                        <form:label path="dateTime" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.date_and_time" />*</form:label>
                         <form:input path="dateTime" type="datetime-local"/>
                         <form:errors path="dateTime" cssClass="isa_error" element="p"/>
                     </div>
-
                     <div class="row">
-                        <form:label path="comments" cssClass="semibold label-text-size">Comments: </form:label>
+                        <form:label path="comments" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.comments" /></form:label>
                         <form:input path="comments" type="text"/>
                         <form:errors path="comments" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
+                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="webapp.reservation.form.mandatory"/></h6>
                     </div>
                     <div class="row center">
                         <a type="submit" id="register-button"
