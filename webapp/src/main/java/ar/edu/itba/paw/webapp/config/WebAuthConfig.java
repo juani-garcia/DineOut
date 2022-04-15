@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
