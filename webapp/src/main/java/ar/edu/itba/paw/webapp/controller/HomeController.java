@@ -27,4 +27,9 @@ public class HomeController {
         return mav;
     }
 
+    @RequestMapping("/login")
+    public ModelAndView login() {
+        return new ModelAndView("home/login");
+    }
+
 }
