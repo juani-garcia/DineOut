@@ -4,11 +4,11 @@
 <html lang="en">
 <head>
     <title>Not Found</title>
-    <%@ include file="header.jsp" %>
+    <%@ include file="../header.jsp" %>
 </head>
 <body>
 
-<%@ include file="navbar.jsp" %>
+<%@ include file="../navbar.jsp" %>
 <button class="btn waves-effect waves-light" onClick="history.back()">Regresar</button>
 <h1>No encontramos el resturante</h1>
 <br/>
@@ -16,7 +16,7 @@
 <p><b>Pedido URI:</b> <c:out value="${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}"/></p>
 <br/>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 </body>
 
 </html>

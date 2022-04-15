@@ -39,11 +39,11 @@
 
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/jsp/errorPage404.jsp</location>
+        <location>/WEB-INF/jsp/error/errorPage404.jsp/jsp/errorPage404.jsp</location>
     </error-page>
 
     <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/jsp/errorPage500.jsp</location>
+        <location>/WEB-INF/jsp/error/errorPage500.jsp/jsp/errorPage500.jsp</location>
     </error-page>
 </web-app>
