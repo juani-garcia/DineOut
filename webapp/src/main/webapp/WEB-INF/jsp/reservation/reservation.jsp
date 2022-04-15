@@ -6,10 +6,10 @@
 <html>
 <head>
     <title>Dine Out</title>
-    <%@ include file="header.jsp" %>
+    <%@ include file="../header.jsp" %>
 </head>
 <body class="default_light">
-<%@ include file="navbar.jsp" %>
+<%@ include file="../navbar.jsp" %>
 <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
         <div class="container">
@@ -42,32 +42,32 @@
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
                     <div class="row">
-                        <h5 class="white bold"><spring:message code="webapp.reservation.form.header" /></h5>
+                        <h5 class="white bold"><spring:message code="reservation.reservation.form.header" /></h5>
                     </div>
                     <div class="row">
-                        <form:label path="mail" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.mail" />*</form:label>
+                        <form:label path="mail" cssClass="semibold label-text-size"><spring:message code="reservation.reservation.form.mail" />*</form:label>
                         <form:input type="text" path="mail"/>
                         <form:errors path="mail" cssClass="isa_error" element="p"/>
                     </div>
 
                     <div class="row">
-                        <form:label path="amount" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.amount" />*</form:label>
+                        <form:label path="amount" cssClass="semibold label-text-size"><spring:message code="reservation.reservation.form.amount" />*</form:label>
                         <form:input path="amount" type="number"/>
                         <form:errors path="amount" cssClass="isa_error" element="p"/>
                     </div>
 
                     <div class="row">
-                        <form:label path="dateTime" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.date_and_time" />*</form:label>
+                        <form:label path="dateTime" cssClass="semibold label-text-size"><spring:message code="reservation.reservation.form.date_and_time" />*</form:label>
                         <form:input path="dateTime" type="datetime-local"/>
                         <form:errors path="dateTime" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <form:label path="comments" cssClass="semibold label-text-size"><spring:message code="webapp.reservation.form.comments" /></form:label>
+                        <form:label path="comments" cssClass="semibold label-text-size"><spring:message code="reservation.reservation.form.comments" /></form:label>
                         <form:input path="comments" type="text"/>
                         <form:errors path="comments" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="webapp.reservation.form.mandatory"/></h6>
+                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="reservation.reservation.form.mandatory"/></h6>
                     </div>
                     <div class="row center">
                         <a type="submit" id="register-button"
@@ -85,6 +85,6 @@
 
 
 </form:form>
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 </body>
 </html>
