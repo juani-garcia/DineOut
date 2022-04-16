@@ -14,12 +14,6 @@ public class HomeController {
     @Autowired
     private RestaurantService restaurantService;
 
-    @ExceptionHandler(RestaurantNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView noSuchRestaurant() {
-        return new ModelAndView("error/restaurant_not_found");
-    }
-
     @RequestMapping(value = "/")
     public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
         final ModelAndView mav = new ModelAndView("home/index");
