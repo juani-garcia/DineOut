@@ -1,3 +1,10 @@
+CREATE TABLE IF NOT EXISTS account (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    UNIQUE(username)
+);
+
 CREATE TABLE IF NOT EXISTS restaurant (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,

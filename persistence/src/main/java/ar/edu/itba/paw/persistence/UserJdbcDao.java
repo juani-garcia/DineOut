@@ -28,18 +28,18 @@ public class UserJdbcDao implements UserDao {
     @Autowired
     public UserJdbcDao(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(ds).withTableName("users").usingGeneratedKeyColumns("id");
+        this.jdbcInsert = new SimpleJdbcInsert(ds).withTableName("account").usingGeneratedKeyColumns("id");
     }
 
     @Override
     public Optional<User> getById(final long id) {
-        List<User> query = jdbcTemplate.query("SELECT * FROM users WHERE id = ?", new Object[]{id}, ROW_MAPPER);
+        List<User> query = jdbcTemplate.query("SELECT * FROM account WHERE id = ?", new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();
     }
 
     @Override
     public Optional<User> getByUsername(final String username) {
-        List<User> query = jdbcTemplate.query("SELECT * FROM users WHERE username = ?", new Object[]{username}, ROW_MAPPER);
+        List<User> query = jdbcTemplate.query("SELECT * FROM account WHERE username = ?", new Object[]{username}, ROW_MAPPER);
         return query.stream().findFirst();
     }
 
