@@ -52,8 +52,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .key("TODO: CAMBIAR") // TODO: Cambiar la llave
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
             .and().logout()
-                .logoutUrl("logout")
-                .logoutSuccessUrl("login")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
             .and().exceptionHandling()
                 .accessDeniedPage("/403")
             .and().csrf().disable();
