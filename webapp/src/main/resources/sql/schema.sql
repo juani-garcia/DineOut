@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS menu_section (
     name TEXT NOT NULL,
     restaurant_id INTEGER NOT NULL,
     ordering INTEGER NOT NULL,
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id),
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant (id) ON DELETE CASCADE,
     UNIQUE (ordering, restaurant_id)
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS menu_item (
     price DOUBLE PRECISION NOT NULL,
     section_id INTEGER NOT NULL,
     ordering INTEGER NOT NULL,
-    FOREIGN KEY (section_id) REFERENCES menu_section (id),
+    FOREIGN KEY (section_id) REFERENCES menu_section (id) ON DELETE CASCADE,
     UNIQUE (ordering, section_id)
 );
 

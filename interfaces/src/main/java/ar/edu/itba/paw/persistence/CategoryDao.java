@@ -13,4 +13,8 @@ public interface CategoryDao {
 
     List<Category> getByRestaurantId(long restaurantId);
 
+    boolean delete(long restaurantId, long categoryId);
+
+    boolean add(long restaurantId, long categoryId);
+
 }

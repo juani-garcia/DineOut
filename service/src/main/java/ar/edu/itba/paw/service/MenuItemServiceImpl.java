@@ -17,4 +17,19 @@ public class MenuItemServiceImpl implements MenuItemService {
     public List<MenuItem> getBySectionId(long sectionId) {
         return menuItemDao.getBySectionId(sectionId);
     }
+
+    @Override
+    public MenuItem create(String name, String detail, double price, long sectionId, long ordering) {
+        return menuItemDao.create(name, detail, price, sectionId, ordering);
+    }
+
+    @Override
+    public boolean delete(long itemId) {
+        return menuItemDao.delete(itemId);
+    }
+
+    @Override
+    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering) {
+        return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering);
+    }
 }

@@ -17,4 +17,19 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     public List<MenuSection> getByRestaurantId(long restaurantId) {
         return menuSectionDao.getByRestaurantId(restaurantId);
     }
+
+    @Override
+    public MenuSection create(String name, long restaurantId, long ordering) {
+        return menuSectionDao.create(name, restaurantId, ordering);
+    }
+
+    @Override
+    public boolean delete(long sectionId) {
+        return menuSectionDao.delete(sectionId);
+    }
+
+    @Override
+    public boolean edit(long sectionId, String name, long restaurantId, long ordering) {
+        return menuSectionDao.edit(sectionId, name, restaurantId, ordering);
+    }
 }

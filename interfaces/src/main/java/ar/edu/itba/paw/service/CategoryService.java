@@ -13,4 +13,8 @@ public interface CategoryService {
 
     List<Category> getAll();
 
+    boolean delete(long restaurantId, long categoryId);
+
+    boolean add(long restaurantId, long categoryId);
+
 }

@@ -4,13 +4,22 @@ public class MenuItem {
 
     private String name, detail;
     private double price;
-    private long sectionId;
+    private long sectionId, id;
 
-    public MenuItem(String name, String detail, double price, long sectionId) {
+    public MenuItem(long id, String name, String detail, double price, long sectionId) {
+        this.id = id;
         this.name = name;
         this.detail = detail;
         this.price = price;
         this.sectionId = sectionId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
