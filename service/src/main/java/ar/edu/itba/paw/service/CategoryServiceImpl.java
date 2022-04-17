@@ -28,4 +28,14 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getAll() {
         return categoryDao.getAll();
     }
+
+    @Override
+    public boolean delete(long restaurantId, long categoryId) {
+        return categoryDao.delete(restaurantId, categoryId);
+    }
+
+    @Override
+    public boolean add(long restaurantId, long categoryId) {
+        return categoryDao.add(restaurantId, categoryId);
+    }
 }
