@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS restaurant_category (
     restaurant_id INTEGER,
     category_id INTEGER,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(id),
+    FOREIGN KEY (category_id) REFERENCES category(id) ON DELETE CASCADE,
     PRIMARY KEY (restaurant_id, category_id)
 );
 
