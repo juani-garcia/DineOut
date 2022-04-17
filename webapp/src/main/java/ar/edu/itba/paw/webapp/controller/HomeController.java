@@ -57,4 +57,11 @@ public class HomeController {
         return new ModelAndView("home/login");
     }
 
+    @RequestMapping("/profile/{userId}")
+    public ModelAndView reservation(@PathVariable final long userId) {
+        final ModelAndView mav = new ModelAndView("home/profile");
+        mav.addObject("user", userService.getById(userId).orElseThrow( () -> new RuntimeException("User with id " + userId + " not found") ));
+        return mav;
+    }
+
 }
