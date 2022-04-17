@@ -3,6 +3,8 @@ package ar.edu.itba.paw.persistence;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -11,10 +13,15 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
+@ComponentScan({ "ar.edu.itba.paw.persistence" })
+@Configuration
 public class TestConfig {
 
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
+
+    @Value("classpath:sql/hsqldb.sql")
+    private Resource hsqldbSql;
 
     @Bean
     public DataSource dataSource() {
@@ -28,9 +35,9 @@ public class TestConfig {
     }
 
     @Bean
-    public DataSourceInitializer dataSourceInitializer() {
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
         DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(dataSource());
+        dsi.setDataSource(ds);
         dsi.setDatabasePopulator(databasePopulator());
 
         return dsi;
@@ -38,8 +45,10 @@ public class TestConfig {
 
     @Bean
     public DatabasePopulator databasePopulator() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(schemaSql);
-        return populator;
+        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+        dbp.addScript(hsqldbSql);
+        dbp.addScript(schemaSql);
+        return dbp;
     }
+
 }
