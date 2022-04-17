@@ -38,4 +38,18 @@ public class CategoryJdbcDao implements CategoryDao {
         String query = "SELECT c.id, c.name FROM restaurant_category rc JOIN category c ON rc.category_id = c.id WHERE rc.restaurant_id = ?";
         return jdbcTemplate.query(query, new Object[]{restaurantId}, CATEGORY_ROW_MAPPER);
     }
+
+    @Override
+    public boolean delete(long restaurantId, long categoryId) {
+        String sql = "DELETE FROM restaurant_category WHERE restaurant_id = ? AND category_id = ?";
+        Object[] args = new Object[]{restaurantId, categoryId};
+        return jdbcTemplate.update(sql, args) == 1;
+    }
+
+    @Override
+    public boolean add(long restaurantId, long categoryId) {
+        String sql = "INSERT INTO restaurant_category VALUES (?, ?) ON CONFLICT DO NOTHING";
+        Object[] args = new Object[]{restaurantId, categoryId};
+        return jdbcTemplate.update(sql, args) == 1;
+    }
 }
