@@ -26,6 +26,11 @@
         <form:input type="password" path="password"/>
     </div>
     <div>
+        <form:errors path="confirmPassword" element="p" cssClass="color: red"/>
+        <form:label path="confirmPassword"><spring:message code="home.register.form.confirmPassword"/></form:label>
+        <form:input type="password" path="confirmPassword"/>
+    </div>
+    <div>
         <input type="submit" value="<spring:message code="home.register.form.button"/>"/>
     </div>
 </form:form>
