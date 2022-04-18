@@ -19,10 +19,10 @@
 
         <ul class="right hide-on-small-and-down">
             <li><a href="<c:url value="/test"/>" class="restaurant-register light">¡Registra tu restaurante!</a></li>
-            <li><a href="<c:url value="/test"/>" class="btn-small waves-effect waves-red white black-text bold">Iniciar
+            <li><a href="<c:url value="/test"/>" class="btn-small no-text-transform waves-effect waves-red white black-text bold">Iniciar
                 sesión</a></li>
             <li>
-                <a href="<c:url value="/test"/>" class="btn-small waves-effect waves-red default_red black-text bold">
+                <a href="<c:url value="/test"/>" class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
                     <div class="logged-in-panel">
                         <p class="padding-5px">
                             Hola xxxx
@@ -36,7 +36,7 @@
         </ul>
 
         <ul id="nav-mobile" class="sidenav">
-            <li><a href="<c:url value="/test"/>" class="btn-small card waves-effect waves-red white black-text bold">Iniciar
+            <li><a href="<c:url value="/test"/>" class="btn-small no-text-transform card waves-effect waves-red white black-text bold">Iniciar
                 sesión</a></li>
             <li><a href="<c:url value="/test"/>" class="restaurant-register">¡Registra tu restaurante!</a></li>
         </ul>

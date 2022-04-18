@@ -178,7 +178,6 @@ h1 {
 
 .btn-small {
     border-radius: 10px;
-    text-transform: none;
     transition: all 0.2s ease-in-out;
 }
 
@@ -320,4 +319,8 @@ h1 {
     justify-content: space-between;
     height: 50px;
     width: 100%;
+}
+
+.no-text-transform {
+    text-transform: none;
 }

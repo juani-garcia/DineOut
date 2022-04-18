@@ -38,7 +38,7 @@ public class HomeController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm form) {
-        return new ModelAndView("home/register");
+        return new ModelAndView("register/register");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
