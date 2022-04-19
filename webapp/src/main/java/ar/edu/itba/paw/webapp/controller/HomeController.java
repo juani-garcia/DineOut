@@ -3,10 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
-import ar.edu.itba.paw.webapp.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +20,6 @@ public class HomeController {
 
     @Autowired
     private RestaurantService restaurantService;
-
-    @ExceptionHandler(RestaurantNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView noSuchRestaurant() {
-        return new ModelAndView("error/restaurant_not_found");
-    }
 
     @RequestMapping(value = "/")
     public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
