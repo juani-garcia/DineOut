@@ -12,8 +12,3 @@
       media="screen,projection"/>
 <link href="<c:url value="/resources/css/style.css"/>" type="text/css" rel="stylesheet"
       media="screen,projection"/>
-
-<!-- Scripts-->
-<script src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
-<script src="<c:url value="/resources/js/materialize.js"/>"></script>
-<script src="<c:url value="/resources/js/init.js"/>"></script>
