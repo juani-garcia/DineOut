@@ -28,12 +28,19 @@ p {
 }
 
 .parallax-container {
-    min-height: 380px;
     line-height: 0;
     height: auto;
     color: rgba(255, 255, 255, .9);
     display: flex;
     align-items: center;
+}
+
+.parallax-container-medium {
+    min-height: 380px;
+}
+
+.parallax-container-small {
+    min-height: 280px;
 }
 
 .parallax-container .section {
@@ -79,7 +86,7 @@ footer.page-footer {
 }
 
 .default_red {
-    background-color: #FF1B1B !important;
+    background-color: #F54242 !important;
 }
 
 .default_light {
@@ -87,7 +94,8 @@ footer.page-footer {
 }
 
 .default_light_text {
-    color: #9e9e9e; !important;
+    color: #9e9e9e;
+!important;
 }
 
 /* Font types */
@@ -143,6 +151,10 @@ footer.page-footer {
     font-weight: 900;
 }
 
+h1 {
+    margin: 2.8rem 0 2.8rem 0;
+}
+
 /* Restaurant register button style and animation */
 .restaurant-register {
     text-decoration: underline;
@@ -164,6 +176,25 @@ footer.page-footer {
     background-color: transparent;
 }
 
+.btn-small {
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-small:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+}
+
+.grow_on_hover {
+    transition: all 0.2s ease-in-out;
+}
+
+.grow_on_hover:hover {
+    transform: scale(1.1);
+    background-color: transparent;
+}
+
 .outline-black {
     text-shadow: -2px -2px 0 #000,
     2px -2px 0 #000,
@@ -181,6 +212,11 @@ footer.page-footer {
 .align_center {
     display: flex;
     align-items: center;
+}
+
+.align_space_between {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .card {
@@ -261,3 +297,30 @@ footer.page-footer {
     font-size: 25px;
 }
 
+.material-icons {
+    height: inherit;
+}
+
+.logged-in-panel {
+    display: flex;
+    align-items: center;
+    height: inherit;
+}
+
+.padding-5px {
+    padding: 5px;
+}
+
+.user_nav_options {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+}
+
+.no-text-transform {
+    text-transform: none;
+}

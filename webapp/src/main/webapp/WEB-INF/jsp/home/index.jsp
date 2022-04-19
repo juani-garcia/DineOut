@@ -11,7 +11,7 @@
 <%@ include file="../navbar.jsp" %>
 
 <!-- Main title -->
-<div id="index-banner" class="parallax-container">
+<div id="index-banner" class="parallax-container parallax-container-medium">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold"><spring:message code="home.index.header.title" /></h1>

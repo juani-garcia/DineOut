@@ -14,4 +14,9 @@ public class ErrorController {
     public ModelAndView noSuchRestaurant() {
         return new ModelAndView("error/restaurant_not_found");
     }
+
+    @RequestMapping("/403")
+    public ModelAndView accessDenied() {
+        return new ModelAndView("error/errorPage403");
+    }
 }
