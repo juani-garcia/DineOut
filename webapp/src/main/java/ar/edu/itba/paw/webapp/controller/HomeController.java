@@ -22,8 +22,14 @@ public class HomeController {
     private RestaurantService restaurantService;
 
     @RequestMapping(value = "/")
-    public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
+    public ModelAndView webapp() {
         final ModelAndView mav = new ModelAndView("home/index");
+        return mav;
+    }
+
+    @RequestMapping(value = "/restaurants")
+    public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
+        final ModelAndView mav = new ModelAndView("home/restaurants");
         mav.addObject("restaurants", restaurantService.getAll(page));
         return mav;
     }
