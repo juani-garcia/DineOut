@@ -32,7 +32,7 @@
         <div class="container">
             <spring:message code="webapp.footer.project" />
             <text class="bold"><spring:message code="company.name" />
-                </text>.
+                </text>
         </div>
     </div>
 </footer>
