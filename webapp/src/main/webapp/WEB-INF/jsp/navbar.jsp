@@ -18,25 +18,33 @@
         <%--        </c:if>--%>
 
         <ul class="right hide-on-small-and-down">
-            <li><a href="<c:url value="/test"/>" class="restaurant-register light">¡Registra tu restaurante!</a></li>
-            <li><a href="<c:url value="/test"/>" class="btn-small no-text-transform waves-effect waves-red white black-text bold">Iniciar
-                sesión</a></li>
-            <li>
-                <a href="<c:url value="/test"/>" class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
-                    <div class="logged-in-panel">
-                        <p class="padding-5px">
-                            Hola xxxx
-                        </p>
-                        <p>
-                            <i class="material-icons">menu</i>
-                        </p>
-                    </div>
-                </a>
-            </li>
+            <c:if test="${pageContext.request.userPrincipal.name == null}">
+                <li><a href="<c:url value="/register"/>" class="restaurant-register light">¡Registra tu restaurante!</a>
+                </li>
+                <li><a href="<c:url value="/login"/>"
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">Iniciar
+                    sesión</a></li>
+            </c:if>
+            <c:if test="${pageContext.request.userPrincipal.name != null}">
+                <li>
+                    <a href="<c:url value="/profile"/>"
+                       class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px">
+                                ¡Hola <c:out value="${pageContext.request.userPrincipal.name}"/>!
+                            </p>
+                            <p>
+                                <i class="material-icons">menu</i>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </c:if>
         </ul>
 
         <ul id="nav-mobile" class="sidenav">
-            <li><a href="<c:url value="/test"/>" class="btn-small no-text-transform card waves-effect waves-red white black-text bold">Iniciar
+            <li><a href="<c:url value="/test"/>"
+                   class="btn-small no-text-transform card waves-effect waves-red white black-text bold">Iniciar
                 sesión</a></li>
             <li><a href="<c:url value="/test"/>" class="restaurant-register">¡Registra tu restaurante!</a></li>
         </ul>
