@@ -28,6 +28,7 @@
                 <div class="col s6 offset-s3">
                     <div class="row">
                         <h4><spring:message code="home.register.body.title"/></h4>
+                        <p class="default_light_text"><spring:message code="home.register.body.description"/></p>
                     </div>
                     <div class="row">
                         <form:errors path="username" element="p" cssClass="isa_error"/>
