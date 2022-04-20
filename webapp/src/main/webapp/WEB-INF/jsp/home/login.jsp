@@ -27,25 +27,23 @@
         <div class="section">
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
-                    <div class="row">
-                        <h4><spring:message code="home.register.body.title"/></h4>
-                    </div>
                     <c:if test="${param.error}">
                         <div class="isa_error">
                             <spring:message code="home.login.error"/>
                         </div>
                     </c:if>
                     <div class="row">
-                        <label> Username: <input type="text" name="username"></label>
+                        <label> <spring:message code="home.form.username"/> <input type="text" name="username"></label>
                     </div>
                     <div class="row">
-                        <label> Password: <input type="password" name="password"></label>
+                        <label> <spring:message code="home.form.password"/> <input type="password"
+                                                                                   name="password"></label>
                     </div>
                     <div class="row">
-                            <input type="checkbox" id="remember" name="remember-me">
-                            <label for="remember">
-                                Remember Me
-                            </label>
+                        <label>
+                            <input type="checkbox" id="remember" name="remember-me"/>
+                            <span><spring:message code="home.login.form.rememberMe"/></span>
+                        </label>
                     </div>
                     <div class="row center">
                         <a type="submit" id="register-button"
