@@ -23,4 +23,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     public List<Restaurant> getAll(int page) {
         return restaurantDao.getAll(page);
     }
+
+    @Override
+    public Restaurant create(String name, String address, String mail, String detail) {
+        // TODO : validate data
+        return restaurantDao.create(name, address, mail, detail);
+    }
 }

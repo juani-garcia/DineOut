@@ -14,9 +14,15 @@
 <div id="index-banner" class="parallax-container parallax-container-medium">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold"><spring:message code="home.index.header.title" /></h1>
+            <h1 class="header center white-text bold"><spring:message code="home.index.header.title"/></h1>
             <div class="row center">
-                <h5 class="header col s12 medium"><spring:message code="home.index.header.catchphrase" /></h5>
+                <h5 class="header col s12 medium"><spring:message code="home.index.header.catchphrase"/></h5>
+            </div>
+            <div class="row center">
+                <a href="<c:url value ="/restaurants"/>"
+                   class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform">
+                    ¡Explora todos los restaurantes!
+                </a>
             </div>
         </div>
     </div>
@@ -31,44 +37,22 @@
             <div class="col s6 offset-2">
                 <div class="icon-block">
                     <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-                    <h5 class="center"><spring:message code="home.index.info.title" /></h5>
-                    <p class="center light"><spring:message code="home.index.info.description" /></p>
+                    <h5 class="center"><spring:message code="home.index.info.title"/></h5>
+                    <p class="center light"><spring:message code="home.index.info.description"/></p>
                 </div>
             </div>
             <div class="col s6 offset-2">
                 <div class="icon-block">
                     <h2 class="center brown-text"><i class="material-icons">restaurant</i></h2>
-                    <h5 class="center"><spring:message code="home.index.recommended.title" /></h5>
+                    <h5 class="center"><spring:message code="home.index.recommended.title"/></h5>
 
-                    <p class="center light"><spring:message code="home.index.recommended.description" /></p>
+                    <p class="center light"><spring:message code="home.index.recommended.description"/></p>
                 </div>
             </div>
+
         </div>
 
     </div>
-</div>
-
-<div id="restaurant-parallax-container" class="parallax-container">
-    <div class="row align_center">
-        <div class="col">
-            <c:forEach items="${restaurants}" var="restaurant">
-
-                <a href="<c:url value ="/reserve/${restaurant.id}"/>">
-                    <div class="card card_wrapper">
-                            <%--                <div class="card-image">--%>
-                            <%--                    <img src="" alt="">--%>
-                            <%--                </div>--%>
-                        <div class="card-content black-text">
-                            <h2><c:out value="${restaurant.name}"/></h2>
-                            <p><c:out value="${restaurant.detail}"/></p>
-                        </div>
-                    </div>
-                </a>
-            </c:forEach>
-        </div>
-    </div>
-    <div class="parallax"><img src="<c:url value="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg"/>"
-                               alt=""></div>
 </div>
 <%@ include file="../footer.jsp" %>
 </body>

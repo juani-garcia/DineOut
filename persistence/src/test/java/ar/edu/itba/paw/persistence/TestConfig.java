@@ -28,7 +28,7 @@ public class TestConfig {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(JDBCDriver.class);
         ds.setUrl("jdbc:hsqldb:mem:paw");
-        ds.setUsername("ha");
+        ds.setUsername("ha");  // TODO: add to env file
         ds.setPassword("");
 
         return ds;

@@ -11,4 +11,5 @@ public interface RestaurantDao {
 
     List<Restaurant> getAll(int page);
 
+    Restaurant create(final String name, final String address, final String mail, final String detail);
 }
