@@ -69,24 +69,25 @@ public class RestaurantJdbcDaoTest {
         // assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
     }
 
-    @Test
-    public void testFindByIdRestaurantExists() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, RESTAURANT_TABLE);
-        final Map<String, Object> restaurantData = new HashMap<>();
-        restaurantData.put("name", RESTAURANT_NAME);
-        restaurantData.put("address", RESTAURANT_ADDRESS);
-        restaurantData.put("mail", RESTAURANT_MAIL);
-        restaurantData.put("detail", RESTAURANT_DETAIL);
+//    @Test
+//    public void testFindByIdRestaurantExists() {
+//        JdbcTestUtils.deleteFromTables(jdbcTemplate, RESTAURANT_TABLE);
+//        final Map<String, Object> restaurantData = new HashMap<>();
+//        restaurantData.put("name", RESTAURANT_NAME);
+//        restaurantData.put("address", RESTAURANT_ADDRESS);
+//        restaurantData.put("mail", RESTAURANT_MAIL);
+//        restaurantData.put("detail", RESTAURANT_DETAIL);
+//
+//        int id = jdbcInsert.executeAndReturnKey(restaurantData).intValue();
+//
+//        // ejercitacion
 
-        int id = jdbcInsert.executeAndReturnKey(restaurantData).intValue();
-
-        // ejercitacion
-        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(id);
-
-        // postcondiciones
-        assertTrue(maybeRestaurant.isPresent());
-        assertEquals(RESTAURANT_NAME, maybeRestaurant.get().getName());
-    }
+//        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(id);
+//
+//        // postcondiciones
+//        assertTrue(maybeRestaurant.isPresent());
+//        assertEquals(RESTAURANT_NAME, maybeRestaurant.get().getName());
+//    }
 
     @Test
     public void testFindByIdRestaurantDoesntExist() {

@@ -23,13 +23,19 @@ public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/register_restaurant")
     public ModelAndView registerRestaurant(@ModelAttribute("restaurantForm") final RestaurantForm form) {
+        verifyCreateRestaurant();
+
         return new ModelAndView("register/register_restaurant");
     }
 
     @RequestMapping(value = "/create_restaurant", method = {RequestMethod.POST})
     public ModelAndView create(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form, final BindingResult errors) {
+        long userID = verifyCreateRestaurant();
 
         if (errors.hasErrors()) {
             return registerRestaurant(form);
@@ -37,6 +43,16 @@ public class RestaurantController {
 
         restaurantService.create(userID, form.getName(), form.getAddress(), form.getEmail(), form.getDetail());
         return new ModelAndView("redirect:/profile");
+    }
+
+    private long verifyCreateRestaurant() {  // TODO: Clean up this.
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();   // TODO: Improve how we ask for users
+        String username = auth.getName();
+        Optional<User> user = userService.getByUsername(username);
+        if (!user.isPresent()) throw new IllegalStateException("Tenes que estar loggeado para realizar esta accion.");
+        long userID = user.get().getId();
+        if (restaurantService.getByUserID(userID).isPresent()) throw new IllegalStateException("Tenes que estar loggeado para realizar esta accion.");
+        return userID;
     }
 
 }

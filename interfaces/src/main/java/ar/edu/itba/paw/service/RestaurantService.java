@@ -13,4 +13,5 @@ public interface RestaurantService {
 
     Restaurant create(final long userID, final String name, final String address, final String mail, final String detail);
 
+    Optional<Restaurant> getByUserID(long id);
 }
