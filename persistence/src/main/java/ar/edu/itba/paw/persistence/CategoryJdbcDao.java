@@ -15,7 +15,7 @@ public class CategoryJdbcDao implements CategoryDao {
 
     private final JdbcTemplate jdbcTemplate;
     private static final RowMapper<Category> CATEGORY_ROW_MAPPER = (rs, rowNum) ->
-            new Category(rs.getString("name"), rs.getLong("id"));
+            Category.getById(rs.getLong("id"));
 
     @Autowired
     public CategoryJdbcDao(final DataSource ds) {
@@ -23,19 +23,8 @@ public class CategoryJdbcDao implements CategoryDao {
     }
 
     @Override
-    public List<Category> getAll() {
-        return jdbcTemplate.query("SELECT * FROM category", CATEGORY_ROW_MAPPER);
-    }
-
-    @Override
-    public Optional<Category> getById(long id) {
-        List<Category> result = jdbcTemplate.query("SELECT * FROM category WHERE id = ?", new Object[]{id}, CATEGORY_ROW_MAPPER);
-        return result.stream().findFirst();
-    }
-
-    @Override
     public List<Category> getByRestaurantId(long restaurantId) {
-        String query = "SELECT c.id, c.name FROM restaurant_category rc JOIN category c ON rc.category_id = c.id WHERE rc.restaurant_id = ?";
+        String query = "SELECT category_id id FROM restaurant_category WHERE restaurant_id = ?";
         return jdbcTemplate.query(query, new Object[]{restaurantId}, CATEGORY_ROW_MAPPER);
     }
 

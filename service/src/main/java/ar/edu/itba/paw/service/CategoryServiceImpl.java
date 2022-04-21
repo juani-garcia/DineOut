@@ -14,19 +14,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryDao categoryDao;
 
-    @Override
-    public Optional<Category> getById(long id) {
-        return categoryDao.getById(id);
-    }
 
     @Override
     public List<Category> getByRestaurantId(long restaurantId) {
         return categoryDao.getByRestaurantId(restaurantId);
-    }
-
-    @Override
-    public List<Category> getAll() {
-        return categoryDao.getAll();
     }
 
     @Override
@@ -36,6 +27,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean add(long restaurantId, long categoryId) {
+        if(Category.getById(categoryId) == null) {
+            // TODO: throw NoSuchCategoryException
+        }
+
         return categoryDao.add(restaurantId, categoryId);
     }
 }

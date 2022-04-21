@@ -7,10 +7,6 @@ import java.util.Optional;
 
 public interface CategoryDao {
 
-    Optional<Category> getById(long id);
-
-    List<Category> getAll();
-
     List<Category> getByRestaurantId(long restaurantId);
 
     boolean delete(long restaurantId, long categoryId);

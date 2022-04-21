@@ -7,11 +7,7 @@ import java.util.Optional;
 
 public interface CategoryService {
 
-    Optional<Category> getById(long id);
-
     List<Category> getByRestaurantId(long restaurantId);
-
-    List<Category> getAll();
 
     boolean delete(long restaurantId, long categoryId);
 
