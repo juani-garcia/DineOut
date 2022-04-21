@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,7 +21,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     private final SimpleJdbcInsert jdbcInsert;
     /* private X default=package-private for testing */
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
-            new Restaurant(rs.getLong("id"), rs.getString("name"), rs.getString("address"),
+            new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("address"),
             rs.getString("mail"), rs.getString("detail"));
 
     @Autowired
@@ -38,19 +37,26 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
+    public Optional<Restaurant> getByUserId(long id) {
+        List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE user_id = ?", new Object[]{id}, ROW_MAPPER);
+        return query.stream().findFirst();
+    }
+
+    @Override
     public List<Restaurant> getAll(int page) {
         return jdbcTemplate.query("SELECT * FROM restaurant ORDER BY name LIMIT ? OFFSET ?", new Object[] {PAGE_SIZE, (page - 1) * PAGE_SIZE},  ROW_MAPPER);
     }
 
     @Override
-    public Restaurant create(final String name, final String address, final String mail, final String detail) {
+    public Restaurant create(final long userID, final String name, final String address, final String mail, final String detail) {
         final Map<String, Object> restaurantData = new HashMap<>();
+        restaurantData.put("user_id", userID);
         restaurantData.put("name", name);
         restaurantData.put("address", address);
         restaurantData.put("mail", mail);
         restaurantData.put("detail", detail);
 
         final long restaurantid = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
-        return new Restaurant(restaurantid, name, address, mail, detail);
+        return new Restaurant(restaurantid, userID, name, address, mail, detail);
     }
 }

@@ -9,7 +9,9 @@ public interface RestaurantDao {
 
     Optional<Restaurant> getById(long id);
 
+    Optional<Restaurant> getByUserId(long id);
+
     List<Restaurant> getAll(int page);
 
-    Restaurant create(final String name, final String address, final String mail, final String detail);
+    Restaurant create(final long userID, final String name, final String address, final String mail, final String detail);
 }

@@ -11,6 +11,6 @@ public interface RestaurantService {
 
     List<Restaurant> getAll(int page);
 
-    Restaurant create(final String name, final String address, final String mail, final String detail);
+    Restaurant create(final long userID, final String name, final String address, final String mail, final String detail);
 
 }
