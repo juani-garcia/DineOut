@@ -9,8 +9,8 @@ public interface CategoryService {
 
     List<Category> getByRestaurantId(long restaurantId);
 
-    boolean delete(long restaurantId, long categoryId);
+    boolean delete(long restaurantId, Category category);
 
-    boolean add(long restaurantId, long categoryId);
+    boolean add(long restaurantId, Category category);
 
 }

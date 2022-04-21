@@ -21,16 +21,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean delete(long restaurantId, long categoryId) {
-        return categoryDao.delete(restaurantId, categoryId);
+    public boolean delete(long restaurantId, Category category) {
+        return categoryDao.delete(restaurantId, category);
     }
 
     @Override
-    public boolean add(long restaurantId, long categoryId) {
-        if(Category.getById(categoryId) == null) {
-            // TODO: throw NoSuchCategoryException
-        }
-
-        return categoryDao.add(restaurantId, categoryId);
+    public boolean add(long restaurantId, Category category) {
+        return categoryDao.add(restaurantId, category);
     }
 }

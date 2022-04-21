@@ -29,16 +29,16 @@ public class CategoryJdbcDao implements CategoryDao {
     }
 
     @Override
-    public boolean delete(long restaurantId, long categoryId) {
+    public boolean delete(long restaurantId, Category category) {
         String sql = "DELETE FROM restaurant_category WHERE restaurant_id = ? AND category_id = ?";
-        Object[] args = new Object[]{restaurantId, categoryId};
+        Object[] args = new Object[]{restaurantId, category.getId()};
         return jdbcTemplate.update(sql, args) == 1;
     }
 
     @Override
-    public boolean add(long restaurantId, long categoryId) {
+    public boolean add(long restaurantId, Category category) {
         String sql = "INSERT INTO restaurant_category VALUES (?, ?) ON CONFLICT DO NOTHING";
-        Object[] args = new Object[]{restaurantId, categoryId};
+        Object[] args = new Object[]{restaurantId, category.getId()};
         return jdbcTemplate.update(sql, args) == 1;
     }
 }
