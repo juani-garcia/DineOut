@@ -29,7 +29,7 @@
 <div class="container">
     <div class="section">
         <div id="index-banner" class="rounded shadowed parallax-container parallax-container-large home_parallax">
-            <a href="<c:url value ="/restaurant_picker"/>" class="row rounded shadowed white padding-15px home_parallax_card">
+            <a href="<c:url value ="/restaurant_picker"/>" class="row rounded shadowed white padding-15px home_parallax_card waves-effect waves-red grow_on_hover">
                 <h5 class="center bold default_dark_text groovy">¿No sabes que comer?</h5>
                 <p class="center default_dark_text">Dejanos elegir un restaurante para vos</p>
             </a>
