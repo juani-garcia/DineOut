@@ -11,49 +11,34 @@
 <%@ include file="../navbar.jsp" %>
 
 <!-- Main title -->
-<div id="index-banner" class="parallax-container parallax-container-medium">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <h1 class="header center white-text bold"><spring:message code="home.index.header.title"/></h1>
-            <div class="row center">
-                <h5 class="header col s12 medium"><spring:message code="home.index.header.catchphrase"/></h5>
-            </div>
-            <div class="row center">
-                <a href="<c:url value ="/restaurants"/>"
-                   class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform">
-                    ¡Explora todos los restaurantes!
-                </a>
-            </div>
+<div class="section no-pad-bot">
+    <div class="container">
+        <h1 class="header center white-text bold"><spring:message code="home.index.header.title"/></h1>
+        <h5 class="header center white-text bold"><spring:message code="home.index.header.catchphrase"/></h5>
+
+        <div class="row center">
+            <a href="<c:url value ="/restaurants"/>"
+               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
+                ¡Explora todos los restaurantes!
+            </a>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>
 </div>
 
-<!-- Recommended -->
+
 <div class="container">
     <div class="section">
-        <div class="row align_center">
-            <div class="col s6 offset-2">
-                <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-                    <h5 class="center"><spring:message code="home.index.info.title"/></h5>
-                    <p class="center light"><spring:message code="home.index.info.description"/></p>
-                </div>
-            </div>
-            <div class="col s6 offset-2">
-                <div class="icon-block">
-                    <h2 class="center brown-text"><i class="material-icons">restaurant</i></h2>
-                    <h5 class="center"><spring:message code="home.index.recommended.title"/></h5>
-
-                    <p class="center light"><spring:message code="home.index.recommended.description"/></p>
-                </div>
-            </div>
-
+        <div id="index-banner" class="rounded shadowed parallax-container parallax-container-large home_parallax">
+            <a href="<c:url value ="/restaurant_picker"/>" class="row rounded shadowed white padding-15px home_parallax_card">
+                <h5 class="center bold default_dark_text groovy">¿No sabes que comer?</h5>
+                <p class="center default_dark_text">Dejanos elegir un restaurante para vos</p>
+            </a>
+            <div class="parallax white"><img src="<c:url value="/resources/media/background2.jpg"/>"
+                                       alt=""></div>   <!-- Custom restaurant image -->
         </div>
-
     </div>
 </div>
+
 <%@ include file="../footer.jsp" %>
 </body>
 </html>
