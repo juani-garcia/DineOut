@@ -7,11 +7,24 @@
  */
 
 /* Brand logo style and aniamtion */
+
+html body {
+    height: 100%;
+    background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+    /*background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);*/
+}
+
 nav ul a,
 nav .brand-logo {
     color: #FFFFFF;
     transition: all 0.2s ease-in-out;
     padding: 0 15px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .brand-logo:hover {
@@ -27,12 +40,42 @@ p {
     color: #FFFFFF;
 }
 
+.parallax {
+    width: 100%;
+}
+
+img {
+    width: 100%;
+}
+
 .parallax-container {
     line-height: 0;
     height: auto;
+    width: 100%;
     color: rgba(255, 255, 255, .9);
     display: flex;
-    align-items: center;
+}
+
+.home_parallax {
+    margin-bottom: 60px;
+    margin-top: 60px;
+    flex-direction: column;
+    flex: 1;
+}
+
+.groovy {
+    background: -webkit-linear-gradient(45deg, #FC466B 0%, #3F5EFB 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.home_parallax_card {
+    margin-top: auto;
+    min-width: 600px;
+}
+
+.parallax-container-large {
+    min-height: 580px;
 }
 
 .parallax-container-medium {
@@ -73,10 +116,7 @@ p {
 }
 
 footer.page-footer {
-    margin: 0;
-    position:absolute;
-    bottom:0;
-    width: 100%;
+    margin-top: auto;
 }
 
 /* Default color scheme */
@@ -213,7 +253,6 @@ h1 {
 }
 
 .align_center {
-    display: flex;
     align-items: center;
 }
 
@@ -312,6 +351,10 @@ h1 {
 
 .padding-5px {
     padding: 5px;
+}
+
+.padding-15px {
+    padding: 15px;
 }
 
 .user_nav_options {
