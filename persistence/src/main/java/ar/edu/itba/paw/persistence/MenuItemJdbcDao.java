@@ -20,7 +20,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
     private static final RowMapper<MenuItem> ITEM_ROW_MAPPER = (rs, rowNum) ->
             new MenuItem(rs.getLong("id"), rs.getString("name"),
                     rs.getString("detail"), rs.getDouble("price"),
-                    rs.getLong("section_id"));
+                    rs.getLong("section_id"), rs.getLong("ordering"));
 
     @Autowired
     public MenuItemJdbcDao(final DataSource ds) {
@@ -44,7 +44,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
         itemData.put("ordering", ordering);
         long itemId = jdbcInsert.executeAndReturnKey(itemData).longValue();
 
-        return new MenuItem(itemId, name, detail, price, sectionId);
+        return new MenuItem(itemId, name, detail, price, sectionId, ordering);
     }
 
     @Override

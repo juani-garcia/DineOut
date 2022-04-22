@@ -18,7 +18,7 @@ public class MenuSectionJdbcDao implements MenuSectionDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private static final RowMapper<MenuSection> SECTION_ROW_MAPPER = (rs, rowNum) ->
-            new MenuSection(rs.getLong("id"), rs.getString("name"), rs.getLong("restaurant_id"));
+            new MenuSection(rs.getLong("id"), rs.getString("name"), rs.getLong("restaurant_id"), rs.getLong("ordering"));
 
     @Autowired
     public MenuSectionJdbcDao(final DataSource ds) {
@@ -40,7 +40,7 @@ public class MenuSectionJdbcDao implements MenuSectionDao {
         sectionData.put("ordering", ordering);
         final long sectionId = jdbcInsert.executeAndReturnKey(sectionData).longValue();
 
-        return new MenuSection(sectionId, name, restaurantId);
+        return new MenuSection(sectionId, name, restaurantId, ordering);
     }
 
     @Override
