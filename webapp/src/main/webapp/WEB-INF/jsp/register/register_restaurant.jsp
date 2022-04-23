@@ -15,7 +15,7 @@
 <h2 class="megabold center">Contanos mas de tu restaurante</h2>
 
 
-<c:url value="/create_restaurant" var="postPath"/>
+<c:url value="/restaurant/register" var="postPath"/>
 <form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post">
     <div class="container">
         <div class="section">
@@ -46,7 +46,7 @@
                     </div>
                     <div class="row">
                         <form:label path="detail" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.detail"/>*</form:label>
+                                code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
                     </div>

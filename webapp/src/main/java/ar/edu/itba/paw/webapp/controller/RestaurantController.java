@@ -43,17 +43,18 @@ public class RestaurantController {
         return mav;
     }
 
+    @RequestMapping("/register")
+    public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         return new ModelAndView("register/register_restaurant");
     }
 
-    @RequestMapping(value = "/create_restaurant", method = {RequestMethod.POST})
+    @RequestMapping(value = "/register", method = {RequestMethod.POST})
     public ModelAndView create(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
-            return registerRestaurant(form);
+            return restaurantForm(form);
         }
 
-        restaurantService.create(userID, form.getName(), form.getAddress(), form.getEmail(), form.getDetail());
-        return new ModelAndView("redirect:/profile");
+        return new ModelAndView("redirect:/restaurant");
     }
 
     private long verifyCreateRestaurant() {  // TODO: Clean up this.
