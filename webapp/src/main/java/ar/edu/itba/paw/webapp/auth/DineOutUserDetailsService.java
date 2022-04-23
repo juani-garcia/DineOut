@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,14 +20,16 @@ import java.util.regex.Pattern;
 public class DineOutUserDetailsService implements UserDetailsService {
 
     private final UserService us;
+    private final RestaurantService rs;
     private final PasswordEncoder passwordEncoder;
 
     private final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
 
     @Autowired
-    public DineOutUserDetailsService(final UserService us, final PasswordEncoder passwordEncoder) {
+    public DineOutUserDetailsService(final UserService us, final RestaurantService rs, final PasswordEncoder passwordEncoder) {
         this.us = us;
+        this.rs = rs;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -37,6 +40,8 @@ public class DineOutUserDetailsService implements UserDetailsService {
 
         final Collection<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (rs.getByUserID(user.getId()).isPresent()) // TODO: use enum to determine if it is owner
+            roles.add(new SimpleGrantedAuthority("ROLE_RESTAURANT_OWNER"));
 
         // Migrate users with un-hashed password
         // Not necessary for us (didn't have users)
