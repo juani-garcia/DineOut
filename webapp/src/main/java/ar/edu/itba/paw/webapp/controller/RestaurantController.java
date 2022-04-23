@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
@@ -32,6 +34,9 @@ public class RestaurantController {
 
     @Autowired
     private MenuSectionService menuSectionService;
+
+    @Autowired
+    private MenuItemService menuItemService;
 
     @RequestMapping("")
     public ModelAndView restaurantProfile(Principal principal) {
@@ -71,6 +76,23 @@ public class RestaurantController {
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow( () -> new RuntimeException("No hay restaurante"));
         MenuSection menuSection = menuSectionService.create(form.getName(), restaurant.getId(), form.getOrdering());
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/item")
+    public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
+        return new ModelAndView("restaurant/item_form");
+    }
+
+    @RequestMapping(value = "/item", method = {RequestMethod.POST})
+    public ModelAndView item(Principal principal, @Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return itemForm(form);
+        }
+
+        User user = userService.getByUsername(principal.getName()).get();
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow( () -> new RuntimeException("No hay restaurante"));
+        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering());
         return new ModelAndView("redirect:/restaurant");
     }
 
