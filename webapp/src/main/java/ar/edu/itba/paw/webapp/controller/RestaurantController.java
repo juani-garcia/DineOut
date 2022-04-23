@@ -1,12 +1,15 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.MenuSection;
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.webapp.form.MenuItemForm;
+import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,28 +18,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.security.Principal;
 
 @Controller
+@RequestMapping("/restaurant")
 public class RestaurantController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private RestaurantService restaurantService;
 
     @Autowired
-    private UserService userService;
+    private MenuSectionService menuSectionService;
 
-    @RequestMapping("/register_restaurant")
-    public ModelAndView registerRestaurant(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        verifyCreateRestaurant();
+    @RequestMapping("")
+    public ModelAndView restaurantProfile(Principal principal) {
+        final ModelAndView mav = new ModelAndView("restaurant/profile");
+
+        User user = userService.getByUsername(principal.getName()).get();
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
+        mav.addObject("restaurant", restaurant);
+        return mav;
+    }
 
         return new ModelAndView("register/register_restaurant");
     }
 
     @RequestMapping(value = "/create_restaurant", method = {RequestMethod.POST})
     public ModelAndView create(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form, final BindingResult errors) {
-        long userID = verifyCreateRestaurant();
-
         if (errors.hasErrors()) {
             return registerRestaurant(form);
         }
