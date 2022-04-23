@@ -235,7 +235,7 @@ public enum Zone {
         return name;
     }
 
-    public Zone getByOrdinal(long ordinal) {
+    public static Zone getByOrdinal(long ordinal) {
         for (Zone zone : Zone.values()) {
             if (zone.ordinal() == ordinal) {
                 return zone;
