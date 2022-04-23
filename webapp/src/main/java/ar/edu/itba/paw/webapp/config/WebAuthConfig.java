@@ -39,6 +39,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
             .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
+                .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
                 .antMatchers("/post/edit").hasRole("EDITOR") /* TODO: check url */
                 .antMatchers("/**").authenticated()
