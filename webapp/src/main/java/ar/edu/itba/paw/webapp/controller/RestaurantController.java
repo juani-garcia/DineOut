@@ -57,14 +57,21 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
-    private long verifyCreateRestaurant() {  // TODO: Clean up this.
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();   // TODO: Improve how we ask for users
-        String username = auth.getName();
-        Optional<User> user = userService.getByUsername(username);
-        if (!user.isPresent()) throw new IllegalStateException("Tenes que estar loggeado para realizar esta accion.");
-        long userID = user.get().getId();
-        if (restaurantService.getByUserID(userID).isPresent()) throw new IllegalStateException("Tenes que estar loggeado para realizar esta accion.");
-        return userID;
+    @RequestMapping(value = "/section")
+    public ModelAndView sectionForm(@ModelAttribute("sectionForm") final MenuSectionForm form) {
+        return new ModelAndView("restaurant/section_form");
+    }
+
+    @RequestMapping(value = "/section", method = {RequestMethod.POST})
+    public ModelAndView section(Principal principal, @Valid @ModelAttribute("sectionForm") final MenuSectionForm form, final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return sectionForm(form);
+        }
+
+        User user = userService.getByUsername(principal.getName()).get();
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow( () -> new RuntimeException("No hay restaurante"));
+        MenuSection menuSection = menuSectionService.create(form.getName(), restaurant.getId(), form.getOrdering());
+        return new ModelAndView("redirect:/restaurant");
     }
 
 }
