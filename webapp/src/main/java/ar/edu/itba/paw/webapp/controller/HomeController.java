@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,6 +44,10 @@ public class HomeController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
+            System.out.println(errors);
+            for (ObjectError oe : errors.getAllErrors()) {
+                System.out.println(oe);
+            }
             return registerForm(form);
         }
 
