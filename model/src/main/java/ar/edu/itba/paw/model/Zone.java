@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.model;
 
-public enum Neighborhood {
+public enum Zone {
     VEINTEDEJUNIO("20 de Junio"),
     NUEVEDEABRIL("9 de Abril"),
     ACASSUSO("Acassuso"),
@@ -227,7 +227,7 @@ public enum Neighborhood {
 
     private final String name;
 
-    Neighborhood(String name) {
+    Zone(String name) {
         this.name = name;
     }
 
@@ -235,10 +235,10 @@ public enum Neighborhood {
         return name;
     }
 
-    public Neighborhood getByOrdinal(long ordinal) {
-        for (Neighborhood n : Neighborhood.values()) {
-            if (n.ordinal() == ordinal) {
-                return n;
+    public Zone getByOrdinal(long ordinal) {
+        for (Zone zone : Zone.values()) {
+            if (zone.ordinal() == ordinal) {
+                return zone;
             }
         }
         return null;
