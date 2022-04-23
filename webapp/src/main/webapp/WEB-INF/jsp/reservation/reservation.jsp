@@ -10,7 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small">
+<div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold"><c:out value="${restaurant.name}"/></h1>
@@ -76,6 +76,11 @@
                                 code="form.mandatory"/></h6>
                     </div>
                     <div class="row center">
+                        <c:if test="${formSuccess == true}">
+                            <div class="isa_success">
+                                Se realizo la reserva exitosamente!
+                            </div>
+                        </c:if>
                         <a type="submit" id="register-button"
                            class="btn-large waves-effect waves-red white black-text lighten-1"
                            href="javascript:{}" onclick="document.getElementById('reservation_form').submit();">¡Reservá!</a>

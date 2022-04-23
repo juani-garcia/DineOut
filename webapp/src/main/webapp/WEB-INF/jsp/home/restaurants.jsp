@@ -24,20 +24,28 @@
 
 <div class="row align_center">
     <div class="col">
-        <c:forEach items="${restaurants}" var="restaurant">
+        <c:if test="${restaurants.size() == 0}">
+            <div class="container">
+                <h1 class="header center white-text bold rounded shadowed default_dark">No hay restaurantes</h1>
+            </div>
+        </c:if>
+        <c:if test="${restaurants.size() != 0}">
+            <c:forEach items="${restaurants}" var="restaurant">
 
-            <a href="<c:url value ="/reserve/${restaurant.id}"/>">
-                <div class="card card_wrapper">
-                        <%--                <div class="card-image">--%>
-                        <%--                    <img src="" alt="">--%>
-                        <%--                </div>--%>
-                    <div class="card-content black-text">
-                        <h2><c:out value="${restaurant.name}"/></h2>
-                        <p><c:out value="${restaurant.detail}"/></p>
+                <a href="<c:url value ="/reserve/${restaurant.id}"/>">
+                    <div class="card card_wrapper">
+                            <%--                <div class="card-image">--%>
+                            <%--                    <img src="" alt="">--%>
+                            <%--                </div>--%>
+                        <div class="card-content black-text">
+                            <h2><c:out value="${restaurant.name}"/></h2>
+                            <p><c:out value="${restaurant.detail}"/></p>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </c:forEach>
+                </a>
+            </c:forEach>
+        </c:if>
+
     </div>
 </div>
 <div class="row align_center">

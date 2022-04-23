@@ -45,7 +45,8 @@ p {
 }
 
 img {
-    width: 100%;
+    width: inherit;
+    height: inherit;
 }
 
 .parallax-container {

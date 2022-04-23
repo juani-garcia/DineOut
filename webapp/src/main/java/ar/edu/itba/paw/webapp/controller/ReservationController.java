@@ -26,6 +26,7 @@ public class ReservationController {
          final ModelAndView mav = new ModelAndView("reservation/reservation");
 
          mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new));
+         mav.addObject("formSuccess", false);
          return mav;
     }
 
@@ -37,7 +38,10 @@ public class ReservationController {
         }
 
         reservationService.create(resId, form.getMail(), form.getAmount(), form.getLocalDateTime(), form.getComments());
-        return new ModelAndView("redirect:/");
+        final ModelAndView mav =  new ModelAndView("redirect:/reserve/" + resId);
+        mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new));
+        mav.addObject("formSuccess", true);
+        return mav;
     }
 
 }
