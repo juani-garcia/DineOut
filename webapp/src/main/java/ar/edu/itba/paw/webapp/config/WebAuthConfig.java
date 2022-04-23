@@ -49,7 +49,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true")
                 .loginPage("/login")
             .and().rememberMe()
-                .rememberMeParameter("rememberme")
+                .rememberMeParameter("remember-me")
                 .userDetailsService(userDetailsService)
                 .key("TODO: CAMBIAR") // TODO: Cambiar la llave
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
