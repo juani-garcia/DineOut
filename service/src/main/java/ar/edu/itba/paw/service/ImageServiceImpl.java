@@ -1,0 +1,44 @@
+package ar.edu.itba.paw.service;
+
+import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.ImageDao;
+import ar.edu.itba.paw.persistence.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class ImageServiceImpl implements ImageService {
+
+    private final ImageDao imageDao;
+
+    @Autowired
+    public ImageServiceImpl(final ImageDao imageDao) {
+        this.imageDao = imageDao;
+    }
+
+    @Override
+    public Image create(final byte[] source) {
+        // TODO: ? Check size?
+        return imageDao.create(source);
+    }
+
+    @Override
+    public Optional<Image> getById(final long id) {
+        return imageDao.getById(id);
+    }
+
+    @Override
+    public boolean edit(final long id, final byte[] source) {
+        return imageDao.edit(id, source);
+    }
+
+    @Override
+    public boolean delete(final long id) {
+        return imageDao.delete(id);
+    }
+
+}
