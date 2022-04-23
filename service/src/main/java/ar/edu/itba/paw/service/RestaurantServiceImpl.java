@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,6 +24,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public List<Restaurant> getAll(int page) {
         return restaurantDao.getAll(page);
+    }
+
+    @Override
+    public List<Restaurant> filter(int page, String name, List<Category> categories, List<OpeningHours> openingHours, List<Zone> zones) {
+        if(name == null && categories == null && openingHours == null && zones == null) {
+            return getAll(page);
+        }
+
+        return restaurantDao.filter(page, name, categories, openingHours, zones);
     }
 
     @Override
