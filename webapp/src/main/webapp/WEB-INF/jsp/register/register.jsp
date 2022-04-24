@@ -28,7 +28,16 @@
                 <div class="col s6 offset-s3">
                     <div class="row">
                         <h4><spring:message code="home.register.body.title"/></h4>
-                        <p class="default_light_text"><spring:message code="home.register.body.description"/></p>
+                    </div>
+                    <div class="row">
+                        <form:errors path="firstName" element="p" cssClass="isa_error"/>
+                        <form:label path="firstName"><spring:message code="home.form.firstname"/></form:label>
+                        <form:input type="text" path="firstName"/>
+                    </div>
+                    <div class="row">
+                        <form:errors path="lastName" element="p" cssClass="isa_error"/>
+                        <form:label path="lastName"><spring:message code="home.form.lastname"/></form:label>
+                        <form:input type="text" path="lastName"/>
                     </div>
                     <div class="row">
                         <form:errors path="username" element="p" cssClass="isa_error"/>
@@ -49,7 +58,9 @@
                     <div class="row center">
                         <a type="submit" id="register-button"
                            class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}" onclick="document.getElementById('register_form').submit();"><spring:message code="home.register.form.button"/></a>
+                           href="javascript:{}"
+                           onclick="document.getElementById('register_form').submit();"><spring:message
+                                code="home.register.form.button"/></a>
                     </div>
                 </div>
             </div>
