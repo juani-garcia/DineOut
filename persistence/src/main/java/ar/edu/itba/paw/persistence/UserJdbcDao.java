@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Reservation;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,7 +9,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,7 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsert;
     /* private X default=package-private for testing */
     static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-            new User(rs.getLong("id"), rs.getString("username"), rs.getString("password"));
+            new User(rs.getLong("id"), rs.getString("username"), rs.getString("password"), rs.getString("first_name"), rs.getString("last_name"));
 
     @Autowired
     public UserJdbcDao(final DataSource ds) {
@@ -44,13 +42,15 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public User create(final String username, final String password) {
+    public User create(final String username, final String password, final String firstName, final String lastName) {
         final Map<String, Object> userData = new HashMap<>();
         userData.put("username", username);
         userData.put("password", password);
+        userData.put("first_name", firstName);
+        userData.put("last_name", lastName);
 
         final long userId = jdbcInsert.executeAndReturnKey(userData).longValue();
-        return new User(userId, username, password);
+        return new User(userId, username, password, firstName, lastName);
     }
 
 }
