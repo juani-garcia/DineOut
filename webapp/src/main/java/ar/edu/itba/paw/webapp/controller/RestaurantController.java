@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -45,6 +46,11 @@ public class RestaurantController {
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
         mav.addObject("restaurant", restaurant);
+
+
+        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
+        menuSectionList.forEach( (section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
+        mav.addObject("sections", menuSectionList);
         return mav;
     }
 
