@@ -26,6 +26,10 @@
 
 <div id="restaurant-parallax-container" class="parallax-container fill_space">
     <div class="row align_center">
+        <a href="<c:url value="/restaurant/section"/>" class="waves-effect waves-light btn">Agregar seccion</a>
+        <a href="<c:url value="/restaurant/item"/>" class="waves-effect waves-light btn">Agregar item</a>
+    </div>
+    <div class="row align_center">
         <div class="col">
             <c:forEach items="${sections}" var="section">
                  <div class="card card_wrapper">
