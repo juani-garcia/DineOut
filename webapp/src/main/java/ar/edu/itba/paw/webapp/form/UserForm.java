@@ -12,13 +12,17 @@ public class UserForm {
     private String username;
 
     @NotNull
-    @Size(max=100)
+    @Size(max = 100)
     private String firstName, lastName;
 
     @Size(min = 8)
     private String password;
 
+    @NotNull
     private String confirmPassword;
+
+    @NotNull
+    private String role;
 
     public String getUsername() {
         return username;
@@ -58,5 +62,13 @@ public class UserForm {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
