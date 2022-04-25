@@ -10,7 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small">
+<div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold">¡Registra tu restaurante!</h1>
@@ -54,6 +54,12 @@
                         <form:label path="confirmPassword"><spring:message
                                 code="home.register.form.confirmPassword"/></form:label>
                         <form:input type="password" path="confirmPassword"/>
+                    </div>
+                    <div class="row">
+                        <form:label path="role"><spring:message
+                                code="home.register.form.roleSelector"/></form:label>
+                        <form:select path="role" items="${roleItems}" size="${roleItems.size()}" cssClass="browser-default"/>
+                        <form:errors path="role" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row center">
                         <a type="submit" id="register-button"
