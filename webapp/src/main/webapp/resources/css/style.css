@@ -380,3 +380,7 @@ h1 {
     width: 100%;
     height: 20px;
 }
+
+select {
+    display: inherit;
+}
