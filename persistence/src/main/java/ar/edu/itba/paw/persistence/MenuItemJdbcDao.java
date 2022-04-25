@@ -20,7 +20,8 @@ public class MenuItemJdbcDao implements MenuItemDao {
     private static final RowMapper<MenuItem> ITEM_ROW_MAPPER = (rs, rowNum) ->
             new MenuItem(rs.getLong("id"), rs.getString("name"),
                     rs.getString("detail"), rs.getDouble("price"),
-                    rs.getLong("section_id"), rs.getLong("ordering"));
+                    rs.getLong("section_id"), rs.getLong("ordering"),
+                    rs.getLong("image_id"));
 
     @Autowired
     public MenuItemJdbcDao(final DataSource ds) {
@@ -35,16 +36,17 @@ public class MenuItemJdbcDao implements MenuItemDao {
     }
 
     @Override
-    public MenuItem create(String name, String detail, double price, long sectionId, long ordering) {
+    public MenuItem create(String name, String detail, double price, long sectionId, long ordering, Long imageId) {
         Map<String, Object> itemData = new HashMap<>();
         itemData.put("name", name);
         itemData.put("detail", detail);
         itemData.put("price", price);
         itemData.put("section_id", sectionId);
         itemData.put("ordering", ordering);
+        itemData.put("image_id", imageId);
         long itemId = jdbcInsert.executeAndReturnKey(itemData).longValue();
 
-        return new MenuItem(itemId, name, detail, price, sectionId, ordering);
+        return new MenuItem(itemId, name, detail, price, sectionId, ordering, imageId);
     }
 
     @Override
@@ -55,9 +57,9 @@ public class MenuItemJdbcDao implements MenuItemDao {
     }
 
     @Override
-    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering) {
-        String query = "UPDATE menu_item SET name = ?, detail = ?, price = ?, section_id = ?, ordering = ? WHERE id = ?";
-        Object[] args = new Object[]{name, detail, price, sectionId, ordering, itemId};
+    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+        String query = "UPDATE menu_item SET name = ?, detail = ?, price = ?, section_id = ?, ordering = ?, image_id = ? WHERE id = ?";
+        Object[] args = new Object[]{name, detail, price, sectionId, ordering, itemId, imageId};
 
         return jdbcTemplate.update(query, args) == 1;
     }

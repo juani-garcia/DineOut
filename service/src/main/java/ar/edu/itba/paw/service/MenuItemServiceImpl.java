@@ -19,8 +19,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem create(String name, String detail, double price, long sectionId, long ordering) {
-        return menuItemDao.create(name, detail, price, sectionId, ordering);
+    public MenuItem create(String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+        return menuItemDao.create(name, detail, price, sectionId, ordering, imageId);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering) {
-        return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering);
+    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+        return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, imageId);
     }
 }
