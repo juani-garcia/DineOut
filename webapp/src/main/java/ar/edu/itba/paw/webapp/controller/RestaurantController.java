@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,19 +87,24 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/item")
-    public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
-        return new ModelAndView("restaurant/item_form");
+    public ModelAndView itemForm(Principal principal, @ModelAttribute("itemForm") final MenuItemForm form) {
+        ModelAndView mav = new ModelAndView("restaurant/item_form");
+        User user = userService.getByUsername(principal.getName()).get();
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
+        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
+        mav.addObject("sections", menuSectionList);
+        return mav;
     }
 
     @RequestMapping(value = "/item", method = {RequestMethod.POST})
     public ModelAndView item(Principal principal, @Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
-            return itemForm(form);
+            return itemForm(principal, form);
         }
 
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow( () -> new RuntimeException("No hay restaurante"));
-        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering());
+        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), null);
         return new ModelAndView("redirect:/restaurant");
     }
 

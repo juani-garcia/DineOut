@@ -21,6 +21,9 @@ public class MenuItemForm {
     @NotNull
     private int ordering;
 
+    @NotNull
+    private String image;
+
     public String getName() {
         return name;
     }
@@ -59,6 +62,14 @@ public class MenuItemForm {
 
     public void setOrdering(int ordering) {
         this.ordering = ordering;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }
