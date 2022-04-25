@@ -31,12 +31,6 @@
                         <form:errors path="name" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <form:label path="image" cssClass="semibold label-text-size"><spring:message
-                                code="restaurant.item.form.image"/></form:label>
-                        <form:input type="text" path="image"/>
-                        <form:errors path="image" cssClass="isa_error" element="p"/>
-                    </div>
-                    <div class="row">
                         <form:label path="detail" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
@@ -49,10 +43,21 @@
                         <form:errors path="price" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <form:label path="menuSectionId" cssClass="semibold label-text-size"><spring:message
-                                code="restaurant.item.form.menutemId"/>*</form:label>
-                        <form:input path="menuSectionId" type="integer"/>
+                        <form:label path="menuSectionId" cssClass="semibold label-text-size">
+                            <spring:message code="restaurant.item.form.menuSectionId"/>
+                        </form:label>
+                        <form:select path="menuSectionId">
+                            <c:forEach items="${sections}" var="section">
+                                <form:option value="${section.id}" label="${section.name}"/>
+                            </c:forEach>
+                        </form:select>
                         <form:errors path="menuSectionId" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
+                        <form:label path="image" cssClass="semibold label-text-size"><spring:message
+                                code="restaurant.item.form.image"/>*</form:label>
+                        <form:input path="image" type="text"/>
+                        <form:errors path="image" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
                         <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
