@@ -31,6 +31,12 @@
                         <form:errors path="name" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
+                        <form:label path="image" cssClass="semibold label-text-size"><spring:message
+                                code="restaurant.item.form.image"/></form:label>
+                        <form:input type="text" path="image"/>
+                        <form:errors path="image" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
                         <form:label path="detail" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
