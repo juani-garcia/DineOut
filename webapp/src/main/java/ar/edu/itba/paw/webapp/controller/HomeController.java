@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.UsernameNotAvailableException;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.form.UserForm;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,12 +44,20 @@ public class HomeController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
+
+        // TODO: i18n
+        User user = userService.create(form.getUsername(), form.getPassword());
+        try {
+            user = userService.create(form.getUsername(), form.getPassword());
+        } catch(UsernameNotAvailableException e) {
+            errors.addError(new FieldError("registerForm", "username", "El nombre de usuairo no está disponible."));
+        }
+
         if (errors.hasErrors()) {
             return registerForm(form);
         }
 
-        final User user = userService.create(form.getUsername(), form.getPassword());
-
+        assert user != null;
         return new ModelAndView("redirect:/profile/" + user.getId());
     }
 
