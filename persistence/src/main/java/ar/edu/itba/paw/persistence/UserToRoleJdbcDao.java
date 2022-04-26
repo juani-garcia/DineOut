@@ -39,7 +39,7 @@ public class UserToRoleJdbcDao implements UserToRoleDao {
         userToRoleData.put("role_id", roleId);
 
         final long userToRoleId = jdbcInsert.executeAndReturnKey(userToRoleData).longValue();
-        return new UserToRole(userToRoleId, roleId, userId);
+        return new UserToRole(userToRoleId, userId, roleId);
     }
 }
 

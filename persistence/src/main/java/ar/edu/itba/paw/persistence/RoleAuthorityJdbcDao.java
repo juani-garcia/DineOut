@@ -15,7 +15,7 @@ public class RoleAuthorityJdbcDao implements RoleAuthorityDao {
 
     private final JdbcTemplate jdbcTemplate;
     static final RowMapper<RoleAuthority> ROW_MAPPER = (rs, rowNum) ->
-            new RoleAuthority(rs.getLong("id"), rs.getString("role_name"));
+            new RoleAuthority(rs.getLong("id"), rs.getString("authority_name"));
 
     @Autowired
     public RoleAuthorityJdbcDao(final DataSource ds) {
