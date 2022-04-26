@@ -1,10 +1,15 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@FieldsValueMatch(
+        field = "password",
+        fieldMatch = "confirmPassword"
+)
 public class UserForm {
 
     @Size(min = 6, max = 100)
