@@ -59,9 +59,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/restaurants").permitAll()
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
-                .antMatchers("/register_restaurant").hasAuthority("canCreateRestaurant")
+                .antMatchers("restaurant/**").hasAuthority("canCreateRestaurant")
                 .anyRequest().authenticated()
-                .and().formLogin()
+            .and().formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", false)
@@ -84,4 +84,5 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/resources/**");
     }
+
 }
