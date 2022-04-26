@@ -9,7 +9,7 @@
 </head>
 <body>
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../diner_detailed_navbar.jsp" %>
+<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <!-- Main title -->
 
@@ -18,7 +18,7 @@
 </div>
 
 <div>
-    <h1>Tus reservas:</h1>
+    <h1>Tu menu:</h1>
 </div>
 
 
