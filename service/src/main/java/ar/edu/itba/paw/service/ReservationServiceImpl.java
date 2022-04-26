@@ -23,7 +23,7 @@ public class ReservationServiceImpl implements ReservationService {
     private EmailService emailService;
 
     @Autowired
-    private OpeningHoursService openingHoursService;
+    private ShiftService shiftService;
 
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
@@ -31,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new InvalidTimeException();
         }
 
-        if(!Shift.belongs(openingHoursService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
+        if(!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
         }
 

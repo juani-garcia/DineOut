@@ -10,14 +10,14 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class OpeningHoursJdbcDao implements OpeningHoursDao {
+public class ShiftJdbcDao implements ShiftDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final static RowMapper<Shift> OPENING_HOURS_ROW_MAPPER = (rs, rowNum) ->
             Shift.getById(rs.getLong("id"));
 
     @Autowired
-    public OpeningHoursJdbcDao(final DataSource ds) {
+    public ShiftJdbcDao(final DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
     }
 
