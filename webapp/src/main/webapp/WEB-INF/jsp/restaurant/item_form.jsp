@@ -46,14 +46,12 @@
                         <form:label path="menuSectionId" cssClass="semibold label-text-size">
                             <spring:message code="restaurant.item.form.menuSectionId"/>
                         </form:label>
-                        <form:select path="menuSectionId">
-                            <form:options items="${sections}" itemLabel="name" itemValue="id" />
-                        </form:select>
+                        <form:select path="menuSectionId" items="${sections}" itemLabel="name" itemValue="id" />
                         <form:errors path="menuSectionId" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
                         <form:label path="image" cssClass="semibold label-text-size"><spring:message
-                                code="restaurant.item.form.image"/>*</form:label>
+                                code="restaurant.item.form.image"/></form:label>
                         <form:input path="image" type="text"/>
                         <form:errors path="image" cssClass="isa_error" element="p"/>
                     </div>

@@ -23,7 +23,6 @@ public class MenuItemForm {
     @Min(1)
     private int ordering;
 
-    @NotNull
     private String image;
 
     public String getName() {
