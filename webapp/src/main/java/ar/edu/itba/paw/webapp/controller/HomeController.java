@@ -55,9 +55,8 @@ public class HomeController {
         }
 
         if (errors.hasErrors()) {
-            System.out.println(errors);
             for (ObjectError oe : errors.getAllErrors()) {
-                System.out.println(oe);
+                errors.addError(new FieldError("registerForm", "password", oe.getDefaultMessage()));
             }
             return registerForm(form);
         }
