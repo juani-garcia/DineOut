@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.model.exceptions.UsernameNotAvailableException;
@@ -19,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -62,6 +60,14 @@ public class HomeController {
         return mav;
     }
 
+    @RequestMapping(value = "/restaurant_picker")
+    public ModelAndView restaurantPicker() {  // TODO: use tags and previous reservations to choose restaurant.
+        final List<Restaurant> restaurantList = restaurantService.getAll(1);
+        Random random = new Random();
+        System.out.println(restaurantList.size());
+        return new ModelAndView("redirect:/reserve/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm form) {
         final ModelAndView mav =new ModelAndView("register/register");
@@ -76,7 +82,7 @@ public class HomeController {
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         // TODO: i18n
         User user = null;
-        if (! errors.hasErrors()) {
+        if (!errors.hasErrors()) {
             try {
                 user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName());
             } catch (UsernameNotAvailableException e) {
@@ -84,7 +90,7 @@ public class HomeController {
             }
         }
 
-        if (errors.hasErrors()) {
+        if (errors.hasErrors() || user == null) {
             return registerForm(form);
         }
 
