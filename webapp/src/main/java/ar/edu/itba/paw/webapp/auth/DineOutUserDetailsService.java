@@ -51,7 +51,7 @@ public class DineOutUserDetailsService implements UserDetailsService {
 
         for (UserToRole userToRole : userToRoleList) {
             // Paso por todos los roles del usuario y por cada uno me guardo su nombre y todos sus privilegios.
-            Optional<UserRole> userRole = userRoleService.getByRoleId(userToRole.getId());
+            Optional<UserRole> userRole = userRoleService.getByRoleId(userToRole.getRoleId());
 
             if (!userRole.isPresent()) throw new IllegalStateException("El rol del usuario es invalido");
 
