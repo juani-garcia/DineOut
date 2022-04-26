@@ -23,30 +23,19 @@ import java.util.regex.Pattern;
 @Component
 public class DineOutUserDetailsService implements UserDetailsService {
 
-<<<<<<< HEAD
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final UserToRoleService userToRoleService;
     private final RoleToAuthorityService roleToAuthorityService;
     private final RoleAuthorityService roleAuthorityService;
-=======
-    private final UserService us;
-    private final RestaurantService rs;
->>>>>>> 1956c4ff206082db71e326c62dc8b85646afc85e
     private final PasswordEncoder passwordEncoder;
 
     private final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
 
     @Autowired
-<<<<<<< HEAD
     public DineOutUserDetailsService(final UserService userService, final PasswordEncoder passwordEncoder, final UserRoleService userRoleService, final UserToRoleService userToRoleService, RoleToAuthorityService roleToAuthorityService, RoleAuthorityService roleAuthorityService) {
         this.userService = userService;
-=======
-    public DineOutUserDetailsService(final UserService us, final RestaurantService rs, final PasswordEncoder passwordEncoder) {
-        this.us = us;
-        this.rs = rs;
->>>>>>> 1956c4ff206082db71e326c62dc8b85646afc85e
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
         this.userToRoleService = userToRoleService;
