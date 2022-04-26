@@ -27,7 +27,7 @@ public class FieldsValueMatchValidator implements ConstraintValidator<FieldsValu
 
         if (! isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("validation.matchingfields")
+            context.buildConstraintViolationWithTemplate("Debe coincidir con la contrasena")
                     .addNode(fieldMatch).addConstraintViolation();
         }
 
