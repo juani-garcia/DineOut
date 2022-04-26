@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.OpeningHours;
+import ar.edu.itba.paw.model.Shift;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,35 +10,35 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class OpeningHoursJdbcDao implements OpeningHoursDao {
+public class ShiftJdbcDao implements ShiftDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final static RowMapper<OpeningHours> OPENING_HOURS_ROW_MAPPER = (rs, rowNum) ->
-            OpeningHours.getById(rs.getLong("id"));
+    private final static RowMapper<Shift> OPENING_HOURS_ROW_MAPPER = (rs, rowNum) ->
+            Shift.getById(rs.getLong("id"));
 
     @Autowired
-    public OpeningHoursJdbcDao(final DataSource ds) {
+    public ShiftJdbcDao(final DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
     }
 
     @Override
-    public List<OpeningHours> getByRestaurantId(long restaurantId) {
+    public List<Shift> getByRestaurantId(long restaurantId) {
         String sql = "SELECT opening_hours_id id FROM restaurant_opening_hours WHERE restaurant_id = ?";
         Object[] args = new Object[]{restaurantId};
         return jdbcTemplate.query(sql, args, OPENING_HOURS_ROW_MAPPER);
     }
 
     @Override
-    public boolean add(long restaurantId, OpeningHours openingHours) {
+    public boolean add(long restaurantId, Shift shift) {
         String sql = "INSERT INTO restaurant_opening_hours VALUES (?, ?) ON CONFLICT DO NOTHING";
-        Object[] args = new Object[]{restaurantId, openingHours.getId()};
+        Object[] args = new Object[]{restaurantId, shift.getId()};
         return jdbcTemplate.update(sql, args) == 1;
     }
 
     @Override
-    public boolean delete(long restaurantId, OpeningHours openingHours) {
+    public boolean delete(long restaurantId, Shift shift) {
         String sql = "DELETE FROM restaurant_opening_hours WHERE restaurant_id = ? AND opening_hours_id = ?";
-        Object[] args = new Object[]{restaurantId, openingHours.getId()};
+        Object[] args = new Object[]{restaurantId, shift.getId()};
         return jdbcTemplate.update(sql, args) == 1;
     }
 }

@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.webapp.exceptions;
+package ar.edu.itba.paw.model.exceptions;
 
-public class RestaurantNotFoundException extends RuntimeException{
+public class RestaurantNotFoundException extends RuntimeException {
 
     private final static String MESSAGE = "Restaurant not found";
 

@@ -2,20 +2,18 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
-import ar.edu.itba.paw.model.UserToRole;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserRoleService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.service.UserToRoleService;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -74,11 +72,18 @@ public class HomeController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
+
+        // TODO: i18n
+        final User user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName());
+//        try {
+//            user = userService.create(form.getUsername(), form.getPassword());
+//        } catch(UsernameNotAvailableException e) {
+//            errors.addError(new FieldError("registerForm", "username", "El nombre de usuairo no está disponible."));
+//        }
+
         if (errors.hasErrors()) {
             return registerForm(form);
         }
-
-        final User user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName());
 
         if (form.getRole().equals(this.roles.get("RESTAURANT"))) {
             Optional<UserRole> userRole = userRoleService.getByRoleName("RESTAURANT");

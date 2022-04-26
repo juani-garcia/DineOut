@@ -57,6 +57,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
                 .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
+                .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
                 .antMatchers("/register_restaurant").hasAuthority("canCreateRestaurant")
                 .anyRequest().authenticated()
