@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.OpeningHours;
+import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
@@ -31,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new InvalidTimeException();
         }
 
-        if(!OpeningHours.belongs(openingHoursService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
+        if(!Shift.belongs(openingHoursService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
         }
 

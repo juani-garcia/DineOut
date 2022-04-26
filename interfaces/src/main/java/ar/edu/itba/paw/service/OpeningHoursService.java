@@ -1,15 +1,15 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.OpeningHours;
+import ar.edu.itba.paw.model.Shift;
 
 import java.util.List;
 
 public interface OpeningHoursService {
 
-    List<OpeningHours> getByRestaurantId(long restaurantId);
+    List<Shift> getByRestaurantId(long restaurantId);
 
-    boolean add(long restaurantId, OpeningHours openingHours);
+    boolean add(long restaurantId, Shift shift);
 
-    boolean delete(long restaurantId, OpeningHours openingHours);
+    boolean delete(long restaurantId, Shift shift);
 
 }

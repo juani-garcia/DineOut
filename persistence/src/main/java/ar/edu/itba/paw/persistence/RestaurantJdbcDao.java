@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.OpeningHours;
+import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public List<Restaurant> filter(int page, String name, List<Category> categories, List<OpeningHours> openingHours, List<Zone> zones) {
+    public List<Restaurant> filter(int page, String name, List<Category> categories, List<Shift> openingHours, List<Zone> zones) {
         List<Object> args = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT DISTINCT r.id AS id, r.name AS name, r.address AS address,");
@@ -76,7 +76,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
         if(openingHours != null) {
             sql.append("AND (");
-            for(OpeningHours hours : openingHours) {
+            for(Shift hours : openingHours) {
                 sql.append(" roh.opening_hours_id = ? OR");
                 args.add(hours.ordinal());
             }

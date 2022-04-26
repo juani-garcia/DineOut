@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.OpeningHours;
+import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.persistence.OpeningHoursDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,17 +14,17 @@ public class OpeningHoursServiceImpl implements OpeningHoursService {
     private OpeningHoursDao openingHoursDao;
 
     @Override
-    public List<OpeningHours> getByRestaurantId(long restaurantId) {
+    public List<Shift> getByRestaurantId(long restaurantId) {
         return openingHoursDao.getByRestaurantId(restaurantId);
     }
 
     @Override
-    public boolean add(long restaurantId, OpeningHours openingHours) {
-        return openingHoursDao.add(restaurantId, openingHours);
+    public boolean add(long restaurantId, Shift shift) {
+        return openingHoursDao.add(restaurantId, shift);
     }
 
     @Override
-    public boolean delete(long restaurantId, OpeningHours openingHours) {
-        return openingHoursDao.delete(restaurantId, openingHours);
+    public boolean delete(long restaurantId, Shift shift) {
+        return openingHoursDao.delete(restaurantId, shift);
     }
 }

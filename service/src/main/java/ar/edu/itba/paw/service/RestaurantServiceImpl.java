@@ -3,8 +3,6 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Restaurant> filter(int page, String name, List<Category> categories, List<OpeningHours> openingHours, List<Zone> zones) {
+    public List<Restaurant> filter(int page, String name, List<Category> categories, List<Shift> openingHours, List<Zone> zones) {
         if(name == null && categories == null && openingHours == null && zones == null) {
             return getAll(page);
         }
