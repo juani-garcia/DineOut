@@ -9,7 +9,9 @@ import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.service.UserToRoleService;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +38,9 @@ public class HomeController {
 
     @Autowired
     private UserToRoleService userToRoleService;
+
+    @Autowired
+    private SecurityController securityController;
 
     private final HashMap<String, String> roles = new HashMap<String, String>() {
         {
@@ -85,7 +90,7 @@ public class HomeController {
             userToRoleService.create(user.getId(), userRole.get().getId());
         }
 
-        return new ModelAndView("redirect:/profile/" + user.getId());
+        return new ModelAndView("redirect:/profile");
     }
 
     @RequestMapping("/login")
@@ -96,9 +101,9 @@ public class HomeController {
     @RequestMapping("/profile")
     public ModelAndView profile() {
         final ModelAndView mav = new ModelAndView("home/profile");
-        Object loggedInUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (loggedInUser == null) throw new RuntimeException("Not logged in");  // TODO: I18N
-        mav.addObject("user", loggedInUser);
+        Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
+        if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
+        mav.addObject("user", loggedInUser.get());
         return mav;
     }
 
