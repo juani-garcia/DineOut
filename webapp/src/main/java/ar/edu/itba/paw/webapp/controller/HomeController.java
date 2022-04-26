@@ -7,6 +7,8 @@ import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.NewPasswordForm;
 import ar.edu.itba.paw.webapp.form.PasswordRecoveryForm;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +29,8 @@ import java.util.*;
 @Controller
 @ControllerAdvice
 public class HomeController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private UserService userService;
