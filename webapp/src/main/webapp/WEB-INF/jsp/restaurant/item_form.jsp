@@ -47,9 +47,7 @@
                             <spring:message code="restaurant.item.form.menuSectionId"/>
                         </form:label>
                         <form:select path="menuSectionId">
-                            <c:forEach items="${sections}" var="section">
-                                <form:option value="${section.id}" label="${section.name}"/>
-                            </c:forEach>
+                            <form:options items="${sections}" itemLabel="name" itemValue="id" />
                         </form:select>
                         <form:errors path="menuSectionId" cssClass="isa_error" element="p"/>
                     </div>
