@@ -13,7 +13,7 @@
 <div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold"><c:out value="${restaurant.name}"/></h1>
+            <h1 class="header center white-text bold text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h1>
         </div>
     </div>
     <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
@@ -21,16 +21,20 @@
 </div>
 
 <div class="container">
-    <div class="section">
+    <div class="section restaurant_detail_flex_container">
         <!--   Icon Section   -->
-        <div class="row default_dark rounded shadowed">
-            <div class="align_center align_space_between">
+        <div class="card horizontal card_wrapper default_dark white-text align_center same_width_elements">
+            <div class="card-content same_width_elements">
                 <div class="icon-block">
-                    <h2 class="center white-text"><i class="material-icons">restaurant_menu</i></h2>
-                    <h5 class="center white-text semibold"><c:out value="${restaurant.detail}"/></h5>
+                    <h2 class="center"><i class="material-icons">restaurant_menu</i></h2>
+                    <h5 class="center"><c:out value="${restaurant.detail}"/></h5>
                 </div>
-                    <h5 class="center white-text">&#128205;<c:out value="${restaurant.address}"/></h5>
-                    <h5 class="center white-text">Horarios: </h5>
+            </div>
+            <div class="card-content same_width_elements">
+                <h5 class="center">&#128205;<c:out value="${restaurant.address}"/></h5>
+            </div>
+            <div class="card-content same_width_elements">
+                <h5 class="center">Horarios: </h5>
             </div>
         </div>
     </div>

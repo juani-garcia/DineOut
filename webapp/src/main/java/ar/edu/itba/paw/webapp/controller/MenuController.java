@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.MenuSection;
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MenuController {
@@ -24,14 +26,20 @@ public class MenuController {
     @Autowired
     private UserService userService;
 
+     @Autowired
+     private ErrorController errorController;
+
     @RequestMapping("/menu/{resID}")
     public ModelAndView menu(@PathVariable final long resID) {
         final ModelAndView mav = new ModelAndView("reservation/menu");
+        Optional<Restaurant> restaurant = restaurantService.getById(resID);
+        if (!restaurant.isPresent()) return errorController.noSuchRestaurant();
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(resID);
         for (MenuSection section: menuSectionList) {
             section.setMenuItemList(menuItemService.getBySectionId(section.getId()));
         }
         mav.addObject("sections", menuSectionList);
+        mav.addObject("restaurant", restaurant.get());
         return mav;
     }
 
