@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.validations;
 
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
