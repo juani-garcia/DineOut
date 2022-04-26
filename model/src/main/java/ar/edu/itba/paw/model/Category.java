@@ -1,48 +1,42 @@
 package ar.edu.itba.paw.model;
 
 public enum Category {
-    ITALIAN     (1, "categories.name.italian"),
-    AMERICAN    (2, "categories.name.american"),
-    SPANISH     (3, "categories.name.spanish"),
-    PIZZA       (4, "categories.name.pizza"),
-    STEAKHOUSE  (5, "categories.name.steakhouse"),
-    BAR         (6, "categories.name.bar"),
-    CHINESE     (7, "categories.name.chinese"),
-    VIET_THAI   (8, "categories.name.viet_thai"),
-    BURGERS     (9, "categories.name.burgers"),
-    JAPANESE    (10, "categories.name.japanese"),
-    SUSHI       (11, "categories.name.sushi"),
-    VEGGIE      (12, "categories.name.veggie"),
-    INDIAN      (13, "categories.name.indian"),
-    EMPANADAS   (14, "categories.name.empanadas"),
-    BOULANGERIE (15, "categories.name.boulangerie"),
-    COFFEE      (16, "categories.name.coffee"),
-    BREWERY     (17, "categories.name.brewery"),
-    PERUVIAN    (18, "categories.name.peruvian"),
-    NIKKEI      (19, "categories.name.nikkei"),
-    ARABIAN     (20, "categories.name.arabian"),
-    MEXICAN     (21, "categories.name.mexican"),
-    GELATO      (22, "categories.name.gelato");
+    ITALIAN     ("categories.name.italian"),
+    AMERICAN    ("categories.name.american"),
+    SPANISH     ("categories.name.spanish"),
+    PIZZA       ("categories.name.pizza"),
+    STEAKHOUSE  ("categories.name.steakhouse"),
+    BAR         ("categories.name.bar"),
+    CHINESE     ("categories.name.chinese"),
+    VIET_THAI   ("categories.name.viet_thai"),
+    BURGERS     ("categories.name.burgers"),
+    JAPANESE    ("categories.name.japanese"),
+    SUSHI       ("categories.name.sushi"),
+    VEGGIE      ("categories.name.veggie"),
+    INDIAN      ("categories.name.indian"),
+    EMPANADAS   ("categories.name.empanadas"),
+    BOULANGERIE ("categories.name.boulangerie"),
+    COFFEE      ("categories.name.coffee"),
+    BREWERY     ("categories.name.brewery"),
+    PERUVIAN    ("categories.name.peruvian"),
+    NIKKEI      ("categories.name.nikkei"),
+    ARABIAN     ("categories.name.arabian"),
+    MEXICAN     ("categories.name.mexican"),
+    GELATO      ("categories.name.gelato");
 
     private final String message;
-    private final long id;
 
-    Category(long id, String name) {
+    Category(String name) {
         this.message = name;
-        this.id = id;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public static Category getById(long id) {
+    public static Category getByOrdinal(long ordinal) {
         for(Category c : Category.values()) {
-            if(c.getId() == id) {
+            if(c.ordinal() == ordinal) {
                 return c;
             }
         }
