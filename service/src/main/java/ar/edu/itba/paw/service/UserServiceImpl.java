@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UsernameNotAvailableException;
-import ar.edu.itba.paw.persistence.RestaurantDao;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,14 +32,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String username, String password) {
+    public User create(String username, String password, final String firstName, final String lastName) {
+        // TODO : validate password
         if(getByUsername(username).isPresent()) {
             throw new UsernameNotAvailableException();
         }
 
         // TODO : send email validation mail
         // TODO : ...
-        return userDao.create(username, passwordEncoder.encode(password));
+        return userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
     }
 
 

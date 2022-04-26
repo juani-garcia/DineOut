@@ -19,7 +19,7 @@
 
         <ul class="right hide-on-small-and-down">
             <c:if test="${pageContext.request.userPrincipal.name == null}">
-                <li><a href="<c:url value="/register"/>" class="restaurant-register light">¡Registra tu restaurante!</a>
+                <li><a href="<c:url value="/register"/>" class="restaurant-register light">¡Registrate!</a>
                 </li>
                 <li><a href="<c:url value="/login"/>"
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">Iniciar

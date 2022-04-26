@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
 import org.hibernate.validator.constraints.Email;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @FieldsValueMatch(
@@ -15,10 +16,18 @@ public class UserForm {
     @Email
     private String username;
 
+    @NotNull
+    @Size(max = 100)
+    private String firstName, lastName;
+
     @Size(min = 8)
     private String password;
 
+    @NotNull
     private String confirmPassword;
+
+    @NotNull
+    private String role;
 
     public String getUsername() {
         return username;
@@ -44,4 +53,27 @@ public class UserForm {
         this.confirmPassword = confirmPassword;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
