@@ -56,5 +56,9 @@ CREATE TABLE IF NOT EXISTS restaurant_opening_hours (
     opening_hours_id INTEGER,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(id),
     PRIMARY KEY (restaurant_id, opening_hours_id)
-)
+);
 
+CREATE TABLE IF NOT EXISTS image (
+    id  SERIAL PRIMARY KEY,
+    source BYTEA
+);
