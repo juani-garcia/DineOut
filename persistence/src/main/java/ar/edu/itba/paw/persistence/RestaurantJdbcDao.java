@@ -110,7 +110,8 @@ public class RestaurantJdbcDao implements RestaurantDao {
         restaurantData.put("mail", mail);
         restaurantData.put("detail", detail);
 
-        final long restaurantid = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
-        return new Restaurant(restaurantid, userID, name, address, mail, detail, null);
+        final long restaurantId = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
+        return new Restaurant(restaurantId, userID, name, address, mail, detail, null);
     }
+
 }
