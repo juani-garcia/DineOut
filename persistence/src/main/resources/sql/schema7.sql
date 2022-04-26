@@ -26,4 +26,30 @@ CREATE TRIGGER dineout_menusection_ordering
     FOR EACH ROW
     EXECUTE PROCEDURE maintain_ordering_menusection();
 
-INSERT INTO menu_section VALUES (default, 'Seccion 2', 1, 2);
+-- Add menu item ordering maintenance on insert
+CREATE OR REPLACE FUNCTION maintain_ordering_menuitem() RETURNS trigger AS $maintain_ordering_menuitem$
+DECLARE
+    query_cursor CURSOR FOR SELECT *
+                            FROM menu_item
+                            WHERE ordering >= NEW.ordering AND section_id = NEW.section_id
+                            ORDER BY ordering DESC
+                            FOR UPDATE;
+    rec RECORD;
+BEGIN
+    OPEN query_cursor;
+    FETCH query_cursor INTO rec;    -- Read a row from the cursor
+    WHILE FOUND LOOP
+            UPDATE menu_item SET ordering = ordering + 1 WHERE CURRENT OF query_cursor;
+            FETCH query_cursor INTO rec;  -- Keep on reading rows
+        END LOOP;
+    CLOSE query_cursor;
+    RETURN NEW;
+END;
+$maintain_ordering_menuitem$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS dineout_menuitem_ordering ON menu_item;
+
+CREATE TRIGGER dineout_menuitem_ordering
+    BEFORE INSERT ON menu_item
+    FOR EACH ROW
+EXECUTE PROCEDURE maintain_ordering_menuitem();
