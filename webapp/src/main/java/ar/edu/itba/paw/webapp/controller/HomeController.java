@@ -4,6 +4,8 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import javax.validation.Valid;
 
 @Controller
 public class HomeController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private UserService userService;
