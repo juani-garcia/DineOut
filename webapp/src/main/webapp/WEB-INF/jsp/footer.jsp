@@ -46,3 +46,9 @@
 <script src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script src="<c:url value="/resources/js/materialize.js"/>"></script>
 <script src="<c:url value="/resources/js/init.js"/>"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
