@@ -108,9 +108,14 @@ public class HomeController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        final ModelAndView mav = new ModelAndView("home/profile");
         Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
         if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
+        ModelAndView mav = null;
+        if (userService.isRestaurant(loggedInUser.get().getId())) {
+            mav = new ModelAndView("home/restaurant_profile");
+        } else {
+            mav = new ModelAndView("home/profile");
+        }
         mav.addObject("user", loggedInUser.get());
         return mav;
     }
