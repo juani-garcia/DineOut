@@ -2,10 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
-import ar.edu.itba.paw.service.MenuItemService;
-import ar.edu.itba.paw.service.MenuSectionService;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
@@ -41,6 +38,9 @@ public class RestaurantController {
 
     @Autowired
     private MenuItemService menuItemService;
+
+    @Autowired
+    private ShiftService shiftService;
 
     @Autowired
     private SecurityController securityController;
@@ -135,6 +135,7 @@ public class RestaurantController {
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
         mav.addObject("restaurant", restaurant);
         mav.addObject("formSuccess", false);
+        mav.addObject("shifts", shiftService.getByRestaurantId(resId));
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
         mav.addObject("sections", menuSectionList);
