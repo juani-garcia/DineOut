@@ -18,6 +18,14 @@ public enum Shift {
         this.end = end;
     }
 
+    public LocalTime getStart() {
+        return start;
+    }
+
+    public LocalTime getEnd() {
+        return end;
+    }
+
     public long getId() {
         return ordinal();
     }
