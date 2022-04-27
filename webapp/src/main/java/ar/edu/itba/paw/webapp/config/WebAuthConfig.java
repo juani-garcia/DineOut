@@ -63,7 +63,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/restaurant/section").hasAuthority("canCreateRestaurant")
                 .antMatchers("/restaurant/register").hasAuthority("canCreateRestaurant")
                 .antMatchers("/restaurant").hasRole("RESTAURANT")
-                .antMatchers("/restaurant/view/**").hasRole("DINER")
+                .antMatchers("/restaurant/view/**").hasAnyRole("DINER", "RESTAURANT")
                 .antMatchers("/reserve/**").hasAuthority("canReserveTable")
                 .anyRequest().authenticated()
             .and().formLogin()
