@@ -1,16 +1,18 @@
 package ar.edu.itba.paw.model;
 
 public class Restaurant {
-    private final long id;
-    private final String name, mail, address, detail, image;
+    private final long id, userID;
+    private final String name, mail, address, detail;
+    private final Zone zone;
 
-    public Restaurant(long id, String name, String address, String mail, String detail, String image) {
+    public Restaurant(long id, long userID, String name, String address, String mail, String detail, Zone zone) {
         this.id = id;
+        this.userID = userID;
         this.name = name;
         this.address = address;
         this.detail = detail;
-        this.image = image;
         this.mail = mail;
+        this.zone = zone;
     }
 
     public long getId() {
@@ -29,8 +31,12 @@ public class Restaurant {
         return detail;
     }
 
-    public String getImage() {
-        return image;
+    public Zone getZone() {
+        return zone;
+    }
+
+    public long getUserID() {
+        return userID;
     }
 
     public String getMail() {

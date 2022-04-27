@@ -1,11 +1,15 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
+import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -19,10 +23,17 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ShiftService shiftService;
+
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
-        if(dateTime.isBefore(LocalDateTime.now())) {
-            // Reservation was made in the past.
+        if(!restaurantService.getById(restaurantId).isPresent()) {
+            throw new InvalidTimeException();
+        }
+
+        if(!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
+            throw new InvalidTimeException();
         }
 
         Reservation reservation = reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
@@ -33,5 +44,10 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getReservationId(), restaurantMail, userMail, amount, dateTime, comments);
 
         return reservation;
+    }
+
+    @Override
+    public List<Reservation> getAllByUsername(String username) {
+        return reservationDao.getAllByUsername(username);
     }
 }
