@@ -15,10 +15,6 @@ public class ReservationForm {
 
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
-    @NotEmpty
-    @Email
-    private String mail;
-
     @Size(max = 150)
     private String comments;
 
@@ -30,14 +26,6 @@ public class ReservationForm {
     @FutureString(pattern = DATE_TIME_FORMAT)
     @Format(pattern = DATE_TIME_FORMAT)
     private String dateTime;
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
 
     public String getComments() {
         return comments;

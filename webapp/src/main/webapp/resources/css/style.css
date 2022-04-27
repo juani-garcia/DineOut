@@ -301,6 +301,10 @@ h1 {
     transform: scale(0.9);
 }
 
+.scale_up {
+    transform: scale(1.5);
+}
+
 /* Form error */
 .isa_info, .isa_success, .isa_warning, .isa_error {
     margin: 10px 0px;
@@ -451,8 +455,8 @@ h1 {
 }
 
 .menu_title_card {
-    width: 500px;
-    height: 200px;
+    min-width: 500px;
+    min-height: 200px;
     background-color: white;
 }
 
