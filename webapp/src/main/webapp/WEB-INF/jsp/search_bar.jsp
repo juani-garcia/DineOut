@@ -12,15 +12,15 @@
                   id="search_form">
                 <div class="card-content same_width_elements_with_overflow">
                     <label>
-                        Nombre del restaurant:
+                        <spring:message code="search_bar.restaurant_name"/>:
                         <input name="name" type="text"/>
                     </label>
                 </div>
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="category_select">
-                        Categoria:
+                        <spring:message code="search_bar.category"/>:
                         <select name="category">
-                            <option value="" disabled selected>Selecciona una categoria:
+                            <option value="" disabled selected><spring:message code="search_bar.category.placeholder"/>:
                             </option>
                             <c:forEach items="${categories}" var="category">
                                 <option value="${category.name}"><c:out value="${category.name}"/></option>
@@ -30,9 +30,9 @@
                 </div>
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="shift_select">
-                        Turno:
+                        <spring:message code="search_bar.shift"/>:
                         <select name="shift">
-                            <option value="" disabled selected>Selecciona una turno:
+                            <option value="" disabled selected><spring:message code="search_bar.shift.placeholder"/>:
                             </option>
                             <c:forEach items="${shifts}" var="shift">
                                 <option value="${shift.name}"><c:out value="${shift.name}"/></option>
@@ -42,9 +42,9 @@
                 </div>
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="zone_select">
-                        Zona:
+                        <spring:message code="search_bar.zone"/>:
                         <select name="zone">
-                            <option value="" disabled selected>Selecciona una zona:
+                            <option value="" disabled selected><spring:message code="search_bar.zone.placeholder"/>:
                             </option>
                             <c:forEach items="${zones}" var="zone">
                                 <option value="${zone.name}"><c:out value="${zone.name}"/></option>
