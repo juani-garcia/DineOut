@@ -59,7 +59,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/restaurants").permitAll()
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
-                .antMatchers("restaurant/**").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/**").hasAuthority("canCreateRestaurant")
                 .anyRequest().authenticated()
             .and().formLogin()
                 .usernameParameter("username")

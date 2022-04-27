@@ -10,7 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../user_detailed_navbar.jsp" %>
+<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <h2 class="megabold center">Contanos mas de tu restaurante</h2>
 
@@ -42,12 +42,15 @@
                         <form:input path="price" type="number" step="0.01" min="0"/>
                         <form:errors path="price" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row">
-                        <form:label path="menuSectionId" cssClass="semibold label-text-size">
-                            <spring:message code="restaurant.item.form.menuSectionId"/>
-                        </form:label>
-                        <form:select path="menuSectionId" items="${sections}" itemLabel="name" itemValue="id" />
-                        <form:errors path="menuSectionId" cssClass="isa_error" element="p"/>
+                    <div class="row input-field">
+                        <form:label path="menuSectionId" cssClass="semibold label-text-size"><spring:message
+                                code="restaurant.item.form.menuSectionId"/></form:label>
+                        <form:select path="menuSectionId">
+                            <c:forEach items="${sections}" var="section">
+                                <form:option value="${section.id}"><c:out value="${section.name}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="menuSectionId" element="p" cssClass="isa_error"/>
                     </div>
                     <!-- <div class="row">
                         <form:label path="image" cssClass="semibold label-text-size"><spring:message
@@ -79,5 +82,15 @@
 </form:form>
 
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
+        <c:forEach items="${sections}" var="section">
+        options.push("${section.name}");
+        </c:forEach>
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
 </body>
 </html>

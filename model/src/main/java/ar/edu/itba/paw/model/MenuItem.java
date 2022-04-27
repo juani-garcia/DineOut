@@ -14,6 +14,7 @@ public class MenuItem {
         this.price = price;
         this.sectionId = sectionId;
         this.ordering = ordering;
+        this.imageId = imageId;
     }
 
     public long getOrdering() {

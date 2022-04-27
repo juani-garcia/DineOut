@@ -127,7 +127,7 @@ public class HomeController {
         if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
         ModelAndView mav = null;
         if (userService.isRestaurant(loggedInUser.get().getId())) {
-            mav = new ModelAndView("home/restaurant_profile");
+            return new ModelAndView("redirect:/restaurant");
         } else {
             mav = new ModelAndView("home/profile");
         }

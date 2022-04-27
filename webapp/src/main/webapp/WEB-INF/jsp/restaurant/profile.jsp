@@ -10,12 +10,13 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small">
+<%@ include file="../restaurant_detailed_navbar.jsp" %>
+
+<div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold">
-                <c:if test="${empty restaurant}">No tenes restaurante</c:if>
-                <c:if test="${not empty restaurant}"><c:out value="${restaurant.name}"/></c:if>
+                <c:out value="${restaurant.name}"/>
             </h1>
         </div>
     </div>
@@ -23,34 +24,34 @@
                                alt=""></div>   <!-- Custom restaurant image -->
 </div>
 
-
-<div id="restaurant-parallax-container" class="parallax-container fill_space">
-    <div class="row align_center">
-        <a href="<c:url value="/restaurant/section"/>" class="waves-effect waves-light btn">Agregar seccion</a>
-        <a href="<c:url value="/restaurant/item"/>" class="waves-effect waves-light btn">Agregar item</a>
+<div class="container flex_center padding-15px">
+    <div class="menu_title_card flex_center align_center rounded shadowed">
+        <h1 class="megabold flex_center groovy">Menu:</h1>
     </div>
-    <div class="row align_center">
-        <div class="col">
+    <div class="section flex_center width_100">
+        <div class="card menu_card">
+            <div class="center-align padding-15px">
+                <a href="<c:url value="/restaurant/section"/>" class="btn-large waves-effect waves-light default_red white-text">Agregar seccion</a>
+                <a href="<c:url value="/restaurant/item"/>" class="btn-large waves-effect waves-light default_red white-text">Agregar item</a>
+            </div>
             <c:forEach items="${sections}" var="section">
-                 <div class="card card_wrapper">
-                            <%--                <div class="card-image">--%>
-                            <%--                    <img src="" alt="">--%>
-                            <%--                </div>--%>
-                        <div class="card-content black-text">
-                            <h2><c:out value="${section.name}"/></h2>
-                            <c:forEach items="${section.menuItemList}" var="item">
-                                <p><c:out value="${item.name}"/></p>
-                                <p><c:out value="${item.detail}"/></p>
-
-                                <p><c:out value="${item.price}"/></p>
-                            </c:forEach>
+                <%--                <div class="card-image">--%>
+                <%--                    <img src="" alt="">--%>
+                <%--                </div>--%>
+                <div class="card-content black-text">
+                    <h2 class="bold"><c:out value="${section.name}"/></h2>
+                    <c:forEach items="${section.menuItemList}" var="item">
+                        <div class="section_item_container align_center">
+                            <h4><c:out value="${item.name}"/></h4>
+                            <p>$ <c:out value="${item.price}"/></p>
                         </div>
-                    </div>
+                        <hr>
+                        <p><c:out value="${item.detail}"/></p>
+                    </c:forEach>
+                </div>
             </c:forEach>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg"/>"
-                               alt=""></div>
 </div>
 
 
