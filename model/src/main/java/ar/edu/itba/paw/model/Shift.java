@@ -41,6 +41,8 @@ public enum Shift {
     }
 
     public static boolean belongs(List<Shift> hours, LocalTime time) {
+        if(hours.isEmpty()) return true;
+
         for (Shift hour : hours) {
             if(hour.belongs(time)){
                 return true;
