@@ -26,10 +26,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Restaurant> filter(int page, String name, long categoryId, long shiftId, long zoneId) {
-        Category category = Category.getByOrdinal(categoryId);
-        Zone zone = Zone.getByOrdinal(zoneId);
-        Shift shift = Shift.getById(shiftId);
+    public List<Restaurant> filter(int page, String name, String categoryName, String shiftName, String zoneName) {
+        Category category = Category.getByName(categoryName);
+        Zone zone = Zone.getByName(zoneName);
+        Shift shift = Shift.getByName(shiftName);
 
         return restaurantDao.filter(page, name, category, shift, zone);
     }
