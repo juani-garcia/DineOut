@@ -67,6 +67,7 @@ public class RestaurantController {
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("register/register_restaurant");
         mav.addObject("zones", Zone.values());
+        mav.addObject("categoryList", Category.values());
         return mav;
     }
 

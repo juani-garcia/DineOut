@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class RestaurantForm {
     @Size(min = 1, max = 100)
@@ -26,6 +27,9 @@ public class RestaurantForm {
 
     @NotNull
     private String zone;
+
+    @NotNull
+    private List<Long> categories;
 
     public String getName() {
         return name;
@@ -65,5 +69,13 @@ public class RestaurantForm {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public List<Long> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Long> categories) {
+        this.categories = categories;
     }
 }
