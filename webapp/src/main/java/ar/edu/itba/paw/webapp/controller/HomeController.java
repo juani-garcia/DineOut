@@ -74,12 +74,12 @@ public class HomeController {
         final List<Restaurant> restaurantList = restaurantService.getAll(1);
         Random random = new Random();
         System.out.println(restaurantList.size());
-        return new ModelAndView("redirect:/reserve/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
+        return new ModelAndView("redirect:/restaurant/view/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm form) {
-        final ModelAndView mav =new ModelAndView("register/register");
+        final ModelAndView mav = new ModelAndView("register/register");
         List<String> roles = new ArrayList<>();
         roles.add(this.roles.get("RESTAURANT"));
         roles.add(this.roles.get("DINER"));
@@ -125,14 +125,10 @@ public class HomeController {
     public ModelAndView profile() {
         Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
         if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
-        ModelAndView mav = null;
         if (userService.isRestaurant(loggedInUser.get().getId())) {
             return new ModelAndView("redirect:/restaurant");
-        } else {
-            mav = new ModelAndView("home/profile");
         }
-        mav.addObject("user", loggedInUser.get());
-        return mav;
+        return new ModelAndView("redirect:/diner/profile");
     }
 
     @RequestMapping("/search")
