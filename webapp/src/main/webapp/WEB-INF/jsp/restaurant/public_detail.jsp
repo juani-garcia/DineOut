@@ -44,10 +44,10 @@
     <div class="menu_title_card flex_center align_center rounded shadowed padding-15px">
         <h1 class="megabold flex_center groovy">
             <c:if test="${sections.size() == 0}">
-                El restaurante no cargo un menu.
+                <spring:message code="restaurant.public_detail.no_menu"/>.
             </c:if>
             <c:if test="${sections.size() != 0}">
-                Menu:
+                <spring:message code="restaurant.public_detail.menu"/>:
             </c:if>
         </h1>
     </div>

@@ -19,7 +19,7 @@
         <div class="row center">
             <a href="<c:url value ="/restaurants"/>"
                class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                ¡Explora todos los restaurantes!
+                <spring:message code="home.index.explore.button"/>
             </a>
         </div>
         <div class="row">
@@ -33,8 +33,8 @@
     <div class="section">
         <div id="index-banner" class="rounded shadowed parallax-container parallax-container-large home_parallax">
             <a href="<c:url value ="/restaurant_picker"/>" class="row rounded shadowed white padding-15px home_parallax_card waves-effect waves-red grow_on_hover">
-                <h5 class="center bold default_dark_text groovy">¿No sabes que comer?</h5>
-                <p class="center default_dark_text">Dejanos elegir un restaurante para vos</p>
+                <h5 class="center bold default_dark_text groovy"><spring:message code="home.index.picker.question"/></h5>
+                <p class="center default_dark_text"><spring:message code="home.index.picker.answer"/></p>
             </a>
             <div class="parallax white"><img src="<c:url value="/resources/media/background2.jpg"/>"
                                        alt=""></div>   <!-- Custom restaurant image -->

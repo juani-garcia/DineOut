@@ -12,7 +12,7 @@
 <%@ include file="../navbar.jsp" %>
 <%@ include file="../restaurant_detailed_navbar.jsp" %>
 
-<h2 class="megabold center">Contanos mas de tu restaurante</h2>
+<h2 class="megabold center"><spring:message code="register.restaurant.form.title"></h2>
 
 
 <c:url value="/restaurant/item" var="postPath"/>
