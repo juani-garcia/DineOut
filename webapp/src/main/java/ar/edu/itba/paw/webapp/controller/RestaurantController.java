@@ -80,7 +80,7 @@ public class RestaurantController {
         Long userId = securityController.getCurrentUserId();
         if (userId == null) throw new IllegalStateException("Not logged in");
         try {
-            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()));
+            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories());
         } catch (DuplicateKeyException e) {
             errors.addError(new FieldError("restaurantForm", "email", "El mail ya esta en uso"));
             return restaurantForm(form);

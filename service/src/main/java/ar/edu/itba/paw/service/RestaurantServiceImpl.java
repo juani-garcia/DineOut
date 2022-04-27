@@ -13,6 +13,9 @@ import java.util.Optional;
 public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private RestaurantDao restaurantDao;
 
     @Override
@@ -35,9 +38,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone) {
+    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories) {
         // TODO : validate data
-        return restaurantDao.create(userID, name, address, mail, detail, zone);
+        Restaurant restaurant = restaurantDao.create(userID, name, address, mail, detail, zone);
+        for (Long categoryId : categories) {
+            Category category = Category.getByOrdinal(categoryId);
+            categoryService.add(restaurant.getId(), category);
+        }
+        return restaurant;
     }
 
     @Override
