@@ -55,10 +55,10 @@
                                 code="home.register.form.confirmPassword"/></form:label>
                         <form:input type="password" path="confirmPassword"/>
                     </div>
-                    <div class="row">
+                    <div class="row input-field">
                         <form:label path="role"><spring:message
                                 code="home.register.form.roleSelector"/></form:label>
-                        <form:select path="role" items="${roleItems}" size="${roleItems.size()}" cssClass="browser-default"/>
+                        <form:select path="role" items="${roleItems}" size="${roleItems.size()}"/>
                         <form:errors path="role" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row center">
@@ -76,5 +76,15 @@
 
 
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
+        <c:forEach items="${roleItems}" var="roleItem">
+        options.push("${roleItem}");
+        </c:forEach>
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
 </body>
 </html>
