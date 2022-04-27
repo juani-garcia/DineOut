@@ -31,14 +31,16 @@
     <div class="section flex_center width_100">
         <div class="card menu_card">
             <div class="center-align padding-15px">
-                <a href="<c:url value="/restaurant/section"/>" class="btn-large waves-effect waves-light default_red white-text">Agregar seccion</a>
-                <a href="<c:url value="/restaurant/item"/>" class="btn-large waves-effect waves-light default_red white-text">Agregar item</a>
+                <a href="<c:url value="/restaurant/section"/>"
+                   class="btn-large waves-effect waves-light default_red white-text">Agregar seccion</a>
+                <a href="<c:url value="/restaurant/item"/>"
+                   class="btn-large waves-effect waves-light default_red white-text">Agregar item</a>
             </div>
-            <c:forEach items="${sections}" var="section">
-                <%--                <div class="card-image">--%>
-                <%--                    <img src="" alt="">--%>
-                <%--                </div>--%>
-                <div class="card-content black-text">
+            <div class="card-content black-text">
+                <c:forEach items="${sections}" var="section">
+                    <%--                <div class="card-image">--%>
+                    <%--                    <img src="" alt="">--%>
+                    <%--                </div>--%>
                     <h2 class="bold"><c:out value="${section.name}"/></h2>
                     <c:forEach items="${section.menuItemList}" var="item">
                         <div class="section_item_container align_center">
@@ -48,8 +50,8 @@
                         <hr>
                         <p><c:out value="${item.detail}"/></p>
                     </c:forEach>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
     </div>
 </div>

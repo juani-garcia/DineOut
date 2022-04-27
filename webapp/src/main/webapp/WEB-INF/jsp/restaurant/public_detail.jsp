@@ -53,11 +53,8 @@
     </div>
     <div class="section flex_center width_100">
         <div class="card menu_card">
-            <c:forEach items="${sections}" var="section">
-                <%--                <div class="card-image">--%>
-                <%--                    <img src="" alt="">--%>
-                <%--                </div>--%>
-                <div class="card-content black-text">
+            <div class="card-content black-text">
+                <c:forEach items="${sections}" var="section">
                     <h2 class="bold"><c:out value="${section.name}"/></h2>
                     <c:forEach items="${section.menuItemList}" var="item">
                         <div class="section_item_container align_center">
@@ -67,8 +64,8 @@
                         <hr>
                         <p><c:out value="${item.detail}"/></p>
                     </c:forEach>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
     </div>
 </div>
