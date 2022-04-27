@@ -294,7 +294,7 @@ h1 {
 }
 
 .menu_card {
-    max-width: inherit;
+    width: 70%;
 }
 
 .scale_down {
@@ -424,5 +424,38 @@ h1 {
 
 .search_bar {
     display: flex;
+}
 
+.select-wrapper input.select-dropdown {
+    margin: 8px 0 8px 0;
+}
+
+.input-field > label {
+    font-size: 1.2rem;
+}
+
+.section_item_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex_center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.restaurant_card {
+    width: 80%;
+}
+
+.menu_title_card {
+    width: 500px;
+    height: 200px;
+    background-color: white;
+}
+
+.width_100 {
+    width: 100%;
 }

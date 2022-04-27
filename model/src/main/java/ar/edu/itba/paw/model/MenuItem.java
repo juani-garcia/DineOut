@@ -5,14 +5,16 @@ public class MenuItem {
     private String name, detail;
     private double price;
     private long sectionId, id, ordering;
+    private long imageId;
 
-    public MenuItem(long id, String name, String detail, double price, long sectionId, long ordering) {
+    public MenuItem(long id, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
         this.id = id;
         this.name = name;
         this.detail = detail;
         this.price = price;
         this.sectionId = sectionId;
         this.ordering = ordering;
+        this.imageId = imageId;
     }
 
     public long getOrdering() {
@@ -61,6 +63,14 @@ public class MenuItem {
 
     public void setSectionId(long sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(long imageId) {
+        this.imageId = imageId;
     }
 
     @Override
