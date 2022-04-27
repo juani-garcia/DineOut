@@ -243,6 +243,14 @@ h1 {
     transform: scale(1.1);
 }
 
+.grow_on_hover2 {
+    transition: all 0.2s ease-in-out;
+}
+
+.grow_on_hover2:hover {
+    transform: scale(2);
+}
+
 .outline-black {
     text-shadow: -2px -2px 0 #000,
     2px -2px 0 #000,

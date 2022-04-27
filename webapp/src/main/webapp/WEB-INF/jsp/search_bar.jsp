@@ -52,7 +52,7 @@
                         </select>
                     </label>
                 </div>
-                <a class="card-content grow_on_hover black-text" type="submit" id="search-button"
+                <a class="card-content grow_on_hover2 black-text" type="submit" id="search-button"
                      onclick="document.getElementById('search_form').submit();"><i class="material-icons">search</i>
                 </a>
             </form>
