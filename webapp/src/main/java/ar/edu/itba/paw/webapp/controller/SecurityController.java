@@ -36,4 +36,13 @@ public class SecurityController {
         if (!optionalUser.isPresent()) return null;
         return optionalUser.get().getId();
     }
+
+    @RequestMapping(value = "/first_name", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCurrentFirstName() {
+        Authentication authentication = authenticationFacade.getAuthentication();
+        String userName = authentication.getName();
+        Optional<User> optionalUser = userService.getByUsername(userName);
+        return optionalUser.map(User::getFirstName).orElse(null);
+    }
 }

@@ -31,7 +31,7 @@
                        class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                ¡Hola <c:out value="${pageContext.request.userPrincipal.name}"/>!
+                                ¡Hola <c:import url="/first_name"/>!
                             </p>
                             <p>
                                 <i class="material-icons">menu</i>
