@@ -37,7 +37,7 @@
             <c:if test="${restaurants.size() != 0}">
                 <c:forEach items="${restaurants}" var="restaurant">
 
-                    <a href="<c:url value ="/reserve/${restaurant.id}"/>" class="flex_center">
+                    <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>" class="flex_center">
                         <div class="card horizontal card_wrapper grow_on_hover restaurant_card">
                             <div class="card-image">
                                 <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img" class="scale_down rounded" />

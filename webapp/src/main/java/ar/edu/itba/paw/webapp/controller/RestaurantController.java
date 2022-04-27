@@ -1,18 +1,20 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
+import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -116,6 +118,19 @@ public class RestaurantController {
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), null);
         return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping("/view/{resId}")
+    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
+        final ModelAndView mav = new ModelAndView("restaurant/public_detail");
+
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
+        mav.addObject("restaurant", restaurant);
+        mav.addObject("formSuccess", false);
+        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
+        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
+        mav.addObject("sections", menuSectionList);
+        return mav;
     }
 
 }

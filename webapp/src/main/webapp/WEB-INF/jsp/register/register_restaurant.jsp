@@ -10,6 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
+<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <h2 class="megabold center default_dark_text"><spring:message code="register.restaurant.form.title"/></h2>
 
