@@ -272,6 +272,14 @@ h1 {
     text-overflow: ellipsis;
 }
 
+.same_width_elements_with_overflow {
+    flex: 1;
+}
+
+.dropdown-content {
+    max-height: 400px;
+}
+
 .restaurant_detail_flex_container {
     display: flex;
 }
@@ -387,8 +395,8 @@ h1 {
     height: 20px;
 }
 
-select {
-    display: inherit;
+.dropdown-content li > a, .dropdown-content li > span {
+    color: #242B2A !important;
 }
 
 .restaurant_detail_card {
@@ -403,4 +411,18 @@ select {
 
 .card.horizontal .card-image img {
     border-radius: 24px;
+}
+
+.card.horizontal .card-image {
+    max-width: 30%;
+}
+
+.role_selector {
+    width: 100%;
+    margin-top: auto;
+}
+
+.search_bar {
+    display: flex;
+
 }
