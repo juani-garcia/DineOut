@@ -60,6 +60,15 @@
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
                     <div class="row">
+                        <form:label path="categories" cssClass="semibold label-text-size">
+                            <spring:message code="register.restaurant.form.categories"/>
+                        </form:label>
+                        <form:select multiple="true" path="categories">
+                            <form:options items="${categoryList}" itemValue="id" itemLabel="name"/>
+                        </form:select>
+                        <form:errors path="categories" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
