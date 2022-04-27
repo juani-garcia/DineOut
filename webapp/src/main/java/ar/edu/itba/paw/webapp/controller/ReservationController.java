@@ -43,12 +43,12 @@ public class ReservationController {
     private SecurityController securityController;
 
     @RequestMapping("/reserve/{resId}")
-    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
+    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form,  @RequestParam(name = "formSuccess", defaultValue = "false") final boolean formSuccess) {
          final ModelAndView mav = new ModelAndView("reservation/reservation");
 
          Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
          mav.addObject("restaurant", restaurant);
-         mav.addObject("formSuccess", false);
+         mav.addObject("formSuccess", formSuccess);
          return mav;
     }
 
@@ -63,7 +63,7 @@ public class ReservationController {
         }
 
         if (errors.hasErrors()) {
-            return reservation(resId, form);
+            return reservation(resId, form, false);
         }
 
 
