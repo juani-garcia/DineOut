@@ -34,7 +34,7 @@
                     <div class="row">
                         <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.section.form.ordering"/>*</form:label>
-                        <form:input path="ordering" type="integer"/>
+                        <form:input path="ordering" type="number" step="1" min="1" value="1"/>
                         <form:errors path="ordering" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
