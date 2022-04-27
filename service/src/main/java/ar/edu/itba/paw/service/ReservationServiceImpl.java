@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -43,5 +44,10 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getReservationId(), restaurantMail, userMail, amount, dateTime, comments);
 
         return reservation;
+    }
+
+    @Override
+    public List<Reservation> getAllByUsername(String username) {
+        return reservationDao.getAllByUsername(username);
     }
 }
