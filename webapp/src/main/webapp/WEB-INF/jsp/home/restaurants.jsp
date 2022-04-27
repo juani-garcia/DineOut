@@ -30,7 +30,9 @@
             <c:if test="${restaurants.size() == 0}">
                 <div class="container">
                     <div class="card card_wrapper padding-15px default_dark">
-                        <h1 class="header center default_light_text">No hay restaurantes disponibles</h1>
+                        <h1 class="header center default_light_text">
+                            <spring:message code="home.restaurants.none_found"/>
+                        </h1>
                     </div>
                 </div>
             </c:if>

@@ -20,6 +20,9 @@ public class SecurityController {
     @Autowired
     private UserService userService;
 
+    private String cachedUserName = null;
+    private String cachedFirstName = null;
+
     @RequestMapping(value = "/username", method = RequestMethod.GET)
     @ResponseBody
     public String getCurrentUserName() {
@@ -35,5 +38,18 @@ public class SecurityController {
         Optional<User> optionalUser = userService.getByUsername(userName);
         if (!optionalUser.isPresent()) return null;
         return optionalUser.get().getId();
+    }
+
+    @RequestMapping(value = "/first_name", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCurrentFirstName() {
+        Authentication authentication = authenticationFacade.getAuthentication();
+        String userName = authentication.getName();
+        if (cachedUserName == null || !cachedUserName.equals(userName)) {
+            cachedUserName = userName;
+            Optional<User> optionalUser = userService.getByUsername(userName);
+            cachedFirstName = optionalUser.map(User::getFirstName).orElse(null);
+        }
+        return cachedFirstName;
     }
 }
