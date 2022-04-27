@@ -52,7 +52,7 @@
                         <a type="submit" id="register-button"
                            class="btn-large waves-effect waves-red white black-text lighten-1"
                            href="javascript:{}" onclick="document.getElementById('reservation_form').submit();">
-                            <spring:message code="reservation.reservation.form.submit"
+                            <spring:message code="reservation.reservation.form.submit" />
                         </a>
                     </div>
                 </div>
