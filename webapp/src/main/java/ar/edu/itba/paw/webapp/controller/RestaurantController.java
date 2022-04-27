@@ -11,8 +11,10 @@ import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +67,7 @@ public class RestaurantController {
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("register/register_restaurant");
         mav.addObject("zones", Zone.values());
+        mav.addObject("categoryList", Category.values());
         return mav;
     }
 
@@ -76,7 +79,12 @@ public class RestaurantController {
 
         Long userId = securityController.getCurrentUserId();
         if (userId == null) throw new IllegalStateException("Not logged in");
-        restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()));
+        try {
+            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories());
+        } catch (DuplicateKeyException e) {
+            errors.addError(new FieldError("restaurantForm", "email", "El mail ya esta en uso"));
+            return restaurantForm(form);
+        }
 
         return new ModelAndView("redirect:/restaurant");
     }
