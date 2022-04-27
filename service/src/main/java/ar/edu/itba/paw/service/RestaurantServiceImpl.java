@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,12 +26,12 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Restaurant> filter(int page, String name, List<Category> categories, List<Shift> openingHours, List<Zone> zones) {
-        if(name == null && categories == null && openingHours == null && zones == null) {
-            return getAll(page);
-        }
+    public List<Restaurant> filter(int page, String name, String categoryName, String shiftName, String zoneName) {
+        Category category = Category.getByName(categoryName);
+        Zone zone = Zone.getByName(zoneName);
+        Shift shift = Shift.getByName(shiftName);
 
-        return restaurantDao.filter(page, name, categories, openingHours, zones);
+        return restaurantDao.filter(page, name, category, shift, zone);
     }
 
     @Override

@@ -10,9 +10,8 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../user_detailed_navbar.jsp" %>
 
-<h2 class="megabold center">Contanos mas de tu restaurante</h2>
+<h2 class="megabold center default_dark_text"><spring:message code="register.restaurant.form.title"/></h2>
 
 
 <c:url value="/restaurant/register" var="postPath"/>
@@ -49,6 +48,7 @@
                                 code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
+                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
                     <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
