@@ -16,7 +16,7 @@ public interface RestaurantDao {
 
     List<Restaurant> getAll(int page);
 
-    List<Restaurant> filter(int page, String name, List<Category> categories, List<Shift> openingHours, List<Zone> zones);
+    List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone);
 
     Restaurant create(final long userID, final String name, final String address, final String mail, final String detail);
 }
