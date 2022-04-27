@@ -10,7 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../user_detailed_navbar.jsp" %>
+<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <h2 class="megabold center">Contanos mas de tu restaurante</h2>
 
