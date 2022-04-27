@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UsernameNotAvailableException;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserRoleService;
@@ -54,9 +52,14 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/restaurants")
-    public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
+    public ModelAndView webapp(
+            @RequestParam(name = "page", defaultValue = "1") final int page,
+            @RequestParam(name = "name", defaultValue = "") final String name,
+            @RequestParam(name = "category", defaultValue = "") final String category,
+            @RequestParam(name = "zone", defaultValue = "") final String zone,
+            @RequestParam(name = "shift", defaultValue = "") final String shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
-        mav.addObject("restaurants", restaurantService.getAll(page));
+        mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
 
@@ -123,6 +126,15 @@ public class HomeController {
             mav = new ModelAndView("home/profile");
         }
         mav.addObject("user", loggedInUser.get());
+        return mav;
+    }
+
+    @RequestMapping("/search")
+    public ModelAndView search() {
+        final ModelAndView mav = new ModelAndView("home/search");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         return mav;
     }
 
