@@ -48,6 +48,9 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView webapp() {
         final ModelAndView mav = new ModelAndView("home/index");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         return mav;
     }
 
@@ -59,6 +62,9 @@ public class HomeController {
             @RequestParam(name = "zone", defaultValue = "") final String zone,
             @RequestParam(name = "shift", defaultValue = "") final String shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
@@ -97,7 +103,7 @@ public class HomeController {
             return registerForm(form);
         }
 
-        if (form.getRole().equals(this.roles.get("RESTAURANT"))) {
+        if (form.getRole().equals(this.roles.get("RESTAURANT"))) {  // TODO: move this logic into service
             Optional<UserRole> userRole = userRoleService.getByRoleName("RESTAURANT");
             if (!userRole.isPresent()) throw new IllegalStateException("El rol RESTAURANT no esta presente en la bbdd");
             userToRoleService.create(user.getId(), userRole.get().getId());
