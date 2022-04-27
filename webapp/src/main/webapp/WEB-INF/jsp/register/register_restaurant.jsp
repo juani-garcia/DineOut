@@ -29,14 +29,22 @@
                         <form:input type="text" path="name"/>
                         <form:errors path="name" cssClass="isa_error" element="p"/>
                     </div>
-
                     <div class="row">
                         <form:label path="address" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.address"/>*</form:label>
                         <form:input path="address" type="text"/>
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
-
+                    <div class="row input-field">
+                        <form:label path="zone" cssClass="semibold label-text-size"><spring:message
+                                code="register.restaurant.form.zone"/></form:label>
+                        <form:select path="zone">
+                            <c:forEach items="${zones}" var="zone">
+                                <form:option value="${zone.name}"><c:out value="${zone.name}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="zone" element="p" cssClass="isa_error"/>
+                    </div>
                     <div class="row">
                         <form:label path="email" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.email"/>*</form:label>
@@ -67,5 +75,15 @@
 </form:form>
 
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
+        <c:forEach items="${zones}" var="zone">
+        options.push("${zone.name}");
+        </c:forEach>
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
 </body>
 </html>

@@ -35,9 +35,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant create(long userID, String name, String address, String mail, String detail) {
+    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone) {
         // TODO : validate data
-        return restaurantDao.create(userID, name, address, mail, detail);
+        return restaurantDao.create(userID, name, address, mail, detail, zone);
     }
 
     @Override

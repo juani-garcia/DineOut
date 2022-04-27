@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.model.Zone;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
@@ -23,6 +24,9 @@ public class RestaurantForm {
     @NotNull
     private String detail;
 
+    @NotNull
+    private String zone;
+
     public String getName() {
         return name;
     }
@@ -41,6 +45,14 @@ public class RestaurantForm {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
     }
 
     public void setAddress(String address) {

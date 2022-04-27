@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.MenuItem;
-import ar.edu.itba.paw.model.MenuSection;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.service.RestaurantService;
@@ -23,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -40,24 +38,32 @@ public class RestaurantController {
     @Autowired
     private MenuItemService menuItemService;
 
+    @Autowired
+    private SecurityController securityController;
+
     @RequestMapping("")
     public ModelAndView restaurantProfile(Principal principal) {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
-        User user = userService.getByUsername(principal.getName()).get();
+        Optional<User> optionalUser = userService.getByUsername(principal.getName());
+        if (!optionalUser.isPresent()) throw new IllegalStateException("Not logged in.");
+        User user = optionalUser.get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
+        if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
         mav.addObject("restaurant", restaurant);
 
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach( (section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
+        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
         mav.addObject("sections", menuSectionList);
         return mav;
     }
 
     @RequestMapping("/register")
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        return new ModelAndView("register/register_restaurant");
+        ModelAndView mav = new ModelAndView("register/register_restaurant");
+        mav.addObject("zones", Zone.values());
+        return mav;
     }
 
     @RequestMapping(value = "/register", method = {RequestMethod.POST})
@@ -65,6 +71,10 @@ public class RestaurantController {
         if (errors.hasErrors()) {
             return restaurantForm(form);
         }
+
+        Long userId = securityController.getCurrentUserId();
+        if (userId == null) throw new IllegalStateException("Not logged in");
+        restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()));
 
         return new ModelAndView("redirect:/restaurant");
     }
@@ -81,7 +91,7 @@ public class RestaurantController {
         }
 
         User user = userService.getByUsername(principal.getName()).get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow( () -> new RuntimeException("No hay restaurante"));
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
         MenuSection menuSection = menuSectionService.create(form.getName(), restaurant.getId(), form.getOrdering());
         return new ModelAndView("redirect:/restaurant");
     }
@@ -103,7 +113,7 @@ public class RestaurantController {
         }
 
         User user = userService.getByUsername(principal.getName()).get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow( () -> new RuntimeException("No hay restaurante"));
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), null);
         return new ModelAndView("redirect:/restaurant");
     }
