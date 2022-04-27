@@ -10,10 +10,11 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small">
+<div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold">dale que se puede</h1>
+            <h1 class="header center white-text bold"><c:out value="${restaurant.name}"/></h1>
+            <h4 class="header center white-text bold"><c:out value="${restaurant.detail}"/></h4>
         </div>
     </div>
     <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
@@ -21,14 +22,15 @@
 </div>
 
 
-<div id="restaurant-parallax-container" class="parallax-container fill_space">
-    <div class="row align_center">
-        <div class="col">
-            <c:forEach items="${sections}" var="section">
-                 <div class="card card_wrapper">
-                            <%--                <div class="card-image">--%>
-                            <%--                    <img src="" alt="">--%>
-                            <%--                </div>--%>
+<div class="container">
+    <div class="section">
+        <div class="align_center">
+            <div class="col">
+                <div class="card menu_card">
+                    <c:forEach items="${sections}" var="section">
+                        <%--                <div class="card-image">--%>
+                        <%--                    <img src="" alt="">--%>
+                        <%--                </div>--%>
                         <div class="card-content black-text">
                             <h2><c:out value="${section.name}"/></h2>
                             <c:forEach items="${section.menuItemList}" var="item">
@@ -38,14 +40,12 @@
                                 <p><c:out value="${item.price}"/></p>
                             </c:forEach>
                         </div>
-                    </div>
-            </c:forEach>
+                    </c:forEach>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg"/>"
-                               alt=""></div>
 </div>
-
 
 <%@ include file="../footer.jsp" %>
 </body>

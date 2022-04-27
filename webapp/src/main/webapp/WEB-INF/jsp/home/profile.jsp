@@ -9,12 +9,18 @@
 </head>
 <body>
 <%@ include file="../navbar.jsp" %>
+<%@ include file="../diner_detailed_navbar.jsp" %>
 
 <!-- Main title -->
 
 <div>
-    <p><c:out value="${user.username}"/> </p>
+    <p><c:out value="${user.firstName}"/> </p>
 </div>
+
+<div>
+    <h1>Tus reservas:</h1>
+</div>
+
 
 <%@ include file="../footer.jsp" %>
 </body>

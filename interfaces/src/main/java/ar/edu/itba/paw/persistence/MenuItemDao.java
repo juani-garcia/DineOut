@@ -8,10 +8,10 @@ public interface MenuItemDao {
 
     List<MenuItem> getBySectionId(long sectionId);
 
-    MenuItem create(String name, String detail, double price, long sectionId, long ordering);
+    MenuItem create(String name, String detail, double price, long sectionId, long ordering, Long imageId);
 
     boolean delete(long itemId);
 
-    boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering);
+    boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, Long imageId);
 
 }

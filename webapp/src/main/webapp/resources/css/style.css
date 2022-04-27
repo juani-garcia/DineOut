@@ -120,6 +120,11 @@ footer.page-footer {
     margin-top: auto;
 }
 
+.text_overflow_ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Default color scheme */
 .default_dark {
     background-color: #242B2A !important;
@@ -236,7 +241,6 @@ h1 {
 
 .grow_on_hover:hover {
     transform: scale(1.1);
-    background-color: transparent;
 }
 
 .outline-black {
@@ -262,9 +266,26 @@ h1 {
     justify-content: space-evenly;
 }
 
+.same_width_elements {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.same_width_elements_with_overflow {
+    flex: 1;
+}
+
+.dropdown-content {
+    max-height: 400px;
+}
+
+.restaurant_detail_flex_container {
+    display: flex;
+}
+
 .card {
     border-radius: 20px;
-    transition: all 0.2s ease-in-out;
 }
 
 .card_wrapper {
@@ -272,19 +293,16 @@ h1 {
     min-width: 1000px;
 }
 
-.card:hover {
-    transform: scale(1.1);
+.menu_card {
+    width: 70%;
 }
 
-.card-image {
-    padding: 10px;
-    float: left;
-    width: 150px;
-    height: 100%;
+.scale_down {
+    transform: scale(0.9);
 }
 
-.card-image img {
-    height: 100%;
+.scale_up {
+    transform: scale(1.5);
 }
 
 /* Form error */
@@ -381,6 +399,67 @@ h1 {
     height: 20px;
 }
 
-select {
-    display: inherit;
+.dropdown-content li > a, .dropdown-content li > span {
+    color: #242B2A !important;
+}
+
+.restaurant_detail_card {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Override card image border radius */
+.card .card-image img {
+    border-radius: 24px;
+}
+
+.card.horizontal .card-image img {
+    border-radius: 24px;
+}
+
+.card.horizontal .card-image {
+    max-width: 30%;
+}
+
+.role_selector {
+    width: 100%;
+    margin-top: auto;
+}
+
+.search_bar {
+    display: flex;
+}
+
+.select-wrapper input.select-dropdown {
+    margin: 8px 0 8px 0;
+}
+
+.input-field > label {
+    font-size: 1.2rem;
+}
+
+.section_item_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex_center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.restaurant_card {
+    width: 80%;
+}
+
+.menu_title_card {
+    min-width: 500px;
+    min-height: 200px;
+    background-color: white;
+}
+
+.width_100 {
+    width: 100%;
 }

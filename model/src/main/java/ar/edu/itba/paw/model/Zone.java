@@ -235,9 +235,22 @@ public enum Zone {
         return name;
     }
 
+    public long getId() {
+        return ordinal();
+    }
+
     public static Zone getByOrdinal(long ordinal) {
         for (Zone zone : Zone.values()) {
             if (zone.ordinal() == ordinal) {
+                return zone;
+            }
+        }
+        return null;
+    }
+
+    public static Zone getByName(String name) {
+        for (Zone zone : Zone.values()) {
+            if (zone.getName().equals(name)) {
                 return zone;
             }
         }

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UsernameNotAvailableException;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserRoleService;
@@ -19,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -52,14 +48,33 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView webapp() {
         final ModelAndView mav = new ModelAndView("home/index");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         return mav;
     }
 
     @RequestMapping(value = "/restaurants")
-    public ModelAndView webapp(@RequestParam(name = "page", defaultValue = "1") final int page) {
+    public ModelAndView webapp(
+            @RequestParam(name = "page", defaultValue = "1") final int page,
+            @RequestParam(name = "name", defaultValue = "") final String name,
+            @RequestParam(name = "category", defaultValue = "") final String category,
+            @RequestParam(name = "zone", defaultValue = "") final String zone,
+            @RequestParam(name = "shift", defaultValue = "") final String shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
-        mav.addObject("restaurants", restaurantService.getAll(page));
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
+        mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
+    }
+
+    @RequestMapping(value = "/restaurant_picker")
+    public ModelAndView restaurantPicker() {  // TODO: use tags and previous reservations to choose restaurant.
+        final List<Restaurant> restaurantList = restaurantService.getAll(1);
+        Random random = new Random();
+        System.out.println(restaurantList.size());
+        return new ModelAndView("redirect:/reserve/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -76,7 +91,7 @@ public class HomeController {
     public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         // TODO: i18n
         User user = null;
-        if (! errors.hasErrors()) {
+        if (!errors.hasErrors()) {
             try {
                 user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName());
             } catch (UsernameNotAvailableException e) {
@@ -84,11 +99,11 @@ public class HomeController {
             }
         }
 
-        if (errors.hasErrors()) {
+        if (errors.hasErrors() || user == null) {
             return registerForm(form);
         }
 
-        if (form.getRole().equals(this.roles.get("RESTAURANT"))) {
+        if (form.getRole().equals(this.roles.get("RESTAURANT"))) {  // TODO: move this logic into service
             Optional<UserRole> userRole = userRoleService.getByRoleName("RESTAURANT");
             if (!userRole.isPresent()) throw new IllegalStateException("El rol RESTAURANT no esta presente en la bbdd");
             userToRoleService.create(user.getId(), userRole.get().getId());
@@ -108,10 +123,24 @@ public class HomeController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        final ModelAndView mav = new ModelAndView("home/profile");
         Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
         if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
+        ModelAndView mav = null;
+        if (userService.isRestaurant(loggedInUser.get().getId())) {
+            return new ModelAndView("redirect:/restaurant");
+        } else {
+            mav = new ModelAndView("home/profile");
+        }
         mav.addObject("user", loggedInUser.get());
+        return mav;
+    }
+
+    @RequestMapping("/search")
+    public ModelAndView search() {
+        final ModelAndView mav = new ModelAndView("home/search");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         return mav;
     }
 

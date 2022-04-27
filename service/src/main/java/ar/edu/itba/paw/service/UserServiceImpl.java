@@ -14,11 +14,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
+    private final UserRoleService userRoleService;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.userRoleService = userRoleService;
     }
 
     @Override
@@ -33,14 +35,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(String username, String password, final String firstName, final String lastName) {
-        // TODO : validate password
         if(getByUsername(username).isPresent()) {
             throw new UsernameNotAvailableException();
         }
 
         // TODO : send email validation mail
-        // TODO : ...
         return userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
+    }
+
+    @Override
+    public boolean isRestaurant(long userId) {
+        return userRoleService.hasRoleByUserId(userId, "RESTAURANT");
+    }
+
+    @Override
+    public boolean isDiner(long userId) {
+        return userRoleService.hasRoleByUserId(userId, "DINER");
     }
 
 

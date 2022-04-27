@@ -48,50 +48,33 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public List<Restaurant> filter(int page, String name, List<Category> categories, List<Shift> openingHours, List<Zone> zones) {
+    public List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
         List<Object> args = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT DISTINCT r.id AS id, r.name AS name, r.address AS address,");
-        sql.append("r.mail AS mail, r.detail AS detail, r.zone_id AS zone_id, r.user_id AS user_id\n");
+        StringBuilder sql = new StringBuilder("SELECT id, name, address, mail, detail, zone_id, user_id\n");
 
-        sql.append("FROM (restaurant r LEFT OUTER JOIN restaurant_category rc ON r.id = rc.restaurant_id)\n");
-        sql.append("LEFT OUTER JOIN restaurant_opening_hours roh ON r.id = roh.restaurant_id\n");
+        sql.append("FROM restaurant\n");
         sql.append("WHERE true\n");
 
         if(name != null) {
-            sql.append("AND LOWER(r.name) like ?\n");
+            sql.append("AND LOWER(name) like ?\n");
             args.add('%' + name.toLowerCase() + '%');
         }
 
         // TODO:
-        if(categories != null) {
-            sql.append("AND (");
-            for(Category category : categories) {
-                sql.append(" rc.category_id = ? OR");
-                args.add(category.ordinal());
-            }
-            sql.delete(sql.length() - 2, sql.length());
-            sql.append(")\n");
+        if(category != null) {
+            sql.append("AND id in (SELECT restaurant_id FROM restaurant_category WHERE category_id = ?)\n");
+            args.add(category.getId());
         }
 
-        if(openingHours != null) {
-            sql.append("AND (");
-            for(Shift hours : openingHours) {
-                sql.append(" roh.opening_hours_id = ? OR");
-                args.add(hours.ordinal());
-            }
-            sql.delete(sql.length() - 2, sql.length());
-            sql.append(")\n");
+        if(shift != null) {
+            sql.append("AND id in (SELECT restaurant_id FROM restaurant_opening_hours WHERE opening_hours_id = ?)\n");
+            args.add(shift.getId());
         }
 
-        if(zones != null) {
-            sql.append("AND (");
-            for(Zone zone : zones) {
-                sql.append(" r.zone_id = ? OR");
-                args.add(zone.ordinal());
-            }
-            sql.delete(sql.length() - 2, sql.length());
-            sql.append(")\n");
+        if(zone != null) {
+            sql.append("AND zone_id = ?\n");
+            args.add(zone.getId());
         }
 
         sql.append("LIMIT ? OFFSET ?");
@@ -102,15 +85,17 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public Restaurant create(final long userID, final String name, final String address, final String mail, final String detail) {
+    public Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone) {
         final Map<String, Object> restaurantData = new HashMap<>();
         restaurantData.put("user_id", userID);
         restaurantData.put("name", name);
         restaurantData.put("address", address);
         restaurantData.put("mail", mail);
         restaurantData.put("detail", detail);
+        restaurantData.put("zone_id", zone.getId());
 
-        final long restaurantid = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
-        return new Restaurant(restaurantid, userID, name, address, mail, detail, null);
+        final long restaurantId = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
+        return new Restaurant(restaurantId, userID, name, address, mail, detail, zone);
     }
+
 }

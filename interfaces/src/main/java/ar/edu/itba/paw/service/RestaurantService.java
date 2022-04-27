@@ -14,9 +14,9 @@ public interface RestaurantService {
 
     List<Restaurant> getAll(int page);
 
-    List<Restaurant> filter(int page, String name, List<Category> categories, List<Shift> openingHours, List<Zone> zones);
+    List<Restaurant> filter(int page, String name, String categoryName, String shiftName, String zoneName);
 
-    Restaurant create(final long userID, final String name, final String address, final String mail, final String detail);
+    Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone);
 
     Optional<Restaurant> getByUserID(long id);
 }

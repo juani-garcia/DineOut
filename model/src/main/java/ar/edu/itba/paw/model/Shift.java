@@ -4,16 +4,16 @@ import java.time.LocalTime;
 import java.util.List;
 
 public enum Shift {
-    MORNING("opening_hours.name.morning", LocalTime.of(8, 0), LocalTime.of(11, 59)),
-    NOON("opening_hours.name.noon", LocalTime.of(12, 0), LocalTime.of(15, 59)),
-    AFTERNOON("opening_hours.name.afternoon", LocalTime.of(16, 0), LocalTime.of(19, 59)),
-    EVENING("opening_hours.name.evening", LocalTime.of(20, 0), LocalTime.of(23, 59));
+    MORNING("Mañana", LocalTime.of(8, 0), LocalTime.of(11, 59)),
+    NOON("Mediodiía", LocalTime.of(12, 0), LocalTime.of(15, 59)),
+    AFTERNOON("Tarde", LocalTime.of(16, 0), LocalTime.of(19, 59)),
+    EVENING("Noche", LocalTime.of(20, 0), LocalTime.of(23, 59));
 
-    private final String message;
+    private final String name;
     private final LocalTime start, end;
 
-    Shift(String message, LocalTime start, LocalTime end) {
-        this.message = message;
+    Shift(String name, LocalTime start, LocalTime end) {
+        this.name = name;
         this.start = start;
         this.end = end;
     }
@@ -22,8 +22,8 @@ public enum Shift {
         return ordinal();
     }
 
-    public String getMessage() {
-        return message;
+    public String getName() {
+        return name;
     }
 
     public static Shift getById(long id) {
@@ -41,11 +41,22 @@ public enum Shift {
     }
 
     public static boolean belongs(List<Shift> hours, LocalTime time) {
+        if(hours.isEmpty()) return true;
+
         for (Shift hour : hours) {
             if(hour.belongs(time)){
                 return true;
             }
         }
         return false;
+    }
+
+    public static Shift getByName(String name) {
+        for(Shift shift : Shift.values()) {
+            if (shift.getName().equals((name))) {
+                return shift;
+            }
+        }
+        return null;
     }
 }

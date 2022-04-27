@@ -10,31 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <h1 class="header center white-text bold"><c:out value="${restaurant.name}"/></h1>
-        </div>
-    </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>   <!-- Custom restaurant image -->
-</div>
-
-<div class="container">
-    <div class="section">
-        <!--   Icon Section   -->
-        <div class="row default_dark rounded shadowed">
-            <div class="align_center align_space_between">
-                <div class="icon-block">
-                    <h2 class="center white-text"><i class="material-icons">restaurant_menu</i></h2>
-                    <h5 class="center white-text semibold"><c:out value="${restaurant.detail}"/></h5>
-                </div>
-                    <h5 class="center white-text">&#128205;<c:out value="${restaurant.address}"/></h5>
-                    <h5 class="center white-text">Horarios: </h5>
-            </div>
-        </div>
-    </div>
-</div>
+<%@ include file="../diner_detailed_navbar.jsp" %>
 
 <c:url value="/create/${resId}" var="postPath"/>
 <form:form id="reservation_form" modelAttribute="reservationForm" action="${postPath}" method="post">
@@ -45,13 +21,6 @@
                     <div class="row">
                         <h5 class="white bold"><spring:message code="reservation.reservation.form.header"/></h5>
                     </div>
-                    <div class="row">
-                        <form:label path="mail" cssClass="semibold label-text-size"><spring:message
-                                code="reservation.reservation.form.mail"/>*</form:label>
-                        <form:input type="text" path="mail"/>
-                        <form:errors path="mail" cssClass="isa_error" element="p"/>
-                    </div>
-
                     <div class="row">
                         <form:label path="amount" cssClass="semibold label-text-size"><spring:message
                                 code="reservation.reservation.form.amount"/>*</form:label>

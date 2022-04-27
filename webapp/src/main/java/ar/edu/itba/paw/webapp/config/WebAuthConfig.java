@@ -55,33 +55,39 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .invalidSessionUrl("/")
-                .and().authorizeRequests()
+            .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
-                .antMatchers("/register_restaurant").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/item").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/section").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/register").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant").hasRole("RESTAURANT")
+                .antMatchers("/restaurant/view/**").hasRole("DINER")
+                .antMatchers("/reserve/**").hasAuthority("canReserveTable")
                 .anyRequest().authenticated()
-                .and().formLogin()
+            .and().formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", false)
                 .failureUrl("/login?error=true")
                 .loginPage("/login")
-                .and().rememberMe()
+            .and().rememberMe()
                 .rememberMeParameter("remember-me")
                 .userDetailsService(userDetailsService)
                 .key("TODO: CAMBIAR") // TODO: Cambiar la llave
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
+            .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                .and().exceptionHandling()
+            .and().exceptionHandling()
                 .accessDeniedPage("/403")
-                .and().csrf().disable();
+            .and().csrf().disable();
     }
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/resources/**");
     }
+
 }

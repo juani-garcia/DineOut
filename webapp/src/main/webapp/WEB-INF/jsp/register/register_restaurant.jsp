@@ -10,12 +10,12 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../user_detailed_navbar.jsp" %>
+<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
-<h2 class="megabold center">Contanos mas de tu restaurante</h2>
+<h2 class="megabold center default_dark_text"><spring:message code="register.restaurant.form.title"/></h2>
 
 
-<c:url value="/create_restaurant" var="postPath"/>
+<c:url value="/restaurant/register" var="postPath"/>
 <form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post">
     <div class="container">
         <div class="section">
@@ -30,14 +30,22 @@
                         <form:input type="text" path="name"/>
                         <form:errors path="name" cssClass="isa_error" element="p"/>
                     </div>
-
                     <div class="row">
                         <form:label path="address" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.address"/>*</form:label>
                         <form:input path="address" type="text"/>
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
-
+                    <div class="row input-field">
+                        <form:label path="zone" cssClass="semibold label-text-size"><spring:message
+                                code="register.restaurant.form.zone"/></form:label>
+                        <form:select path="zone">
+                            <c:forEach items="${zones}" var="zone">
+                                <form:option value="${zone.name}"><c:out value="${zone.name}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="zone" element="p" cssClass="isa_error"/>
+                    </div>
                     <div class="row">
                         <form:label path="email" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.email"/>*</form:label>
@@ -46,9 +54,10 @@
                     </div>
                     <div class="row">
                         <form:label path="detail" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.detail"/>*</form:label>
+                                code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
+                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
                     <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
@@ -67,5 +76,15 @@
 </form:form>
 
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
+        <c:forEach items="${zones}" var="zone">
+        options.push("${zone.name}");
+        </c:forEach>
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
 </body>
 </html>
