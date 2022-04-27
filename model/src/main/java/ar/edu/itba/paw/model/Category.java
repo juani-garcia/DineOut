@@ -1,37 +1,37 @@
 package ar.edu.itba.paw.model;
 
 public enum Category {
-    ITALIAN("categories.name.italian"),
-    AMERICAN("categories.name.american"),
-    SPANISH("categories.name.spanish"),
-    PIZZA("categories.name.pizza"),
-    STEAKHOUSE("categories.name.steakhouse"),
-    BAR("categories.name.bar"),
-    CHINESE("categories.name.chinese"),
-    VIET_THAI("categories.name.viet_thai"),
-    BURGERS("categories.name.burgers"),
-    JAPANESE("categories.name.japanese"),
-    SUSHI("categories.name.sushi"),
-    VEGGIE("categories.name.veggie"),
-    INDIAN("categories.name.indian"),
-    EMPANADAS("categories.name.empanadas"),
-    BOULANGERIE("categories.name.boulangerie"),
-    COFFEE("categories.name.coffee"),
-    BREWERY("categories.name.brewery"),
-    PERUVIAN("categories.name.peruvian"),
-    NIKKEI("categories.name.nikkei"),
-    ARABIAN("categories.name.arabian"),
-    MEXICAN("categories.name.mexican"),
-    GELATO("categories.name.gelato");
+    ITALIAN("Italiana"),
+    AMERICAN("Americana"),
+    SPANISH("Española"),
+    PIZZA("Pizza"),
+    STEAKHOUSE("Parrilla"),
+    BAR("Bar"),
+    CHINESE("China"),
+    VIET_THAI("Viet-Thai"),
+    BURGERS("Hamburguesas"),
+    JAPANESE("Japonesa"),
+    SUSHI("Sushi"),
+    VEGGIE("Veggie"),
+    INDIAN("Hindú"),
+    EMPANADAS("Empanadas"),
+    BOULANGERIE("Panadería"),
+    COFFEE("Café"),
+    BREWERY("Cervecería"),
+    PERUVIAN("Peruana"),
+    NIKKEI("Nikkei"),
+    ARABIAN("Árabe"),
+    MEXICAN("Mexicana"),
+    GELATO("Heladería");
 
-    private final String message;
+    private final String name;
 
-    Category(String message) {
-        this.message = message;
+    Category(String name) {
+        this.name = name;
     }
 
-    public String getMessage() {
-        return message;
+    public String getName() {
+        return name;
     }
 
     public long getId() {
@@ -41,6 +41,15 @@ public enum Category {
     public static Category getByOrdinal(long ordinal) {
         for (Category c : Category.values()) {
             if (c.ordinal() == ordinal) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static Category getByName(String name) {
+        for (Category c : Category.values()) {
+            if (c.getName().equals(name)) {
                 return c;
             }
         }

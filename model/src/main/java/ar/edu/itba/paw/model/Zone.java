@@ -247,4 +247,13 @@ public enum Zone {
         }
         return null;
     }
+
+    public static Zone getByName(String name) {
+        for (Zone zone : Zone.values()) {
+            if (zone.getName().equals(name)) {
+                return zone;
+            }
+        }
+        return null;
+    }
 }
