@@ -26,7 +26,7 @@
     <div class="row">
         <%@include file="../search_bar.jsp"%>
     </div>
-    <div class="row align_center">
+    <div class="flex_center">
             <c:if test="${restaurants.size() == 0}">
                 <div class="container">
                     <div class="card card_wrapper padding-15px default_dark">
@@ -37,8 +37,8 @@
             <c:if test="${restaurants.size() != 0}">
                 <c:forEach items="${restaurants}" var="restaurant">
 
-                    <a href="<c:url value ="/reserve/${restaurant.id}"/>">
-                        <div class="card horizontal card_wrapper grow_on_hover">
+                    <a href="<c:url value ="/reserve/${restaurant.id}"/>" class="flex_center">
+                        <div class="card horizontal card_wrapper grow_on_hover restaurant_card">
                             <div class="card-image">
                                 <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img" class="scale_down rounded" />
                             </div>
