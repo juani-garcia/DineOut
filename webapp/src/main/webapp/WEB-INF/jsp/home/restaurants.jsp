@@ -23,12 +23,14 @@
 <div class="separator default_red"></div>
 
 <div class="container">
+    <div class="row">
+        <%@include file="../search_bar.jsp"%>
+    </div>
     <div class="row align_center">
-        <div class="col">
             <c:if test="${restaurants.size() == 0}">
                 <div class="container">
                     <div class="card card_wrapper padding-15px default_dark">
-                        <h1 class="header center default_light_text">No hay restaurantes</h1>
+                        <h1 class="header center default_light_text">No hay restaurantes disponibles</h1>
                     </div>
                 </div>
             </c:if>
@@ -51,7 +53,6 @@
             </c:if>
 
         </div>
-    </div>
 </div>
 <%--<div class="row align_center">--%>
 <%--    <ul class="pagination">--%>
@@ -66,5 +67,30 @@
 <%--</div>--%>
 
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add category, zone and shift options for search.
+        var category_options = [];
+        <c:forEach items="${categories}" var="category">
+        category_options.push("${category.name}");
+        </c:forEach>
+        var category_elems = document.getElementById("category_select").querySelectorAll('select');
+        var category_instances = M.FormSelect.init(category_elems, category_options);
+
+        var shift_options = [];
+        <c:forEach items="${shifts}" var="shift">
+        shift_options.push("${shift.name}");
+        </c:forEach>
+        var shift_elems = document.getElementById("shift_select").querySelectorAll('select');
+        var shift_instances = M.FormSelect.init(shift_elems, shift_options);
+
+        var zone_options = [];
+        <c:forEach items="${zones}" var="zone">
+        zone_options.push("${zone.name}");
+        </c:forEach>
+        var zone_elems = document.getElementById("zone_select").querySelectorAll('select');
+        var zone_instances = M.FormSelect.init(zone_elems, zone_options);
+    });
+</script>
 </body>
 </html>
