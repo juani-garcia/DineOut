@@ -24,24 +24,23 @@
 
 <div class="container">
     <div class="section">
-            <div class="align_center">
-                <div class="col">
-                    <div class="card menu_card">
-                        <c:forEach items="${sections}" var="section">
-                            <%--                <div class="card-image">--%>
-                            <%--                    <img src="" alt="">--%>
-                            <%--                </div>--%>
-                            <div class="card-content black-text">
-                                <h2><c:out value="${section.name}"/></h2>
-                                <c:forEach items="${section.menuItemList}" var="item">
-                                    <p><c:out value="${item.name}"/></p>
-                                    <p><c:out value="${item.detail}"/></p>
+        <div class="align_center">
+            <div class="col">
+                <div class="card menu_card">
+                    <c:forEach items="${sections}" var="section">
+                        <%--                <div class="card-image">--%>
+                        <%--                    <img src="" alt="">--%>
+                        <%--                </div>--%>
+                        <div class="card-content black-text">
+                            <h2><c:out value="${section.name}"/></h2>
+                            <c:forEach items="${section.menuItemList}" var="item">
+                                <p><c:out value="${item.name}"/></p>
+                                <p><c:out value="${item.detail}"/></p>
 
-                                    <p><c:out value="${item.price}"/></p>
-                                </c:forEach>
-                            </div>
-                        </c:forEach>
-                    </div>
+                                <p><c:out value="${item.price}"/></p>
+                            </c:forEach>
+                        </div>
+                    </c:forEach>
                 </div>
             </div>
         </div>
