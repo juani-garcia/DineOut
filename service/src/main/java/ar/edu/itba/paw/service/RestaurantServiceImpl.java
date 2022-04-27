@@ -16,6 +16,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     private CategoryService categoryService;
 
     @Autowired
+    private ShiftService shiftService;
+
+    @Autowired
     private RestaurantDao restaurantDao;
 
     @Override
@@ -38,12 +41,16 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories) {
+    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
         // TODO : validate data
         Restaurant restaurant = restaurantDao.create(userID, name, address, mail, detail, zone);
         for (Long categoryId : categories) {
             Category category = Category.getByOrdinal(categoryId);
             categoryService.add(restaurant.getId(), category);
+        }
+        for (Long shiftId : shifts) {
+            Shift shift = Shift.getById(shiftId);
+            shiftService.add(restaurant.getId(), shift);
         }
         return restaurant;
     }

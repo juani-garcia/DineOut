@@ -2,10 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
-import ar.edu.itba.paw.service.MenuItemService;
-import ar.edu.itba.paw.service.MenuSectionService;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
@@ -43,6 +40,9 @@ public class RestaurantController {
     private MenuItemService menuItemService;
 
     @Autowired
+    private ShiftService shiftService;
+
+    @Autowired
     private SecurityController securityController;
 
     @RequestMapping("")
@@ -68,6 +68,7 @@ public class RestaurantController {
         ModelAndView mav = new ModelAndView("register/register_restaurant");
         mav.addObject("zones", Zone.values());
         mav.addObject("categoryList", Category.values());
+        mav.addObject("shiftList", Shift.values());
         return mav;
     }
 
@@ -80,7 +81,7 @@ public class RestaurantController {
         Long userId = securityController.getCurrentUserId();
         if (userId == null) throw new IllegalStateException("Not logged in");
         try {
-            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories());
+            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
         } catch (DuplicateKeyException e) {
             errors.addError(new FieldError("restaurantForm", "email", "El mail ya esta en uso"));
             return restaurantForm(form);
@@ -138,6 +139,8 @@ public class RestaurantController {
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
         mav.addObject("sections", menuSectionList);
+        List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
+        mav.addObject("shifts", shifts);
         return mav;
     }
 

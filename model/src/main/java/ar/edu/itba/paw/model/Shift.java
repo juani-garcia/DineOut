@@ -18,6 +18,11 @@ public enum Shift {
         this.end = end;
     }
 
+    @Override
+    public String toString() {
+        return start + " - " + end;
+    }
+
     public long getId() {
         return ordinal();
     }

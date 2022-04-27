@@ -35,6 +35,9 @@
             </div>
             <div class="card-content same_width_elements">
                 <h5 class="center">Horarios: </h5>
+                <c:forEach items="${shifts}" var="shift">
+                    <h6><c:out value="${shift}"/></h6>
+                </c:forEach>
             </div>
         </div>
     </div>
