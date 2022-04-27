@@ -81,11 +81,6 @@ public class RestaurantJdbcDao implements RestaurantDao {
         args.add(PAGE_SIZE);
         args.add((page - 1) * PAGE_SIZE);
 
-        System.out.println("---------------------------------------");
-        System.out.println(sql);
-        System.out.println(args);
-        System.out.println("---------------------------------------");
-
         return jdbcTemplate.query(sql.toString(), args.toArray(), ROW_MAPPER);
     }
 

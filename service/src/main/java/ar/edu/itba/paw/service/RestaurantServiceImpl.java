@@ -31,16 +31,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         Zone zone = Zone.getByOrdinal(zoneId);
         Shift shift = Shift.getById(shiftId);
 
-        System.out.println("**************************************");
-        System.out.println("Category = " + category + " " + categoryId);
-        System.out.println("Zone = " + zone + " " + zoneId);
-        System.out.println("Shift = " + shift + " " + shiftId);
-        System.out.println("**************************************");
-
-        if(name == null && category == null && zone == null && shift == null) {
-            return getAll(page);
-        }
-
         return restaurantDao.filter(page, name, category, shift, zone);
     }
 
