@@ -12,7 +12,7 @@
 <%@ include file="../navbar.jsp" %>
 <%@ include file="../restaurant_detailed_navbar.jsp" %>
 
-<h2 class="megabold center default_dark_text"><spring:message code="register.restaurant.form.title"/></h2>
+<h2 class="megabold center white-text"><spring:message code="register.restaurant.form.title"/></h2>
 
 
 <c:url value="/restaurant/register" var="postPath"/>
@@ -76,7 +76,9 @@
                         <a type="submit" id="register-button"
                            class="btn-large waves-effect waves-red white black-text lighten-1"
                            href="javascript:{}"
-                           onclick="document.getElementById('restaurant_form').submit();">Continua con el registro</a>
+                           onclick="document.getElementById('restaurant_form').submit();">
+                            <spring:message code="register.restaurant.form.continue" />
+                        </a>
                     </div>
                 </div>
             </div>
