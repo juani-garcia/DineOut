@@ -5,7 +5,7 @@ public class MenuItem {
     private String name, detail;
     private double price;
     private long sectionId, id, ordering;
-    private long imageId;
+    private Long imageId;
 
     public MenuItem(long id, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
         this.id = id;
@@ -65,11 +65,11 @@ public class MenuItem {
         this.sectionId = sectionId;
     }
 
-    public long getImageId() {
+    public Long getImageId() {
         return imageId;
     }
 
-    public void setImageId(long imageId) {
+    public void setImageId(Long imageId) {
         this.imageId = imageId;
     }
 
