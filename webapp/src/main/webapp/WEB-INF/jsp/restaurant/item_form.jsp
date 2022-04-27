@@ -49,12 +49,12 @@
                         <form:select path="menuSectionId" items="${sections}" itemLabel="name" itemValue="id" />
                         <form:errors path="menuSectionId" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <form:label path="image" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.image"/></form:label>
                         <form:input path="image" type="text"/>
                         <form:errors path="image" cssClass="isa_error" element="p"/>
-                    </div>
+                    </div> -->
                     <div class="row">
                         <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.ordering"/>*</form:label>
