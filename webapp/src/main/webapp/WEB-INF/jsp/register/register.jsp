@@ -39,6 +39,11 @@
                         <form:label path="lastName"><spring:message code="home.form.lastname"/></form:label>
                         <form:input type="text" path="lastName"/>
                     </div>
+                    <c:if test="${duplicatedUsername}">
+                        <p class="isa_error">
+                            <spring:message code="home.form.duplicated_username" />
+                        </p>
+                    </c:if>
                     <div class="row">
                         <form:errors path="username" element="p" cssClass="isa_error"/>
                         <form:label path="username"><spring:message code="home.form.username"/></form:label>
