@@ -2,6 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.persistence.MenuItem;
+import ar.edu.itba.paw.persistence.MenuSection;
+import ar.edu.itba.paw.persistence.Restaurant;
+import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;

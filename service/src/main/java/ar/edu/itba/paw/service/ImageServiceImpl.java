@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.ImageDao;
-import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

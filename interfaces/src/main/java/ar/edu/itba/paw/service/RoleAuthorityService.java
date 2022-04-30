@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.RoleAuthority;
+import ar.edu.itba.paw.persistence.RoleAuthority;
 
 import java.util.Optional;
 

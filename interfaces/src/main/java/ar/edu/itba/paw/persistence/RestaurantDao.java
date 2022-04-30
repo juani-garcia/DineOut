@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Category;
 import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 
 import java.util.List;

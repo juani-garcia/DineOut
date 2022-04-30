@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.UserToRole;
+import ar.edu.itba.paw.persistence.UserToRole;
 import ar.edu.itba.paw.persistence.UserToRoleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

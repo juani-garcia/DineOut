@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import org.springframework.beans.factory.annotation.Autowired;
