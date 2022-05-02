@@ -67,11 +67,11 @@
                         <form:errors path="role" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('register_form').submit();"><spring:message
-                                code="home.register.form.button"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="home.register.form.button"/>
+                            <i class="material-icons right">send</i>
+                        </button>
                     </div>
                 </div>
             </div>

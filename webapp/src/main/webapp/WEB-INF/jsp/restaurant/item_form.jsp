@@ -70,7 +70,7 @@
                     </div>
                     <div class="row center">
                         <button type="submit" name="action"
-                                class="btn-large waves-effect waves-red white black-text lighten-1">
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
                             <spring:message code="restaurant.item.form.submit"/>
                             <i class="material-icons right">send</i>
                         </button>
