@@ -9,7 +9,6 @@
 <nav class="default_dark" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="<c:url value="/"/>" class="brand-logo megabold">Dine Out &#127836;</a>
-        <%--        <!-- TODO: add isloggedin validation-->--%>
         <%--        <c:if test="isloggedin">--%>
 
         <%--        </c:if>--%>
