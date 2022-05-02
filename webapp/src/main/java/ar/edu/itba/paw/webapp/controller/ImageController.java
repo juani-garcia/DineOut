@@ -13,7 +13,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @RequestMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = "/image/{id}", produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE} )
     @ResponseBody
     public byte[] image(@PathVariable final long id) {
         Image image = imageService.getById(id).orElseThrow( () -> new RuntimeException("No such image for id: " + id));
