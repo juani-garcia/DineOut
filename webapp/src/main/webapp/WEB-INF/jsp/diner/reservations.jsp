@@ -22,7 +22,8 @@
             </c:if>
             <c:forEach items="${reservations}" var="reservation">
                 <div class="card-content default_dark_text">
-                    <h4 class="medium"><c:out value="${reservation.amount}"/></h4>
+                    <h4 class="medium"><c:out value="${reservation.restaurant.name}"/></h4>
+                    <h5 class="medium"><c:out value="${reservation.amount}"/></h5>
                     <h6 class="regular"><c:out value="${reservation.dateTime}"/></h6>
                     <p class="regular"><c:out value="${reservation.comments}"/></p>
                 </div>

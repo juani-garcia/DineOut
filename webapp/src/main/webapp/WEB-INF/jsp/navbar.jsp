@@ -1,20 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jerobrave
-  Date: 4/10/22
-  Time: 3:54 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="default_dark" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="<c:url value="/"/>" class="brand-logo megabold">Dine Out &#127836;</a>
-        <%--        <c:if test="isloggedin">--%>
-
-        <%--        </c:if>--%>
-        <%--        <c:if test="">--%>
-
-        <%--        </c:if>--%>
 
         <ul class="right hide-on-small-and-down">
             <c:if test="${pageContext.request.userPrincipal.name == null}">
@@ -27,7 +14,7 @@
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <li>
                     <a href="<c:url value="/profile"/>"
-                       class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
                                 ¡Hola <c:import url="/first_name"/>!

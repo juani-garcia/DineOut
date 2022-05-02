@@ -24,37 +24,37 @@
 
 <div class="container">
     <div class="row">
-        <%@include file="../search_bar.jsp"%>
+        <%@include file="../search_bar.jsp" %>
     </div>
-    <div class="flex_center">
-            <c:if test="${restaurants.size() == 0}">
-                <div class="container">
-                    <div class="card card_wrapper padding-15px default_dark">
-                        <h1 class="header center default_light_text">
-                            <spring:message code="home.restaurants.none_found"/>
-                        </h1>
-                    </div>
+    <div class="flex_column">
+        <c:if test="${restaurants.size() == 0}">
+            <div class="container">
+                <div class="card card_wrapper padding-15px default_dark">
+                    <h1 class="header center default_light_text">
+                        <spring:message code="home.restaurants.none_found"/>
+                    </h1>
                 </div>
-            </c:if>
-            <c:if test="${restaurants.size() != 0}">
-                <c:forEach items="${restaurants}" var="restaurant">
+            </div>
+        </c:if>
+        <c:if test="${restaurants.size() != 0}">
+            <c:forEach items="${restaurants}" var="restaurant">
 
-                    <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>" class="flex_center">
-                        <div class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                            <div class="card-image">
-                                <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img" class="scale_down rounded" />
-                            </div>
-                            <div class="card-content default_dark_text">
-                                <h4 class="medium"><c:out value="${restaurant.name}"/></h4>
-                                <h6 class="regular"><c:out value="${restaurant.detail}"/></h6>
-                                <p class="regular">&#128205;<c:out value="${restaurant.address}"/></p>
-                            </div>
-                        </div>
-                    </a>
-                </c:forEach>
-            </c:if>
+                <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
+                   class="card horizontal card_wrapper grow_on_hover restaurant_card">
+                    <div class="card-image flex_center">
+                        <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img"
+                             class="scale_down rounded"/>
+                    </div>
+                    <div class="card-content default_dark_text">
+                        <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>
+                        <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
+                        <p class="light text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></p>
+                    </div>
+                </a>
+            </c:forEach>
+        </c:if>
 
-        </div>
+    </div>
 </div>
 <%--<div class="row align_center">--%>
 <%--    <ul class="pagination">--%>
@@ -70,7 +70,7 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Add category, zone and shift options for search.
         var category_options = [];
         <c:forEach items="${categories}" var="category">

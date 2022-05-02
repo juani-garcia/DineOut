@@ -7,6 +7,7 @@ public class Reservation {
     private final int amount;
     private final LocalDateTime dateTime;
     private final String userMail, comments;
+    private Restaurant restaurant;
 
     protected Reservation(long reservationId, long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         this.reservationId = reservationId;
@@ -15,6 +16,14 @@ public class Reservation {
         this.dateTime = dateTime;
         this.userMail = userMail;
         this.comments = comments;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public long getReservationId() {
