@@ -46,6 +46,11 @@
                         </form:select>
                         <form:errors path="zone" element="p" cssClass="isa_error"/>
                     </div>
+                    <c:if test="${duplicatedMail}">
+                        <p class="isa_error">
+                            <spring:message code="register.restaurant.form.duplicated_email" />
+                        </p>
+                    </c:if>
                     <div class="row">
                         <form:label path="email" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.email"/>*</form:label>
