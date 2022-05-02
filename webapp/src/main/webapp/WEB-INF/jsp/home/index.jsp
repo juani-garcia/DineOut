@@ -23,7 +23,7 @@
             </a>
         </div>
         <div class="row">
-            <%@include file="../search_bar.jsp"%>
+            <%@include file="../search_bar.jsp" %>
         </div>
     </div>
 </div>
@@ -32,19 +32,29 @@
 <div class="container">
     <div class="section">
         <div id="index-banner" class="rounded shadowed parallax-container parallax-container-large home_parallax">
-            <a href="<c:url value ="/restaurant_picker"/>" class="row rounded shadowed white padding-15px home_parallax_card waves-effect waves-red grow_on_hover">
-                <h5 class="center bold default_dark_text groovy"><spring:message code="home.index.picker.question"/></h5>
+            <a href="<c:url value ="/restaurant_picker"/>"
+               class="row rounded shadowed white padding-15px home_parallax_card waves-effect waves-red grow_on_hover">
+                <h5 class="center bold default_dark_text groovy"><spring:message
+                        code="home.index.picker.question"/></h5>
                 <p class="center default_dark_text"><spring:message code="home.index.picker.answer"/></p>
             </a>
             <div class="parallax white"><img src="<c:url value="/resources/media/background2.jpg"/>"
-                                       alt=""></div>   <!-- Custom restaurant image -->
+                                             alt=""></div>   <!-- Custom restaurant image -->
         </div>
     </div>
 </div>
+<c:if test="${pageContext.request.userPrincipal.name == null}">
+    <div class="container">
+        <div class="row center">
+            <h4 class="white-text bold"><spring:message code="home.index.info.title"/></h4>
+            <h6 class="light white-text"><spring:message code="home.index.info.description"/></h6>
+        </div>
+    </div>
 
+</c:if>
 <%@ include file="../footer.jsp" %>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Add category, zone and shift options for search.
         var category_options = [];
         <c:forEach items="${categories}" var="category">
