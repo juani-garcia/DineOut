@@ -21,7 +21,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     /* private X default=package-private for testing */
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
             new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("address"),
-            rs.getString("mail"), rs.getString("detail"), Zone.getByOrdinal(rs.getLong("zone_id")));
+            rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
 
     @Autowired
     public RestaurantJdbcDao(final DataSource ds) {
@@ -66,7 +66,6 @@ public class RestaurantJdbcDao implements RestaurantDao {
             args.add('%' + name.toLowerCase() + '%');
         }
 
-        // TODO:
         if(category != null) {
             sql.append("AND id in (SELECT restaurant_id FROM restaurant_category WHERE category_id = ?)\n");
             args.add(category.getId());
