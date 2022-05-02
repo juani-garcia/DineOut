@@ -48,14 +48,14 @@
         // Add category, zone and shift options for search.
         var category_options = [];
         <c:forEach items="${categories}" var="category">
-        category_options.push("${category.name}");
+        category_options.push("${category.message}");
         </c:forEach>
         var category_elems = document.getElementById("category_select").querySelectorAll('select');
         var category_instances = M.FormSelect.init(category_elems, category_options);
 
         var shift_options = [];
         <c:forEach items="${shifts}" var="shift">
-        shift_options.push("${shift.name}");
+        shift_options.push("${shift.message}");
         </c:forEach>
         var shift_elems = document.getElementById("shift_select").querySelectorAll('select');
         var shift_instances = M.FormSelect.init(shift_elems, shift_options);
