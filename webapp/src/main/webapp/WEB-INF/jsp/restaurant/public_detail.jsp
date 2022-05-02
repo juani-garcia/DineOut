@@ -39,7 +39,7 @@
                     <h6 class="center">Las 24hs.</h6>
                 </c:if>
                 <c:forEach items="${shifts}" var="shift">
-                    <h6 class="center"><c:out value="${shift.name}"/> <c:out value="${shift.start}"/> a <c:out
+                    <h6 class="center"><spring:message code="${shift.message}"/> <c:out value="${shift.start}"/> a <c:out
                             value="${shift.end}"/></h6>
                 </c:forEach>
             </div>
