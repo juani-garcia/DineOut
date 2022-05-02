@@ -59,9 +59,9 @@ public class HomeController {
     public ModelAndView webapp(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "name", defaultValue = "") final String name,
-            @RequestParam(name = "category", defaultValue = "") final String category,
-            @RequestParam(name = "zone", defaultValue = "") final String zone,
-            @RequestParam(name = "shift", defaultValue = "") final String shift) {
+            @RequestParam(name = "category", defaultValue = "-1") final int category,
+            @RequestParam(name = "zone", defaultValue = "-1") final int zone,
+            @RequestParam(name = "shift", defaultValue = "-1") final int shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
