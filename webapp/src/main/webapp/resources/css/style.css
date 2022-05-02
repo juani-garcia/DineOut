@@ -65,7 +65,8 @@ img {
 }
 
 .groovy {
-    background: -webkit-linear-gradient(45deg, #FC466B 0%, #3F5EFB 100%);
+    /*background: -webkit-linear-gradient(45deg, #FC466B 0%, #3F5EFB 100%);*/
+    background: -webkit-linear-gradient(45deg, #d53369 0%, #daae51 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -298,7 +299,7 @@ h1 {
 
 .card_wrapper {
     width: 100%;
-    min-width: 1000px;
+    min-width: 500px;
 }
 
 .menu_card {
@@ -458,8 +459,18 @@ h1 {
     align-items: center;
 }
 
+.flex_column {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .restaurant_card {
-    width: 80%;
+    box-sizing: border-box;
+    max-width: 47%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .menu_title_card {
@@ -470,4 +481,15 @@ h1 {
 
 .width_100 {
     width: 100%;
+}
+
+.restaurant_card > .card-content {
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card.horizontal .card-image {
+    width: 40%;
+    max-width: 40%;
 }
