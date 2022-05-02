@@ -73,7 +73,6 @@ public class HomeController {
     public ModelAndView restaurantPicker() {  // TODO: use tags and previous reservations to choose restaurant.
         final List<Restaurant> restaurantList = restaurantService.getAll(1);
         Random random = new Random();
-        System.out.println(restaurantList.size());
         return new ModelAndView("redirect:/restaurant/view/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
     }
 
