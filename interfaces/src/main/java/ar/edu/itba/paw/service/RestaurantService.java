@@ -10,6 +10,8 @@ public interface RestaurantService {
 
     Optional<Restaurant> getById(long id);
 
+    Optional<Restaurant> getByMail(String mail);
+
     List<Restaurant> getAll(int page);
 
     List<Restaurant> filter(int page, String name, String categoryName, String shiftName, String zoneName);
