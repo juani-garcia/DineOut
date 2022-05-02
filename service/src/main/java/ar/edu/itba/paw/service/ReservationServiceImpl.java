@@ -4,12 +4,14 @@ import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
+import ar.edu.itba.paw.persistence.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -48,6 +50,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> getAllByUsername(String username) {
-        return reservationDao.getAllByUsername(username);
+        List<Reservation> reservationList = reservationDao.getAllByUsername(username);
+        for (Reservation reservation :
+                reservationList) {
+            Optional<Restaurant> restaurant = restaurantService.getById(reservation.getRestaurantId());
+            if (!restaurant.isPresent()) throw new IllegalStateException("Restaurant id: " + reservation.getRestaurantId() + " in reservation id: " + reservation.getReservationId() + " is not a valid restaurant");
+            reservation.setRestaurant(restaurant.get());
+        }
+        return reservationList;
     }
 }
