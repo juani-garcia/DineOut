@@ -39,6 +39,11 @@
                         <form:label path="lastName"><spring:message code="home.form.lastname"/></form:label>
                         <form:input type="text" path="lastName"/>
                     </div>
+                    <c:if test="${duplicatedUsername}">
+                        <p class="isa_error">
+                            <spring:message code="home.form.duplicated_username" />
+                        </p>
+                    </c:if>
                     <div class="row">
                         <form:errors path="username" element="p" cssClass="isa_error"/>
                         <form:label path="username"><spring:message code="home.form.username"/></form:label>
@@ -62,11 +67,11 @@
                         <form:errors path="role" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('register_form').submit();"><spring:message
-                                code="home.register.form.button"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="home.register.form.button"/>
+                            <i class="material-icons right">send</i>
+                        </button>
                     </div>
                 </div>
             </div>

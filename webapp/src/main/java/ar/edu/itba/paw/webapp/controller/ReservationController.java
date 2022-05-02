@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.MenuSection;
-import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.service.MenuSectionService;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class ReservationController {

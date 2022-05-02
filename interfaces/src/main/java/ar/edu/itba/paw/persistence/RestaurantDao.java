@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Category;
 import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 
 import java.util.List;
@@ -11,6 +10,8 @@ import java.util.Optional;
 public interface RestaurantDao {
 
     Optional<Restaurant> getById(long id);
+
+    Optional<Restaurant> getByMail(String mail);
 
     Optional<Restaurant> getByUserId(long id);
 

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 
 import java.util.List;
@@ -12,9 +10,11 @@ public interface RestaurantService {
 
     Optional<Restaurant> getById(long id);
 
+    Optional<Restaurant> getByMail(String mail);
+
     List<Restaurant> getAll(int page);
 
-    List<Restaurant> filter(int page, String name, String categoryName, String shiftName, String zoneName);
+    List<Restaurant> filter(int page, String name, int category, int shift, int zone);
 
     Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone, final List<Long> categories, final List<Long> shifts);
 

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.persistence;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class MenuSection {
     private String name;
     private List<MenuItem> menuItemList;
 
-    public MenuSection(long id, String name, long restaurantId, long ordering) {
+    protected MenuSection(long id, String name, long restaurantId, long ordering) {
         this.id = id;
         this.name = name;
         this.restaurantId = restaurantId;

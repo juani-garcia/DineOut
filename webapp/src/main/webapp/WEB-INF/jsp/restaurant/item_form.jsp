@@ -69,11 +69,11 @@
                                 code="form.mandatory"/></h6>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('item_form').submit();">
-                            <spring:message code="restaurant.item.form.submit"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="restaurant.item.form.submit"/>
+                            <i class="material-icons right">send</i>
+                        </button>
                     </div>
                 </div>
             </div>

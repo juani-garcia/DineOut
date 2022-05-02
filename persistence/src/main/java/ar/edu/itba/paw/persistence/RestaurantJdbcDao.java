@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Category;
 import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +21,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     /* private X default=package-private for testing */
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
             new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("address"),
-            rs.getString("mail"), rs.getString("detail"), Zone.getByOrdinal(rs.getLong("zone_id")));
+            rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
 
     @Autowired
     public RestaurantJdbcDao(final DataSource ds) {
@@ -33,6 +32,12 @@ public class RestaurantJdbcDao implements RestaurantDao {
     @Override
     public Optional<Restaurant> getById(long id) {
         List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE id = ?", new Object[]{id}, ROW_MAPPER);
+        return query.stream().findFirst();
+    }
+
+    @Override
+    public Optional<Restaurant> getByMail(String mail) {
+        List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE mail = ?", new Object[]{mail}, ROW_MAPPER);
         return query.stream().findFirst();
     }
 
@@ -61,7 +66,6 @@ public class RestaurantJdbcDao implements RestaurantDao {
             args.add('%' + name.toLowerCase() + '%');
         }
 
-        // TODO:
         if(category != null) {
             sql.append("AND id in (SELECT restaurant_id FROM restaurant_category WHERE category_id = ?)\n");
             args.add(category.getId());

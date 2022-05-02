@@ -2,6 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.persistence.MenuItem;
+import ar.edu.itba.paw.persistence.MenuSection;
+import ar.edu.itba.paw.persistence.Restaurant;
+import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
@@ -71,6 +75,7 @@ public class RestaurantController {
     @RequestMapping("/register")
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("register/register_restaurant");
+        mav.addObject("duplicatedMail", false);
         mav.addObject("zones", Zone.values());
         mav.addObject("categoryList", Category.values());
         mav.addObject("shiftList", Shift.values());
@@ -148,6 +153,7 @@ public class RestaurantController {
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
         mav.addObject("restaurant", restaurant);
         mav.addObject("formSuccess", false);
+        mav.addObject("shifts", shiftService.getByRestaurantId(resId));
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
         mav.addObject("sections", menuSectionList);

@@ -1,11 +1,11 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.persistence;
 
 public class Image {
 
     private long id;
     private byte[] source;
 
-    public Image(final long id, final byte[] source) {
+    protected Image(final long id, final byte[] source) {
         this.id  =id;
         this.source = source;
     }

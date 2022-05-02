@@ -33,10 +33,14 @@
             <div class="card-content same_width_elements">
                 <h5 class="center">&#128205;<c:out value="${restaurant.address}"/></h5>
             </div>
-            <div class="card-content same_width_elements">
-                <h5 class="center">Horarios: </h5>
+            <div class="card-content same_width_elements flex_center">
+                <h5 class="center">Horarios:</h5>
+                <c:if test="${shifts.size() == 0}">
+                    <h6 class="center">Las 24hs.</h6>
+                </c:if>
                 <c:forEach items="${shifts}" var="shift">
-                    <h6><c:out value="${shift}"/></h6>
+                    <h6 class="center"><spring:message code="${shift.message}"/> <c:out value="${shift.start}"/> a <c:out
+                            value="${shift.end}"/></h6>
                 </c:forEach>
             </div>
         </div>
@@ -54,34 +58,37 @@
             </c:if>
         </h1>
     </div>
-    <div class="section flex_center width_100">
-        <div class="card menu_card">
-            <div class="card-content black-text">
-                <c:forEach items="${sections}" var="section">
-                    <h2 class="bold"><c:out value="${section.name}"/></h2>
-                    <c:forEach items="${section.menuItemList}" var="item">
-                        <div style="display: flex; justify-content: space-between; align-items: center">
-                            <div style="flex: 4">
-                                <div class="section_item_container align_center">
-                                    <h4><c:out value="${item.name}"/></h4>
-                                    <p>$ <c:out value="${item.price}"/></p>
+    <c:if test="${sections.size() != 0}">
+        <div class="section flex_center width_100">
+            <div class="card menu_card">
+                <div class="card-content black-text">
+                    <c:forEach items="${sections}" var="section">
+                        <h2 class="bold"><c:out value="${section.name}"/></h2>
+                        <c:forEach items="${section.menuItemList}" var="item">
+                            <div style="display: flex; justify-content: space-between; align-items: center">
+                                <div style="flex: 4">
+                                    <div class="section_item_container align_center">
+                                        <h4><c:out value="${item.name}"/></h4>
+                                        <p>$ <c:out value="${item.price}"/></p>
+                                    </div>
+                                    <hr/>
+                                    <p><c:out value="${item.detail}"/></p>
                                 </div>
-                                <c:out value="${item.detail}"/>
-                            </div>
-                            <div style="flex: 1">
-                            <c:if test="${item.imageId > 0}">
-                                <div>
-                                    <c:url value="/image/${item.imageId}" var="imagePath"/>
-                                    <img src="${imagePath}" class="circle" style="padding: 25px; width: 100%; height: auto"/>
+                                <div style="flex: 1">
+                                    <c:if test="${item.imageId > 0}">
+                                        <div>
+                                            <c:url value="/image/${item.imageId}" var="imagePath"/>
+                                            <img src="${imagePath}" class="circle" style="padding: 25px; width: 100%; height: auto"/>
+                                        </div>
+                                    </c:if>
                                 </div>
-                            </c:if>
                             </div>
-                        </div>
+                        </c:forEach>
                     </c:forEach>
-                </c:forEach>
+                </div>
             </div>
         </div>
-    </div>
+    </c:if>
 </div>
 <div class="section no-pad-bot">
     <div class="container">

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Image;
-import ar.edu.itba.paw.model.MenuItem;
+import ar.edu.itba.paw.persistence.Image;
+import ar.edu.itba.paw.persistence.MenuItem;
 import ar.edu.itba.paw.persistence.MenuItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

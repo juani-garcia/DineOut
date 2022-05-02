@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.persistence.Reservation;
 
 import java.time.LocalDateTime;
 import java.util.List;

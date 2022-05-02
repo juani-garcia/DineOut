@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.UsernameNotAvailableException;
+import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.exceptions.DuplicatedUsernameException;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +36,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(String username, String password, final String firstName, final String lastName) {
         if(getByUsername(username).isPresent()) {
-            throw new UsernameNotAvailableException();
+            DuplicatedUsernameException ex = new DuplicatedUsernameException();
+            ex.setUsername(username);
+            ex.setPassword(password);
+            ex.setLastName(lastName);
+            ex.setFirstName(firstName);
+            throw ex;
         }
 
         // TODO : send email validation mail

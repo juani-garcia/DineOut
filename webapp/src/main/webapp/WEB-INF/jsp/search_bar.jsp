@@ -23,7 +23,7 @@
                             <option value="" disabled selected><spring:message code="search_bar.category.placeholder"/>:
                             </option>
                             <c:forEach items="${categories}" var="category">
-                                <option value="${category.name}"><c:out value="${category.name}"/></option>
+                                <option value="${category.idString}"><spring:message code="${category.message}"/></option>
                             </c:forEach>
                         </select>
                     </label>
@@ -35,7 +35,7 @@
                             <option value="" disabled selected><spring:message code="search_bar.shift.placeholder"/>:
                             </option>
                             <c:forEach items="${shifts}" var="shift">
-                                <option value="${shift.name}"><c:out value="${shift.name}"/></option>
+                                <option value="${shift.idString}"><spring:message code="${shift.message}"/></option>
                             </c:forEach>
                         </select>
                     </label>
@@ -47,7 +47,7 @@
                             <option value="" disabled selected><spring:message code="search_bar.zone.placeholder"/>:
                             </option>
                             <c:forEach items="${zones}" var="zone">
-                                <option value="${zone.name}"><c:out value="${zone.name}"/></option>
+                                <option value="${zone.idString}"><c:out value="${zone.name}"/></option>
                             </c:forEach>
                         </select>
                     </label>

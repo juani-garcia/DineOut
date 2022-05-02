@@ -46,6 +46,11 @@
                         </form:select>
                         <form:errors path="zone" element="p" cssClass="isa_error"/>
                     </div>
+                    <c:if test="${duplicatedMail}">
+                        <p class="isa_error">
+                            <spring:message code="register.restaurant.form.duplicated_email" />
+                        </p>
+                    </c:if>
                     <div class="row">
                         <form:label path="email" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.email"/>*</form:label>
@@ -82,12 +87,11 @@
                                 code="form.mandatory"/></h6>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('restaurant_form').submit();">
-                            <spring:message code="register.restaurant.form.continue" />
-                        </a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="register.restaurant.form.continue"/>
+                            <i class="material-icons right">send</i>
+                        </button>
                     </div>
                 </div>
             </div>

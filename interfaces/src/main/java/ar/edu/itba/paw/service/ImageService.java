@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.persistence.Image;
 
 import java.util.Optional;
 

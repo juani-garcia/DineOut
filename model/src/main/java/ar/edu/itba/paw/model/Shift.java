@@ -4,16 +4,16 @@ import java.time.LocalTime;
 import java.util.List;
 
 public enum Shift {
-    MORNING("Mañana", LocalTime.of(8, 0), LocalTime.of(11, 59)),
-    NOON("Mediodiía", LocalTime.of(12, 0), LocalTime.of(15, 59)),
-    AFTERNOON("Tarde", LocalTime.of(16, 0), LocalTime.of(19, 59)),
-    EVENING("Noche", LocalTime.of(20, 0), LocalTime.of(23, 59));
+    MORNING("shift.morning.name", LocalTime.of(8, 0), LocalTime.of(11, 59)),
+    NOON("shift.noon.name", LocalTime.of(12, 0), LocalTime.of(15, 59)),
+    AFTERNOON("shift.afternoon.name", LocalTime.of(16, 0), LocalTime.of(19, 59)),
+    EVENING("shift.evening.name", LocalTime.of(20, 0), LocalTime.of(23, 59));
 
-    private final String name;
+    private final String message;
     private final LocalTime start, end;
 
-    Shift(String name, LocalTime start, LocalTime end) {
-        this.name = name;
+    Shift(String message, LocalTime start, LocalTime end) {
+        this.message = message;
         this.start = start;
         this.end = end;
     }
@@ -23,12 +23,24 @@ public enum Shift {
         return start + " - " + end;
     }
 
+    public LocalTime getStart() {
+        return start;
+    }
+
+    public LocalTime getEnd() {
+        return end;
+    }
+
     public long getId() {
         return ordinal();
     }
 
-    public String getName() {
-        return name;
+    public String getIdString() {
+        return String.valueOf(getId());
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public static Shift getById(long id) {
@@ -54,14 +66,5 @@ public enum Shift {
             }
         }
         return false;
-    }
-
-    public static Shift getByName(String name) {
-        for(Shift shift : Shift.values()) {
-            if (shift.getName().equals((name))) {
-                return shift;
-            }
-        }
-        return null;
     }
 }

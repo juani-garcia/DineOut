@@ -1,9 +1,9 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.persistence;
 
 public class RoleToAuthority {
     public final long id, authorityId, roleId;
 
-    public RoleToAuthority(long id, long authorityId, long roleId) {
+    protected RoleToAuthority(long id, long authorityId, long roleId) {
         this.id = id;
         this.authorityId = authorityId;
         this.roleId = roleId;
