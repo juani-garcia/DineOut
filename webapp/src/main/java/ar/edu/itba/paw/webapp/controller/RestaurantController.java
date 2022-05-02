@@ -70,6 +70,7 @@ public class RestaurantController {
     @RequestMapping("/register")
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("register/register_restaurant");
+        mav.addObject("duplicatedMail", false);
         mav.addObject("zones", Zone.values());
         mav.addObject("categoryList", Category.values());
         return mav;
@@ -83,12 +84,7 @@ public class RestaurantController {
 
         Long userId = securityController.getCurrentUserId();
         if (userId == null) throw new IllegalStateException("Not logged in");
-        try {
-            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories());
-        } catch (DuplicateKeyException e) {
-            errors.addError(new FieldError("restaurantForm", "email", "El mail ya esta en uso"));
-            return restaurantForm(form);
-        }
+        restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories());
 
         return new ModelAndView("redirect:/restaurant");
     }
