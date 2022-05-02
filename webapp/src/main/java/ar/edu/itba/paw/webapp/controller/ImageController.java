@@ -16,7 +16,7 @@ public class ImageController {
     @RequestMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] image(@PathVariable final long id) {
-        Image image = imageService.getById(id).orElseThrow( () -> new RuntimeException("No such image"));
+        Image image = imageService.getById(id).orElseThrow( () -> new RuntimeException("No such image for id: " + id));
         return image.getSource();
     }
 
