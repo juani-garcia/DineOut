@@ -125,14 +125,4 @@ public class HomeController {
         }
         return new ModelAndView("redirect:/diner/profile");
     }
-
-    @RequestMapping("/search")
-    public ModelAndView search() {
-        final ModelAndView mav = new ModelAndView("home/search");
-        mav.addObject("categories", Category.values());
-        mav.addObject("zones", Zone.values());
-        mav.addObject("shifts", Shift.values());
-        return mav;
-    }
-
 }
