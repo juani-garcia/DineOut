@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,9 @@ public class RestaurantController {
 
     @Autowired
     private MenuItemService menuItemService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private ShiftService shiftService;
@@ -118,15 +122,22 @@ public class RestaurantController {
         return mav;
     }
 
-    @RequestMapping(value = "/item", method = {RequestMethod.POST})
+    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
     public ModelAndView item(Principal principal, @Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
+        byte[] imageBytes = null;
+        try {
+            imageBytes = form.getImage().getBytes();
+        } catch (IOException e) {
+            errors.addError(new FieldError("itemForm", "image", "Couldn't get image"));
+        }
+
         if (errors.hasErrors()) {
             return itemForm(principal, form);
         }
 
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
-        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), null);
+        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), imageBytes);
         return new ModelAndView("redirect:/restaurant");
     }
 
