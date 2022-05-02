@@ -1,46 +1,50 @@
 package ar.edu.itba.paw.model;
 
 public enum Category {
-    ITALIAN("Italiana"),
-    AMERICAN("Americana"),
-    SPANISH("Española"),
-    PIZZA("Pizza"),
-    STEAKHOUSE("Parrilla"),
-    BAR("Bar"),
-    CHINESE("China"),
-    VIET_THAI("Viet-Thai"),
-    BURGERS("Hamburguesas"),
-    JAPANESE("Japonesa"),
-    SUSHI("Sushi"),
-    VEGGIE("Veggie"),
-    INDIAN("Hindú"),
-    EMPANADAS("Empanadas"),
-    BOULANGERIE("Panadería"),
-    COFFEE("Café"),
-    BREWERY("Cervecería"),
-    PERUVIAN("Peruana"),
-    NIKKEI("Nikkei"),
-    ARABIAN("Árabe"),
-    MEXICAN("Mexicana"),
-    GELATO("Heladería");
+    ITALIAN("category.italian.name"),
+    AMERICAN("category.american.name"),
+    SPANISH("category.spanish.name"),
+    PIZZA("category.pizza.name"),
+    STEAKHOUSE("category.steakhouse.name"),
+    BAR("category.bar.name"),
+    CHINESE("category.chinese.name"),
+    VIET_THAI("category.viet_thai.name"),
+    BURGERS("category.burgers.name"),
+    JAPANESE("category.japanese.name"),
+    SUSHI("category.sushi.name"),
+    VEGGIE("category.veggie.name"),
+    INDIAN("category.indian.name"),
+    EMPANADAS("category.empanadas.name"),
+    BOULANGERIE("category.boulangerie.name"),
+    COFFEE("category.coffee.name"),
+    BREWERY("category.brewery.name"),
+    PERUVIAN("category.peruvian.name"),
+    NIKKEI("category.nikkei.name"),
+    ARABIAN("category.arabian.name"),
+    MEXICAN("category.mexican.name"),
+    GELATO("category.gelato.name");
 
-    private final String name;
+    private final String message;
 
-    Category(String name) {
-        this.name = name;
+    Category(String message) {
+        this.message = message;
     }
 
-    public String getName() {
-        return name;
+    public String getMessage() {
+        return message;
     }
 
     public long getId() {
         return ordinal();
     }
 
-    public static Category getByOrdinal(long ordinal) {
+    public String getIdString() {
+        return String.valueOf(getId());
+    }
+
+    public static Category getById(long id) {
         for (Category c : Category.values()) {
-            if (c.ordinal() == ordinal) {
+            if (c.ordinal() == id) {
                 return c;
             }
         }
@@ -48,12 +52,7 @@ public enum Category {
     }
 
     public static Category getByName(String name) {
-        for (Category c : Category.values()) {
-            if (c.getName().equals(name)) {
-                return c;
-            }
-        }
-        return null;
+        return Category.AMERICAN;
     }
 
 }
