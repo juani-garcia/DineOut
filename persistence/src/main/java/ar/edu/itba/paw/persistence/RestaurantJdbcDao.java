@@ -36,6 +36,12 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
+    public Optional<Restaurant> getByMail(String mail) {
+        List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE mail = ?", new Object[]{mail}, ROW_MAPPER);
+        return query.stream().findFirst();
+    }
+
+    @Override
     public Optional<Restaurant> getByUserId(long id) {
         List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE user_id = ?", new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();

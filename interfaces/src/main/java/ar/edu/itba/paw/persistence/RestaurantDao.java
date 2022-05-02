@@ -11,6 +11,8 @@ public interface RestaurantDao {
 
     Optional<Restaurant> getById(long id);
 
+    Optional<Restaurant> getByMail(String mail);
+
     Optional<Restaurant> getByUserId(long id);
 
     List<Restaurant> getAll(int page);
