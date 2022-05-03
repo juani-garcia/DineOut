@@ -10,7 +10,6 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../diner_detailed_navbar.jsp" %>
 
 <c:url value="/create/${resId}" var="postPath"/>
 <form:form id="reservation_form" modelAttribute="reservationForm" action="${postPath}" method="post">

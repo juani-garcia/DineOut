@@ -9,7 +9,6 @@
 </head>
 <body>
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../diner_detailed_navbar.jsp" %>
 
 <div class="container flex_center padding-15px">
     <div class="section flex_center width_100">
