@@ -17,6 +17,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     private CategoryService categoryService;
 
     @Autowired
+    private ShiftService shiftService;
+
+    @Autowired
     private RestaurantDao restaurantDao;
 
     @Override
@@ -44,7 +47,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories) {
+    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
         if(getByMail(mail).isPresent()) {
             DuplicatedMailException ex = new DuplicatedMailException();
             ex.setAddress(address);
@@ -60,6 +63,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         for (Long categoryId : categories) {
             Category category = Category.getById(categoryId);
             categoryService.add(restaurant.getId(), category);
+        }
+        for (Long shiftId : shifts) {
+            Shift shift = Shift.getById(shiftId);
+            shiftService.add(restaurant.getId(), shift);
         }
         return restaurant;
     }

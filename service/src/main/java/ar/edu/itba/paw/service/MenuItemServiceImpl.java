@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.MenuItem;
 import ar.edu.itba.paw.persistence.MenuItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import java.util.List;
 public class MenuItemServiceImpl implements MenuItemService {
 
     @Autowired
+    private ImageService imageService;
+
+    @Autowired
     private MenuItemDao menuItemDao;
 
     @Override
@@ -19,8 +23,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem create(String name, String detail, double price, long sectionId, long ordering, Long imageId) {
-        return menuItemDao.create(name, detail, price, sectionId, ordering, imageId);
+    public MenuItem create(String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
+        Image image = null;
+        if (imageBytes != null) {
+            image = imageService.create(imageBytes);
+        }
+        return menuItemDao.create(name, detail, price, sectionId, ordering, (image != null) ? image.getId() : null);
     }
 
     @Override
@@ -29,7 +37,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
-        return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, imageId);
+    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
+        // return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, imageId);
+        return false;
     }
 }

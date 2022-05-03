@@ -74,6 +74,15 @@
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
+                        <form:label path="shifts" cssClass="semibold label-text-size">
+                            <spring:message code="register.restaurant.form.shifts"/>
+                        </form:label>
+                        <form:select multiple="true" path="shifts">
+                            <form:options items="${shiftList}" itemValue="id" itemLabel="name"/>
+                        </form:select>
+                        <form:errors path="categories" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
