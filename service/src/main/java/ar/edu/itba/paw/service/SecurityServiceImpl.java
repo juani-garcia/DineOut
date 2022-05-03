@@ -11,8 +11,6 @@ public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private UserService userService;
 
-    private User cachedUser;
-
     public String getCurrentUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
@@ -23,9 +21,6 @@ public class SecurityServiceImpl implements SecurityService {
 
         if (username == null) return null;
 
-        if (cachedUser == null || !cachedUser.getUsername().equals(username)) {
-            cachedUser = userService.getByUsername(username).orElse(null);
-        }
-        return cachedUser;
+        return userService.getByUsername(getCurrentUsername()).orElse(null);
     }
 }
