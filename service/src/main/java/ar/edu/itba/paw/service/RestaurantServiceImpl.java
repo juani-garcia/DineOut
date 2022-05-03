@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exceptions.DuplicatedMailException;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,16 +47,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
-        if(getByMail(mail).isPresent()) {
-            DuplicatedMailException ex = new DuplicatedMailException();
-            ex.setAddress(address);
-            ex.setCategories(categories);
-            ex.setName(name);
-            ex.setMail(mail);
-            ex.setDetail(detail);
-            ex.setZone(zone);
-            throw ex;
-        }
 
         Restaurant restaurant = restaurantDao.create(userID, name, address, mail, detail, zone);
         for (Long categoryId : categories) {
