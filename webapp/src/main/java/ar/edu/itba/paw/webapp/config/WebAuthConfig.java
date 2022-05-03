@@ -61,7 +61,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
             .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
-                .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
                 .antMatchers("/restaurant/item").hasAuthority("canCreateRestaurant")
                 .antMatchers("/restaurant/section").hasAuthority("canCreateRestaurant")
@@ -93,7 +92,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**", "/image/**");
     }
 
 }

@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.mail.Multipart;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,7 +26,7 @@ public class MenuItemForm {
     @Min(1)
     private int ordering;
 
-    private String image;
+    private MultipartFile image;
 
     public String getName() {
         return name;
@@ -65,11 +68,11 @@ public class MenuItemForm {
         this.ordering = ordering;
     }
 
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

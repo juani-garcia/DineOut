@@ -65,12 +65,24 @@
                     <c:forEach items="${sections}" var="section">
                         <h2 class="bold"><c:out value="${section.name}"/></h2>
                         <c:forEach items="${section.menuItemList}" var="item">
-                            <div class="section_item_container align_center">
-                                <h4><c:out value="${item.name}"/></h4>
-                                <p>$ <c:out value="${item.price}"/></p>
+                            <div style="display: flex; justify-content: space-between; align-items: center">
+                                <div style="flex: 4">
+                                    <div class="section_item_container align_center">
+                                        <h4><c:out value="${item.name}"/></h4>
+                                        <p>$ <c:out value="${item.price}"/></p>
+                                    </div>
+                                    <hr/>
+                                    <p><c:out value="${item.detail}"/></p>
+                                </div>
+                                <div style="flex: 1">
+                                    <c:if test="${item.imageId > 0}">
+                                        <div>
+                                            <c:url value="/image/${item.imageId}" var="imagePath"/>
+                                            <img src="${imagePath}" class="circle" style="padding: 25px; width: 100%; height: auto"/>
+                                        </div>
+                                    </c:if>
+                                </div>
                             </div>
-                            <hr>
-                            <p><c:out value="${item.detail}"/></p>
                         </c:forEach>
                     </c:forEach>
                 </div>

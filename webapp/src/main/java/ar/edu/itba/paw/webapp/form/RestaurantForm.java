@@ -31,6 +31,9 @@ public class RestaurantForm {
     @NotNull
     private List<Long> categories;
 
+    @NotNull
+    private List<Long> shifts;
+
     public String getName() {
         return name;
     }
@@ -78,4 +81,13 @@ public class RestaurantForm {
     public void setCategories(List<Long> categories) {
         this.categories = categories;
     }
+
+    public List<Long> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<Long> shifts) {
+        this.shifts = shifts;
+    }
+
 }

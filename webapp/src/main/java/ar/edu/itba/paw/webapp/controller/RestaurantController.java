@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,9 @@ public class RestaurantController {
 
     @Autowired
     private MenuItemService menuItemService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private ShiftService shiftService;
@@ -73,6 +78,7 @@ public class RestaurantController {
         mav.addObject("duplicatedMail", false);
         mav.addObject("zones", Zone.values());
         mav.addObject("categoryList", Category.values());
+        mav.addObject("shiftList", Shift.values());
         return mav;
     }
 
@@ -84,7 +90,12 @@ public class RestaurantController {
 
         Long userId = securityController.getCurrentUserId();
         if (userId == null) throw new IllegalStateException("Not logged in");
-        restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories());
+        try {
+            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+        } catch (DuplicateKeyException e) {
+            errors.addError(new FieldError("restaurantForm", "email", "El mail ya esta en uso"));
+            return restaurantForm(form);
+        }
 
         return new ModelAndView("redirect:/restaurant");
     }
@@ -116,15 +127,22 @@ public class RestaurantController {
         return mav;
     }
 
-    @RequestMapping(value = "/item", method = {RequestMethod.POST})
+    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
     public ModelAndView item(Principal principal, @Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
+        byte[] imageBytes = null;
+        try {
+            imageBytes = form.getImage().getBytes();
+        } catch (IOException e) {
+            errors.addError(new FieldError("itemForm", "image", "Couldn't get image"));
+        }
+
         if (errors.hasErrors()) {
             return itemForm(principal, form);
         }
 
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
-        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), null);
+        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), imageBytes);
         return new ModelAndView("redirect:/restaurant");
     }
 
@@ -139,6 +157,8 @@ public class RestaurantController {
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
         mav.addObject("sections", menuSectionList);
+        List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
+        mav.addObject("shifts", shifts);
         return mav;
     }
 
