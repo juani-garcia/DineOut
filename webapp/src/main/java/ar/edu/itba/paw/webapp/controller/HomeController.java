@@ -32,8 +32,6 @@ public class HomeController {
     @Autowired
     private UserToRoleService userToRoleService;
 
-    @Autowired
-    private SecurityController securityController;
 
     @Autowired
     private SecurityService securityService;
@@ -109,9 +107,9 @@ public class HomeController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
-        if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
-        if (userService.isRestaurant(loggedInUser.get().getId())) {
+        User user = securityService.getCurrentUser();
+        if (user == null) throw new IllegalStateException("Current user is not valid");
+        if (userService.isRestaurant(user.getId())) { // TODO
             return new ModelAndView("redirect:/restaurant");
         }
         return new ModelAndView("redirect:/diner/profile");

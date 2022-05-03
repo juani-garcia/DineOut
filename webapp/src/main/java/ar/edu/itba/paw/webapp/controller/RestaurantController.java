@@ -52,7 +52,7 @@ public class RestaurantController {
     private ShiftService shiftService;
 
     @Autowired
-    private SecurityController securityController;
+    private SecurityService securityService;
 
     @RequestMapping("")
     public ModelAndView restaurantProfile(Principal principal) {
@@ -83,14 +83,10 @@ public class RestaurantController {
             return restaurantForm(form);
         }
 
-        Long userId = securityController.getCurrentUserId();
-        if (userId == null) throw new IllegalStateException("Not logged in");
-        try {
-            restaurantService.create(userId, form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
-        } catch (DuplicateKeyException e) {
-            errors.addError(new FieldError("restaurantForm", "email", "El mail ya esta en uso"));
-            return restaurantForm(form);
-        }
+        User user = securityService.getCurrentUser();
+        if (user == null) throw new IllegalStateException("Not logged in");
+
+        restaurantService.create(user.getId(), form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
         return new ModelAndView("redirect:/restaurant");
     }
