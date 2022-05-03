@@ -64,10 +64,9 @@
                             <spring:message code="register.restaurant.form.categories"/>
                         </form:label>
                         <form:select multiple="true" path="categories">
-                            <c:forEach items="${categoryList}" var="shift">
+                            <c:forEach items="${categories}" var="shift">
                                 <form:option value="${shift.id}"><spring:message code="${shift.message}"/></form:option>
                             </c:forEach>
-<%--                            <form:options items="${categoryList}" itemValue="id" itemLabel="name"/>--%>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
                     </div>
