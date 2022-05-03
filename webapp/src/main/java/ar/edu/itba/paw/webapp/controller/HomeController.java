@@ -84,7 +84,6 @@ public class HomeController {
         roles.add(this.roles.get("RESTAURANT"));
         roles.add(this.roles.get("DINER"));
         mav.addObject("roleItems", roles);
-        mav.addObject("duplicatedUsername", false);
         return mav;
     }
 

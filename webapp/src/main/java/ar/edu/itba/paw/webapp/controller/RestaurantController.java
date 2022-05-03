@@ -75,7 +75,6 @@ public class RestaurantController {
     @RequestMapping("/register")
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("register/register_restaurant");
-        mav.addObject("duplicatedMail", false);
         mav.addObject("zones", Zone.values());
         mav.addObject("categoryList", Category.values());
         mav.addObject("shiftList", Shift.values());
