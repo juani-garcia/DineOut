@@ -4,24 +4,20 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserRole;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.service.UserRoleService;
-import ar.edu.itba.paw.service.UserService;
-import ar.edu.itba.paw.service.UserToRoleService;
+import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.*;
 
 @Controller
+@ControllerAdvice
 public class HomeController {
 
     @Autowired
@@ -39,6 +35,9 @@ public class HomeController {
     @Autowired
     private SecurityController securityController;
 
+    @Autowired
+    private SecurityService securityService;
+
     private final HashMap<String, String> roles = new HashMap<String, String>() {
         {
             put("RESTAURANT", "Mi restaurante.");
@@ -49,9 +48,6 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView webapp() {
         final ModelAndView mav = new ModelAndView("home/index");
-        mav.addObject("categories", Category.values());
-        mav.addObject("zones", Zone.values());
-        mav.addObject("shifts", Shift.values());
         return mav;
     }
 
@@ -63,9 +59,6 @@ public class HomeController {
             @RequestParam(name = "zone", defaultValue = "-1") final int zone,
             @RequestParam(name = "shift", defaultValue = "-1") final int shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
-        mav.addObject("categories", Category.values());
-        mav.addObject("zones", Zone.values());
-        mav.addObject("shifts", Shift.values());
         mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
@@ -123,4 +116,13 @@ public class HomeController {
         }
         return new ModelAndView("redirect:/diner/profile");
     }
+
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("categories", Category.values());
+        model.addAttribute("zones", Zone.values());
+        model.addAttribute("shifts", Shift.values());
+        model.addAttribute("user", securityService.getCurrentUser());
+    }
+
 }
