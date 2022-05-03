@@ -493,3 +493,12 @@ h1 {
     width: 40%;
     max-width: 40%;
 }
+
+button {
+    font-family: inherit;
+}
+
+.margins_auto {
+    margin-top: auto;
+    margin-bottom: auto;
+}
