@@ -36,13 +36,6 @@ public class HomeController {
     @Autowired
     private SecurityService securityService;
 
-    private final HashMap<String, String> roles = new HashMap<String, String>() {
-        {
-            put("RESTAURANT", "Mi restaurante.");
-            put("DINER", "Uso personal.");
-        }
-    };
-
     @RequestMapping(value = "/")
     public ModelAndView webapp() {
         final ModelAndView mav = new ModelAndView("home/index");
@@ -78,8 +71,6 @@ public class HomeController {
     public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm form) {
         final ModelAndView mav = new ModelAndView("register/register");
         List<String> roles = new ArrayList<>();
-        roles.add(this.roles.get("RESTAURANT"));
-        roles.add(this.roles.get("DINER"));
         mav.addObject("roleItems", roles);
         return mav;
     }
@@ -91,17 +82,7 @@ public class HomeController {
             return registerForm(form);
         }
 
-        User user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName());
-
-        if (form.getRole().equals(this.roles.get("RESTAURANT"))) {  // TODO: move this logic into service
-            Optional<UserRole> userRole = userRoleService.getByRoleName("RESTAURANT");
-            if (!userRole.isPresent()) throw new IllegalStateException("El rol RESTAURANT no esta presente en la bbdd");
-            userToRoleService.create(user.getId(), userRole.get().getId());
-        } else {
-            Optional<UserRole> userRole = userRoleService.getByRoleName("DINER");
-            if (!userRole.isPresent()) throw new IllegalStateException("El rol DINER no esta presente en la bbdd");
-            userToRoleService.create(user.getId(), userRole.get().getId());
-        }
+        User user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant());
 
         return new ModelAndView("redirect:/profile");
     }
