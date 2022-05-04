@@ -31,9 +31,9 @@
         <div class="card menu_card">
             <div class="center-align padding-15px">
                 <a href="<c:url value="/restaurant/section"/>"
-                   class="btn-large waves-effect waves-light default_red white-text">Agregar seccion</a>
+                   class="btn-large waves-effect waves-light default_blue white-text">Agregar seccion</a>
                 <a href="<c:url value="/restaurant/item"/>"
-                   class="btn-large waves-effect waves-light default_red white-text">Agregar item</a>
+                   class="btn-large waves-effect waves-light default_blue white-text">Agregar item</a>
             </div>
             <div class="card-content black-text">
                 <c:forEach items="${sections}" var="section">
@@ -44,7 +44,7 @@
                         <c:if test="${section.ordering > 1}">
                             <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
                             <form method="post" action="${upUrl}" style="margin: 0">
-                                <button class="btn waves-effect waves-light btn-floating default_red" type="submit" name="action">
+                                <button class="btn waves-effect waves-light btn-floating default_blue" type="submit" name="action">
                                     <i class="material-icons left">arrow_upward</i>
                                 </button>
                             </form>
@@ -52,11 +52,18 @@
                         <c:if test="${section.ordering < sections.size()}">
                             <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                             <form method="post" action="${downUrl}" style="margin: 0">
-                                <button class="btn waves-effect waves-light btn-floating default_red" type="submit" name="action">
+                                <button class="btn waves-effect waves-light btn-floating default_blue" type="submit" name="action">
                                     <i class="material-icons left">arrow_downward</i>
                                 </button>
                             </form>
                         </c:if>
+                        <c:url value="/restaurant/section/${section.id}/delete" var="deleteUrl"/>
+                        <form method="post" action="${deleteUrl}" style="margin: 0">
+                            <button class="btn waves-effect waves-light btn-floating default_red"
+                                    type="submit" name="action">
+                                <i class="material-icons left">delete</i>
+                            </button>
+                        </form>
                         <h2 class="bold">
                             <c:out value="${section.name}"/>
                         </h2>
@@ -67,7 +74,7 @@
                                 <c:if test="${item.ordering > 1}">
                                     <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
                                     <form method="post" action="${upUrl}" style="margin: 0">
-                                        <button class="btn waves-effect waves-light btn-floating default_red"
+                                        <button class="btn waves-effect waves-light btn-floating default_blue"
                                                 type="submit" name="action">
                                             <i class="material-icons left">arrow_upward</i>
                                         </button>
@@ -76,12 +83,19 @@
                                 <c:if test="${item.ordering < section.menuItemList.size()}">
                                     <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
                                     <form method="post" action="${downUrl}" style="margin: 0">
-                                        <button class="btn waves-effect waves-light btn-floating default_red"
+                                        <button class="btn waves-effect waves-light btn-floating default_blue"
                                                 type="submit" name="action">
                                             <i class="material-icons left">arrow_downward</i>
                                         </button>
                                     </form>
                                 </c:if>
+                                <c:url value="/restaurant/item/${item.id}/delete" var="deleteUrl"/>
+                                <form method="post" action="${deleteUrl}" style="margin: 0">
+                                    <button class="btn waves-effect waves-light btn-floating default_red"
+                                            type="submit" name="action">
+                                        <i class="material-icons left">delete</i>
+                                    </button>
+                                </form>
                                 <h4><c:out value="${item.name}"/></h4>
                             </div>
                             <p>$ <c:out value="${item.price}"/></p>
