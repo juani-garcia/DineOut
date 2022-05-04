@@ -122,7 +122,7 @@ public class HomeController {
     }
 
     @ModelAttribute
-    public void addAttributes(Model model) {
+    public void addUser(Model model) {
         model.addAttribute("user", securityService.getCurrentUser());
     }
 
