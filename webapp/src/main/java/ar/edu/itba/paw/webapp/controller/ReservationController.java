@@ -57,4 +57,11 @@ public class ReservationController {
         return mav;
     }
 
+    @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
+    public ModelAndView delete(@PathVariable final long resId) {
+        reservationService.delete(resId);
+        return new ModelAndView("redirect:/diner/reservations");
+    }
+
+
 }
