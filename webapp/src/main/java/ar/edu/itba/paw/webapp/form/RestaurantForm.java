@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 public class RestaurantForm {
+
     @Size(min = 1, max = 100)
     @NotNull
     private String name;

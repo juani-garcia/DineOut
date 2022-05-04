@@ -108,7 +108,19 @@ public class RestaurantController {
 
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
-        MenuSection menuSection = menuSectionService.create(form.getName(), restaurant.getId(), form.getOrdering());
+        menuSectionService.create(restaurant.getId(), form.getName());
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/section/{sectionId}/up", method = {RequestMethod.POST})
+    public ModelAndView sectionUp(@PathVariable final long sectionId) {
+        menuSectionService.moveUp(sectionId);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/section/{sectionId}/down", method = {RequestMethod.POST})
+    public ModelAndView sectionDown(@PathVariable final long sectionId) {
+        menuSectionService.moveDown(sectionId);
         return new ModelAndView("redirect:/restaurant");
     }
 
@@ -137,7 +149,19 @@ public class RestaurantController {
 
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
-        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), form.getOrdering(), imageBytes);
+        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/item/{itemId}/up", method = {RequestMethod.POST})
+    public ModelAndView itemUp(@PathVariable final long itemId) {
+        menuItemService.moveUp(itemId);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/item/{itemId}/down", method = {RequestMethod.POST})
+    public ModelAndView itemDown(@PathVariable final long itemId) {
+        menuItemService.moveDown(itemId);
         return new ModelAndView("redirect:/restaurant");
     }
 
