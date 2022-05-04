@@ -71,6 +71,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reserve/**").hasAuthority("canReserveTable")
                 .antMatchers("/create/**").hasAuthority("canReserveTable")
                 .antMatchers("/diner/**").hasRole("DINER")
+                // TODO: add error pages to permitAll() when merged.
                 .anyRequest().authenticated()
             .and().formLogin()
                 .usernameParameter("username")
