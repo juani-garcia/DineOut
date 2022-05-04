@@ -17,7 +17,7 @@
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                ¡Hola <c:import url="/first_name"/>!
+                                ¡Hola <c:out value="${user.firstName}"/>!
                             </p>
                             <p>
                                 <i class="material-icons">menu</i>
