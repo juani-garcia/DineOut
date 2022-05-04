@@ -41,7 +41,25 @@
                     <%--                <div class="card-image">--%>
                     <%--                    <img src="" alt="">--%>
                     <%--                </div>--%>
-                    <h2 class="bold"><c:out value="${section.name}"/></h2>
+                    <h2 class="bold">
+                        <c:out value="${section.name}"/>
+                        <c:if test="${section.ordering > 1}">
+                            <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
+                            <form method="post" action="${upUrl}">
+                                <button type="submit">
+                                    <spring:message code="restaurant.section.up"/>
+                                </button>
+                            </form>
+                        </c:if>
+                        <c:if test="${section.ordering < sections.size()}">
+                            <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
+                            <form method="post" action="${downUrl}">
+                                <button type="submit">
+                                    <spring:message code="restaurant.section.down"/>
+                                </button>
+                            </form>
+                        </c:if>
+                    </h2>
                     <c:forEach items="${section.menuItemList}" var="item">
                         <div class="section_item_container align_center">
                             <h4><c:out value="${item.name}"/></h4>

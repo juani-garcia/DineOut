@@ -64,7 +64,6 @@ public class MenuSectionJdbcDao implements MenuSectionDao {
         Object[] args = new Object[]{name, restaurantId, ordering, sectionId};
 
         return jdbcTemplate.update(query, args) == 1;
-
     }
 
 

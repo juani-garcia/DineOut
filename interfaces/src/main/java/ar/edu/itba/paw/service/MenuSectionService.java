@@ -3,8 +3,11 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.persistence.MenuSection;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MenuSectionService {
+
+    Optional<MenuSection> getById(final long sectionId);
 
     List<MenuSection> getByRestaurantId(long restaurantId);
 
@@ -13,5 +16,9 @@ public interface MenuSectionService {
     boolean delete(long sectionId);
 
     boolean edit(long sectionId, String name, long restaurantId, long ordering);
+
+    boolean moveUp(final long sectionId);
+
+    boolean moveDown(final long sectionId);
 
 }

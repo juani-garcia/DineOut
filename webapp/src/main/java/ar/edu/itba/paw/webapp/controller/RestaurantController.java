@@ -112,6 +112,18 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
+    @RequestMapping(value = "/section/{sectionId}/up", method = {RequestMethod.POST})
+    public ModelAndView sectionUp(@PathVariable final long sectionId) {
+        menuSectionService.moveUp(sectionId);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/section/{sectionId}/down", method = {RequestMethod.POST})
+    public ModelAndView sectionDown(@PathVariable final long sectionId) {
+        menuSectionService.moveDown(sectionId);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
     @RequestMapping(value = "/item")
     public ModelAndView itemForm(Principal principal, @ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
