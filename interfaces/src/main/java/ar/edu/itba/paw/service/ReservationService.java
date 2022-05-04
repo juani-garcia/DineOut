@@ -11,4 +11,5 @@ public interface ReservationService {
 
     List<Reservation> getAllByUsername(String username);
 
+    void delete(long reservationId);
 }
