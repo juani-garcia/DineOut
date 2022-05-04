@@ -108,7 +108,7 @@ public class RestaurantController {
 
         User user = userService.getByUsername(principal.getName()).get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
-        MenuSection menuSection = menuSectionService.create(form.getName(), restaurant.getId(), form.getOrdering());
+        menuSectionService.create(restaurant.getId(), form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
 

@@ -19,8 +19,8 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     }
 
     @Override
-    public MenuSection create(String name, long restaurantId, long ordering) {
-        return menuSectionDao.create(name, restaurantId, ordering);
+    public MenuSection create(final long restaurantId, final String name) {
+        return menuSectionDao.create(restaurantId, name);
     }
 
     @Override

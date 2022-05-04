@@ -8,7 +8,7 @@ public interface MenuSectionService {
 
     List<MenuSection> getByRestaurantId(long restaurantId);
 
-    MenuSection create(String name, long restaurantId, long ordering);
+    MenuSection create(final long restaurantId, String name);
 
     boolean delete(long sectionId);
 

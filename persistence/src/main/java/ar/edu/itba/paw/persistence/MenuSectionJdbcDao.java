@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class MenuSectionJdbcDao implements MenuSectionDao {
@@ -32,14 +33,22 @@ public class MenuSectionJdbcDao implements MenuSectionDao {
     }
 
     @Override
-    public MenuSection create(String name, long restaurantId, long ordering) {
+    public MenuSection create(final long restaurantId, final String name) {
         final Map<String, Object> sectionData = new HashMap<>();
-        sectionData.put("name", name);
         sectionData.put("restaurant_id", restaurantId);
-        sectionData.put("ordering", ordering);
+        sectionData.put("name", name);
         final long sectionId = jdbcInsert.executeAndReturnKey(sectionData).longValue();
+        Optional<MenuSection> newSection = getById(sectionId);
+        if (! newSection.isPresent()) {
+            throw new RuntimeException("Couldn't get created section");
+        }
+        return newSection.get();
+    }
 
-        return new MenuSection(sectionId, name, restaurantId, ordering);
+    @Override
+    public Optional<MenuSection> getById(final long sectionId) {
+        return jdbcTemplate.query("SELECT * FROM menu_section WHERE id = ?",
+                new Object[]{sectionId}, SECTION_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
