@@ -6,7 +6,7 @@ public interface MenuItemDao {
 
     List<MenuItem> getBySectionId(long sectionId);
 
-    MenuItem create(String name, String detail, double price, long sectionId, long ordering, Long imageId);
+    MenuItem create(String name, String detail, double price, long sectionId, Long imageId);
 
     boolean delete(long itemId);
 

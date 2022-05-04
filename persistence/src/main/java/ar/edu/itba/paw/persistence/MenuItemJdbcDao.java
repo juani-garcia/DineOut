@@ -35,13 +35,12 @@ public class MenuItemJdbcDao implements MenuItemDao {
     }
 
     @Override
-    public MenuItem create(String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+    public MenuItem create(String name, String detail, double price, long sectionId, Long imageId) {
         Map<String, Object> itemData = new HashMap<>();
         itemData.put("name", name);
         itemData.put("detail", detail);
         itemData.put("price", price);
         itemData.put("section_id", sectionId);
-        itemData.put("ordering", ordering);
         itemData.put("image_id", imageId);
         long itemId = jdbcInsert.executeAndReturnKey(itemData).longValue();
 

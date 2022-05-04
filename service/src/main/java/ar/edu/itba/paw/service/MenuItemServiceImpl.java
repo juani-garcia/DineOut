@@ -23,12 +23,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem create(String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
+    public MenuItem create(String name, String detail, double price, long sectionId, byte[] imageBytes) {
         Image image = null;
         if (imageBytes != null) {
             image = imageService.create(imageBytes);
         }
-        return menuItemDao.create(name, detail, price, sectionId, ordering, (image != null) ? image.getId() : null);
+        return menuItemDao.create(name, detail, price, sectionId, (image != null) ? image.getId() : null);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
-        // return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, imageId);
-        return false;
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
+        return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, menuItem.getImageId());
     }
 }

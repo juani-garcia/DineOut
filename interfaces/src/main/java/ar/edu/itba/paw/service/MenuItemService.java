@@ -8,7 +8,7 @@ public interface MenuItemService {
 
     List<MenuItem> getBySectionId(long sectionId);
 
-    MenuItem create(String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes);
+    MenuItem create(String name, String detail, double price, long sectionId, byte[] imageBytes);
 
     boolean delete(long itemId);
 

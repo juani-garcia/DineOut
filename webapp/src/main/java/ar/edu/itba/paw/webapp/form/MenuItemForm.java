@@ -2,8 +2,6 @@ package ar.edu.itba.paw.webapp.form;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -21,10 +19,6 @@ public class MenuItemForm {
 
     @NotNull
     private long menuSectionId;
-
-    @NotNull
-    @Min(1)
-    private int ordering;
 
     private MultipartFile image;
 
@@ -58,14 +52,6 @@ public class MenuItemForm {
 
     public void setMenuSectionId(long menuSectionId) {
         this.menuSectionId = menuSectionId;
-    }
-
-    public int getOrdering() {
-        return ordering;
-    }
-
-    public void setOrdering(int ordering) {
-        this.ordering = ordering;
     }
 
     public MultipartFile getImage() {
