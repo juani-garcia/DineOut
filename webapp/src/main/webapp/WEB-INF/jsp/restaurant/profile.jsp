@@ -45,7 +45,7 @@
                         <c:if test="${section.ordering > 1}">
                             <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
                             <form method="post" action="${upUrl}" style="margin: 0">
-                                <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                <button class="btn waves-effect waves-light btn-floating default_red" type="submit" name="action">
                                     <i class="material-icons left">arrow_upward</i>
                                 </button>
                             </form>
@@ -53,7 +53,7 @@
                         <c:if test="${section.ordering < sections.size()}">
                             <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                             <form method="post" action="${downUrl}" style="margin: 0">
-                                <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                <button class="btn waves-effect waves-light btn-floating default_red" type="submit" name="action">
                                     <i class="material-icons left">arrow_downward</i>
                                 </button>
                             </form>
@@ -68,7 +68,8 @@
                                 <c:if test="${item.ordering > 1}">
                                     <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
                                     <form method="post" action="${upUrl}" style="margin: 0">
-                                        <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                        <button class="btn waves-effect waves-light btn-floating default_red"
+                                                type="submit" name="action">
                                             <i class="material-icons left">arrow_upward</i>
                                         </button>
                                     </form>
@@ -76,7 +77,8 @@
                                 <c:if test="${item.ordering < section.menuItemList.size()}">
                                     <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
                                     <form method="post" action="${downUrl}" style="margin: 0">
-                                        <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                        <button class="btn waves-effect waves-light btn-floating default_red"
+                                                type="submit" name="action">
                                             <i class="material-icons left">arrow_downward</i>
                                         </button>
                                     </form>
