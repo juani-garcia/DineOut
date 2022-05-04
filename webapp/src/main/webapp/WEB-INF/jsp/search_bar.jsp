@@ -52,9 +52,17 @@
                         </select>
                     </label>
                 </div>
-                <a class="card-content grow_on_hover2 black-text" type="submit" id="search-button"
-                     onclick="document.getElementById('search_form').submit();"><i class="material-icons">search</i>
-                </a>
+
+                <div class="card-content">
+                    <label id="search_submit">
+                        <spring:message code="search_bar.submit"/>:<br/>
+                        <button class="btn-large waves-effect waves-light btn-flat grow_on_hover2 btn-floating"
+                                type="submit">
+                            <i class="material-icons large default_dark_text">search</i>
+                        </button>
+                    </label>
+                </div>
+
             </form>
         </div>
     </div>
