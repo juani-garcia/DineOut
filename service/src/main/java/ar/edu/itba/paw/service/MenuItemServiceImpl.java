@@ -51,7 +51,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem menuItem = getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemID"));
         MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
-        if (securityService.getCurrentUser().getId() != restaurant.getUserID())
+        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
             throw new RuntimeException("Invalid permissions");
         return menuItemDao.delete(itemId);
     }

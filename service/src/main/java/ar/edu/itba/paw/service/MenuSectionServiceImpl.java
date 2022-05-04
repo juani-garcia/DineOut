@@ -42,7 +42,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     public boolean delete(final long sectionId) {
         MenuSection menuSection = getById(sectionId).orElseThrow( () -> new RuntimeException("Invalid section"));
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
-        if (restaurant.getUserID() != restaurant.getUserID())
+        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
             throw new RuntimeException("Invalid permissions");
         return menuSectionDao.delete(sectionId);
     }
