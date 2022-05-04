@@ -64,8 +64,8 @@
                             <spring:message code="register.restaurant.form.categories"/>
                         </form:label>
                         <form:select multiple="true" path="categories">
-                            <c:forEach items="${categories}" var="shift">
-                                <form:option value="${shift.id}"><spring:message code="${shift.message}"/></form:option>
+                            <c:forEach items="${categories}" var="category">
+                                <form:option value="${category.id}"><spring:message code="${category.message}"/></form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
@@ -75,7 +75,7 @@
                             <spring:message code="register.restaurant.form.shifts"/>
                         </form:label>
                         <form:select multiple="true" path="shifts">
-                            <c:forEach items="${shiftList}" var="shift">
+                            <c:forEach items="${shifts}" var="shift">
                                 <form:option value="${shift.id}"><spring:message code="${shift.message}"/></form:option>
                             </c:forEach>
                         </form:select>
