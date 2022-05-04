@@ -2,14 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
-import ar.edu.itba.paw.service.MenuItemService;
-import ar.edu.itba.paw.service.MenuSectionService;
-import ar.edu.itba.paw.service.ReservationService;
-import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -28,16 +24,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
-    private MenuSectionService menuSectionService;
-
-    @Autowired
-    private MenuItemService menuItemService;
-
-    @Autowired
-    private SecurityController securityController;
+    private SecurityService securityService;
 
     @RequestMapping("/reserve/{resId}")
     public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form,  @RequestParam(name = "formSuccess", defaultValue = "false") final boolean formSuccess) {
@@ -54,7 +41,7 @@ public class ReservationController {
 
         // TODO: i18n.
         try {
-            reservationService.create(resId, securityController.getCurrentUserName(), form.getAmount(), form.getLocalDateTime(), form.getComments());
+            reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
         } catch (InvalidTimeException e) {
             errors.addError(new FieldError("reservationForm", "dateTime", "El horario de la reserva es inválido."));
         }

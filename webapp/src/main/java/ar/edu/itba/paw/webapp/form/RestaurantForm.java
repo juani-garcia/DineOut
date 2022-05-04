@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +18,7 @@ public class RestaurantForm {
 
     @Size(min = 6, max = 100)
     @Email
+    @DuplicatedMail
     @NotNull
     private String email;
 
@@ -30,6 +31,9 @@ public class RestaurantForm {
 
     @NotNull
     private List<Long> categories;
+
+    @NotNull
+    private List<Long> shifts;
 
     public String getName() {
         return name;
@@ -78,4 +82,13 @@ public class RestaurantForm {
     public void setCategories(List<Long> categories) {
         this.categories = categories;
     }
+
+    public List<Long> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<Long> shifts) {
+        this.shifts = shifts;
+    }
+
 }

@@ -18,11 +18,11 @@
                 <div class="section flex_center">
                     <div class="card default_red">
                         <div class="card-content">
-                            <h1>¡Oops! Pagina no encontrada</h1>
+                            <h1>¡Oops! <c:out value="${error.title}"/></h1>
                         </div>
                     </div>
                 </div>
-                <h5>Probablemente ingresaste una URL invalida</h5>
+                <h5><c:out value="${error.recomendation}"/></h5>
                 <h5><b>Codigo de error:</b> <c:out value="${pageContext.errorData.statusCode}"/></h5>
                 <h5><b>Pedido URI:</b> <c:out
                         value="${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}"/>

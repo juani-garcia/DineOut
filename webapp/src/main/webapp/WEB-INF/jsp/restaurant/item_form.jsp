@@ -15,7 +15,7 @@
 
 
 <c:url value="/restaurant/item" var="postPath"/>
-<form:form id="item_form" modelAttribute="itemForm" action="${postPath}" method="post">
+<form:form id="item_form" modelAttribute="itemForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="section">
             <div class="row rounded shadowed white">
@@ -51,12 +51,12 @@
                         </form:select>
                         <form:errors path="menuSectionId" element="p" cssClass="isa_error"/>
                     </div>
-                    <!-- <div class="row">
+                    <div class="row">
                         <form:label path="image" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.image"/></form:label>
-                        <form:input path="image" type="text"/>
+                        <form:input path="image" type="file"/>
                         <form:errors path="image" cssClass="isa_error" element="p"/>
-                    </div> -->
+                    </div>
                     <div class="row">
                         <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.ordering"/>*</form:label>

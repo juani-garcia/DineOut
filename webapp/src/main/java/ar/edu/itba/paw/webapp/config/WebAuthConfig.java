@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +23,9 @@ import java.util.concurrent.TimeUnit;
 @EnableWebSecurity
 @Configuration
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private DineOutUserDetailsService userDetailsService;
@@ -57,7 +61,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .invalidSessionUrl("/")
             .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
-                .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
                 .antMatchers("/restaurant/item").hasAuthority("canCreateRestaurant")
                 .antMatchers("/restaurant/section").hasAuthority("canCreateRestaurant")
@@ -77,7 +80,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().rememberMe()
                 .rememberMeParameter("remember-me")
                 .userDetailsService(userDetailsService)
-                .key("TODO: CAMBIAR") // TODO: Cambiar la llave
+                .key(env.getProperty("webauthconfig.rememberme.key"))
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
             .and().logout()
                 .logoutUrl("/logout")
@@ -89,7 +92,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**", "/image/**");
     }
 
 }

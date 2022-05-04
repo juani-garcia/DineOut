@@ -16,26 +16,25 @@ import java.util.Optional;
 public class DinerController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private ReservationService reservationService;
 
     @Autowired
-    private SecurityController securityController;
+    private SecurityService securityService;
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
-        if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
-        ModelAndView mav = new ModelAndView("diner/profile");
-        mav.addObject("user", loggedInUser.get());
-        return mav;
+        // TODO: check if necessary
+        if(securityService.getCurrentUsername() == null) throw new IllegalStateException("Invalid user");
+
+        return new ModelAndView("diner/profile");
     }
 
     @RequestMapping("/reservations")
     public ModelAndView reservations() {
-        String username = securityController.getCurrentUserName();
+        String username = securityService.getCurrentUsername();
+        // TODO: check if necessary
+        if(username == null) throw new IllegalStateException("Invalid user");
+
         List<Reservation> reservationList = reservationService.getAllByUsername(username);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);

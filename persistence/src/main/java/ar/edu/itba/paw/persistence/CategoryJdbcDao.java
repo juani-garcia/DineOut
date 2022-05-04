@@ -14,7 +14,7 @@ public class CategoryJdbcDao implements CategoryDao {
 
     private final JdbcTemplate jdbcTemplate;
     private static final RowMapper<Category> CATEGORY_ROW_MAPPER = (rs, rowNum) ->
-            Category.getByOrdinal(rs.getLong("category_id"));
+            Category.getById(rs.getLong("category_id"));
 
     @Autowired
     public CategoryJdbcDao(final DataSource ds) {

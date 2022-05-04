@@ -4,24 +4,20 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserRole;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.service.UserRoleService;
-import ar.edu.itba.paw.service.UserService;
-import ar.edu.itba.paw.service.UserToRoleService;
+import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.*;
 
 @Controller
+@ControllerAdvice
 public class HomeController {
 
     @Autowired
@@ -36,8 +32,9 @@ public class HomeController {
     @Autowired
     private UserToRoleService userToRoleService;
 
+
     @Autowired
-    private SecurityController securityController;
+    private SecurityService securityService;
 
     private final HashMap<String, String> roles = new HashMap<String, String>() {
         {
@@ -59,9 +56,9 @@ public class HomeController {
     public ModelAndView webapp(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "name", defaultValue = "") final String name,
-            @RequestParam(name = "category", defaultValue = "") final String category,
-            @RequestParam(name = "zone", defaultValue = "") final String zone,
-            @RequestParam(name = "shift", defaultValue = "") final String shift) {
+            @RequestParam(name = "category", defaultValue = "-1") final int category,
+            @RequestParam(name = "zone", defaultValue = "-1") final int zone,
+            @RequestParam(name = "shift", defaultValue = "-1") final int shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
@@ -74,7 +71,6 @@ public class HomeController {
     public ModelAndView restaurantPicker() {  // TODO: use tags and previous reservations to choose restaurant.
         final List<Restaurant> restaurantList = restaurantService.getAll(1);
         Random random = new Random();
-        System.out.println(restaurantList.size());
         return new ModelAndView("redirect:/restaurant/view/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
     }
 
@@ -85,7 +81,6 @@ public class HomeController {
         roles.add(this.roles.get("RESTAURANT"));
         roles.add(this.roles.get("DINER"));
         mav.addObject("roleItems", roles);
-        mav.addObject("duplicatedUsername", false);
         return mav;
     }
 
@@ -118,11 +113,17 @@ public class HomeController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        Optional<User> loggedInUser = userService.getByUsername(securityController.getCurrentUserName());
-        if (!loggedInUser.isPresent()) throw new IllegalStateException("Current user is not valid");
-        if (userService.isRestaurant(loggedInUser.get().getId())) {
+        User user = securityService.getCurrentUser();
+        if (user == null) throw new IllegalStateException("Current user is not valid");
+        if (userService.isRestaurant(user.getId())) { // TODO
             return new ModelAndView("redirect:/restaurant");
         }
         return new ModelAndView("redirect:/diner/profile");
     }
+
+    @ModelAttribute
+    public void addUser(Model model) {
+        model.addAttribute("user", securityService.getCurrentUser());
+    }
+
 }

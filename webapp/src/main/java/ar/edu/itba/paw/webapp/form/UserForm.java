@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.DuplicatedUsername;
 import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
 import org.hibernate.validator.constraints.Email;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 public class UserForm {
 
     @Size(min = 6, max = 100)
+    @DuplicatedUsername
     @Email
     private String username;
 
