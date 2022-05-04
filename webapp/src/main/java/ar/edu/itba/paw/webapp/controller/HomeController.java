@@ -46,6 +46,9 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView webapp() {
         final ModelAndView mav = new ModelAndView("home/index");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         return mav;
     }
 
@@ -57,6 +60,9 @@ public class HomeController {
             @RequestParam(name = "zone", defaultValue = "-1") final int zone,
             @RequestParam(name = "shift", defaultValue = "-1") final int shift) {
         final ModelAndView mav = new ModelAndView("home/restaurants");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
         mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
@@ -117,9 +123,6 @@ public class HomeController {
 
     @ModelAttribute
     public void addAttributes(Model model) {
-        model.addAttribute("categories", Category.values());
-        model.addAttribute("zones", Zone.values());
-        model.addAttribute("shifts", Shift.values());
         model.addAttribute("user", securityService.getCurrentUser());
     }
 

@@ -74,7 +74,11 @@ public class RestaurantController {
 
     @RequestMapping("/register")
     public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        return new ModelAndView("register/register_restaurant");
+        ModelAndView mav = new ModelAndView("register/register_restaurant");
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
+        return mav;
     }
 
     @RequestMapping(value = "/register", method = {RequestMethod.POST})
