@@ -2,6 +2,8 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.persistence.UserDao;
+import ar.edu.itba.paw.persistence.UserRole;
+import ar.edu.itba.paw.persistence.UserToRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,14 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
+    private final UserToRoleService userToRoleService;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService, UserToRoleService userToRoleService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
+        this.userToRoleService = userToRoleService;
     }
 
     @Override
@@ -33,9 +37,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String username, String password, final String firstName, final String lastName) {
-        // TODO : send email validation mail
-        return userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
+    public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant) {
+        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
+        if (user == null) return null;
+
+        Optional<UserRole> userRole;
+        String role = isRestaurant ? "RESTAURANT" : "DINER";
+        userRole = userRoleService.getByRoleName(role);
+        if (!userRole.isPresent()) throw new IllegalStateException("El rol " + role + " no esta presente en la bbdd");
+        UserToRole userToRole = userToRoleService.create(user.getId(), userRole.get().getId());
+
+        // TODO: rollback if not able to create userToRole
+        // TODO : send email for succesful account creation mail
+
+        return user;
     }
 
     @Override

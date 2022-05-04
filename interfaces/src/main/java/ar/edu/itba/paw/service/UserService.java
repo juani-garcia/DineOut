@@ -10,7 +10,7 @@ public interface UserService {
 
     Optional<User> getByUsername(final String username);
 
-    User create(final String username, final String password, final String firstName, final String lastName);
+    User create(final String username, final String password, final String firstName, final String lastName, final Boolean isRestaurant);
 
     boolean isRestaurant(long userId);
 

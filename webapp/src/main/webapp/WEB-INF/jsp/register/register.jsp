@@ -76,15 +76,5 @@
 
 
 <%@ include file="../footer.jsp" %>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var options = [];
-        <c:forEach items="${roleItems}" var="roleItem">
-        options.push("${roleItem}");
-        </c:forEach>
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems, options);
-    });
-</script>
 </body>
 </html>

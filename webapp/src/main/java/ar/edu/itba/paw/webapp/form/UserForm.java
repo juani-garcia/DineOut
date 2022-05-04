@@ -29,7 +29,7 @@ public class UserForm {
     private String confirmPassword;
 
     @NotNull
-    private String role;
+    private Boolean isRestaurant;
 
     public String getUsername() {
         return username;
@@ -71,11 +71,11 @@ public class UserForm {
         this.lastName = lastName;
     }
 
-    public String getRole() {
-        return role;
+    public Boolean getIsRestaurant() {
+        return isRestaurant;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setIsRestaurant(Boolean isRestaurant) {
+        this.isRestaurant = isRestaurant;
     }
 }
