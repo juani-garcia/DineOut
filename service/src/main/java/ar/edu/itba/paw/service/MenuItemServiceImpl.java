@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.Image;
+import ar.edu.itba.paw.persistence.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,11 @@ public class MenuItemServiceImpl implements MenuItemService {
     private MenuItemDao menuItemDao;
 
     @Override
+    public Optional<MenuItem> getById(final long itemId) {
+        return menuItemDao.getById(itemId);
+    }
+
+    @Override
     public List<MenuItem> getBySectionId(long sectionId) {
         return menuItemDao.getBySectionId(sectionId);
     }
@@ -40,7 +47,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public boolean delete(long itemId) {
+    public boolean delete(final long itemId) {
+        MenuItem menuItem = getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemID"));
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
+        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+            throw new RuntimeException("Invalid permissions");
         return menuItemDao.delete(itemId);
     }
 

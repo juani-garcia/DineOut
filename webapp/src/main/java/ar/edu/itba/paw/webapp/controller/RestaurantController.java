@@ -124,6 +124,12 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
+    @RequestMapping(value = "/section/{sectionId}/delete", method = {RequestMethod.POST})
+    public ModelAndView sectionDeletion(@PathVariable final long sectionId) {
+        menuSectionService.delete(sectionId);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
     @RequestMapping(value = "/item")
     public ModelAndView itemForm(Principal principal, @ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
@@ -162,6 +168,12 @@ public class RestaurantController {
     @RequestMapping(value = "/item/{itemId}/down", method = {RequestMethod.POST})
     public ModelAndView itemDown(@PathVariable final long itemId) {
         menuItemService.moveDown(itemId);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/item/{itemId}/delete", method = {RequestMethod.POST})
+    public ModelAndView itemDeletion(@PathVariable final long itemId) {
+        menuItemService.delete(itemId);
         return new ModelAndView("redirect:/restaurant");
     }
 
