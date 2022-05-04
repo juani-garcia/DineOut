@@ -123,7 +123,9 @@ DECLARE
                       WHERE section_id = OLD.section_id AND ordering = NEW.ordering;
     rec RECORD;
 BEGIN
-    UPDATE menu_item SET ordering = OLD.ordering WHERE section_id = OLD.section_id AND ordering = NEW.ordering;
+    IF OLD.ordering != NEW.ordering THEN
+        UPDATE menu_item SET ordering = OLD.ordering WHERE section_id = OLD.section_id AND ordering = NEW.ordering;
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
