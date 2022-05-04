@@ -3,8 +3,11 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.persistence.MenuItem;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MenuItemService {
+
+    Optional<MenuItem> getById(final long itemId);
 
     List<MenuItem> getBySectionId(long sectionId);
 
