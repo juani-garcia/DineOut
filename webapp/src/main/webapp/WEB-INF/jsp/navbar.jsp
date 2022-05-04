@@ -14,7 +14,7 @@
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <li>
                     <div class="white-text">
-                        ¡Hola <c:import url="/first_name"/>!
+                        ¡Hola <c:out value="${user.firstName}"/>!
                     </div>
                 </li>
                 <li>
