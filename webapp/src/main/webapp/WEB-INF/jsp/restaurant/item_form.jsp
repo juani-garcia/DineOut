@@ -59,12 +59,6 @@
                         <form:errors path="image" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
-                                code="restaurant.item.form.ordering"/>*</form:label>
-                        <form:input path="ordering" type="number" step="1" min="1" value="1"/>
-                        <form:errors path="ordering" cssClass="isa_error" element="p"/>
-                    </div>
-                    <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>

@@ -1,15 +1,23 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.Image;
-import ar.edu.itba.paw.persistence.MenuItem;
-import ar.edu.itba.paw.persistence.MenuItemDao;
+import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
+
+    @Autowired
+    private SecurityService securityService;
+
+    @Autowired
+    private RestaurantService restaurantService;
+
+    @Autowired
+    private MenuSectionService menuSectionService;
 
     @Autowired
     private ImageService imageService;
@@ -25,7 +33,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public MenuItem create(String name, String detail, double price, long sectionId, byte[] imageBytes) {
         Image image = null;
-        if (imageBytes != null) {
+        if (imageBytes != null && imageBytes.length > 0) {
             image = imageService.create(imageBytes);
         }
         return menuItemDao.create(name, detail, price, sectionId, (image != null) ? image.getId() : null);
@@ -41,4 +49,25 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
         return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, menuItem.getImageId());
     }
+
+    @Override
+    public boolean moveUp(final long itemId) {
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
+        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+            throw new RuntimeException("This user does not have access");
+        return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() - 1, null);
+    }
+
+    @Override
+    public boolean moveDown(final long itemId) {
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
+        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+            throw new RuntimeException("This user does not have access");
+        return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() + 1, null);
+    }
+
 }

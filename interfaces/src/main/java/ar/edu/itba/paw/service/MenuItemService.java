@@ -13,4 +13,8 @@ public interface MenuItemService {
     boolean delete(long itemId);
 
     boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes);
+
+    boolean moveUp(final long itemId);
+
+    boolean moveDown(final long itemId);
 }

@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MenuItemDao {
+
+    Optional<MenuItem> getById(final long itemId);
 
     List<MenuItem> getBySectionId(long sectionId);
 

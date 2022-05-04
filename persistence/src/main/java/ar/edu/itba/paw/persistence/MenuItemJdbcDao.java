@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class MenuItemJdbcDao implements MenuItemDao {
@@ -29,6 +30,12 @@ public class MenuItemJdbcDao implements MenuItemDao {
     }
 
     @Override
+    public Optional<MenuItem> getById(final long itemId) {
+        return jdbcTemplate.query("SELECT * FROM menu_item WHERE id = ?",
+                new Object[]{itemId}, ITEM_ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
     public List<MenuItem> getBySectionId(long sectionId) {
         return jdbcTemplate.query("SELECT * FROM menu_item WHERE section_id = ? ORDER BY ordering",
                 new Object[]{sectionId}, ITEM_ROW_MAPPER);
@@ -43,8 +50,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
         itemData.put("section_id", sectionId);
         itemData.put("image_id", imageId);
         long itemId = jdbcInsert.executeAndReturnKey(itemData).longValue();
-
-        return new MenuItem(itemId, name, detail, price, sectionId, ordering, imageId);
+        return getById(itemId).orElseThrow( () -> new RuntimeException("Couldn't fetch created item"));
     }
 
     @Override
@@ -57,7 +63,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
     @Override
     public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
         String query = "UPDATE menu_item SET name = ?, detail = ?, price = ?, section_id = ?, ordering = ?, image_id = ? WHERE id = ?";
-        Object[] args = new Object[]{name, detail, price, sectionId, ordering, itemId, imageId};
+        Object[] args = new Object[]{name, detail, price, sectionId, ordering, imageId, itemId};
 
         return jdbcTemplate.update(query, args) == 1;
     }

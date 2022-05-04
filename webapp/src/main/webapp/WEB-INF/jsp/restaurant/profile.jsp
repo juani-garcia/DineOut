@@ -41,28 +41,48 @@
                     <%--                <div class="card-image">--%>
                     <%--                    <img src="" alt="">--%>
                     <%--                </div>--%>
-                    <h2 class="bold">
-                        <c:out value="${section.name}"/>
+                    <div class="row" style="display: flex; align-items: center">
                         <c:if test="${section.ordering > 1}">
                             <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
-                            <form method="post" action="${upUrl}">
-                                <button type="submit">
-                                    <spring:message code="restaurant.section.up"/>
+                            <form method="post" action="${upUrl}" style="margin: 0">
+                                <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                    <i class="material-icons left">arrow_upward</i>
                                 </button>
                             </form>
                         </c:if>
                         <c:if test="${section.ordering < sections.size()}">
                             <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
-                            <form method="post" action="${downUrl}">
-                                <button type="submit">
-                                    <spring:message code="restaurant.section.down"/>
+                            <form method="post" action="${downUrl}" style="margin: 0">
+                                <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                    <i class="material-icons left">arrow_downward</i>
                                 </button>
                             </form>
                         </c:if>
-                    </h2>
+                        <h2 class="bold">
+                            <c:out value="${section.name}"/>
+                        </h2>
+                    </div>
                     <c:forEach items="${section.menuItemList}" var="item">
                         <div class="section_item_container align_center">
-                            <h4><c:out value="${item.name}"/></h4>
+                            <div class="row" style="display:flex; margin: 0; align-items: center">
+                                <c:if test="${item.ordering > 1}">
+                                    <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
+                                    <form method="post" action="${upUrl}" style="margin: 0">
+                                        <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                            <i class="material-icons left">arrow_upward</i>
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${item.ordering < section.menuItemList.size()}">
+                                    <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
+                                    <form method="post" action="${downUrl}" style="margin: 0">
+                                        <button class="btn waves-effect waves-light btn-floating" type="submit" name="action">
+                                            <i class="material-icons left">arrow_downward</i>
+                                        </button>
+                                    </form>
+                                </c:if>
+                                <h4><c:out value="${item.name}"/></h4>
+                            </div>
                             <p>$ <c:out value="${item.price}"/></p>
                         </div>
                         <hr>
