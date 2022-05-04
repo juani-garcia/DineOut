@@ -10,7 +10,6 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">

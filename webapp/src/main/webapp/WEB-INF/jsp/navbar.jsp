@@ -13,27 +13,42 @@
             </c:if>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <li>
+                    <div class="white-text">
+                        ¡Hola <c:import url="/first_name"/>!
+                    </div>
+                </li>
+                <li>
+                    <a href="<c:url value="/diner/reservations"/>"
+                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px">
+                                Mis Reservas
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li>
                     <a href="<c:url value="/profile"/>"
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                ¡Hola <c:out value="${user.firstName}"/>!
+                                Mi perfil
                             </p>
-                            <p>
-                                <i class="material-icons">menu</i>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="<c:url value="/logout"/>"
+                       class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px white-text">
+                                Cerrar sesion
                             </p>
                         </div>
                     </a>
                 </li>
             </c:if>
         </ul>
-
-        <ul id="nav-mobile" class="sidenav">
-            <li><a href="<c:url value="/test"/>"
-                   class="btn-small no-text-transform card waves-effect waves-red white black-text bold">Iniciar
-                sesión</a></li>
-            <li><a href="<c:url value="/test"/>" class="restaurant-register">¡Registra tu restaurante!</a></li>
-        </ul>
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"></a>
     </div>
 </nav>
