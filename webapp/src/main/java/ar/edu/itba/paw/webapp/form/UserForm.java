@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validations.DuplicatedUsername;
 import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,8 +29,7 @@ public class UserForm {
     @NotNull
     private String confirmPassword;
 
-    @NotNull
-    private Boolean isRestaurant;
+    private Boolean isRestaurant = false;
 
     public String getUsername() {
         return username;
