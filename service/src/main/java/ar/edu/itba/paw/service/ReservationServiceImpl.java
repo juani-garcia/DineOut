@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.exceptions.UnauthorizedReservationException;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.persistence.Restaurant;
+import ar.edu.itba.paw.persistence.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private ShiftService shiftService;
+
+    @Autowired
+    private SecurityService securityService;
 
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
@@ -51,12 +56,26 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> getAllByUsername(String username) {
         List<Reservation> reservationList = reservationDao.getAllByUsername(username);
-        for (Reservation reservation :
-                reservationList) {
+        for (Reservation reservation : reservationList) {
             Optional<Restaurant> restaurant = restaurantService.getById(reservation.getRestaurantId());
             if (!restaurant.isPresent()) throw new IllegalStateException("Restaurant id: " + reservation.getRestaurantId() + " in reservation id: " + reservation.getReservationId() + " is not a valid restaurant");
             reservation.setRestaurant(restaurant.get());
         }
         return reservationList;
+    }
+
+    @Override
+    public void delete(long reservationId) {
+        User user = securityService.getCurrentUser();
+        Optional<String> owner = reservationDao.getReservationOwner(reservationId);
+
+        if(user == null || !owner.isPresent() || !owner.get().equals(user.getUsername())) {
+            throw new UnauthorizedReservationException();
+        }
+
+        // TODO: send mail telling that reservation was cancelled
+
+        reservationDao.delete(reservationId);
+
     }
 }

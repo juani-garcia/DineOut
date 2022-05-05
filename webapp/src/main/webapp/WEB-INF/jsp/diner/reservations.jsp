@@ -14,18 +14,32 @@
     <div class="section flex_center width_100">
         <div class="card menu_card">
             <h1 class="megabold flex_center groovy">
-                Reservas
+                <spring:message code="diner.reservations.title"/>
             </h1>
             <c:if test="${reservations.size() == 0}">
                 <h2 class="header center default_light_text">No tienes ninguna reserva</h2>
             </c:if>
             <c:forEach items="${reservations}" var="reservation">
-                <div class="card-content default_dark_text">
-                    <h4 class="medium"><c:out value="${reservation.restaurant.name}"/></h4>
-                    <h5 class="medium"><c:out value="${reservation.amount}"/></h5>
-                    <h6 class="regular"><c:out value="${reservation.dateTime}"/></h6>
-                    <p class="regular"><c:out value="${reservation.comments}"/></p>
+                <hr />
+                <div class="card-content default_dark_text" style="display: flex; justify-content: flex-start;">
+                    <h5 class="medium flex_column" style="margin-right: 10px"><b><c:out value="${reservation.restaurant.name}"/>: </b></h5>
+                    <h5 class="medium flex_column">
+                        <spring:message code="diner.reservation.detail"
+                                        arguments="${reservation.amount}, ${reservation.dateString}, ${reservation.timeString}, ${reservation.restaurant.address}"/>
+                    </h5>
+                    <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>
+                    <form method="post" action="${deleteUrl}" style="margin: 0">
+                        <button class="btn waves-effect waves-light btn-floating default_red"
+                                type="submit" name="action" style="margin-left: auto">
+                            <i class="material-icons left">delete</i>
+                        </button>
+                    </form>
                 </div>
+                <c:if test="${reservation.comments.length() > 0}">
+                    <div class="card-content default_dark_text" style="display: flex; justify-content: flex-start; padding-top: 0" >
+                        <h6 class="regular"><c:out value="${reservation.comments}"/></h6>
+                    </div>
+                </c:if>
             </c:forEach>
         </div>
     </div>

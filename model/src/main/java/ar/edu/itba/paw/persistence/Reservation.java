@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Reservation {
     private final long reservationId, restaurantId;
@@ -48,5 +52,17 @@ public class Reservation {
 
     public String getMail() {
         return userMail;
+    }
+
+    public String getDateString() {
+        LocalDate date = LocalDate.from(dateTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return date.format(formatter);
+    }
+
+    public String getTimeString() {
+        LocalTime time = LocalTime.from(dateTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return time.format(formatter);
     }
 }
