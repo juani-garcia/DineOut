@@ -92,7 +92,7 @@
 </div>
 <div class="section no-pad-bot">
     <div class="container">
-        <div class="row center scale_up">
+        <div class="row center">
             <a href="<c:url value ="/reserve/${restaurant.id}"/>"
                class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
                 ¡Reserva!

@@ -21,7 +21,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
             new MenuItem(rs.getLong("id"), rs.getString("name"),
                     rs.getString("detail"), rs.getDouble("price"),
                     rs.getLong("section_id"), rs.getLong("ordering"),
-                    rs.getLong("image_id"));
+                    Long.getLong(rs.getString("image_id")));
 
     @Autowired
     public MenuItemJdbcDao(final DataSource ds) {
