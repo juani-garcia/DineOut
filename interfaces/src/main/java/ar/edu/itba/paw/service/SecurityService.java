@@ -2,9 +2,11 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.User;
 
+import java.util.Optional;
+
 public interface SecurityService {
 
-    public String getCurrentUsername();
+    String getCurrentUsername();
 
-    public User getCurrentUser();
+    Optional<User> getCurrentUser();
 }

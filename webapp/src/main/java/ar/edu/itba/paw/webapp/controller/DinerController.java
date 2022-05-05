@@ -23,7 +23,6 @@ public class DinerController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        // TODO: check if necessary
         if(securityService.getCurrentUsername() == null) throw new IllegalStateException("Invalid user");
 
         return new ModelAndView("diner/profile");
@@ -32,7 +31,6 @@ public class DinerController {
     @RequestMapping("/reservations")
     public ModelAndView reservations() {
         String username = securityService.getCurrentUsername();
-        // TODO: check if necessary
         if(username == null) throw new IllegalStateException("Invalid user");
 
         List<Reservation> reservationList = reservationService.getAllByUsername(username);

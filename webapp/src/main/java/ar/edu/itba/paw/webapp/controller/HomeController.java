@@ -104,7 +104,7 @@ public class HomeController {
 
     @ModelAttribute
     public void addUser(Model model) {
-        model.addAttribute("user", securityService.getCurrentUser());
+        model.addAttribute("user", securityService.getCurrentUser().orElse(null));
     }
 
 }

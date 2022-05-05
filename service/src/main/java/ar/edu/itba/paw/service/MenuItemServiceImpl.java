@@ -48,10 +48,10 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public boolean delete(final long itemId) {
-        MenuItem menuItem = getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemID"));
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
-        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+        MenuItem menuItem = getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));  // TODO: Modularizar
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId())
             throw new RuntimeException("Invalid permissions");
         return menuItemDao.delete(itemId);
     }
@@ -64,20 +64,20 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public boolean moveUp(final long itemId) {
-        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
-        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));  // TODO: Modularizar
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId())
             throw new RuntimeException("This user does not have access");
         return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() - 1, null);
     }
 
     @Override
     public boolean moveDown(final long itemId) {
-        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).get();
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
-        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));  // TODO: Modularizar
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId())
             throw new RuntimeException("This user does not have access");
         return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() + 1, null);
     }

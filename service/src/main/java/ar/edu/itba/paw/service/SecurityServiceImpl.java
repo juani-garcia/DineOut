@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SecurityServiceImpl implements SecurityService {
 
@@ -16,11 +18,12 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public User getCurrentUser() {
+    public Optional<User> getCurrentUser() {
+        // TODO: use Optional not null.
         String username = getCurrentUsername();
 
-        if (username == null) return null;
+        if (username == null) return Optional.empty();
 
-        return userService.getByUsername(getCurrentUsername()).orElse(null);
+        return userService.getByUsername(getCurrentUsername());
     }
 }

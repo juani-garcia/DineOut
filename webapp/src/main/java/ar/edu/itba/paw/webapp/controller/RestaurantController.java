@@ -58,9 +58,7 @@ public class RestaurantController {
     public ModelAndView restaurantProfile(Principal principal) {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
-        Optional<User> optionalUser = userService.getByUsername(principal.getName());
-        if (!optionalUser.isPresent()) throw new IllegalStateException("Not logged in.");
-        User user = optionalUser.get();
+        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
         if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
         mav.addObject("restaurant", restaurant);
@@ -87,8 +85,7 @@ public class RestaurantController {
             return restaurantForm(form);
         }
 
-        User user = securityService.getCurrentUser();
-        if (user == null) throw new IllegalStateException("Not logged in");
+        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
 
         restaurantService.create(user.getId(), form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
@@ -106,8 +103,8 @@ public class RestaurantController {
             return sectionForm(form);
         }
 
-        User user = userService.getByUsername(principal.getName()).get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
+        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
         menuSectionService.create(restaurant.getId(), form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
@@ -133,8 +130,8 @@ public class RestaurantController {
     @RequestMapping(value = "/item")
     public ModelAndView itemForm(Principal principal, @ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
-        User user = userService.getByUsername(principal.getName()).get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
+        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
         return mav;
@@ -153,8 +150,8 @@ public class RestaurantController {
             return itemForm(principal, form);
         }
 
-        User user = userService.getByUsername(principal.getName()).get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));
+        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));  // TODO: why do we need to acces the restaurant? @mateo
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
         return new ModelAndView("redirect:/restaurant");
     }

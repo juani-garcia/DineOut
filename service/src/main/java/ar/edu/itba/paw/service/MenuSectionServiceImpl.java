@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.persistence.MenuSection;
 import ar.edu.itba.paw.persistence.MenuSectionDao;
 import ar.edu.itba.paw.persistence.Restaurant;
@@ -7,7 +8,6 @@ import ar.edu.itba.paw.persistence.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +41,8 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     @Override
     public boolean delete(final long sectionId) {
         MenuSection menuSection = getById(sectionId).orElseThrow( () -> new RuntimeException("Invalid section"));
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).get();
-        if (restaurant.getUserID() != securityService.getCurrentUser().getId())
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(RestaurantNotFoundException::new);
+        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId())
             throw new RuntimeException("Invalid permissions");
         return menuSectionDao.delete(sectionId);
     }
@@ -53,12 +53,12 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     }
 
     @Override
-    public boolean moveUp(final long sectionId) {
-        User user = securityService.getCurrentUser();
+    public boolean moveUp(final long sectionId) {  // TODO: repeated code
+        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("Invalid user"));
         List<MenuSection> menuSections = getByRestaurantId(restaurant.getId());
         Optional<MenuSection> optionalMenuSection = getById(sectionId);
-        if (! optionalMenuSection.isPresent() || optionalMenuSection.get().getOrdering() <= 1 || ! menuSections.stream().anyMatch( (section) -> section.getId() ==  sectionId)) {
+        if (! optionalMenuSection.isPresent() || optionalMenuSection.get().getOrdering() <= 1 || menuSections.stream().noneMatch( (section) -> section.getId() ==  sectionId)) {
             throw new RuntimeException("Invalid sectionId");
         }
         MenuSection menuSection = optionalMenuSection.get();
@@ -67,11 +67,11 @@ public class MenuSectionServiceImpl implements MenuSectionService {
 
     @Override
     public boolean moveDown(long sectionId) {
-        User user = securityService.getCurrentUser();
+        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("Invalid user"));
         List<MenuSection> menuSections = getByRestaurantId(restaurant.getId());
         Optional<MenuSection> optionalMenuSection = getById(sectionId);
-        if (! optionalMenuSection.isPresent() || optionalMenuSection.get().getOrdering() >= menuSections.size() || ! menuSections.stream().anyMatch( (section) -> section.getId() ==  sectionId)) {
+        if (! optionalMenuSection.isPresent() || optionalMenuSection.get().getOrdering() >= menuSections.size() || menuSections.stream().noneMatch( (section) -> section.getId() ==  sectionId)) {
             throw new RuntimeException("Invalid sectionId");
         }
         MenuSection menuSection = optionalMenuSection.get();

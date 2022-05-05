@@ -66,7 +66,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void delete(long reservationId) {
-        User user = securityService.getCurrentUser();
+        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Optional<String> owner = reservationDao.getReservationOwner(reservationId);
 
         if(user == null || !owner.isPresent() || !owner.get().equals(user.getUsername())) {
