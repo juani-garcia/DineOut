@@ -7,6 +7,12 @@ import ar.edu.itba.paw.persistence.UserRole;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,11 +33,7 @@ public class HomeController {
     private RestaurantService restaurantService;
 
     @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private UserToRoleService userToRoleService;
-
+    protected AuthenticationManager authenticationManager;
 
     @Autowired
     private SecurityService securityService;
@@ -76,15 +78,29 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
+    public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors, HttpServletRequest request) {
 
         if (errors.hasErrors()) {
             return registerForm(form);
         }
 
         User user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant());
+        authenticateUserAndSetSession(request, form.getUsername(), form.getPassword());
 
         return new ModelAndView("redirect:/profile");
+    }
+
+    /* Retrived from : https://www.baeldung.com/spring-security-auto-login-user-after-registration#authManager*/
+    private void authenticateUserAndSetSession(HttpServletRequest request, String username, String password) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+
+        // generate session if one doesn't exist
+        request.getSession();
+
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
     }
 
     @RequestMapping("/login")
