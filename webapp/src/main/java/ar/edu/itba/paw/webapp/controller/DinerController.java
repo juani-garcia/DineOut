@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.persistence.Reservation;
-import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/diner")
@@ -33,7 +31,7 @@ public class DinerController {
         String username = securityService.getCurrentUsername();
         if(username == null) throw new IllegalStateException("Invalid user");
 
-        List<Reservation> reservationList = reservationService.getAllByUsername(username);
+        List<Reservation> reservationList = reservationService.getAllFutureByUsername(username);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
         return mav;
