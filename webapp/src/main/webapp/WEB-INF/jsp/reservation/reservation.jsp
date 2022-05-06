@@ -20,11 +20,6 @@
                     <div class="row">
                         <h5 class="white bold"><spring:message code="reservation.reservation.form.header"/></h5>
                     </div>
-                    <c:if test="${formSuccess == true}">
-                        <div class="isa_success">
-                            Se realizo la reserva exitosamente!
-                        </div>
-                    </c:if>
                     <div class="row">
                         <form:label path="amount" cssClass="semibold label-text-size"><spring:message
                                 code="reservation.reservation.form.amount"/>*</form:label>
