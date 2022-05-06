@@ -42,12 +42,4 @@ public class MenuController {
         mav.addObject("restaurant", restaurant.get());
         return mav;
     }
-
-//    @RequestMapping("/edit_restaurant_menu")
-//    public ModelAndView edit() {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();   // TODO: Improve how we ask for users
-//        Optional<User> user = userService.getByUsername(auth.getName());
-//        if (!user.isPresent()) throw new IllegalStateException("Tenes que estar loggeado para realizar esta accion.");
-//        long userID = user.get().getId();
-//    }
 }
