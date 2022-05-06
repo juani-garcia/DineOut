@@ -6,6 +6,8 @@ public interface FavoriteService {
 
     boolean create(long restaurantId, long userId);
 
+    boolean isFavoriteOfLoggedUser(long resId);
+
     Long getFavCount(long restaurantId);
 
 }

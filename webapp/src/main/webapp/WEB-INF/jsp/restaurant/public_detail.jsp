@@ -20,6 +20,25 @@
                                alt=""></div>
 </div>
 
+<% if (request.isUserInRole("DINER")) { %>
+<c:if test="${isUserFavorite}">
+    <c:url value="/diner/set_favorite/${restaurant.id}/false" var="setFavorite"/>
+    <form method="post" action="${setFavorite}">
+        <button class="btn waves-effect waves-light btn-floating default_blue" type="submit" name="action">
+            <i class="material-icons left">favorite</i>
+        </button>
+    </form>
+</c:if>
+<c:if test="${!isUserFavorite}">
+    <c:url value="/diner/set_favorite/${restaurant.id}/true" var="setFavorite"/>
+    <form method="post" action="${setFavorite}">
+        <button class="btn waves-effect waves-light btn-floating default_blue" type="submit" name="action">
+            <i class="material-icons left">favorite_border</i>
+        </button>
+    </form>
+</c:if>
+<% } %>
+
 <div class="flex_row">
     <div class="restaurant_detail_section_menu flex_center padding-15px">
         <div class="menu_title_card flex_center align_center rounded shadowed padding-15px">

@@ -39,4 +39,9 @@ public class FavoriteJdbcDao implements FavoriteDao {
     public Long getFavCount(long restaurantId) {
         return null;
     }
+
+    @Override
+    public boolean isFavorite(long restaurantId, long userId) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM favorite WHERE restaurant_id = ? AND user_id = ?",  new Object[]{restaurantId, userId}, Long.class) > 0;
+    }
 }

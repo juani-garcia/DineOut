@@ -54,6 +54,9 @@ public class RestaurantController {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private FavoriteService favoriteService;
+
     @RequestMapping("")
     public ModelAndView restaurantProfile(Principal principal) {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
@@ -180,6 +183,7 @@ public class RestaurantController {
 
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
         mav.addObject("restaurant", restaurant);
+        mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", shiftService.getByRestaurantId(resId));
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());

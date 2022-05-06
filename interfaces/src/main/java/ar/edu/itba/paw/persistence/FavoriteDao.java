@@ -8,4 +8,5 @@ public interface FavoriteDao {
 
     Long getFavCount(long restaurantId);
 
+    boolean isFavorite(long restaurantId, long userId);
 }
