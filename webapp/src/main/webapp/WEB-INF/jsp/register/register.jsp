@@ -55,11 +55,11 @@
                                 code="home.register.form.confirmPassword"/></form:label>
                         <form:input type="password" path="confirmPassword"/>
                     </div>
-                    <div class="row input-field">
-                        <form:label path="role"><spring:message
-                                code="home.register.form.roleSelector"/></form:label>
-                        <form:select path="role" items="${roleItems}" size="${roleItems.size()}"/>
-                        <form:errors path="role" element="p" cssClass="isa_error"/>
+                    <div class="row"> <%-- TODO: modify to accept form:checkbox --%>
+                        <label>
+                            <input type="checkbox" id="isRestaurant" name="isRestaurant"/>
+                            <span><spring:message code="home.register.form.roleSelector"/></span>
+                        </label>
                     </div>
                     <div class="row center">
                         <button type="submit" name="action"
