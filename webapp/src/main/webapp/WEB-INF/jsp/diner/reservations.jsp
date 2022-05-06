@@ -23,8 +23,10 @@
                 <hr/>
                 <div class="card-content default_dark_text flex_column">
                     <div class="flex_row">
-                        <h5 class="medium"><b><c:out
-                                value="${reservation.restaurant.name}"/>: </b></h5>
+                        <a href="<c:url value ="/restaurant/view/${reservation.restaurant.id}"/>" class="grow_on_hover default_dark_text underline">
+                            <h5 class="medium"><b><c:out
+                                    value="${reservation.restaurant.name}"/>: </b></h5>
+                        </a>
                         <div class="margin_left_auto flex_row">
                                 <%--                            <div class="margins_lr_5px">--%>
                                 <%--                                <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>--%>

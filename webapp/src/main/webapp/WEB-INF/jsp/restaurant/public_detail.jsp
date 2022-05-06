@@ -16,87 +16,89 @@
             <h1 class="header center white-text bold text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h1>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>   <!-- Custom restaurant image -->
+    <div class="parallax"><img src="<c:url value="/resources/media/background2.jpg"/>"
+                               alt=""></div>
 </div>
 
-<div class="container">
-    <div class="section restaurant_detail_flex_container">
-        <!--   Icon Section   -->
-        <div class="card horizontal card_wrapper default_dark white-text align_center same_width_elements">
-            <div class="card-content same_width_elements">
-                <div class="icon-block">
-                    <h2 class="center"><i class="material-icons">restaurant_menu</i></h2>
-                    <h5 class="center"><c:out value="${restaurant.detail}"/></h5>
-                </div>
-            </div>
-            <div class="card-content same_width_elements">
-                <h5 class="center">&#128205;<c:out value="${restaurant.address}"/></h5>
-            </div>
-            <div class="card-content same_width_elements flex_center">
-                <h5 class="center">Horarios:</h5>
-                <c:if test="${shifts.size() == 0}">
-                    <h6 class="center">Las 24hs.</h6>
+<div class="flex_row">
+    <div class="restaurant_detail_section_menu flex_center padding-15px">
+        <div class="menu_title_card flex_center align_center rounded shadowed padding-15px">
+            <h1 class="megabold groovy center">
+                <c:if test="${sections.size() == 0}">
+                    <spring:message code="restaurant.public_detail.no_menu"/>.
                 </c:if>
-                <c:forEach items="${shifts}" var="shift">
-                    <h6 class="center"><spring:message code="${shift.message}"/> <c:out value="${shift.start}"/> a <c:out
-                            value="${shift.end}"/></h6>
-                </c:forEach>
-            </div>
+                <c:if test="${sections.size() != 0}">
+                    <spring:message code="restaurant.public_detail.menu"/>:
+                </c:if>
+            </h1>
         </div>
-    </div>
-</div>
-
-<div class="container flex_center padding-15px">
-    <div class="menu_title_card flex_center align_center rounded shadowed padding-15px">
-        <h1 class="megabold flex_center groovy">
-            <c:if test="${sections.size() == 0}">
-                <spring:message code="restaurant.public_detail.no_menu"/>.
-            </c:if>
-            <c:if test="${sections.size() != 0}">
-                <spring:message code="restaurant.public_detail.menu"/>:
-            </c:if>
-        </h1>
-    </div>
-    <c:if test="${sections.size() != 0}">
-        <div class="section flex_center width_100">
-            <div class="card menu_card">
-                <div class="card-content black-text">
-                    <c:forEach items="${sections}" var="section">
-                        <h2 class="bold"><c:out value="${section.name}"/></h2>
-                        <c:forEach items="${section.menuItemList}" var="item">
-                            <div style="display: flex; justify-content: space-between; align-items: center">
-                                <div style="flex: 4">
-                                    <div class="section_item_container align_center">
-                                        <h4><c:out value="${item.name}"/></h4>
-                                        <p>$ <c:out value="${item.price}"/></p>
-                                    </div>
-                                    <hr/>
-                                    <p><c:out value="${item.detail}"/></p>
-                                </div>
-                                <div style="flex: 1">
+        <c:if test="${sections.size() != 0}">
+            <div class="section flex_center width_100">
+                <div class="card menu_card">
+                    <div class="card-content black-text">
+                        <c:forEach items="${sections}" var="section">
+                            <h2 class="bold"><c:out value="${section.name}"/></h2>
+                            <c:if test="${section.menuItemList.size() == 0}">
+                                <h4><spring:message code="restaurant.public_detail.no_items"/></h4>
+                            </c:if>
+                            <c:forEach items="${section.menuItemList}" var="item">
+                                <div class="card horizontal item_card">
                                     <c:if test="${item.imageId > 0}">
-                                        <div>
+                                        <div class="card-image">
                                             <c:url value="/image/${item.imageId}" var="imagePath"/>
-                                            <img src="${imagePath}" class="circle" style="padding: 25px; width: 100%; height: auto"/>
+                                            <img src="${imagePath}" class="scale_down rounded" alt=""/>
                                         </div>
                                     </c:if>
+                                    <div class="card-content">
+                                        <div class="section_item_container align_center">
+                                            <h4><c:out value="${item.name}"/></h4>
+                                            <p>$ <c:out value="${item.price}"/></p>
+                                        </div>
+                                        <hr/>
+                                        <p><c:out value="${item.detail}"/></p>
+                                    </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                         </c:forEach>
-                    </c:forEach>
+                    </div>
                 </div>
             </div>
-        </div>
-    </c:if>
-</div>
-<div class="section no-pad-bot">
-    <div class="container">
-        <div class="row center">
-            <a href="<c:url value ="/reserve/${restaurant.id}"/>"
-               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                ¡Reserva!
-            </a>
+        </c:if>
+    </div>
+    <div class="display_flex restaurant_detail_section_data flex_center">
+        <div class="container">
+            <div class="card card_wrapper default_dark white-text align_center same_width_elements">
+                <div class="card-content same_width_elements">
+                    <div class="icon-block">
+                        <h2 class="center text_overflow_ellipsis"><i class="material-icons">restaurant_menu</i></h2>
+                        <h5 class="center text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></h5>
+                    </div>
+                </div>
+                <div class="card-content same_width_elements">
+                    <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
+                </div>
+                <div class="card-content same_width_elements flex_center">
+                    <h5 class="center text_overflow_ellipsis">Horarios:</h5>
+                    <c:if test="${shifts.size() == 0}">
+                        <h6 class="center text_overflow_ellipsis">Las 24hs.</h6>
+                    </c:if>
+                    <c:forEach items="${shifts}" var="shift">
+                        <h6 class="center text_overflow_ellipsis"><spring:message code="${shift.message}"/> <c:out value="${shift.start}"/> a
+                            <c:out
+                                    value="${shift.end}"/></h6>
+                    </c:forEach>
+                </div>
+                <div class="card-content same_width_elements">
+                    <div class="container">
+                        <div class="row center">
+                            <a href="<c:url value ="/reserve/${restaurant.id}"/>"
+                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
+                                ¡Reserva!
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

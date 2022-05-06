@@ -10,17 +10,11 @@
 <body>
 <%@ include file="../navbar.jsp" %>
 
-<!-- Main title -->
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
-    <div class="section no-pad-bot">
-        <div class="container">
-            <h1 class="header center white-text bold"><spring:message code="home.index.recommended.title"/></h1>
-        </div>
+<div class="section no-pad-bot">
+    <div class="container">
+        <h1 class="header center white-text bold"><spring:message code="home.index.recommended.title"/></h1>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>
 </div>
-<div class="separator default_red"></div>
 
 <div class="container">
     <div class="row">
@@ -36,32 +30,36 @@
                 </div>
             </div>
         </c:if>
-        <c:if test="${restaurants.size() != 0}">
-            <c:forEach items="${restaurants}" var="restaurant">
+        <c:forEach items="${restaurants}" var="restaurant">
 
-                <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
-                   class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                    <div class="card-image flex_center">
-                        <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img"
-                             class="scale_down rounded"/>
-                    </div>
-                    <div class="card-content default_dark_text">
+            <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
+               class="card horizontal card_wrapper grow_on_hover restaurant_card">
+                <div class="card-image flex_center">
+                    <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img"
+                         class="scale_down rounded"/>
+                </div>
+                <div class="card-content default_dark_text">
+                    <div class="flex_row">
                         <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>
-                        <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
-                        <p class="light text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></p>
+                        <h6 class="medium text_overflow_ellipsis margin_left_auto">&#128205;<c:out
+                                value="${restaurant.zone.name}"/></h6>
                     </div>
-                </a>
-            </c:forEach>
-        </c:if>
+                    <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
+                    <p class="light text_overflow_ellipsis">Direccion: <c:out value="${restaurant.address}"/></p>
+                </div>
+            </a>
+        </c:forEach>
 
     </div>
 </div>
 <c:if test="${totalRestaurantCount > pageSize}">
     <div class="container flex_center" id="paginator">
-        <ul class="pagination">
-            <li class="waves-effect" id="previous_page"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-            <li id="page_number_of_total"></li>
-            <li class="waves-effect" id="next_page"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        <ul class="pagination padding-15px big">
+            <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                    class="material-icons">chevron_left</i></a></li>
+            <li id="page_number_of_total" class="white-text regular"></li>
+            <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                    class="material-icons">chevron_right</i></a></li>
         </ul>
     </div>
 </c:if>
@@ -108,7 +106,10 @@
     // Set up paginator
     document.addEventListener('DOMContentLoaded', function () {
         const paginator = document.getElementById("paginator");
-        if (<c:out value="${totalRestaurantCount}"/><<c:out value="${pageSize}"/>) { return; }
+        if (<c:out value="${totalRestaurantCount}"/><<c:out value="${pageSize}"/>)
+        {
+            return;
+        }
 
         const params = new URLSearchParams(window.location.search);
         let pageNumber = params.get("page");
@@ -122,9 +123,9 @@
         var previousPagePaginator = document.getElementById("previous_page");
         var nextPagePaginator = document.getElementById("next_page");
         if (pageNumber === 1) {
-            previousPagePaginator.className = "disabled";
+            previousPagePaginator.className = "disabled default_dark_text";
         } else {
-            previousPagePaginator.onclick = function(){
+            previousPagePaginator.onclick = function () {
                 pageNumber = pageNumber - 1;
                 params.set("page", pageNumber.toString());
                 previousPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
@@ -133,9 +134,9 @@
 
 
         if (pageNumber === pages) {
-            nextPagePaginator.className = "disabled";
+            nextPagePaginator.className = "disabled default_dark_text";
         } else {
-            nextPagePaginator.onclick = function(){
+            nextPagePaginator.onclick = function () {
                 pageNumber = pageNumber + 1;
                 params.set("page", pageNumber.toString());
                 nextPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;

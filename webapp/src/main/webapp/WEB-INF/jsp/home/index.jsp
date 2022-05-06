@@ -16,15 +16,17 @@
         <h1 class="header center white-text bold"><spring:message code="home.index.header.title"/></h1>
         <h5 class="header center white-text bold"><spring:message code="home.index.header.catchphrase"/></h5>
 
-        <div class="row center">
-            <a href="<c:url value ="/restaurants"/>"
-               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                <spring:message code="home.index.explore.button"/>
-            </a>
-        </div>
         <div class="row">
             <%@include file="../search_bar.jsp" %>
         </div>
+        <c:if test="${pageContext.request.userPrincipal.name == null}">
+            <div class="container shadowed rounded default_dark">
+                <div class="row center">
+                    <h4 class="white-text bold"><spring:message code="home.index.info.title"/></h4>
+                    <h6 class="light white-text"><spring:message code="home.index.info.description"/></h6>
+                </div>
+            </div>
+        </c:if>
     </div>
 </div>
 
@@ -43,15 +45,7 @@
         </div>
     </div>
 </div>
-<c:if test="${pageContext.request.userPrincipal.name == null}">
-    <div class="container">
-        <div class="row center">
-            <h4 class="white-text bold"><spring:message code="home.index.info.title"/></h4>
-            <h6 class="light white-text"><spring:message code="home.index.info.description"/></h6>
-        </div>
-    </div>
 
-</c:if>
 <%@ include file="../footer.jsp" %>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

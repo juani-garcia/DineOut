@@ -13,14 +13,14 @@
                 <div class="card-content same_width_elements_with_overflow">
                     <label>
                         <spring:message code="search_bar.restaurant_name"/>:
-                        <input name="name" type="text" id="name_filter_input"/>
+                        <input name="name" type="text" id="name_filter_input" placeholder="Atuel, Citadino, BudaGreen, ..."/>
                     </label>
                 </div>
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="category_select">
                         <spring:message code="search_bar.category"/>:
                         <select name="category" id="category_select_options">
-                            <option value="" disabled selected><spring:message code="search_bar.category.placeholder"/>:
+                            <option value="" selected><spring:message code="search_bar.category.placeholder"/>
                             </option>
                             <c:forEach items="${categories}" var="category">
                                 <option value="${category.idString}"><spring:message code="${category.message}"/></option>
@@ -32,7 +32,7 @@
                     <label id="shift_select">
                         <spring:message code="search_bar.shift"/>:
                         <select name="shift" id="shift_select_options">
-                            <option value="" disabled selected><spring:message code="search_bar.shift.placeholder"/>:
+                            <option value="" selected><spring:message code="search_bar.shift.placeholder"/>
                             </option>
                             <c:forEach items="${shifts}" var="shift">
                                 <option value="${shift.idString}"><spring:message code="${shift.message}"/></option>
@@ -44,7 +44,7 @@
                     <label id="zone_select">
                         <spring:message code="search_bar.zone"/>:
                         <select name="zone" id="zone_select_options">
-                            <option value="" disabled selected><spring:message code="search_bar.zone.placeholder"/>:
+                            <option value="" selected><spring:message code="search_bar.zone.placeholder"/>
                             </option>
                             <c:forEach items="${zones}" var="zone">
                                 <option value="${zone.idString}"><c:out value="${zone.name}"/></option>
@@ -55,10 +55,9 @@
 
                 <div class="card-content">
                     <label id="search_submit">
-                        <spring:message code="search_bar.submit"/>:<br/>
-                        <button class="btn-large waves-effect waves-light btn-flat grow_on_hover2 btn-floating"
+                        <button class="btn-large waves-effect waves-red grow_on_hover btn-floating white"
                                 type="submit">
-                            <i class="material-icons large default_dark_text">search</i>
+                            <i class="material-icons default_dark_text font_2rem">search</i>
                         </button>
                     </label>
                 </div>

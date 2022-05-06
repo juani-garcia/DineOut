@@ -205,6 +205,10 @@ h1 {
     margin: 2.8rem 0 2.8rem 0;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
 /* Restaurant register button style and animation */
 .restaurant-register {
     text-decoration: underline;
@@ -289,10 +293,6 @@ h1 {
     max-height: 400px;
 }
 
-.restaurant_detail_flex_container {
-    display: flex;
-}
-
 .card {
     border-radius: 20px;
 }
@@ -303,7 +303,7 @@ h1 {
 }
 
 .menu_card {
-    width: 70%;
+    width: 100%;
 }
 
 .scale_down {
@@ -426,10 +426,6 @@ h1 {
     border-radius: 24px;
 }
 
-.card.horizontal .card-image {
-    max-width: 30%;
-}
-
 .role_selector {
     width: 100%;
     margin-top: auto;
@@ -490,15 +486,58 @@ h1 {
     width: 100%;
 }
 
-.restaurant_card > .card-content {
-    max-width: 60%;
+.restaurant_card > .card-image + .card-content {
+    width: 60%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.card.horizontal .card-image {
-    width: 40%;
-    max-width: 40%;
+.restaurant_card > .card-content {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.restaurant_card > .card-image {
+    width: 40% !important;
+    max-width: 40% !important;
+}
+
+.item_card {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.item_card > .card-image + .card-content {
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item_card > .card-content {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item_card > .card-image {
+    width: 20% !important;
+    max-width: 20% !important;
+}
+
+.restaurant_detail_section_data {
+    box-sizing: border-box;
+    width: 30%;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.restaurant_detail_section_menu {
+    box-sizing: border-box;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 button {
@@ -526,4 +565,28 @@ button {
 .margins_lr_5px {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.margins_15px {
+    margin: 15px 15px 15px 15px;
+}
+
+.font_2rem {
+    font-size: 2rem !important;
+}
+
+.big {
+    font-size: 125%;
+}
+
+.pagination li a {
+    color: #FFFFFF;
+}
+
+.margin_top_20px {
+    margin-top: 20px;
+}
+
+.inherit_width {
+    width: inherit !important;
 }
