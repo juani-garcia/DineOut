@@ -37,14 +37,16 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     @Override
-    public long create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    public Reservation create(Restaurant restaurant, String userMail, int amount, LocalDateTime dateTime, String comments) {
         final Map<String, Object> reservationData = new HashMap<>();
-        reservationData.put("restaurant_id", restaurantId);
+        reservationData.put("restaurant_id", restaurant.getId());
         reservationData.put("user_mail", userMail);
         reservationData.put("amount", amount);
         reservationData.put("date_time", dateTime);
         reservationData.put("comments", comments);
-        return jdbcInsert.executeAndReturnKey(reservationData).intValue();
+        final long reservationId = jdbcInsert.executeAndReturnKey(reservationData).intValue();
+
+        return new Reservation(reservationId, userMail, amount, dateTime, comments, restaurant);
     }
 
     @Override

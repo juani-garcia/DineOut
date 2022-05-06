@@ -1,12 +1,14 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthorizedReservationException;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
+import jdk.internal.net.http.ResponseTimerEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,23 +36,19 @@ public class ReservationServiceImpl implements ReservationService {
     private SecurityService securityService;
 
     @Override
-    public long create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
-        if(!restaurantService.getById(restaurantId).isPresent()) {
-            throw new InvalidTimeException();
-        }
+    public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(RestaurantNotFoundException::new);
 
         if(!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
         }
 
-        long reservationId = reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
-
-        String restaurantMail =  restaurantService.getById(restaurantId).orElseThrow(RuntimeException::new).getMail();
+        Reservation reservation = reservationDao.create(restaurant, userMail, amount, dateTime, comments);
 
         emailService.sendReservationToRestaurant(
-                reservationId, restaurantMail, userMail, amount, dateTime, comments);
+                reservation.getReservationId(), restaurant.getMail(), userMail, amount, dateTime, comments);
 
-        return reservationId;
+        return reservation;
     }
 
     @Override

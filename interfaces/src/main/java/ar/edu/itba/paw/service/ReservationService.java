@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReservationService {
 
-    long create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments);
+    Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments);
 
     List<Reservation> getAllFutureByUsername(String username);
 
