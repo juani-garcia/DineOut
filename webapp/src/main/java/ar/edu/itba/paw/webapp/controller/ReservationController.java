@@ -43,7 +43,7 @@ public class ReservationController {
         try {
             reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
         } catch (InvalidTimeException e) {
-            errors.addError(new FieldError("reservationForm", "dateTime", "El horario de la reserva es inválido."));
+            errors.addError(new FieldError("reservationForm", "dateTime", "El horario de la reserva es inválido."));  // TODO: remove this error from here.
         }
 
         if (errors.hasErrors()) {
