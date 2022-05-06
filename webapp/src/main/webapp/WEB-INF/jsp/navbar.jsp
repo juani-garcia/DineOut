@@ -17,6 +17,7 @@
                         ¡Hola <c:out value="${user.firstName}"/>!
                     </div>
                 </li>
+                <% if (request.isUserInRole("DINER")) { %>
                 <li>
                     <a href="<c:url value="/diner/reservations"/>"
                        class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
@@ -27,6 +28,7 @@
                         </div>
                     </a>
                 </li>
+                <% } %>
                 <li>
                     <a href="<c:url value="/profile"/>"
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">
