@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserRole;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -58,6 +58,8 @@ public class HomeController {
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
         mav.addObject("shifts", Shift.values());
+        mav.addObject("pageSize", 3); // TODO: remove magin number for PAGE_SIZE getter from dao.
+        mav.addObject("totalRestaurantCount", restaurantService.getFilteredCount(name, category, shift, zone));
         mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
@@ -71,10 +73,7 @@ public class HomeController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm form) {
-        final ModelAndView mav = new ModelAndView("register/register");
-        List<String> roles = new ArrayList<>();
-        mav.addObject("roleItems", roles);
-        return mav;
+        return new ModelAndView("register/register");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -109,13 +108,13 @@ public class HomeController {
     }
 
     @RequestMapping("/profile")
-    public ModelAndView profile() {
-        User user = securityService.getCurrentUser();
-        if (user == null) throw new IllegalStateException("Current user is not valid");
-        if (userService.isRestaurant(user.getId())) { // TODO
+    public ModelAndView profile(HttpServletRequest request) {
+        if (request.isUserInRole("RESTAURANT")) {
             return new ModelAndView("redirect:/restaurant");
+        } else if (request.isUserInRole("DINER")) {
+            return new ModelAndView("redirect:/diner/profile");
         }
-        return new ModelAndView("redirect:/diner/profile");
+        throw new BadCredentialsException("Logged user is neither a RESTAURANT or a DINER");
     }
 
     @ModelAttribute
