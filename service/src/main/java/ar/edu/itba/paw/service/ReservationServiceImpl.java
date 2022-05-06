@@ -34,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
     private SecurityService securityService;
 
     @Override
-    public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    public long create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         if(!restaurantService.getById(restaurantId).isPresent()) {
             throw new InvalidTimeException();
         }
@@ -43,25 +43,19 @@ public class ReservationServiceImpl implements ReservationService {
             throw new InvalidTimeException();
         }
 
-        Reservation reservation = reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
+        long reservationId = reservationDao.create(restaurantId, userMail, amount, dateTime, comments);
 
         String restaurantMail =  restaurantService.getById(restaurantId).orElseThrow(RuntimeException::new).getMail();
 
         emailService.sendReservationToRestaurant(
-                reservation.getReservationId(), restaurantMail, userMail, amount, dateTime, comments);
+                reservationId, restaurantMail, userMail, amount, dateTime, comments);
 
-        return reservation;
+        return reservationId;
     }
 
     @Override
-    public List<Reservation> getAllByUsername(String username) {
-        List<Reservation> reservationList = reservationDao.getAllByUsername(username);
-        for (Reservation reservation : reservationList) {
-            Optional<Restaurant> restaurant = restaurantService.getById(reservation.getRestaurantId());
-            if (!restaurant.isPresent()) throw new IllegalStateException("Restaurant id: " + reservation.getRestaurantId() + " in reservation id: " + reservation.getReservationId() + " is not a valid restaurant");
-            reservation.setRestaurant(restaurant.get());
-        }
-        return reservationList;
+    public List<Reservation> getAllFutureByUsername(String username) {
+        return reservationDao.getAllFutureByUsername(username);
     }
 
     @Override

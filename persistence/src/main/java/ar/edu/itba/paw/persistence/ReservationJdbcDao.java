@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Zone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,8 +20,13 @@ public class ReservationJdbcDao implements ReservationDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
-            new Reservation(rs.getLong("reservation_id"), rs.getLong("restaurant_id"), rs.getString("user_mail"), rs.getInt("amount"),
-                    rs.getObject("date_time", LocalDateTime.class), rs.getString("comments"));
+            new Reservation(rs.getLong("reservation_id"), rs.getString("user_mail"),
+                    rs.getInt("amount"), rs.getObject("date_time", LocalDateTime.class),
+                    rs.getString("comments"),
+                    new Restaurant(rs.getLong("id"), rs.getLong("user_id"),
+                            rs.getString("name"), rs.getString("address"),
+                            rs.getString("mail"), rs.getString("detail"),
+                            Zone.getById(rs.getLong("zone_id"))));
     static final RowMapper<String> OWNER_MAPPER = (rs, rowNum) ->
             rs.getString("user_mail");
 
@@ -31,21 +37,24 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     @Override
-    public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    public long create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         final Map<String, Object> reservationData = new HashMap<>();
         reservationData.put("restaurant_id", restaurantId);
         reservationData.put("user_mail", userMail);
         reservationData.put("amount", amount);
         reservationData.put("date_time", dateTime);
         reservationData.put("comments", comments);
-        final int reservationId = jdbcInsert.executeAndReturnKey(reservationData).intValue();
-
-        return new Reservation(reservationId, restaurantId, userMail, amount, dateTime, comments);
+        return jdbcInsert.executeAndReturnKey(reservationData).intValue();
     }
 
     @Override
-    public List<Reservation> getAllByUsername(String username) {
-        return jdbcTemplate.query("SELECT * FROM reservation WHERE user_mail = ? ORDER BY date_time", new Object[] {username},  ROW_MAPPER);
+    public List<Reservation> getAllFutureByUsername(String username) {
+        String query = "SELECT * FROM reservation, restaurant " +
+                "WHERE reservation.restaurant_id = restaurant.id " +
+                "AND reservation.user_mail = ?" +
+                "AND date_time >= now() ";
+
+        return jdbcTemplate.query(query, new Object[]{username}, ROW_MAPPER);
     }
 
     @Override
