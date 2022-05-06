@@ -13,13 +13,13 @@
                 <div class="card-content same_width_elements_with_overflow">
                     <label>
                         <spring:message code="search_bar.restaurant_name"/>:
-                        <input name="name" type="text"/>
+                        <input name="name" type="text" id="name_filter_input"/>
                     </label>
                 </div>
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="category_select">
                         <spring:message code="search_bar.category"/>:
-                        <select name="category">
+                        <select name="category" id="category_select_options">
                             <option value="" disabled selected><spring:message code="search_bar.category.placeholder"/>:
                             </option>
                             <c:forEach items="${categories}" var="category">
@@ -31,7 +31,7 @@
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="shift_select">
                         <spring:message code="search_bar.shift"/>:
-                        <select name="shift">
+                        <select name="shift" id="shift_select_options">
                             <option value="" disabled selected><spring:message code="search_bar.shift.placeholder"/>:
                             </option>
                             <c:forEach items="${shifts}" var="shift">
@@ -43,7 +43,7 @@
                 <div class="card-content same_width_elements_with_overflow">
                     <label id="zone_select">
                         <spring:message code="search_bar.zone"/>:
-                        <select name="zone">
+                        <select name="zone" id="zone_select_options">
                             <option value="" disabled selected><spring:message code="search_bar.zone.placeholder"/>:
                             </option>
                             <c:forEach items="${zones}" var="zone">
@@ -67,19 +67,3 @@
         </div>
     </div>
 </div>
-
-
-<%--<div class="row">--%>
-<%--    <form:errors path="role" element="p" cssClass="isa_error"/>--%>
-<%--    <div class="input-field role_selector">--%>
-<%--        <label class="fill_space">--%>
-<%--            <select name="role">--%>
-<%--                <option value="" disabled selected><spring:message--%>
-<%--                        code="home.register.form.roleSelector"/></option>--%>
-<%--                <c:forEach items="${roleItems}" var="roleItem">--%>
-<%--                    <option value="${roleItem}"><c:out value="${roleItem}"/></option>--%>
-<%--                </c:forEach>--%>
-<%--            </select>--%>
-<%--        </label>--%>
-<%--    </div>--%>
-<%--</div>--%>

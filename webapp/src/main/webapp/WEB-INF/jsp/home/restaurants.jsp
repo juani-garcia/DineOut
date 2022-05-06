@@ -70,14 +70,42 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
+    function defaultSelector(queryParam, options_id, select_id, params) {
+        const categoryString = params.get(queryParam);
+        if (categoryString != null && categoryString !== "") {
+            const elOptions = document.getElementById(options_id).querySelectorAll('option');
+            elOptions[0].removeAttribute('selected');
+            let category = parseInt(categoryString) + 1; // category "0" in select is the "Select category"
+            const elementOption = elOptions[category.toString()];
+            elementOption.setAttribute('selected', 'selected');
+            document.getElementById(select_id).children.item(0).children.item(0).value = elementOption.text;
+        }
+    }
+
+    // Set up all selectors
     document.addEventListener('DOMContentLoaded', function () {
-        // Add category, zone and shift options for search.
-        var category_options = [];
-        <c:forEach items="${categories}" var="category">
-        category_options.push("${category.message}");
-        </c:forEach>
-        var category_elems = document.getElementById("category_select").querySelectorAll('select');
-        var category_instances = M.FormSelect.init(category_elems, category_options);
+        const params = new URLSearchParams(window.location.search);
+
+        var categoryElems = document.getElementById("category_select").querySelectorAll('select');
+        var categoryInstances = M.FormSelect.init(categoryElems);
+        defaultSelector("category", "category_select_options", "category_select", params)
+
+
+        var shiftElems = document.getElementById("shift_select").querySelectorAll('select');
+        var shiftInstances = M.FormSelect.init(shiftElems);
+        defaultSelector("shift", "shift_select_options", "shift_select", params)
+
+
+        var zoneElems = document.getElementById("zone_select").querySelectorAll('select');
+        var zoneInstances = M.FormSelect.init(zoneElems);
+        defaultSelector("zone", "zone_select_options", "zone_select", params)
+
+        const name = params.get("name");
+        if (name != null && name !== "") {
+            const nameInput = document.getElementById("name_filter_input");
+            nameInput.value = name;
+        }
+    });
 
         var shift_options = [];
         <c:forEach items="${shifts}" var="shift">
