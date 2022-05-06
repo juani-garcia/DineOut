@@ -7,27 +7,23 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Reservation {
-    private final long reservationId, restaurantId;
+    private final long reservationId;
     private final int amount;
     private final LocalDateTime dateTime;
     private final String userMail, comments;
-    private Restaurant restaurant;
+    private final Restaurant restaurant;
 
-    protected Reservation(long reservationId, long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    protected Reservation(long reservationId, String userMail, int amount, LocalDateTime dateTime, String comments, Restaurant restaurant) {
         this.reservationId = reservationId;
-        this.restaurantId = restaurantId;
         this.amount = amount;
         this.dateTime = dateTime;
         this.userMail = userMail;
         this.comments = comments;
+        this.restaurant = restaurant;
     }
 
     public Restaurant getRestaurant() {
         return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 
     public long getReservationId() {
@@ -35,7 +31,7 @@ public class Reservation {
     }
 
     public long getRestaurantId() {
-        return restaurantId;
+        return restaurant.getId();
     }
 
     public int getAmount() {

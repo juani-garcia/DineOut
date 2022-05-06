@@ -3,11 +3,11 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.model.Zone;
 
 public class Restaurant {
-    private final long id, userID;
+    private final Long id, userID;
     private final String name, mail, address, detail;
     private final Zone zone;
 
-    protected Restaurant(long id, long userID, String name, String address, String mail, String detail, Zone zone) {
+    protected Restaurant(long id, Long userID, String name, String address, String mail, String detail, Zone zone) {
         this.id = id;
         this.userID = userID;
         this.name = name;
