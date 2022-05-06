@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.service.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class ReservationController {
@@ -27,12 +29,13 @@ public class ReservationController {
     private SecurityService securityService;
 
     @RequestMapping("/reserve/{resId}")
-    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form,  @RequestParam(name = "formSuccess", defaultValue = "false") final boolean formSuccess) {
+    public ModelAndView reservation(
+            @PathVariable final long resId,
+            @ModelAttribute("reservationForm") final ReservationForm form) {
          final ModelAndView mav = new ModelAndView("reservation/reservation");
 
          Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
          mav.addObject("restaurant", restaurant);
-         mav.addObject("formSuccess", formSuccess);
          return mav;
     }
 
@@ -47,13 +50,13 @@ public class ReservationController {
         }
 
         if (errors.hasErrors()) {
-            return reservation(resId, form, false);
+            return reservation(resId, form);
         }
 
 
-        final ModelAndView mav =  new ModelAndView("redirect:/reserve/" + resId);
-        mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new));
-        mav.addObject("formSuccess", true);
+        final ModelAndView mav =  new ModelAndView("redirect:/diner/reservations");
+        List<Reservation> reservationList = reservationService.getAllFutureByUsername(securityService.getCurrentUsername());
+        mav.addObject("reservations", reservationList);
         return mav;
     }
 
