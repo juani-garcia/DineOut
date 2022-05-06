@@ -56,17 +56,15 @@
 
     </div>
 </div>
-<%--<div class="row align_center">--%>
-<%--    <ul class="pagination">--%>
-<%--        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>--%>
-<%--        <li class="active"><a href="#!">1</a></li>--%>
-<%--        <li class="waves-effect"><a href="#!">2</a></li>--%>
-<%--        <li class="waves-effect"><a href="#!">3</a></li>--%>
-<%--        <li class="waves-effect"><a href="#!">4</a></li>--%>
-<%--        <li class="waves-effect"><a href="#!">5</a></li>--%>
-<%--        <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>--%>
-<%--    </ul>--%>
-<%--</div>--%>
+<c:if test="${totalRestaurantCount > pageSize}">
+    <div class="container flex_center" id="paginator">
+        <ul class="pagination">
+            <li class="waves-effect" id="previous_page"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            <li id="page_number_of_total"></li>
+            <li class="waves-effect" id="next_page"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
+</c:if>
 
 <%@ include file="../footer.jsp" %>
 <script>
@@ -107,19 +105,42 @@
         }
     });
 
-        var shift_options = [];
-        <c:forEach items="${shifts}" var="shift">
-        shift_options.push("${shift.message}");
-        </c:forEach>
-        var shift_elems = document.getElementById("shift_select").querySelectorAll('select');
-        var shift_instances = M.FormSelect.init(shift_elems, shift_options);
+    // Set up paginator
+    document.addEventListener('DOMContentLoaded', function () {
+        const paginator = document.getElementById("paginator");
+        if (<c:out value="${totalRestaurantCount}"/><<c:out value="${pageSize}"/>) { return; }
 
-        var zone_options = [];
-        <c:forEach items="${zones}" var="zone">
-        zone_options.push("${zone.name}");
-        </c:forEach>
-        var zone_elems = document.getElementById("zone_select").querySelectorAll('select');
-        var zone_instances = M.FormSelect.init(zone_elems, zone_options);
+        const params = new URLSearchParams(window.location.search);
+        let pageNumber = params.get("page");
+        if (pageNumber == null) pageNumber = "1";
+        var pageNumberElem = document.getElementById("page_number_of_total");
+        var pages = Math.ceil(<c:out value="${totalRestaurantCount / pageSize}"/>);
+        pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
+
+        pageNumber = parseInt(pageNumber);
+
+        var previousPagePaginator = document.getElementById("previous_page");
+        var nextPagePaginator = document.getElementById("next_page");
+        if (pageNumber === 1) {
+            previousPagePaginator.className = "disabled";
+        } else {
+            previousPagePaginator.onclick = function(){
+                pageNumber = pageNumber - 1;
+                params.set("page", pageNumber.toString());
+                previousPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
+            }
+        }
+
+
+        if (pageNumber === pages) {
+            nextPagePaginator.className = "disabled";
+        } else {
+            nextPagePaginator.onclick = function(){
+                pageNumber = pageNumber + 1;
+                params.set("page", pageNumber.toString());
+                nextPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
+            }
+        }
     });
 </script>
 </body>
