@@ -20,26 +20,42 @@
                 <h2 class="header center default_light_text">No tienes ninguna reserva</h2>
             </c:if>
             <c:forEach items="${reservations}" var="reservation">
-                <hr />
-                <div class="card-content default_dark_text" style="display: flex; justify-content: flex-start;">
-                    <h5 class="medium flex_column" style="margin-right: 10px"><b><c:out value="${reservation.restaurant.name}"/>: </b></h5>
-                    <h5 class="medium flex_column">
+                <hr/>
+                <div class="card-content default_dark_text flex_column">
+                    <div class="flex_row">
+                        <h5 class="medium"><b><c:out
+                                value="${reservation.restaurant.name}"/>: </b></h5>
+                        <div class="margin_left_auto flex_row">
+                                <%--                            <div class="margins_lr_5px">--%>
+                                <%--                                <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>--%>
+                                <%--                                <form method="post" action="${deleteUrl}">--%>
+                                <%--                                    <button class="btn-large waves-effect waves-light btn-floating default_dark"--%>
+                                <%--                                            type="submit" name="action">--%>
+                                <%--                                        <i class="material-icons left">create</i>--%>
+                                <%--                                    </button>--%>
+                                <%--                                </form>--%>
+                                <%--                            </div>--%>
+                            <div class="margins_lr_5px">
+                                <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>
+                                <form method="post" action="${deleteUrl}">
+                                    <button class="btn-large waves-effect waves-light btn-floating default_red"
+                                            type="submit" name="action">
+                                        <i class="material-icons left">delete</i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="medium">
                         <spring:message code="diner.reservation.detail"
                                         arguments="${reservation.amount}, ${reservation.dateString}, ${reservation.timeString}, ${reservation.restaurant.address}"/>
                     </h5>
-                    <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>
-                    <form method="post" action="${deleteUrl}" style="margin: 0">
-                        <button class="btn waves-effect waves-light btn-floating default_red"
-                                type="submit" name="action" style="margin-left: auto">
-                            <i class="material-icons left">delete</i>
-                        </button>
-                    </form>
+                    <br>
+                    <c:if test="${reservation.comments.length() > 0}">
+                        <h6 class="regular"><spring:message code="diner.reservation.comments"/> <c:out
+                                value="${reservation.comments}"/></h6>
+                    </c:if>
                 </div>
-                <c:if test="${reservation.comments.length() > 0}">
-                    <div class="card-content default_dark_text" style="display: flex; justify-content: flex-start; padding-top: 0" >
-                        <h6 class="regular"><c:out value="${reservation.comments}"/></h6>
-                    </div>
-                </c:if>
             </c:forEach>
         </div>
     </div>

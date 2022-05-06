@@ -459,9 +459,16 @@ h1 {
     align-items: center;
 }
 
-.flex_column {
+.flex_row {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.flex_column {
+    display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -501,4 +508,22 @@ button {
 .margins_auto {
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.display_flex {
+    display: flex;
+}
+
+.margin_left_auto {
+    margin-left: auto;
+}
+
+.margins_lr_10px {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.margins_lr_5px {
+    margin-left: 5px;
+    margin-right: 5px;
 }

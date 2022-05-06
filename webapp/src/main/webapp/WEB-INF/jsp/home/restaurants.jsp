@@ -26,7 +26,7 @@
     <div class="row">
         <%@include file="../search_bar.jsp" %>
     </div>
-    <div class="flex_column">
+    <div class="flex_row">
         <c:if test="${restaurants.size() == 0}">
             <div class="container">
                 <div class="card card_wrapper padding-15px default_dark">
