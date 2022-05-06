@@ -65,7 +65,7 @@ public class RestaurantController {
 
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
+        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: this should not be here, it could either be on the service or on a join in the dao.
         mav.addObject("sections", menuSectionList);
         return mav;
     }
@@ -143,7 +143,7 @@ public class RestaurantController {
         try {
             imageBytes = form.getImage().getBytes();
         } catch (IOException e) {
-            errors.addError(new FieldError("itemForm", "image", "Couldn't get image"));
+            errors.addError(new FieldError("itemForm", "image", "Couldn't get image"));  // TODO: i18n & move elsewere.
         }
 
         if (errors.hasErrors()) {
@@ -183,7 +183,7 @@ public class RestaurantController {
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", shiftService.getByRestaurantId(resId));
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
+        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: same as bvefore this should not be here.
         mav.addObject("sections", menuSectionList);
         List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
         mav.addObject("shifts", shifts);
