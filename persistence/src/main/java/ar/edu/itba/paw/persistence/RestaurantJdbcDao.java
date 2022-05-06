@@ -16,7 +16,7 @@ import java.util.*;
 public class RestaurantJdbcDao implements RestaurantDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 3;
     private final SimpleJdbcInsert jdbcInsert;
     /* private X default=package-private for testing */
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
@@ -52,12 +52,17 @@ public class RestaurantJdbcDao implements RestaurantDao {
         return jdbcTemplate.query("SELECT * FROM restaurant ORDER BY name LIMIT ? OFFSET ?", new Object[] {PAGE_SIZE, (page - 1) * PAGE_SIZE},  ROW_MAPPER);
     }
 
-    @Override
-    public List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
-        List<Object> args = new ArrayList<>();
+    private static class Pair<A,B> {
+        public final A left;
+        public final B right;
 
-        StringBuilder sql = new StringBuilder("SELECT id, name, address, mail, detail, zone_id, user_id\n");
+        public Pair(A left, B right) {
+            this.left = left;
+            this.right = right;
+        }
+    };
 
+    private Pair<StringBuilder, List<Object>> filterBuilder(String name, Category category, Shift shift, Zone zone, StringBuilder sql, List<Object> args) {
         sql.append("FROM restaurant\n");
         sql.append("WHERE true\n");
 
@@ -80,7 +85,18 @@ public class RestaurantJdbcDao implements RestaurantDao {
             sql.append("AND zone_id = ?\n");
             args.add(zone.getId());
         }
+        return new Pair<>(sql, args);
+    }
 
+    @Override
+    public List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
+        StringBuilder sql = new StringBuilder("SELECT id, name, address, mail, detail, zone_id, user_id\n");
+        List<Object> args = new ArrayList<>();
+
+        Pair<StringBuilder, List<Object>> filterPair = this.filterBuilder(name, category, shift, zone, sql, args);
+
+        sql = filterPair.left;
+        args = filterPair.right;
         sql.append("LIMIT ? OFFSET ?");
         args.add(PAGE_SIZE);
         args.add((page - 1) * PAGE_SIZE);
@@ -100,6 +116,23 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
         final long restaurantId = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
         return new Restaurant(restaurantId, userID, name, address, mail, detail, zone);
+    }
+
+    @Override
+    public Long getCount() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM restaurant",  Long.class);
+    }
+
+    @Override
+    public Long getFilteredCount(String name, Category category, Shift shift, Zone zone) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*)\n");
+        List<Object> args = new ArrayList<>();
+
+        Pair<StringBuilder, List<Object>> filterPair = this.filterBuilder(name, category, shift, zone, sql, args);
+
+        sql = filterPair.left;
+        args = filterPair.right;
+        return jdbcTemplate.queryForObject(sql.toString(), args.toArray(), Long.class);
     }
 
 }

@@ -64,4 +64,18 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Optional<Restaurant> getByUserID(long id) {
         return restaurantDao.getByUserId(id);
     }
+
+    @Override
+    public Long getCount() {
+        return restaurantDao.getCount();
+    }
+
+    @Override
+    public Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId) {
+        Category category = Category.getById(categoryId);
+        Zone zone = Zone.getById(zoneId);
+        Shift shift = Shift.getById(shiftId);
+
+        return restaurantDao.getFilteredCount(name, category, shift, zone);
+    }
 }

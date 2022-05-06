@@ -19,4 +19,8 @@ public interface RestaurantService {
     Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone, final List<Long> categories, final List<Long> shifts);
 
     Optional<Restaurant> getByUserID(long id);
+
+    Long getCount();
+
+    Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId);
 }
