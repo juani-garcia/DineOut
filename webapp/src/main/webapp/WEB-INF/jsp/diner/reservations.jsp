@@ -58,13 +58,32 @@
                                 <%--                            </div>--%>
                             <c:if test="${!past}">
                                 <div class="margins_lr_5px">
-                                    <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>
-                                    <form method="post" action="${deleteUrl}">
-                                        <button class="btn-large waves-effect waves-light btn-floating default_red"
-                                                type="submit" name="action">
-                                            <i class="material-icons left">delete</i>
-                                        </button>
-                                    </form>
+                                    <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
+                                            href="#delete_confirm_modal">
+                                        <i class="material-icons left">delete</i>
+                                    </a>
+                                    <div id="delete_confirm_modal" class="modal">
+                                        <div class="modal-content">
+                                            <h4>
+                                                <spring:message code="diner.reservation.confirmation"
+                                                arguments="${reservation.restaurant.name}"/>
+                                            </h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="flex_row">
+                                                <a class="modal-close waves-effect btn-flat">
+                                                    <spring:message code="diner.reservation.back" />
+                                                </a>
+                                                <form method="post"
+                                                      action="<c:url value="/reservation/${reservation.reservationId}/delete"/>">
+                                                    <button class="modal-close waves-effect red-text btn-flat"
+                                                            type="submit" name="action">
+                                                        <spring:message code="diner.reservation.continue" />
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </c:if>
                         </div>
@@ -84,5 +103,11 @@
     </div>
 </div>
 <%@ include file="../footer.jsp" %>
+<script>
+    $(document).ready(function(){
+        $('.modal').modal();
+    });
+
+</script>
 </body>
 </html>
