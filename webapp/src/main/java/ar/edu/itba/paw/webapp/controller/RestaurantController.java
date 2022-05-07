@@ -178,6 +178,35 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
+    @RequestMapping(value = "/item/{itemId}/edit")
+    public ModelAndView itemEditForm(@PathVariable final long itemId,
+                                     @ModelAttribute("itemForm") final MenuItemForm form) {
+        ModelAndView mav = new ModelAndView("restaurant/item_edit_form");
+        MenuItem menuItem = menuItemService.getById(itemId).orElseThrow(InvalidParameterException::new);
+        mav.addObject("item", menuItem);
+        User user = securityService.getCurrentUser().get();
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).get();
+        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
+        mav.addObject("sections", menuSectionList);
+        form.setName(menuItem.getName());
+        form.setDetail(menuItem.getDetail());
+        form.setPrice(menuItem.getPrice());
+        form.setMenuSectionId(menuItem.getSectionId());
+        // form.setImage(new CommonsMultipartFile(image.getSource()));
+        return mav;
+    }
+
+    @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST})
+    public ModelAndView itemEdit(@PathVariable final long itemId,
+                                    @ModelAttribute("itemForm") final MenuItemForm form,
+                                    final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return itemEditForm(itemId, form);
+        }
+        menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), null);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
     @RequestMapping(value = "/item/{itemId}/up", method = {RequestMethod.POST})
     public ModelAndView itemUp(@PathVariable final long itemId) {
         menuItemService.moveUp(itemId);
