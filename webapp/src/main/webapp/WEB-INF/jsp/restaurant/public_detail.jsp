@@ -13,31 +13,33 @@
 <div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h1>
+            <h1 class="header center white-text bold text_overflow_ellipsis flex_row flex_center"><c:out value="${restaurant.name}"/>
+                <% if (request.isUserInRole("DINER")) { %>
+                <c:if test="${isUserFavorite}">
+                    <c:url value="/diner/set_favorite/${restaurant.id}/false" var="setFavorite"/>
+                    <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
+                        <button class="btn-large waves-effect waves-light btn-floating default_red" type="submit"
+                                name="action">
+                            <i class="material-icons left">favorite</i>
+                        </button>
+                    </form>
+                </c:if>
+                <c:if test="${!isUserFavorite}">
+                    <c:url value="/diner/set_favorite/${restaurant.id}/true" var="setFavorite"/>
+                    <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
+                        <button class="btn-large waves-effect waves-light btn-floating default_red" type="submit"
+                                name="action">
+                            <i class="material-icons left">favorite_border</i>
+                        </button>
+                    </form>
+                </c:if>
+                <% } %>
+            </h1>
         </div>
     </div>
     <div class="parallax"><img src="<c:url value="/resources/media/background2.jpg"/>"
                                alt=""></div>
 </div>
-
-<% if (request.isUserInRole("DINER")) { %>
-<c:if test="${isUserFavorite}">
-    <c:url value="/diner/set_favorite/${restaurant.id}/false" var="setFavorite"/>
-    <form method="post" action="${setFavorite}">
-        <button class="btn waves-effect waves-light btn-floating default_blue" type="submit" name="action">
-            <i class="material-icons left">favorite</i>
-        </button>
-    </form>
-</c:if>
-<c:if test="${!isUserFavorite}">
-    <c:url value="/diner/set_favorite/${restaurant.id}/true" var="setFavorite"/>
-    <form method="post" action="${setFavorite}">
-        <button class="btn waves-effect waves-light btn-floating default_blue" type="submit" name="action">
-            <i class="material-icons left">favorite_border</i>
-        </button>
-    </form>
-</c:if>
-<% } %>
 
 <div class="flex_row">
     <div class="restaurant_detail_section_menu flex_center padding-15px">
@@ -102,7 +104,8 @@
                         <h6 class="center text_overflow_ellipsis">Las 24hs.</h6>
                     </c:if>
                     <c:forEach items="${shifts}" var="shift">
-                        <h6 class="center text_overflow_ellipsis"><spring:message code="${shift.message}"/> <c:out value="${shift.start}"/> a
+                        <h6 class="center text_overflow_ellipsis"><spring:message code="${shift.message}"/> <c:out
+                                value="${shift.start}"/> a
                             <c:out
                                     value="${shift.end}"/></h6>
                     </c:forEach>
