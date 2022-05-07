@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public interface ReservationDao {
 
-    Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments);
+    Reservation create(Restaurant restaurant, String userMail, int amount, LocalDateTime dateTime, String comments);
 
-    List<Reservation> getAllByUsername(String username);
+    List<Reservation> getAllFutureByUsername(String username);
 
     void delete(long reservationId);
 
