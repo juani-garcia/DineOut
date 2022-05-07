@@ -201,6 +201,7 @@ public class RestaurantController {
         if (errors.hasErrors()) {
             return itemEditForm(itemId, form);
         }
+        // TODO: manage image update
         menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), null);
         return new ModelAndView("redirect:/restaurant");
     }
