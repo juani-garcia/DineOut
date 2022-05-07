@@ -23,7 +23,7 @@
                     <div class="row">
                         <form:label path="amount" cssClass="semibold label-text-size"><spring:message
                                 code="reservation.reservation.form.amount"/>*</form:label>
-                        <form:input path="amount" type="number" id="numberonly"/>
+                        <form:input path="amount" type="number" id="numberonly" min="0"/>
                         <form:errors path="amount" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
