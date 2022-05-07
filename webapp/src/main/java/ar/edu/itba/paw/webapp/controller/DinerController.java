@@ -40,7 +40,7 @@ public class DinerController {
         String username = securityService.getCurrentUsername();
         if (username == null) throw new IllegalStateException("Invalid user");
 
-        List<Reservation> reservationList = reservationService.getAllByUsername(username, page, past);
+        List<Reservation> reservationList = reservationService.getAllForCurrentUser(page, past);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
         mav.addObject("past", past);
