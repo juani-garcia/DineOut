@@ -51,8 +51,4 @@ public enum Category {
         return null;
     }
 
-    public static Category getByName(String name) {
-        return Category.AMERICAN;
-    }
-
 }
