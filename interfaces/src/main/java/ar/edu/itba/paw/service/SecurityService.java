@@ -9,4 +9,6 @@ public interface SecurityService {
     String getCurrentUsername();
 
     Optional<User> getCurrentUser();
+
+    boolean isLoggedIn();
 }

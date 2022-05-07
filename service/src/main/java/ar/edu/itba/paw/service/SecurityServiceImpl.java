@@ -26,4 +26,9 @@ public class SecurityServiceImpl implements SecurityService {
 
         return userService.getByUsername(getCurrentUsername());
     }
+
+    @Override
+    public boolean isLoggedIn() {
+        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+    }
 }
