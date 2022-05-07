@@ -135,4 +135,49 @@ public class RestaurantJdbcDao implements RestaurantDao {
         return jdbcTemplate.queryForObject(sql.toString(), args.toArray(), Long.class);
     }
 
+    @Override
+    public List<Restaurant> getTopTenByFavorite() {
+        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+                "    SELECT restaurant_id AS id, COUNT(user_id) AS likes" +
+                "    FROM favorite" +
+                "    GROUP BY restaurant_id" +
+                ") AS restaurant_with_likes" +
+                " ORDER BY likes DESC" +
+                " LIMIT 10", ROW_MAPPER);
+    }
+
+    @Override
+    public List<Restaurant> getTopTenByFavoriteOfUser(long userId) {
+        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+                "    SELECT restaurant_id AS id" +
+                "    FROM favorite" +
+                "    WHERE user_id = ?" +
+                "    GROUP BY restaurant_id" +
+                ") AS fav_restaurants" +
+                " LIMIT 10", new Object[]{userId}, ROW_MAPPER);
+    }
+
+    @Override
+    public List<Restaurant> getTopTenByReservations() {
+        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+                "    SELECT restaurant_id AS id, COUNT(user_mail) AS reservation_count" +
+                "    FROM reservation" +
+                "    GROUP BY restaurant_id" +
+                ") AS restaurant_with_reservation_count" +
+                " ORDER BY reservation_count DESC" +
+                " LIMIT 10", ROW_MAPPER);
+    }
+
+    @Override
+    public List<Restaurant> getTopTenByReservationsOfUser(long userId) {
+        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+                "    SELECT restaurant_id AS id, COUNT(user_mail) AS reservation_count" +
+                "    FROM reservation" +
+                "    WHERE user_mail = ?" +
+                "    GROUP BY restaurant_id" +
+                ") AS restaurant_with_reservation_count" +
+                " ORDER BY reservation_count DESC" +
+                " LIMIT 10", new Object[]{userId}, ROW_MAPPER);
+    }
+
 }

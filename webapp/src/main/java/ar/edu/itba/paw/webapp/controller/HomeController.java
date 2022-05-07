@@ -65,10 +65,9 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/restaurant_picker")
-    public ModelAndView restaurantPicker() {  // TODO: use tags and previous reservations to choose restaurant.
-        final List<Restaurant> restaurantList = restaurantService.getAll(1);
-        Random random = new Random();
-        return new ModelAndView("redirect:/restaurant/view/" + restaurantList.get(random.nextInt(restaurantList.size())).getId());
+    public ModelAndView restaurantPicker(HttpServletRequest request) {  // TODO: use tags and previous reservations to choose restaurant.
+        Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole("DINER"));
+        return new ModelAndView("redirect:/restaurant/view/" + restaurant.getId());
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)

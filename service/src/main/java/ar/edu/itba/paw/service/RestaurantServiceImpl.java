@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.RestaurantDao;
+import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -20,6 +18,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     private RestaurantDao restaurantDao;
+
+    @Autowired
+    private SecurityService securityService;
+
+    @Autowired
+    private FavoriteService favoriteService;
 
     @Override
     public Optional<Restaurant> getById(long id) {
@@ -77,5 +81,56 @@ public class RestaurantServiceImpl implements RestaurantService {
         Shift shift = Shift.getById(shiftId);
 
         return restaurantDao.getFilteredCount(name, category, shift, zone);
+    }
+
+    private Restaurant getRecommendedOfLoggedUser() {
+        List<Restaurant> restaurantFavoriteList = restaurantDao.getTopTenByFavoriteOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
+        List<Restaurant> restaurantReservedList = restaurantDao.getTopTenByReservationsOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
+        HashMap<Zone, Integer> zoneIntegerHashMap = new HashMap<>();
+        HashMap<Category, Integer> categoryIntegerHashMap = new HashMap<>();
+        for (Restaurant favRestaurant : restaurantFavoriteList) {
+            zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(favRestaurant.getZone(), 0) + 1);
+            for (Category category : categoryService.getByRestaurantId(favRestaurant.getId())) {
+                categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
+            }
+        }
+        for (Restaurant resRestaurant : restaurantReservedList) {
+            zoneIntegerHashMap.put(resRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(resRestaurant.getZone(), 0) + 1);
+            for (Category category : categoryService.getByRestaurantId(resRestaurant.getId())) {
+                categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
+            }
+        }
+        List<Restaurant> randomList = new ArrayList<>();
+
+        // TODO
+
+        return getRecommended();
+    }
+
+    private Restaurant getRecommended() {
+        List<Restaurant> restaurantFavoriteList = restaurantDao.getTopTenByFavorite();
+        List<Restaurant> restaurantReservedList = restaurantDao.getTopTenByReservations();
+        List<Restaurant> randomList = new ArrayList<>();
+        for (Restaurant favRestaurant : restaurantFavoriteList) {
+            for (Restaurant resRestaurant : restaurantReservedList) {
+                if (favRestaurant.getId() == resRestaurant.getId()) {
+                     randomList.add(favRestaurant);
+                }
+            }
+        }
+        Random random = new Random();
+        if (!randomList.isEmpty()) return randomList.get(random.nextInt(randomList.size()));
+        if (!restaurantFavoriteList.isEmpty()) return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
+        if (!restaurantReservedList.isEmpty()) return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
+        return restaurantDao.getAll(1).stream().findFirst().orElseThrow(IllegalStateException::new);
+    }
+
+    @Override
+    public Restaurant getRecommendedRestaurant(boolean isDiner) {
+        if (isDiner) {
+            return getRecommendedOfLoggedUser();
+        } else {
+            return getRecommended();
+        }
     }
 }

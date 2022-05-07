@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.persistence.Favorite;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 
@@ -23,4 +24,6 @@ public interface RestaurantService {
     Long getCount();
 
     Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId);
+
+    Restaurant getRecommendedRestaurant(boolean isDiner);
 }
