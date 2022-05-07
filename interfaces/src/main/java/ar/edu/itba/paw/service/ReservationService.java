@@ -9,7 +9,7 @@ public interface ReservationService {
 
     Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments);
 
-    List<Reservation> getAllFutureByUsername(String username);
+    List<Reservation> getAllByUsername(String username, int page, boolean past);
 
     void delete(long reservationId);
 }

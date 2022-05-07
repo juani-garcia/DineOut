@@ -17,6 +17,7 @@ import java.util.Optional;
 @Repository
 public class ReservationJdbcDao implements ReservationDao {
 
+    private static final int PAGE_SIZE = 10;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
@@ -50,13 +51,15 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     @Override
-    public List<Reservation> getAllFutureByUsername(String username) {
+    public List<Reservation> getAllByUsername(String username, int page, boolean past) {
+        String cmp = past? "<=" : ">";
         String query = "SELECT * FROM reservation, restaurant " +
                 "WHERE reservation.restaurant_id = restaurant.id " +
-                "AND reservation.user_mail = ?" +
-                "AND date_time >= now() ";
+                "AND reservation.user_mail = ? " +
+                "AND date_time " + cmp + " now() " +
+                "ORDER BY date_time LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(query, new Object[]{username}, ROW_MAPPER);
+        return jdbcTemplate.query(query, new Object[]{username, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
 
     @Override

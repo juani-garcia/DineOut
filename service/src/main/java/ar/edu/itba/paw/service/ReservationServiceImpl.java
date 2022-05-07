@@ -51,8 +51,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> getAllFutureByUsername(String username) {
-        return reservationDao.getAllFutureByUsername(username);
+    public List<Reservation> getAllByUsername(String username, int page, boolean past) {
+        return reservationDao.getAllByUsername(username, page, past);
     }
 
     @Override
