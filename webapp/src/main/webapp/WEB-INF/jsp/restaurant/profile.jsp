@@ -95,6 +95,12 @@
                                         </button>
                                     </form>
                                 </c:if>
+                                <c:url value="/restaurant/item/${item.id}/edit" var="editUrl"/>
+                                <a href="${editUrl}" style="margin: 0">
+                                    <button class="btn waves-effect waves-light btn-floating default_yellow">
+                                        <i class="material-icons left">edit</i>
+                                    </button>
+                                </a>
                                 <c:url value="/restaurant/item/${item.id}/delete" var="deleteUrl"/>
                                 <form method="post" action="${deleteUrl}" style="margin: 0">
                                     <button class="btn waves-effect waves-light btn-floating default_red"
