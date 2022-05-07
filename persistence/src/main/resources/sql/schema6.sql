@@ -1,3 +1,8 @@
+DROP TRIGGER IF EXISTS dineout_menusection_ordering ON menu_section;
+DROP FUNCTION IF EXISTS maintain_order_in_menusection();
+DROP TRIGGER IF EXISTS dineout_menuitem_ordering ON menu_item;
+DROP FUNCTION IF EXISTS maintain_order_in_menuitem();
+
 ALTER TABLE menu_section DROP CONSTRAINT IF EXISTS menu_section_ordering_restaurant_id_key;
 ALTER TABLE menu_section DROP CONSTRAINT IF EXISTS menu_section_ordering_unique;
 ALTER TABLE menu_section ADD CONSTRAINT menu_section_ordering_unique UNIQUE(restaurant_id, ordering) DEFERRABLE INITIALLY DEFERRED;
@@ -64,7 +69,7 @@ $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_item_section_trigger ON menu_section;
 CREATE TRIGGER update_item_section_trigger
-    AFTER UPDATE on menu_section
+    BEFORE UPDATE on menu_section
     FOR EACH ROW
     WHEN (pg_trigger_depth() < 1)
 EXECUTE PROCEDURE update_section_ordering();
@@ -135,7 +140,7 @@ $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_item_trigger ON menu_item;
 CREATE TRIGGER update_item_trigger
-    AFTER UPDATE on menu_item
+    BEFORE UPDATE on menu_item
     FOR EACH ROW
     WHEN (pg_trigger_depth() < 1)
 EXECUTE PROCEDURE update_item_ordering();
