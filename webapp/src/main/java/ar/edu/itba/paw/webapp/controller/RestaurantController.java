@@ -21,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,10 +53,10 @@ public class RestaurantController {
     private FavoriteService favoriteService;
 
     @RequestMapping("")
-    public ModelAndView restaurantProfile(Principal principal) {
+    public ModelAndView restaurantProfile() {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
         if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
         mav.addObject("restaurant", restaurant);
@@ -97,14 +96,13 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/section", method = {RequestMethod.POST})
-    public ModelAndView section(Principal principal,
-                                @Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
+    public ModelAndView section(@Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
                                 final BindingResult errors) {
         if (errors.hasErrors()) {
             return sectionForm(form);
         }
 
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
         menuSectionService.create(restaurant.getId(), form.getName());
         return new ModelAndView("redirect:/restaurant");
@@ -150,9 +148,9 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/item")
-    public ModelAndView itemForm(Principal principal, @ModelAttribute("itemForm") final MenuItemForm form) {
+    public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
@@ -160,7 +158,7 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
-    public ModelAndView item(Principal principal, @Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
+    public ModelAndView item(@Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
         byte[] imageBytes = null;
         try {
             imageBytes = form.getImage().getBytes();
@@ -169,10 +167,10 @@ public class RestaurantController {
         }
 
         if (errors.hasErrors()) {
-            return itemForm(principal, form);
+            return itemForm(form);
         }
 
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));  // TODO: why do we need to acces the restaurant? @mateo
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
         return new ModelAndView("redirect:/restaurant");
