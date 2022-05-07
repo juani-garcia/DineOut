@@ -51,16 +51,32 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> getAllByUsername(String username, int page, boolean past) {
+    public List<Reservation> getAllForCurrentUser(int page, boolean past) {
+        String username = securityService.getCurrentUsername();
+        if(username == null) throw new IllegalStateException("Not logged in"); // TODO: change for is logged in
+
         return reservationDao.getAllByUsername(username, page, past);
     }
 
     @Override
-    public void delete(long reservationId) {
-        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
-        Optional<String> owner = reservationDao.getReservationOwner(reservationId);
+    public List<Reservation> getAllForCurrentRestaurant(int page, boolean past) {
+        User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
+        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
 
-        if(user == null || !owner.isPresent() || !owner.get().equals(user.getUsername())) {
+        return reservationDao.getAllByRestaurant(self.getId(), page, past);
+    }
+
+    @Override
+    public void delete(long reservationId) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthorizedReservationException::new);
+        Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(UnauthorizedReservationException::new);
+        Optional<Restaurant> restaurant = restaurantService.getByUserID(user.getId());
+
+        boolean userMadeReservation = reservation.getMail().equals(user.getUsername()) && !restaurant.isPresent();
+        boolean reservationWasMadeToRestaurant = restaurant.isPresent() && restaurant.get().getId() == reservation.getRestaurantId();
+        boolean reservationIsFuture = reservation.getDateTime().isAfter(LocalDateTime.now());
+
+        if((!userMadeReservation && !reservationWasMadeToRestaurant) || !reservationIsFuture) {
             throw new UnauthorizedReservationException();
         }
 
