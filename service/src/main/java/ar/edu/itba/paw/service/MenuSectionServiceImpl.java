@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.persistence.MenuSection;
 import ar.edu.itba.paw.persistence.MenuSectionDao;
@@ -50,6 +51,12 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     @Override
     public boolean edit(long sectionId, String name, long restaurantId, long ordering) {
         return menuSectionDao.edit(sectionId, name, restaurantId, ordering);
+    }
+
+    @Override
+    public boolean updateName(final long sectionId, final String newName) {
+        MenuSection menuSection = getById(sectionId).orElseThrow(MenuSectionNotFoundException::new);
+        return edit(sectionId, newName, menuSection.getRestaurantId(), menuSection.getOrdering());
     }
 
     @Override

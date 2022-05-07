@@ -17,6 +17,8 @@ public interface MenuSectionService {
 
     boolean edit(long sectionId, String name, long restaurantId, long ordering);
 
+    boolean updateName(long sectionId, String newName);
+
     boolean moveUp(final long sectionId);
 
     boolean moveDown(final long sectionId);

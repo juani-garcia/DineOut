@@ -1,16 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
-import ar.edu.itba.paw.persistence.MenuItem;
-import ar.edu.itba.paw.persistence.MenuSection;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.webapp.form.MenuItemForm;
-import ar.edu.itba.paw.webapp.form.MenuSectionForm;
-import ar.edu.itba.paw.webapp.form.ReservationForm;
-import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
@@ -25,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +97,9 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/section", method = {RequestMethod.POST})
-    public ModelAndView section(Principal principal, @Valid @ModelAttribute("sectionForm") final MenuSectionForm form, final BindingResult errors) {
+    public ModelAndView section(Principal principal,
+                                @Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
+                                final BindingResult errors) {
         if (errors.hasErrors()) {
             return sectionForm(form);
         }
