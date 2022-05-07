@@ -10,8 +10,10 @@ public interface ReservationDao {
 
     List<Reservation> getAllByUsername(String username, int page, boolean past);
 
+    List<Reservation> getAllByRestaurant(long restaurantId, int page, boolean past);
+
     void delete(long reservationId);
 
-    Optional<String> getReservationOwner(long reservationId);
+    Optional<Reservation> getReservation(long reservationId);
 
 }

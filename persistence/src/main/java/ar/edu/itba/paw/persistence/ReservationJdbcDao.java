@@ -57,9 +57,21 @@ public class ReservationJdbcDao implements ReservationDao {
                 "WHERE reservation.restaurant_id = restaurant.id " +
                 "AND reservation.user_mail = ? " +
                 "AND date_time " + cmp + " now() " +
-                "ORDER BY date_time LIMIT ? OFFSET ?";
+                "ORDER BY date_time, restaurant.name LIMIT ? OFFSET ?";
 
         return jdbcTemplate.query(query, new Object[]{username, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
+    }
+
+    @Override
+    public List<Reservation> getAllByRestaurant(long restaurantId, int page, boolean past) {
+        String cmp = past? "<=" : ">";
+        String query = "SELECT * FROM reservation, restaurant " +
+                "WHERE reservation.restaurant_id = restaurant.id " +
+                "AND restaurant.id = ? " +
+                "AND date_time " + cmp + " now() " +
+                "ORDER BY date_time, restaurant.name LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(query, new Object[]{restaurantId, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
 
     @Override
@@ -68,10 +80,9 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     @Override
-    public Optional<String> getReservationOwner(long reservationId) {
-        List<String> owner = jdbcTemplate.query("SELECT user_mail FROM reservation WHERE reservation_id = ?",
+    public Optional<Reservation> getReservation(long reservationId) {
+        return jdbcTemplate.query("SELECT * FROM reservation, restaurant WHERE restaurant_id = id AND reservation_id = ?",
                 new Object[]{reservationId},
-                OWNER_MAPPER);
-        return owner.stream().findFirst();
+                ROW_MAPPER).stream().findFirst();
     }
 }
