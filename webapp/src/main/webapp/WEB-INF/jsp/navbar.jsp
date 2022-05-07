@@ -39,6 +39,18 @@
                     </a>
                 </li>
                 <% } %>
+                <% if (request.isUserInRole("RESTAURANT")) { %>
+                <li>
+                    <a href="<c:url value="/restaurant/reservations"/>"
+                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px">
+                                Mis reservas
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <% } %>
                 <li>
                     <a href="<c:url value="/profile"/>"
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">

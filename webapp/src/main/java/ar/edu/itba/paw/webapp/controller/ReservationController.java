@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -54,16 +55,17 @@ public class ReservationController {
             return reservation(resId, form);
         }
 
-        final ModelAndView mav =  new ModelAndView("redirect:/diner/reservations");
-        List<Reservation> reservationList = reservationService.getAllFutureByUsername(securityService.getCurrentUsername());
-        mav.addObject("reservations", reservationList);
-        return mav;
+        return new ModelAndView("redirect:/diner/reservations");
     }
 
     @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
-    public ModelAndView delete(@PathVariable final long resId) {
+    public ModelAndView delete(@PathVariable final long resId, HttpServletRequest request) {
         reservationService.delete(resId);
-        return new ModelAndView("redirect:/diner/reservations");
+        if(request.isUserInRole("DINER")) {
+            return new ModelAndView("redirect:/diner/reservations");
+        } else {
+            return new ModelAndView("redirect:/restaurant/reservations");
+        }
     }
 
 
