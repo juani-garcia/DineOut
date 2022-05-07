@@ -2,25 +2,18 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
-import ar.edu.itba.paw.persistence.MenuItem;
-import ar.edu.itba.paw.persistence.MenuSection;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -56,6 +49,9 @@ public class RestaurantController {
 
     @Autowired
     private FavoriteService favoriteService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @RequestMapping("")
     public ModelAndView restaurantProfile(Principal principal) {
@@ -191,6 +187,16 @@ public class RestaurantController {
         mav.addObject("sections", menuSectionList);
         List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
         mav.addObject("shifts", shifts);
+        return mav;
+    }
+
+    @RequestMapping("/reservations")
+    public ModelAndView reservations(
+            @RequestParam(name = "page", defaultValue = "1") final int page,
+            @RequestParam(name = "past", defaultValue = "false") final boolean past) {
+        ModelAndView mav = new ModelAndView("restaurant/reservations");
+        mav.addObject("past", past);
+        mav.addObject("reservations", reservationService.getAllForCurrentRestaurant(page, past));
         return mav;
     }
 
