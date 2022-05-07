@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.form;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,6 +16,7 @@ public class MenuItemForm {
     private String detail;
 
     @NotNull
+    @Min(0)
     private double price;
 
     @NotNull
