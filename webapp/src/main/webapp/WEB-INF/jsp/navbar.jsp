@@ -41,7 +41,7 @@
                 <% } %>
                 <% if (request.isUserInRole("RESTAURANT")) { %>
                 <li>
-                    <a href="<c:url value="/restaurant/favorites"/>"
+                    <a href="<c:url value="/restaurant/reservations"/>"
                        class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
