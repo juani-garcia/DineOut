@@ -45,7 +45,7 @@
                                 value="${restaurant.zone.name}"/></h6>
                     </div>
                     <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
-                    <p class="light text_overflow_ellipsis">Direccion: <c:out value="${restaurant.address}"/></p>
+                    <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address" />: <c:out value="${restaurant.address}"/></p>
                 </div>
             </a>
         </c:forEach>
