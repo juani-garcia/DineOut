@@ -12,9 +12,28 @@
 
 <div class="container flex_center padding-15px">
     <div class="section flex_center width_100">
+        <div class="bold grow_on_hover">
+            <c:if test="${past}">
+                <c:url value="/diner/reservations" var="toggleUrl" />
+                <a href="${toggleUrl}" class = "white-text">
+                    <spring:message code="diner.show_future" />
+                </a>
+            </c:if>
+            <c:if test="${!past}">
+                <c:url value="/diner/reservations?past=true" var="toggleUrl" />
+                <a href="${toggleUrl}" class="white-text">
+                    <spring:message code="diner.show_past" />
+                </a>
+            </c:if>
+        </div>
         <div class="card menu_card">
             <h1 class="megabold flex_center groovy">
-                <spring:message code="diner.reservations.title"/>
+                <c:if test="${past}" >
+                    <spring:message code="diner.past_reservations.title"/>
+                </c:if>
+                <c:if test="${!past}" >
+                    <spring:message code="diner.future_reservations.title"/>
+                </c:if>
             </h1>
             <c:if test="${reservations.size() == 0}">
                 <h2 class="header center default_light_text">No tienes ninguna reserva</h2>
@@ -37,15 +56,17 @@
                                 <%--                                    </button>--%>
                                 <%--                                </form>--%>
                                 <%--                            </div>--%>
-                            <div class="margins_lr_5px">
-                                <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>
-                                <form method="post" action="${deleteUrl}">
-                                    <button class="btn-large waves-effect waves-light btn-floating default_red"
-                                            type="submit" name="action">
-                                        <i class="material-icons left">delete</i>
-                                    </button>
-                                </form>
-                            </div>
+                            <c:if test="${!past}">
+                                <div class="margins_lr_5px">
+                                    <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>
+                                    <form method="post" action="${deleteUrl}">
+                                        <button class="btn-large waves-effect waves-light btn-floating default_red"
+                                                type="submit" name="action">
+                                            <i class="material-icons left">delete</i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                     <h5 class="medium">
