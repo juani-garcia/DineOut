@@ -42,17 +42,17 @@ public class ReservationController {
     @RequestMapping(value = "/create/{resId}", method = { RequestMethod.POST })
     public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
 
+        if (errors.hasErrors()) {
+            return reservation(resId, form);
+        }
+
         // TODO: i18n.
         try {
             reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
         } catch (InvalidTimeException e) {
             errors.addError(new FieldError("reservationForm", "dateTime", "El horario de la reserva es inválido."));  // TODO: remove this error from here.
-        }
-
-        if (errors.hasErrors()) {
             return reservation(resId, form);
         }
-
 
         final ModelAndView mav =  new ModelAndView("redirect:/diner/reservations");
         List<Reservation> reservationList = reservationService.getAllFutureByUsername(securityService.getCurrentUsername());
