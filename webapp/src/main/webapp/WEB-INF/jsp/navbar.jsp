@@ -28,6 +28,16 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="<c:url value="/diner/favorites"/>"
+                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px">
+                                Mis Favoritos
+                            </p>
+                        </div>
+                    </a>
+                </li>
                 <% } %>
                 <li>
                     <a href="<c:url value="/profile"/>"

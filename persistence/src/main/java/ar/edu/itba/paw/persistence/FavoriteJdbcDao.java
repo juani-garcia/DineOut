@@ -1,18 +1,18 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class FavoriteJdbcDao implements FavoriteDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private static final int PAGE_SIZE = 3;
     private static final RowMapper<Favorite> ROW_MAPPER = (rs, rowNum) ->
             new Favorite(rs.getLong("restaurant_id"), rs.getLong("user_id"));
 
@@ -42,6 +42,16 @@ public class FavoriteJdbcDao implements FavoriteDao {
 
     @Override
     public boolean isFavorite(long restaurantId, long userId) {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM favorite WHERE restaurant_id = ? AND user_id = ?",  new Object[]{restaurantId, userId}, Long.class) > 0;
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM favorite WHERE restaurant_id = ? AND user_id = ?", new Object[]{restaurantId, userId}, Long.class) > 0;
+    }
+
+    @Override
+    public List<Favorite> getAllByUserId(long userId, int page) {
+        return jdbcTemplate.query("SELECT * FROM favorite WHERE user_id = ? LIMIT ? OFFSET ?", new Object[]{userId, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
+    }
+
+    @Override
+    public long countByUserId(long id) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM favorite WHERE user_id = ?", new Object[]{id}, Long.class);
     }
 }

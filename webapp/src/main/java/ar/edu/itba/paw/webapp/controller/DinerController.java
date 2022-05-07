@@ -1,12 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.persistence.Reservation;
+import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class DinerController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        if(securityService.getCurrentUsername() == null) throw new IllegalStateException("Invalid user");
+        if (securityService.getCurrentUsername() == null) throw new IllegalStateException("Invalid user");
 
         return new ModelAndView("diner/profile");
     }
@@ -34,11 +36,21 @@ public class DinerController {
     @RequestMapping("/reservations")
     public ModelAndView reservations() {
         String username = securityService.getCurrentUsername();
-        if(username == null) throw new IllegalStateException("Invalid user");
+        if (username == null) throw new IllegalStateException("Invalid user");
 
         List<Reservation> reservationList = reservationService.getAllFutureByUsername(username);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
+        return mav;
+    }
+
+    @RequestMapping("/favorites")
+    public ModelAndView favorites(@RequestParam(name = "page", defaultValue = "1") final int page) {
+        List<Restaurant> restaurantList = favoriteService.getRestaurantList(page);
+        ModelAndView mav = new ModelAndView("diner/favorites");
+        mav.addObject("restaurants", restaurantList);
+        mav.addObject("pageSize", 3); // TODO: remove magin number for PAGE_SIZE getter from dao.
+        mav.addObject("totalRestaurantCount", favoriteService.getFavoriteCount());
         return mav;
     }
 
