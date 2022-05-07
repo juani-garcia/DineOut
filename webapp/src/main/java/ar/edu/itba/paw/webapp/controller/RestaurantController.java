@@ -110,6 +110,27 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
+    @RequestMapping(value = "/section/{sectionId}/edit")
+    public ModelAndView sectionEditForm(@PathVariable final long sectionId,
+                                        @ModelAttribute("sectionForm") final MenuSectionForm form) {
+        MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(MenuSectionNotFoundException::new);
+        ModelAndView mav = new ModelAndView("restaurant/section_edit_form");
+        mav.addObject("section", menuSection);
+        form.setName(menuSection.getName());
+        return mav;
+    }
+
+    @RequestMapping(value = "/section/{sectionId}/edit", method = {RequestMethod.POST})
+    public ModelAndView sectionEdit(@PathVariable final long sectionId,
+                                    @ModelAttribute("sectionForm") final MenuSectionForm form,
+                                    final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return sectionEditForm(sectionId, form);
+        }
+        menuSectionService.updateName(sectionId, form.getName());
+        return new ModelAndView("redirect:/restaurant");
+    }
+
     @RequestMapping(value = "/section/{sectionId}/up", method = {RequestMethod.POST})
     public ModelAndView sectionUp(@PathVariable final long sectionId) {
         menuSectionService.moveUp(sectionId);
