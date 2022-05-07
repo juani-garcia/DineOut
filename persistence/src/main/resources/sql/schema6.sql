@@ -54,14 +54,17 @@ DECLARE
                       WHERE menu_section.restaurant_id = OLD.restaurant_id AND ordering = NEW.ordering;
     rec RECORD;
 BEGIN
-    UPDATE menu_section SET ordering = OLD.ordering WHERE restaurant_id = OLD.restaurant_id AND ordering = NEW.ordering;
+    IF OLD.ordering != NEW.ordering THEN
+        UPDATE menu_section SET ordering = OLD.ordering WHERE restaurant_id = OLD.restaurant_id AND ordering = NEW.ordering;
+    END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_item_section_trigger ON menu_section;
 CREATE TRIGGER update_item_section_trigger
-    BEFORE UPDATE on menu_section
+    AFTER UPDATE on menu_section
     FOR EACH ROW
     WHEN (pg_trigger_depth() < 1)
 EXECUTE PROCEDURE update_section_ordering();
@@ -132,7 +135,7 @@ $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_item_trigger ON menu_item;
 CREATE TRIGGER update_item_trigger
-    BEFORE UPDATE on menu_item
+    AFTER UPDATE on menu_item
     FOR EACH ROW
     WHEN (pg_trigger_depth() < 1)
 EXECUTE PROCEDURE update_item_ordering();
