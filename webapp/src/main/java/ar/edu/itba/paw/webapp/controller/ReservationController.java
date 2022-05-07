@@ -55,8 +55,9 @@ public class ReservationController {
         }
 
         final ModelAndView mav =  new ModelAndView("redirect:/diner/reservations");
-        List<Reservation> reservationList = reservationService.getAllFutureByUsername(securityService.getCurrentUsername());
+        List<Reservation> reservationList = reservationService.getAllByUsername(securityService.getCurrentUsername(), 1, false);
         mav.addObject("reservations", reservationList);
+        mav.addObject("past", false);
         return mav;
     }
 

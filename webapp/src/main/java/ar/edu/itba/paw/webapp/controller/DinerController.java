@@ -34,13 +34,16 @@ public class DinerController {
     }
 
     @RequestMapping("/reservations")
-    public ModelAndView reservations() {
+    public ModelAndView reservations(
+            @RequestParam(name = "page", defaultValue = "1") final int page,
+            @RequestParam(name = "past", defaultValue = "false") final boolean past) {
         String username = securityService.getCurrentUsername();
         if (username == null) throw new IllegalStateException("Invalid user");
 
-        List<Reservation> reservationList = reservationService.getAllFutureByUsername(username);
+        List<Reservation> reservationList = reservationService.getAllByUsername(username, page, past);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
+        mav.addObject("past", past);
         return mav;
     }
 
