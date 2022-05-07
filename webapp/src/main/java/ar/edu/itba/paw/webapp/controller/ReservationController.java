@@ -55,11 +55,7 @@ public class ReservationController {
             return reservation(resId, form);
         }
 
-        final ModelAndView mav =  new ModelAndView("redirect:/diner/reservations");
-        List<Reservation> reservationList = reservationService.getAllForCurrentUser(1, false);
-        mav.addObject("reservations", reservationList);
-        mav.addObject("past", false);
-        return mav;
+        return new ModelAndView("redirect:/diner/reservations");
     }
 
     @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
