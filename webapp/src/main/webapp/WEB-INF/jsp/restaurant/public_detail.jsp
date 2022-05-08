@@ -99,15 +99,17 @@
                     <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
                 </div>
                 <div class="card-content same_width_elements flex_center">
-                    <h5 class="center text_overflow_ellipsis">Horarios:</h5>
+                    <h5 class="center text_overflow_ellipsis">
+                        <spring:message code="restaurant.public_detail.time" />:
+                    </h5>
                     <c:if test="${shifts.size() == 0}">
-                        <h6 class="center text_overflow_ellipsis">Las 24hs.</h6>
+                        <h6 class="center text_overflow_ellipsis"><spring:message code="restaurant.public_detail.all_day" /></h6>
                     </c:if>
                     <c:forEach items="${shifts}" var="shift">
-                        <h6 class="center text_overflow_ellipsis"><spring:message code="${shift.message}"/> <c:out
-                                value="${shift.start}"/> a
-                            <c:out
-                                    value="${shift.end}"/></h6>
+                        <h6 class="center text_overflow_ellipsis">
+                            <spring:message code="${shift.message}"/>
+                            <c:out value="${shift.start}"/> a
+                            <c:out value="${shift.end}"/></h6>
                     </c:forEach>
                 </div>
                 <div class="card-content same_width_elements">

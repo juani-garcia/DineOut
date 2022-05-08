@@ -1,31 +1,22 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
-import ar.edu.itba.paw.persistence.MenuItem;
-import ar.edu.itba.paw.persistence.MenuSection;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.webapp.form.MenuItemForm;
-import ar.edu.itba.paw.webapp.form.MenuSectionForm;
-import ar.edu.itba.paw.webapp.form.ReservationForm;
-import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.security.Principal;
+import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,11 +48,14 @@ public class RestaurantController {
     @Autowired
     private FavoriteService favoriteService;
 
+    @Autowired
+    private ReservationService reservationService;
+
     @RequestMapping("")
-    public ModelAndView restaurantProfile(Principal principal) {
+    public ModelAndView restaurantProfile() {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
         if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
         mav.addObject("restaurant", restaurant);
@@ -101,14 +95,36 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/section", method = {RequestMethod.POST})
-    public ModelAndView section(Principal principal, @Valid @ModelAttribute("sectionForm") final MenuSectionForm form, final BindingResult errors) {
+    public ModelAndView section(@Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
+                                final BindingResult errors) {
         if (errors.hasErrors()) {
             return sectionForm(form);
         }
 
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
         menuSectionService.create(restaurant.getId(), form.getName());
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/section/{sectionId}/edit")
+    public ModelAndView sectionEditForm(@PathVariable final long sectionId,
+                                        @ModelAttribute("sectionForm") final MenuSectionForm form) {
+        MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(MenuSectionNotFoundException::new);
+        ModelAndView mav = new ModelAndView("restaurant/section_edit_form");
+        mav.addObject("section", menuSection);
+        form.setName(menuSection.getName());
+        return mav;
+    }
+
+    @RequestMapping(value = "/section/{sectionId}/edit", method = {RequestMethod.POST})
+    public ModelAndView sectionEdit(@PathVariable final long sectionId,
+                                    @ModelAttribute("sectionForm") final MenuSectionForm form,
+                                    final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return sectionEditForm(sectionId, form);
+        }
+        menuSectionService.updateName(sectionId, form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
 
@@ -131,9 +147,9 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/item")
-    public ModelAndView itemForm(Principal principal, @ModelAttribute("itemForm") final MenuItemForm form) {
+    public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
@@ -141,7 +157,7 @@ public class RestaurantController {
     }
 
     @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
-    public ModelAndView item(Principal principal, @Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
+    public ModelAndView item(@Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
         byte[] imageBytes = null;
         try {
             imageBytes = form.getImage().getBytes();
@@ -150,12 +166,42 @@ public class RestaurantController {
         }
 
         if (errors.hasErrors()) {
-            return itemForm(principal, form);
+            return itemForm(form);
         }
 
-        User user = userService.getByUsername(principal.getName()).orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().get();
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));  // TODO: why do we need to acces the restaurant? @mateo
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping(value = "/item/{itemId}/edit")
+    public ModelAndView itemEditForm(@PathVariable final long itemId,
+                                     @ModelAttribute("itemForm") final MenuItemForm form) {
+        ModelAndView mav = new ModelAndView("restaurant/item_edit_form");
+        MenuItem menuItem = menuItemService.getById(itemId).orElseThrow(InvalidParameterException::new);
+        mav.addObject("item", menuItem);
+        User user = securityService.getCurrentUser().get();
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).get();
+        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
+        mav.addObject("sections", menuSectionList);
+        form.setName(menuItem.getName());
+        form.setDetail(menuItem.getDetail());
+        form.setPrice(menuItem.getPrice());
+        form.setMenuSectionId(menuItem.getSectionId());
+        // form.setImage(new CommonsMultipartFile(image.getSource()));
+        return mav;
+    }
+
+    @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST})
+    public ModelAndView itemEdit(@PathVariable final long itemId,
+                                    @ModelAttribute("itemForm") final MenuItemForm form,
+                                    final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return itemEditForm(itemId, form);
+        }
+        // TODO: manage image update
+        menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), null);
         return new ModelAndView("redirect:/restaurant");
     }
 
@@ -191,6 +237,16 @@ public class RestaurantController {
         mav.addObject("sections", menuSectionList);
         List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
         mav.addObject("shifts", shifts);
+        return mav;
+    }
+
+    @RequestMapping("/reservations")
+    public ModelAndView reservations(
+            @RequestParam(name = "page", defaultValue = "1") final int page,
+            @RequestParam(name = "past", defaultValue = "false") final boolean past) {
+        ModelAndView mav = new ModelAndView("restaurant/reservations");
+        mav.addObject("past", past);
+        mav.addObject("reservations", reservationService.getAllForCurrentRestaurant(page, past));
         return mav;
     }
 

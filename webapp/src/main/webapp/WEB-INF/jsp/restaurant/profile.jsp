@@ -31,9 +31,13 @@
         <div class="card menu_card">
             <div class="center-align padding-15px">
                 <a href="<c:url value="/restaurant/section"/>"
-                   class="btn-large waves-effect waves-light default_blue white-text">Agregar seccion</a>
+                   class="btn-large waves-effect waves-light default_blue white-text">
+                    <spring:message code="restaurant.profile.add_section" />
+                </a>
                 <a href="<c:url value="/restaurant/item"/>"
-                   class="btn-large waves-effect waves-light default_blue white-text">Agregar item</a>
+                   class="btn-large waves-effect waves-light default_blue white-text">
+                    <spring:message code="restaurant.profile.add_item" />
+                </a>
             </div>
             <div class="card-content black-text">
                 <c:forEach items="${sections}" var="section">
@@ -57,6 +61,12 @@
                                 </button>
                             </form>
                         </c:if>
+                        <c:url value="/restaurant/section/${section.id}/edit" var="editUrl"/>
+                        <a href="${editUrl}" style="margin: 0">
+                            <button class="btn waves-effect waves-light btn-floating default_yellow">
+                                <i class="material-icons left">edit</i>
+                            </button>
+                        </a>
                         <c:url value="/restaurant/section/${section.id}/delete" var="deleteUrl"/>
                         <form method="post" action="${deleteUrl}" style="margin: 0">
                             <button class="btn waves-effect waves-light btn-floating default_red"
@@ -89,6 +99,12 @@
                                         </button>
                                     </form>
                                 </c:if>
+                                <c:url value="/restaurant/item/${item.id}/edit" var="editUrl"/>
+                                <a href="${editUrl}" style="margin: 0">
+                                    <button class="btn waves-effect waves-light btn-floating default_yellow">
+                                        <i class="material-icons left">edit</i>
+                                    </button>
+                                </a>
                                 <c:url value="/restaurant/item/${item.id}/delete" var="deleteUrl"/>
                                 <form method="post" action="${deleteUrl}" style="margin: 0">
                                     <button class="btn waves-effect waves-light btn-floating default_red"

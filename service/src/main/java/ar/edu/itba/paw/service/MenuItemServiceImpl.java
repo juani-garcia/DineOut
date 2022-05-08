@@ -56,10 +56,15 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemDao.delete(itemId);
     }
 
-    @Override
     public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
         return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, menuItem.getImageId());
+    }
+
+    @Override
+    public boolean edit(long itemId, String name, String detail, double price, long sectionId, byte[] imageBytes) {
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow( () -> new RuntimeException("Invalid itemId"));
+        return menuItemDao.edit(itemId, name, detail, price, sectionId, menuItem.getOrdering(), menuItem.getImageId());
     }
 
     @Override

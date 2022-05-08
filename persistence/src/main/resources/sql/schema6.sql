@@ -1,3 +1,8 @@
+DROP TRIGGER IF EXISTS dineout_menusection_ordering ON menu_section;
+DROP FUNCTION IF EXISTS maintain_order_in_menusection();
+DROP TRIGGER IF EXISTS dineout_menuitem_ordering ON menu_item;
+DROP FUNCTION IF EXISTS maintain_order_in_menuitem();
+
 ALTER TABLE menu_section DROP CONSTRAINT IF EXISTS menu_section_ordering_restaurant_id_key;
 ALTER TABLE menu_section DROP CONSTRAINT IF EXISTS menu_section_ordering_unique;
 ALTER TABLE menu_section ADD CONSTRAINT menu_section_ordering_unique UNIQUE(restaurant_id, ordering) DEFERRABLE INITIALLY DEFERRED;
@@ -54,7 +59,10 @@ DECLARE
                       WHERE menu_section.restaurant_id = OLD.restaurant_id AND ordering = NEW.ordering;
     rec RECORD;
 BEGIN
-    UPDATE menu_section SET ordering = OLD.ordering WHERE restaurant_id = OLD.restaurant_id AND ordering = NEW.ordering;
+    IF OLD.ordering != NEW.ordering THEN
+        UPDATE menu_section SET ordering = OLD.ordering WHERE restaurant_id = OLD.restaurant_id AND ordering = NEW.ordering;
+    END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

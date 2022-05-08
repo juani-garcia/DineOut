@@ -17,6 +17,7 @@ import java.util.Optional;
 @Repository
 public class ReservationJdbcDao implements ReservationDao {
 
+    private static final int PAGE_SIZE = 10;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
@@ -26,9 +27,8 @@ public class ReservationJdbcDao implements ReservationDao {
                     new Restaurant(rs.getLong("id"), rs.getLong("user_id"),
                             rs.getString("name"), rs.getString("address"),
                             rs.getString("mail"), rs.getString("detail"),
-                            Zone.getById(rs.getLong("zone_id"))));
-    static final RowMapper<String> OWNER_MAPPER = (rs, rowNum) ->
-            rs.getString("user_mail");
+                            Zone.getById(rs.getLong("zone_id"))),
+                    rs.getBoolean("is_confirmed"));
 
     @Autowired
     public ReservationJdbcDao(final DataSource ds) {
@@ -44,19 +44,34 @@ public class ReservationJdbcDao implements ReservationDao {
         reservationData.put("amount", amount);
         reservationData.put("date_time", dateTime);
         reservationData.put("comments", comments);
+        reservationData.put("is_confirmed", false);
         final long reservationId = jdbcInsert.executeAndReturnKey(reservationData).intValue();
 
-        return new Reservation(reservationId, userMail, amount, dateTime, comments, restaurant);
+        return new Reservation(reservationId, userMail, amount, dateTime, comments, restaurant, false);
     }
 
     @Override
-    public List<Reservation> getAllFutureByUsername(String username) {
+    public List<Reservation> getAllByUsername(String username, int page, boolean past) {
+        String cmp = past? "<=" : ">";
         String query = "SELECT * FROM reservation, restaurant " +
                 "WHERE reservation.restaurant_id = restaurant.id " +
-                "AND reservation.user_mail = ?" +
-                "AND date_time >= now() ";
+                "AND reservation.user_mail = ? " +
+                "AND date_time " + cmp + " now() " +
+                "ORDER BY date_time, restaurant.name LIMIT ? OFFSET ?";
 
-        return jdbcTemplate.query(query, new Object[]{username}, ROW_MAPPER);
+        return jdbcTemplate.query(query, new Object[]{username, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
+    }
+
+    @Override
+    public List<Reservation> getAllByRestaurant(long restaurantId, int page, boolean past) {
+        String cmp = past? "<=" : ">";
+        String query = "SELECT * FROM reservation, restaurant " +
+                "WHERE reservation.restaurant_id = restaurant.id " +
+                "AND restaurant.id = ? " +
+                "AND date_time " + cmp + " now() " +
+                "ORDER BY date_time, restaurant.name LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(query, new Object[]{restaurantId, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
 
     @Override
@@ -65,10 +80,15 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     @Override
-    public Optional<String> getReservationOwner(long reservationId) {
-        List<String> owner = jdbcTemplate.query("SELECT user_mail FROM reservation WHERE reservation_id = ?",
+    public Optional<Reservation> getReservation(long reservationId) {
+        return jdbcTemplate.query("SELECT * FROM reservation, restaurant WHERE restaurant_id = id AND reservation_id = ?",
                 new Object[]{reservationId},
-                OWNER_MAPPER);
-        return owner.stream().findFirst();
+                ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
+    public boolean confirm(long reservationId) {
+        String query = "UPDATE reservation SET is_confirmed = true WHERE reservation_id = ?";
+        return jdbcTemplate.update(query, reservationId) == 1;
     }
 }

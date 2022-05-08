@@ -5,16 +5,19 @@
 
         <ul class="right hide-on-small-and-down">
             <c:if test="${pageContext.request.userPrincipal.name == null}">
-                <li><a href="<c:url value="/register"/>" class="restaurant-register light">¡Registrate!</a>
+                <li><a href="<c:url value="/register"/>" class="restaurant-register light">
+                    <spring:message code="navbar.register" />
+                </a>
                 </li>
                 <li><a href="<c:url value="/login"/>"
-                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">Iniciar
-                    sesión</a></li>
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">
+                    <spring:message code="navbar.login" />
+                </a></li>
             </c:if>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <li>
                     <div class="white-text">
-                        ¡Hola <c:out value="${user.firstName}"/>!
+                        <spring:message code="navbar.greeting" arguments="${user.firstName}" />
                     </div>
                 </li>
                 <% if (request.isUserInRole("DINER")) { %>
@@ -23,7 +26,7 @@
                        class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                Mis Reservas
+                                <spring:message code="navbar.reservations" />
                             </p>
                         </div>
                     </a>
@@ -33,7 +36,19 @@
                        class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                Mis Favoritos
+                                <spring:message code="navbar.favorites" />
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <% } %>
+                <% if (request.isUserInRole("RESTAURANT")) { %>
+                <li>
+                    <a href="<c:url value="/restaurant/reservations"/>"
+                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px">
+                                <spring:message code="navbar.reservations" />
                             </p>
                         </div>
                     </a>
@@ -44,7 +59,7 @@
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                Mi perfil
+                                <spring:message code="navbar.profile" />
                             </p>
                         </div>
                     </a>
@@ -54,7 +69,7 @@
                        class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px white-text">
-                                Cerrar sesion
+                                <spring:message code="navbar.logout" />
                             </p>
                         </div>
                     </a>
