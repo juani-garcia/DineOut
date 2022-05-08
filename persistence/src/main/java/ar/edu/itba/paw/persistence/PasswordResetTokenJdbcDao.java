@@ -17,9 +17,8 @@ public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    /* private X default=package-private for testing */
     static final RowMapper<PasswordResetToken> ROW_MAPPER = (rs, rowNum) ->
-            new PasswordResetToken(rs.getLong("id"), rs.getString("token"), rs.getLong("user_id"), rs.getObject("expiry_date", LocalDateTime.class));
+            new PasswordResetToken(rs.getLong("id"), rs.getString("token"), rs.getLong("user_id"), rs.getObject("expiry_date", LocalDateTime.class), rs.getBoolean("is_used"));
 
     @Autowired
     public PasswordResetTokenJdbcDao(final DataSource ds) {
@@ -33,14 +32,15 @@ public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
     }
 
     @Override
-    public PasswordResetToken create(String token, User user, LocalDateTime expiryDate) {
+    public PasswordResetToken create(String token, User user, LocalDateTime expiryDate, boolean isUsed) {
         final Map<String, Object> passwordResetTokenData = new HashMap<>();
         passwordResetTokenData.put("token", token);
         passwordResetTokenData.put("user_id", user.getId());
+        passwordResetTokenData.put("is_used", isUsed);
         passwordResetTokenData.put("expiry_date", expiryDate.plusMinutes(PasswordResetToken.EXPIRATION));
         final long PasswordResetTokenId = jdbcInsert.executeAndReturnKey(passwordResetTokenData).intValue();
 
-        return new PasswordResetToken(PasswordResetTokenId, token, user.getId(), expiryDate);
+        return new PasswordResetToken(PasswordResetTokenId, token, user.getId(), expiryDate, isUsed);
     }
 
     @Override

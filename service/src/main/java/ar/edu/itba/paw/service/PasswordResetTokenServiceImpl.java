@@ -16,8 +16,8 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     private PasswordResetTokenDao passwordResetTokenDao;
 
     @Override
-    public PasswordResetToken create(String token, User user, LocalDateTime expiryDate) {
-        return passwordResetTokenDao.create(token, user, expiryDate);
+    public PasswordResetToken create(String token, User user, LocalDateTime expiryDate, boolean isUsed) {
+        return passwordResetTokenDao.create(token, user, expiryDate, isUsed);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     @Override
     public boolean hasValidToken(long userId) {
         Optional<PasswordResetToken> optionalPasswordResetToken = getByUserId(userId);
-        return optionalPasswordResetToken.map(passwordResetToken -> passwordResetToken.getExpiryDate().isBefore(LocalDateTime.now())).orElse(false);
+        return optionalPasswordResetToken.map(passwordResetToken -> passwordResetToken.getExpiryDate().isAfter(LocalDateTime.now()) && !passwordResetToken.isUsed()).orElse(false);
     }
 
     @Override

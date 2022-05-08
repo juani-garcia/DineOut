@@ -13,11 +13,14 @@ public class PasswordResetToken {
 
     private final LocalDateTime expiryDate;
 
-    protected PasswordResetToken(Long id, String token, long userId, LocalDateTime expiryDate) {
+    private final boolean isUsed;
+
+    protected PasswordResetToken(Long id, String token, long userId, LocalDateTime expiryDate, boolean isUsed) {
         this.id = id;
         this.token = token;
         this.userId = userId;
         this.expiryDate = expiryDate;
+        this.isUsed = isUsed;
     }
 
     public Long getId() {
@@ -34,5 +37,9 @@ public class PasswordResetToken {
 
     public LocalDateTime getExpiryDate() {
         return expiryDate;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
     }
 }
