@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.User;
-import ar.edu.itba.paw.persistence.UserDao;
-import ar.edu.itba.paw.persistence.UserRole;
-import ar.edu.itba.paw.persistence.UserToRole;
+import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,13 +16,17 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
     private final UserToRoleService userToRoleService;
+    private final PasswordResetTokenService passwordResetTokenService;
+    private final EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService, UserToRoleService userToRoleService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService, UserToRoleService userToRoleService, PasswordResetTokenService passwordResetTokenService, EmailService emailService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
         this.userToRoleService = userToRoleService;
+        this.passwordResetTokenService = passwordResetTokenService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -63,5 +66,26 @@ public class UserServiceImpl implements UserService {
         return userRoleService.hasRoleByUserId(userId, "DINER");
     }
 
+    @Override
+    public void createPasswordResetTokenForUser(User user, String contextPath) {
+        if (passwordResetTokenService.hasValidToken(user.getId())) return;  // TODO: manage error
+        PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
+        emailService.sendPasswordResetTokenEmail(contextPath, passwordResetToken, user);
+    }
+
+    @Override
+    public Optional<User> getUserByPasswordResetToken(String token) {
+        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).orElseThrow(IllegalStateException::new);
+        return getById(passwordResetToken.getUserId());
+    }
+
+    @Override
+    public void changePasswordByUserToken(String token, String newPassword) {
+        User user = getUserByPasswordResetToken(token).orElseThrow(IllegalStateException::new);
+        if (userDao.updatePassword(passwordEncoder.encode(newPassword), user.getId())) {
+            passwordResetTokenService.setUsed(token);
+        }
+
+    }
 
 }

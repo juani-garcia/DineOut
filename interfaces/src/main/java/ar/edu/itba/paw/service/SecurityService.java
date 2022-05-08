@@ -11,4 +11,6 @@ public interface SecurityService {
     Optional<User> getCurrentUser();
 
     boolean isLoggedIn();
+
+    String validatePasswordResetToken(String token);
 }

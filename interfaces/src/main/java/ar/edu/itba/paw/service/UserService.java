@@ -15,4 +15,10 @@ public interface UserService {
     boolean isRestaurant(long userId);
 
     boolean isDiner(long userId);
+
+    void createPasswordResetTokenForUser(User user, String contextPath);
+
+    Optional<User> getUserByPasswordResetToken(String token);
+
+    void changePasswordByUserToken(String token, String newPassword);
 }
