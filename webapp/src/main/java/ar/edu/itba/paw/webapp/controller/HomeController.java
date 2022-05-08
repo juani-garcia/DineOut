@@ -163,8 +163,7 @@ public class HomeController {
             return new ModelAndView("redirect:/login");  // TODO: send error info.
         }
 
-        User user = userService.getUserByPasswordResetToken(newPasswordForm.getToken()).orElseThrow(IllegalStateException::new);
-        userService.changeUserPassword(user, newPasswordForm.getNewPassword());
+        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getNewPassword());
         return new ModelAndView("redirect:/login");  // TODO: send succes message.
     }
 

@@ -80,9 +80,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserPassword(User user, String newPassword) {
-        userDao.updatePassword(passwordEncoder.encode(newPassword), user.getId());
-    }
+    public void changePasswordByUserToken(String token, String newPassword) {
+        User user = getUserByPasswordResetToken(token).orElseThrow(IllegalStateException::new);
+        if (userDao.updatePassword(passwordEncoder.encode(newPassword), user.getId())) {
+            passwordResetTokenService.setUsed(token);
+        }
 
+    }
 
 }
