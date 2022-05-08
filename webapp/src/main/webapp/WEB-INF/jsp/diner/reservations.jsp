@@ -98,8 +98,13 @@
                                 value="${reservation.comments}"/></h6>
                     </c:if>
                     <c:if test="${!reservation.isConfirmed}">
-                        <h6>
+                        <h6 class="isa_warning">
                             <spring:message code="diner.reservation.pending"/>
+                        </h6>
+                    </c:if>
+                    <c:if test="${reservation.isConfirmed}">
+                        <h6 class="isa_success">
+                            <spring:message code="diner.reservation.approved"/>
                         </h6>
                     </c:if>
                 </div>
@@ -107,12 +112,64 @@
         </div>
     </div>
 </div>
+
+<c:if test="${pages > 1}">
+    <div class="container flex_center" id="paginator">
+        <ul class="pagination padding-15px big">
+            <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                    class="material-icons">chevron_left</i></a></li>
+            <li id="page_number_of_total" class="white-text regular"></li>
+            <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                    class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
+</c:if>
 <%@ include file="../footer.jsp" %>
 <script>
     $(document).ready(function(){
         $('.modal').modal();
     });
 
+    // Set up paginator
+    document.addEventListener('DOMContentLoaded', function () {
+        const paginator = document.getElementById("paginator");
+        if (<c:out value="${pages}"/> === 1)
+        {
+            return;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        let pageNumber = params.get("page");
+        if (pageNumber == null) pageNumber = "1";
+        var pageNumberElem = document.getElementById("page_number_of_total");
+        var pages = Math.ceil(<c:out value="${pages}"/>);
+        pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
+
+        pageNumber = parseInt(pageNumber);
+
+        var previousPagePaginator = document.getElementById("previous_page");
+        var nextPagePaginator = document.getElementById("next_page");
+        if (pageNumber === 1) {
+            previousPagePaginator.className = "disabled default_dark_text";
+        } else {
+            previousPagePaginator.onclick = function () {
+                pageNumber = pageNumber - 1;
+                params.set("page", pageNumber.toString());
+                previousPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
+            }
+        }
+
+
+        if (pageNumber === pages) {
+            nextPagePaginator.className = "disabled default_dark_text";
+        } else {
+            nextPagePaginator.onclick = function () {
+                pageNumber = pageNumber + 1;
+                params.set("page", pageNumber.toString());
+                nextPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
+            }
+        }
+    });
 </script>
 </body>
 </html>
