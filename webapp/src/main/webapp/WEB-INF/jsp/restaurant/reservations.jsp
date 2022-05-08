@@ -59,6 +59,15 @@
                                 <%--                            </div>--%>
                             <c:if test="${!past}">
                                 <div class="margins_lr_5px">
+                                    <c:if test="${!reservation.isConfirmed}">
+                                        <form method="post"
+                                              action="<c:url value="/reservation/${reservation.reservationId}/confirm"/>">
+                                            <button class="btn-large waves-effect waves-light btn-floating green modal-trigger"
+                                               type="submit" name="action">
+                                                <i class="material-icons left">check</i>
+                                            </button>
+                                        </form>
+                                    </c:if>
                                     <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
                                        href="#delete_confirm_modal">
                                         <i class="material-icons left">delete</i>

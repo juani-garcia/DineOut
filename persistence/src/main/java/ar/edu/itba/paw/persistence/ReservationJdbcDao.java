@@ -27,9 +27,8 @@ public class ReservationJdbcDao implements ReservationDao {
                     new Restaurant(rs.getLong("id"), rs.getLong("user_id"),
                             rs.getString("name"), rs.getString("address"),
                             rs.getString("mail"), rs.getString("detail"),
-                            Zone.getById(rs.getLong("zone_id"))));
-    static final RowMapper<String> OWNER_MAPPER = (rs, rowNum) ->
-            rs.getString("user_mail");
+                            Zone.getById(rs.getLong("zone_id"))),
+                    rs.getBoolean("is_confirmed"));
 
     @Autowired
     public ReservationJdbcDao(final DataSource ds) {
@@ -45,9 +44,10 @@ public class ReservationJdbcDao implements ReservationDao {
         reservationData.put("amount", amount);
         reservationData.put("date_time", dateTime);
         reservationData.put("comments", comments);
+        reservationData.put("is_confirmed", false);
         final long reservationId = jdbcInsert.executeAndReturnKey(reservationData).intValue();
 
-        return new Reservation(reservationId, userMail, amount, dateTime, comments, restaurant);
+        return new Reservation(reservationId, userMail, amount, dateTime, comments, restaurant, false);
     }
 
     @Override
@@ -84,5 +84,11 @@ public class ReservationJdbcDao implements ReservationDao {
         return jdbcTemplate.query("SELECT * FROM reservation, restaurant WHERE restaurant_id = id AND reservation_id = ?",
                 new Object[]{reservationId},
                 ROW_MAPPER).stream().findFirst();
+    }
+
+    @Override
+    public boolean confirm(long reservationId) {
+        String query = "UPDATE reservation SET is_confirmed = true WHERE reservation_id = ?";
+        return jdbcTemplate.update(query, reservationId) == 1;
     }
 }

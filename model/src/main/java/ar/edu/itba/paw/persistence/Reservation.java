@@ -12,14 +12,17 @@ public class Reservation {
     private final LocalDateTime dateTime;
     private final String userMail, comments;
     private final Restaurant restaurant;
+    private final boolean isConfirmed;
 
-    protected Reservation(long reservationId, String userMail, int amount, LocalDateTime dateTime, String comments, Restaurant restaurant) {
+    protected Reservation(long reservationId, String userMail, int amount, LocalDateTime dateTime,
+                          String comments, Restaurant restaurant, boolean isConfirmed) {
         this.reservationId = reservationId;
         this.amount = amount;
         this.dateTime = dateTime;
         this.userMail = userMail;
         this.comments = comments;
         this.restaurant = restaurant;
+        this.isConfirmed = isConfirmed;
     }
 
     public Restaurant getRestaurant() {
@@ -60,5 +63,9 @@ public class Reservation {
         LocalTime time = LocalTime.from(dateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return time.format(formatter);
+    }
+
+    public boolean getIsConfirmed() {
+        return isConfirmed;
     }
 }
