@@ -52,6 +52,11 @@
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
+                    <div class="row center">
+                        <a class="thin underline lighten-1" href="<c:url value="/forgot_my_password"/>">
+                            <spring:message code="home.forgot_password"/>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
