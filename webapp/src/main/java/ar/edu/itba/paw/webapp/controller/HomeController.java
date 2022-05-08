@@ -156,8 +156,8 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/save_password", method = RequestMethod.POST)
-    public ModelAndView savePassword(@RequestParam(name = "token") final String token, @ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm) {
-        String result = securityService.validatePasswordResetToken(token);
+    public ModelAndView savePassword(@ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm) {
+        String result = securityService.validatePasswordResetToken(newPasswordForm.getToken());
 
         if (result != null) {
             return new ModelAndView("redirect:/login");  // TODO: send error info.
