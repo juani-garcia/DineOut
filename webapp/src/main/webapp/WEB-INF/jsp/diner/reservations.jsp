@@ -97,6 +97,11 @@
                         <h6 class="regular"><spring:message code="diner.reservation.comments"/> <c:out
                                 value="${reservation.comments}"/></h6>
                     </c:if>
+                    <c:if test="${!reservation.isConfirmed}">
+                        <h6>
+                            <spring:message code="diner.reservation.pending"/>
+                        </h6>
+                    </c:if>
                 </div>
             </c:forEach>
         </div>
