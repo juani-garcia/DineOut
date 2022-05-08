@@ -9,4 +9,6 @@ public interface PasswordResetTokenDao {
     PasswordResetToken create(String token, User user, LocalDateTime expiryDate, boolean isUsed);
 
     Optional<PasswordResetToken> getByToken(String token);
+
+    void setUsed(String token);
 }

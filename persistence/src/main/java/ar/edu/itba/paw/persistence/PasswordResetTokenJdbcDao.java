@@ -47,4 +47,9 @@ public class PasswordResetTokenJdbcDao implements PasswordResetTokenDao {
     public Optional<PasswordResetToken> getByToken(String token) {
         return jdbcTemplate.query("SELECT * FROM password_reset_token WHERE token = ? ORDER BY expiry_date ASC", new Object[]{token}, ROW_MAPPER).stream().findFirst();
     }
+
+    @Override
+    public void setUsed(String token) {
+        jdbcTemplate.update("UPDATE password_reset_token SET is_used = true WHERE token = ?", token);
+    }
 }

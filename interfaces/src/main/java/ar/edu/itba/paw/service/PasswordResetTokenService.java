@@ -14,4 +14,6 @@ public interface PasswordResetTokenService {
     boolean hasValidToken(long userId);
 
     Optional<PasswordResetToken> getByToken(String token);
+
+    void setUsed(String token);
 }

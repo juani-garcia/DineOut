@@ -35,4 +35,9 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public Optional<PasswordResetToken> getByToken(String token) {
         return passwordResetTokenDao.getByToken(token);
     }
+
+    @Override
+    public void setUsed(String token) {
+        passwordResetTokenDao.setUsed(token);
+    }
 }
