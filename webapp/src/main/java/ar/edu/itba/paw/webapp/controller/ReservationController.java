@@ -68,5 +68,11 @@ public class ReservationController {
         }
     }
 
+    @RequestMapping(value = "/reservation/{resId}/confirm", method = {RequestMethod.POST})
+    public ModelAndView confirm(@PathVariable final long resId) {
+        reservationService.confirm(resId);
+        return new ModelAndView("redirect:/restaurant/reservations");
+    }
+
 
 }
