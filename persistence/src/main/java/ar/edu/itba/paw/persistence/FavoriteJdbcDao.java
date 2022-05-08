@@ -54,4 +54,9 @@ public class FavoriteJdbcDao implements FavoriteDao {
     public long countByUserId(long id) {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM favorite WHERE user_id = ?", new Object[]{id}, Long.class);
     }
+
+    @Override
+    public long countPagesByUserId(long id) {
+        return Double.valueOf(Math.ceil(Long.valueOf(countByUserId(id)).doubleValue() / PAGE_SIZE)).longValue();
+    }
 }
