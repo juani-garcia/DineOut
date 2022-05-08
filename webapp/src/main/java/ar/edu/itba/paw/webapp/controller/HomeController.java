@@ -58,14 +58,13 @@ public class HomeController {
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
         mav.addObject("shifts", Shift.values());
-        mav.addObject("pageSize", 3); // TODO: remove magin number for PAGE_SIZE getter from dao.
-        mav.addObject("totalRestaurantCount", restaurantService.getFilteredCount(name, category, shift, zone));
+        mav.addObject("pages", restaurantService.getFilteredPagesCount(name, category, shift, zone));
         mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
 
     @RequestMapping(value = "/restaurant_picker")
-    public ModelAndView restaurantPicker(HttpServletRequest request) {  // TODO: use tags and previous reservations to choose restaurant.
+    public ModelAndView restaurantPicker(HttpServletRequest request) {
         Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole("DINER"));
         return new ModelAndView("redirect:/restaurant/view/" + restaurant.getId());
     }
