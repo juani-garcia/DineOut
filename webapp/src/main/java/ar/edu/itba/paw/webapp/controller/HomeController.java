@@ -163,7 +163,7 @@ public class HomeController {
             return new ModelAndView("redirect:/login");  // TODO: send error info.
         }
 
-        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getNewPassword());
+        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
         return new ModelAndView("redirect:/login");  // TODO: send succes message.
     }
 

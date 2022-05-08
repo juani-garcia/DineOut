@@ -1,19 +1,37 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@FieldsValueMatch(
+        field = "password",
+        fieldMatch = "confirmPassword"
+)
 public class NewPasswordForm {
-    // Add validators
-    private String oldPassword;
+    @Size(min = 8)
+    private String password;
+
+    @NotNull
+    private String confirmPassword;
 
     private  String token;
 
-    private String newPassword;
-
-    public String getOldPassword() {
-        return oldPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getToken() {
@@ -22,13 +40,5 @@ public class NewPasswordForm {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
     }
 }
