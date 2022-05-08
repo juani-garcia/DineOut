@@ -28,22 +28,21 @@
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
                     <div class="row">
-                        <form:label path="oldPassword" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.email"/>*</form:label>
-                        <form:input path="oldPassword" type="text"/>
-                        <form:errors path="oldPassword" cssClass="isa_error" element="p"/>
+                        <form:errors path="password" element="p" cssClass="isa_error"/>
+                        <form:label path="password"><spring:message code="password.recovery.newPassword"/>*</form:label>
+                        <form:input type="password" path="password"/>
+                    </div>
+                    <div class="row">
+                        <form:errors path="confirmPassword" element="p" cssClass="isa_error"/>
+                        <form:label path="confirmPassword"><spring:message
+                                code="password.recovery.confirmPassword"/>*</form:label>
+                        <form:input type="password" path="confirmPassword"/>
                     </div>
                     <div class="display_hidden">
                         <form:label path="token" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.email"/>*</form:label>
                         <form:input path="token" type="text"/>
                         <form:errors path="token" cssClass="isa_error" element="p"/>
-                    </div>
-                    <div class="row">
-                        <form:label path="newPassword" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.email"/>*</form:label>
-                        <form:input path="newPassword" type="text"/>
-                        <form:errors path="newPassword" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row center">
                         <button type="submit" name="action"

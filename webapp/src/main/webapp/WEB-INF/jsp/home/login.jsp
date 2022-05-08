@@ -53,9 +53,23 @@
                         </button>
                     </div>
                     <div class="row center">
-                        <a class="thin underline lighten-1" href="<c:url value="/forgot_my_password"/>">
-                            <spring:message code="home.forgot_password"/>
-                        </a>
+                        <div class="flex_row">
+                            <h6>
+                                <div class="grow_on_hover">
+                                    <a class="thin underline default_dark_text" href="<c:url value="/forgot_my_password"/>">
+                                        <spring:message code="home.forgot_password"/>
+                                    </a>
+                                </div>
+                            </h6>
+                            <h6 class="margin_left_auto flex_row">
+                                <spring:message code="home.no_account"/>
+                                <div class="grow_on_hover margins_lr_10px">
+                                    <a class="thin underline default_dark_text" href="<c:url value="/register"/>">
+                                        <spring:message code="home.register"/>
+                                    </a>
+                                </div>
+                            </h6>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -29,15 +29,15 @@
                 <div class="col s6 offset-s3">
                     <div class="row">
                         <form:label path="username" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.email"/>*</form:label>
+                                code="password.recovery.username"/>*</form:label>
                         <form:input path="username" type="text"/>
                         <form:errors path="username" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row center">
                         <button type="submit" name="action"
                                 class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
-                            <spring:message code="register.restaurant.form.continue"/>
-                            <i class="material-icons right">send</i>
+                            <spring:message code="password.recovery.continue"/>
+                            <i class="material-icons right">send</i>  <!-- TODO: add floating message -->
                         </button>
                     </div>
                 </div>
