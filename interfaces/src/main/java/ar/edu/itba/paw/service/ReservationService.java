@@ -14,4 +14,6 @@ public interface ReservationService {
     List<Reservation> getAllForCurrentRestaurant(int page, boolean past);
 
     void delete(long reservationId);
+
+    boolean confirm(long reservationId);
 }

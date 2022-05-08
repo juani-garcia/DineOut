@@ -85,4 +85,17 @@ public class ReservationServiceImpl implements ReservationService {
         reservationDao.delete(reservationId);
 
     }
+
+    @Override
+    public boolean confirm(long reservationId) {
+        User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Not a restaurant"));
+        Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(UnauthorizedReservationException::new);
+
+        if(reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {
+            throw new UnauthorizedReservationException();
+        }
+
+        return reservationDao.confirm(reservation.getReservationId());
+    }
 }
