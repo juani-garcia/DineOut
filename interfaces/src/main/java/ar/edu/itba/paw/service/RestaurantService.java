@@ -26,4 +26,6 @@ public interface RestaurantService {
     Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId);
 
     Restaurant getRecommendedRestaurant(boolean isDiner);
+
+    long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId);
 }

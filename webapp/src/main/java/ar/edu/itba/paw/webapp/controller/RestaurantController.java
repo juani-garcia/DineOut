@@ -246,6 +246,7 @@ public class RestaurantController {
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
         ModelAndView mav = new ModelAndView("restaurant/reservations");
         mav.addObject("past", past);
+        mav.addObject("pages", reservationService.getPagesCountForCurrentRestaurant(past));
         mav.addObject("reservations", reservationService.getAllForCurrentRestaurant(page, past));
         return mav;
     }
