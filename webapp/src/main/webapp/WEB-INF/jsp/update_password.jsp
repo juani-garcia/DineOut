@@ -21,7 +21,7 @@
                                alt=""></div>   <!-- Custom restaurant image -->
 </div>
 
-<c:url value="${'/save_password?token= ' + ${}}" var="postPath"/>
+<c:url value="/save_password" var="postPath"/>
 <form:form id="new_password_form" modelAttribute="newPasswordForm" action="${postPath}" method="post">
     <div class="container">
         <div class="section">
@@ -33,7 +33,7 @@
                         <form:input path="oldPassword" type="text"/>
                         <form:errors path="oldPassword" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row">
+                    <div class="display_hidden">
                         <form:label path="token" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.email"/>*</form:label>
                         <form:input path="token" type="text"/>
