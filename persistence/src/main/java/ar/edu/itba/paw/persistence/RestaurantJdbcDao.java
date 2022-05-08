@@ -180,4 +180,9 @@ public class RestaurantJdbcDao implements RestaurantDao {
                 " LIMIT 10", new Object[]{userId}, ROW_MAPPER);
     }
 
+    @Override
+    public long getFilteredPagesCount(String name, Category category, Shift shift, Zone zone) {
+        return Double.valueOf(Math.ceil(getFilteredCount(name, category, shift, zone).doubleValue() / PAGE_SIZE)).longValue();
+    }
+
 }

@@ -32,4 +32,6 @@ public interface RestaurantDao {
     List<Restaurant> getTopTenByFavoriteOfUser(long userId);
 
     List<Restaurant> getTopTenByReservationsOfUser(long userId);
+
+    long getFilteredPagesCount(String name, Category category, Shift shift, Zone zone);
 }

@@ -133,4 +133,13 @@ public class RestaurantServiceImpl implements RestaurantService {
             return getRecommended();
         }
     }
+
+    @Override
+    public long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId) {
+        Category category = Category.getById(categoryId);
+        Zone zone = Zone.getById(zoneId);
+        Shift shift = Shift.getById(shiftId);
+
+        return restaurantDao.getFilteredPagesCount(name, category, shift, zone);
+    }
 }

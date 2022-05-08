@@ -98,4 +98,20 @@ public class ReservationServiceImpl implements ReservationService {
 
         return reservationDao.confirm(reservation.getReservationId());
     }
+
+    @Override
+    public long getPagesCountForCurrentUser(boolean past) {
+        String username = securityService.getCurrentUsername();
+        if(username == null) throw new IllegalStateException("Not logged in"); // TODO: change for is logged in
+
+        return reservationDao.getPagesCountForCurrentUser(username, past);
+    }
+
+    @Override
+    public long getPagesCountForCurrentRestaurant(boolean past) {
+        User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
+        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
+
+        return reservationDao.getPagesCountForCurrentRestaurant(self, past);
+    }
 }

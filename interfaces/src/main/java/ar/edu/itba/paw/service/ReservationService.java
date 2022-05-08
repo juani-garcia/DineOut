@@ -16,4 +16,8 @@ public interface ReservationService {
     void delete(long reservationId);
 
     boolean confirm(long reservationId);
+
+    long getPagesCountForCurrentUser(boolean past);
+
+    long getPagesCountForCurrentRestaurant(boolean past);
 }

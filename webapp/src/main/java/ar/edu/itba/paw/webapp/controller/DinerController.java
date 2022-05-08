@@ -43,6 +43,7 @@ public class DinerController {
         List<Reservation> reservationList = reservationService.getAllForCurrentUser(page, past);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
+        mav.addObject("pages", reservationService.getPagesCountForCurrentUser(past));
         mav.addObject("past", past);
         return mav;
     }
@@ -52,8 +53,7 @@ public class DinerController {
         List<Restaurant> restaurantList = favoriteService.getRestaurantList(page);
         ModelAndView mav = new ModelAndView("diner/favorites");
         mav.addObject("restaurants", restaurantList);
-        mav.addObject("pageSize", 3); // TODO: remove magin number for PAGE_SIZE getter from dao.
-        mav.addObject("totalRestaurantCount", favoriteService.getFavoriteCount());
+        mav.addObject("pages", favoriteService.getFavoritePageCount());
         return mav;
     }
 

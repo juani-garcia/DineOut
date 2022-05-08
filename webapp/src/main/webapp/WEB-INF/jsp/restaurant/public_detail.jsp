@@ -13,7 +13,8 @@
 <div id="index-banner" class="parallax-container parallax-container-small align_center">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold text_overflow_ellipsis flex_row flex_center"><c:out value="${restaurant.name}"/>
+            <h1 class="header center white-text bold text_overflow_ellipsis flex_row flex_center"><c:out
+                    value="${restaurant.name}"/>
                 <% if (request.isUserInRole("DINER")) { %>
                 <c:if test="${isUserFavorite}">
                     <c:url value="/diner/set_favorite/${restaurant.id}/false" var="setFavorite"/>
@@ -100,10 +101,11 @@
                 </div>
                 <div class="card-content same_width_elements flex_center">
                     <h5 class="center text_overflow_ellipsis">
-                        <spring:message code="restaurant.public_detail.time" />:
+                        <spring:message code="restaurant.public_detail.time"/>:
                     </h5>
                     <c:if test="${shifts.size() == 0}">
-                        <h6 class="center text_overflow_ellipsis"><spring:message code="restaurant.public_detail.all_day" /></h6>
+                        <h6 class="center text_overflow_ellipsis"><spring:message
+                                code="restaurant.public_detail.all_day"/></h6>
                     </c:if>
                     <c:forEach items="${shifts}" var="shift">
                         <h6 class="center text_overflow_ellipsis">
@@ -117,7 +119,7 @@
                         <div class="row center">
                             <a href="<c:url value ="/reserve/${restaurant.id}"/>"
                                class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                                ¡Reserva!
+                                <spring:message code="reservation.reservation.form.submit"/>
                             </a>
                         </div>
                     </div>
