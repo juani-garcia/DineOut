@@ -10,5 +10,5 @@ public interface UserDao {
 
     User create(final String username, final String password, final String firstName, final String lastName);
 
-    void updatePassword(final String newPassword, final long userId);
+    boolean updatePassword(final String newPassword, final long userId);
 }
