@@ -85,10 +85,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendChangePassword(String to, String name, String token) {
+    public void sendChangePassword(String to, String name, String recoveryLink) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
-        model.put("token", token);
+        model.put("recovery_link", recoveryLink);
         sendMessageUsingThymeleafTemplate(to, model, "reset-password.html");
     }
 
