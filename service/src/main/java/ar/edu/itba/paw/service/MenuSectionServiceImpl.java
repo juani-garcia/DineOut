@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.MenuSection;
 import ar.edu.itba.paw.persistence.MenuSectionDao;
 import ar.edu.itba.paw.persistence.Restaurant;
@@ -41,9 +42,9 @@ public class MenuSectionServiceImpl implements MenuSectionService {
 
     @Override
     public boolean delete(final long sectionId) {
-        MenuSection menuSection = getById(sectionId).orElseThrow( () -> new RuntimeException("Invalid section"));
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(RestaurantNotFoundException::new);
-        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId())
+        MenuSection menuSection = getById(sectionId).orElseThrow(() -> new RuntimeException("Invalid section"));
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(NotFoundException::new);
+        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId())
             throw new RuntimeException("Invalid permissions");
         return menuSectionDao.delete(sectionId);
     }
@@ -59,30 +60,25 @@ public class MenuSectionServiceImpl implements MenuSectionService {
         return edit(sectionId, newName, menuSection.getRestaurantId(), menuSection.getOrdering());
     }
 
-    @Override
-    public boolean moveUp(final long sectionId) {  // TODO: repeated code
-        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
+    private boolean move(final long sectionId, boolean moveUp) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("Invalid user"));
         List<MenuSection> menuSections = getByRestaurantId(restaurant.getId());
         Optional<MenuSection> optionalMenuSection = getById(sectionId);
-        if (! optionalMenuSection.isPresent() || optionalMenuSection.get().getOrdering() <= 1 || menuSections.stream().noneMatch( (section) -> section.getId() ==  sectionId)) {
+        if (!optionalMenuSection.isPresent() || (moveUp ? optionalMenuSection.get().getOrdering() <= 1 : optionalMenuSection.get().getOrdering() >= menuSections.size()) || menuSections.stream().noneMatch((section) -> section.getId() == sectionId)) {
             throw new RuntimeException("Invalid sectionId");
         }
         MenuSection menuSection = optionalMenuSection.get();
-        return edit(sectionId, menuSection.getName(), menuSection.getRestaurantId(), menuSection.getOrdering() - 1);
+        return edit(sectionId, menuSection.getName(), menuSection.getRestaurantId(), menuSection.getOrdering() + (moveUp ? -1 : 1));
+    }
+
+    @Override
+    public boolean moveUp(final long sectionId) {
+        return move(sectionId, true);
     }
 
     @Override
     public boolean moveDown(long sectionId) {
-        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("Invalid user"));
-        List<MenuSection> menuSections = getByRestaurantId(restaurant.getId());
-        Optional<MenuSection> optionalMenuSection = getById(sectionId);
-        if (! optionalMenuSection.isPresent() || optionalMenuSection.get().getOrdering() >= menuSections.size() || menuSections.stream().noneMatch( (section) -> section.getId() ==  sectionId)) {
-            throw new RuntimeException("Invalid sectionId");
-        }
-        MenuSection menuSection = optionalMenuSection.get();
-        return edit(sectionId, menuSection.getName(), menuSection.getRestaurantId(), menuSection.getOrdering() + 1);
-
+        return move(sectionId, false);
     }
 }

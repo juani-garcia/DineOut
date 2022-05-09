@@ -30,4 +30,6 @@ public interface RestaurantService {
     Restaurant getRecommendedRestaurant(boolean isDiner);
 
     long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId);
+
+    Optional<Restaurant> getOfLoggedUser();
 }

@@ -149,4 +149,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         return restaurantDao.getFilteredPagesCount(name, category, shift, zone);
     }
+
+    @Override
+    public Optional<Restaurant> getOfLoggedUser() {
+        Optional<User> user = securityService.getCurrentUser();
+        if (user.isPresent()) return getByUserID(user.get().getId());
+        return Optional.empty();
+    }
 }

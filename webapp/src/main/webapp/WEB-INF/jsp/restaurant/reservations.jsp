@@ -14,24 +14,24 @@
     <div class="section flex_center width_100">
         <div class="bold grow_on_hover">
             <c:if test="${past}">
-                <c:url value="/restaurant/reservations" var="toggleUrl" />
-                <a href="${toggleUrl}" class = "white-text">
-                    <spring:message code="restaurant.reservations.show_future" />
+                <c:url value="/restaurant/reservations" var="toggleUrl"/>
+                <a href="${toggleUrl}" class="white-text">
+                    <spring:message code="restaurant.reservations.show_future"/>
                 </a>
             </c:if>
             <c:if test="${!past}">
-                <c:url value="/restaurant/reservations?past=true" var="toggleUrl" />
+                <c:url value="/restaurant/reservations?past=true" var="toggleUrl"/>
                 <a href="${toggleUrl}" class="white-text">
-                    <spring:message code="restaurant.reservations.show_past" />
+                    <spring:message code="restaurant.reservations.show_past"/>
                 </a>
             </c:if>
         </div>
         <div class="card menu_card">
             <h1 class="megabold flex_center groovy">
-                <c:if test="${past}" >
+                <c:if test="${past}">
                     <spring:message code="restaurant.reservations.past_title"/>
                 </c:if>
-                <c:if test="${!past}" >
+                <c:if test="${!past}">
                     <spring:message code="restaurant.reservations.future_title"/>
                 </c:if>
             </h1>
@@ -63,7 +63,7 @@
                                         <form method="post"
                                               action="<c:url value="/reservation/${reservation.reservationId}/confirm"/>">
                                             <button class="btn-large waves-effect waves-light btn-floating green modal-trigger"
-                                               type="submit" name="action">
+                                                    type="submit" name="action">
                                                 <i class="material-icons left">check</i>
                                             </button>
                                         </form>
@@ -82,13 +82,13 @@
                                         <div class="modal-footer">
                                             <div class="flex_row">
                                                 <a class="modal-close waves-effect btn-flat">
-                                                    <spring:message code="restaurant.reservation.back" />
+                                                    <spring:message code="restaurant.reservation.back"/>
                                                 </a>
                                                 <form method="post"
                                                       action="<c:url value="/reservation/${reservation.reservationId}/delete"/>">
                                                     <button class="modal-close waves-effect red-text btn-flat"
                                                             type="submit" name="action">
-                                                        <spring:message code="restaurant.reservation.continue" />
+                                                        <spring:message code="restaurant.reservation.continue"/>
                                                     </button>
                                                 </form>
                                             </div>
@@ -125,23 +125,19 @@
 </c:if>
 <%@ include file="../footer.jsp" %>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.modal').modal();
     });
 
     // Set up paginator
     document.addEventListener('DOMContentLoaded', function () {
         const paginator = document.getElementById("paginator");
-        if (<c:out value="${pages}"/> === 1)
-        {
-            return;
-        }
+        if (paginator === null) return;
 
         const params = new URLSearchParams(window.location.search);
         let pageNumber = params.get("page");
         if (pageNumber == null) pageNumber = "1";
         var pageNumberElem = document.getElementById("page_number_of_total");
-        var pages = Math.ceil(<c:out value="${pages}"/>);
         pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
 
         pageNumber = parseInt(pageNumber);

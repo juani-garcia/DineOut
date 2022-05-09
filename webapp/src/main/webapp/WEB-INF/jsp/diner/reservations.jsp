@@ -36,7 +36,16 @@
                 </c:if>
             </h1>
             <c:if test="${reservations.size() == 0}">
-                <h2 class="header center default_light_text">No tienes ninguna reserva</h2>
+                <h2 class="header center default_light_text">
+                    <spring:message code="restaurant.reservation.no_reservations"/>
+                    <div class="center default_light_text underline margins_tb_30px">
+                        <h6 class="grow_on_hover">
+                            <a class="default_light_text" href="<c:url value="/restaurants"/>">
+                                <spring:message code="restaurant.reservation.explore"/>
+                            </a>
+                        </h6>
+                    </div>
+                </h2>
             </c:if>
             <c:forEach items="${reservations}" var="reservation">
                 <hr/>
@@ -62,21 +71,21 @@
                                             href="#delete_confirm_modal">
                                         <i class="material-icons left">delete</i>
                                     </a>
-                                    <div id="delete_confirm_modal" class="modal">
+                                    <div id="delete_confirm_modal" class="modal confirm_delet_modal_height">
                                         <div class="modal-content">
-                                            <h4>
+                                            <h4 class="center">
                                                 <spring:message code="diner.reservation.confirmation"
                                                 arguments="${reservation.restaurant.name}"/>
                                             </h4>
                                         </div>
                                         <div class="modal-footer">
                                             <div class="flex_row">
-                                                <a class="modal-close waves-effect btn-flat">
+                                                <a class="modal-close waves-effect btn-flat grow_on_hover">
                                                     <spring:message code="diner.reservation.back" />
                                                 </a>
                                                 <form method="post"
                                                       action="<c:url value="/reservation/${reservation.reservationId}/delete"/>">
-                                                    <button class="modal-close waves-effect red-text btn-flat"
+                                                    <button class="modal-close waves-effect red-text btn-flat grow_on_hover"
                                                             type="submit" name="action">
                                                         <spring:message code="diner.reservation.continue" />
                                                     </button>
@@ -133,10 +142,7 @@
     // Set up paginator
     document.addEventListener('DOMContentLoaded', function () {
         const paginator = document.getElementById("paginator");
-        if (<c:out value="${pages}"/> === 1)
-        {
-            return;
-        }
+        if (paginator === null) return;
 
         const params = new URLSearchParams(window.location.search);
         let pageNumber = params.get("page");

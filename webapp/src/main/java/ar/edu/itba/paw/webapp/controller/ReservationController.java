@@ -1,10 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 public class ReservationController {
@@ -35,7 +33,7 @@ public class ReservationController {
             @ModelAttribute("reservationForm") final ReservationForm form) {
          final ModelAndView mav = new ModelAndView("reservation/reservation");
 
-         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
+         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
          mav.addObject("restaurant", restaurant);
          return mav;
     }
