@@ -1,16 +1,16 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
+import ar.edu.itba.paw.webapp.validations.Password;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @FieldsValueMatch(
         field = "password",
         fieldMatch = "confirmPassword"
 )
 public class NewPasswordForm {
-    @Size(min = 8)
+    @Password
     private String password;
 
     @NotNull
