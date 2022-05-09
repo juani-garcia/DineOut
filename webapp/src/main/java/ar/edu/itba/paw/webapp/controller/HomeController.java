@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Controller
-@ControllerAdvice
 public class HomeController {
 
     @Autowired
