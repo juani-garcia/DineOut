@@ -114,6 +114,7 @@
                             <c:out value="${shift.end}"/></h6>
                     </c:forEach>
                 </div>
+                <% if (request.isUserInRole("DINER")) { %>
                 <div class="card-content same_width_elements">
                     <div class="container">
                         <div class="row center">
@@ -124,6 +125,7 @@
                         </div>
                     </div>
                 </div>
+                <% } %>
             </div>
         </div>
     </div>
