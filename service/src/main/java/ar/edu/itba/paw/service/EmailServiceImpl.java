@@ -3,16 +3,15 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,28 +25,32 @@ public class EmailServiceImpl implements EmailService {
     private SpringTemplateEngine thymeleafTemplateEngine;
 
     @Override
-    public void sendReservationToRestaurant(long reservation_id, String to, String user, int amount, LocalDateTime when, String comments) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("dineout.graphene@gmail.com");
-        message.setTo(to);
-        message.setSubject("Reserva " + reservation_id);
-
-        String body = "¡Recibiste una reserva! \n" +
-                "Numero de reserva: " + reservation_id + '\n' +
-                "Mail: " + user + '\n' +
-                "Para: " + when + '\n' +
-                "Cantidad: " + amount + '\n' +
-                "Comentarios: " + amount + '\n';
-
-        message.setText(body);
-        emailSender.send(message);
-    }
-
-    @Override
     public void sendAccountCreationMail(String to, String name) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         sendMessageUsingThymeleafTemplate(to, model, "account-creation.html");
+    }
+
+    @Override
+    public void sendReservationCreatedUser(String to, String name, Reservation reservation) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("recipient", name);
+        model.put("amount", reservation.getAmount());
+        model.put("date", reservation.getDateString());
+        model.put("time", reservation.getTimeString());
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-created-user.html");
+    }
+
+    @Override
+    public void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("recipient", reservation.getRestaurant().getName());
+        model.put("date", reservation.getDateString());
+        model.put("amount", reservation.getAmount());
+        model.put("time", reservation.getTimeString());
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getFirstName());
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-created-restaurant.html");
     }
 
     @Override
@@ -71,7 +74,26 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-restaurant.html");
     }
 
-    private void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
+    @Override
+    public void sendReservationConfirmed(String to, String name, Reservation reservation) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("recipient", name);
+        model.put("date", reservation.getDateString());
+        model.put("time", reservation.getTimeString());
+        model.put("restaurant", reservation.getRestaurant().getName());
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-confirmed.html");
+    }
+
+    @Override
+    public void sendChangePassword(String to, String name, String token) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("recipient", name);
+        model.put("token", token);
+        sendMessageUsingThymeleafTemplate(to, model, "reset-password.html");
+    }
+
+    @Async
+    void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
 
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
