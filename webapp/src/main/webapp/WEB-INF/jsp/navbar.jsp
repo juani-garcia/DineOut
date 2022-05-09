@@ -15,6 +15,11 @@
                 </a></li>
             </c:if>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
+                <li>
+                    <div class="white-text">
+                        <spring:message code="navbar.greeting" arguments="${user.firstName}" />
+                    </div>
+                </li>
                 <% if (request.isUserInRole("DINER")) { %>
                 <li>
                     <a href="<c:url value="/diner/reservations"/>"

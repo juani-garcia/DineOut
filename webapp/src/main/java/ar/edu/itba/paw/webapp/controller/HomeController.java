@@ -165,4 +165,10 @@ public class HomeController {
         return new ModelAndView("redirect:/login");  // TODO: send succes message.
     }
 
+    @ModelAttribute
+    public void addUser(Model model) {
+        model.addAttribute("user", securityService.getCurrentUser().orElse(null));
+    }
+
+
 }
