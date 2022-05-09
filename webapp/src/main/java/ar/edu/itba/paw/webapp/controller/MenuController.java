@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.MenuSection;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.service.*;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class MenuController {
@@ -33,7 +32,7 @@ public class MenuController {
     @RequestMapping("/menu/{resID}")
     public ModelAndView menu(@PathVariable final long resID) {
         final ModelAndView mav = new ModelAndView("reservation/menu");
-        Restaurant restaurant = restaurantService.getById(resID).orElseThrow(RestaurantNotFoundException::new);
+        Restaurant restaurant = restaurantService.getById(resID).orElseThrow(NotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(resID);
         for (MenuSection section: menuSectionList) {
             section.setMenuItemList(menuItemService.getBySectionId(section.getId()));

@@ -166,5 +166,4 @@ public class HomeController {
         return new ModelAndView("redirect:/login");  // TODO: send succes message.
     }
 
-
 }

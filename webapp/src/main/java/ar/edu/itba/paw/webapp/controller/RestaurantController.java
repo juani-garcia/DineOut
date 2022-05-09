@@ -2,7 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.*;
@@ -18,7 +19,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -82,7 +82,7 @@ public class RestaurantController {
             return restaurantForm(form);
         }
 
-        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
 
         restaurantService.create(user.getId(), form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
@@ -102,7 +102,7 @@ public class RestaurantController {
         }
 
         User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(NotFoundException::new);
         menuSectionService.create(restaurant.getId(), form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
@@ -150,7 +150,7 @@ public class RestaurantController {
     public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
         User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(RestaurantNotFoundException::new);
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(NotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
         return mav;
@@ -227,7 +227,7 @@ public class RestaurantController {
     public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
 
-        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
         mav.addObject("restaurant", restaurant);
         mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
