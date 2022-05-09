@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.UnauthorizedReservationException;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
@@ -114,11 +115,6 @@ public class HomeController {
             return new ModelAndView("redirect:/diner/profile");
         }
         throw new BadCredentialsException("Logged user is neither a RESTAURANT or a DINER");
-    }
-
-    @ModelAttribute
-    public void addUser(Model model) {
-        model.addAttribute("user", securityService.getCurrentUser().orElse(null));
     }
 
 }
