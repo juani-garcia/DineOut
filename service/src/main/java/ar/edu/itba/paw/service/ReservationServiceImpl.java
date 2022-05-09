@@ -40,6 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(RestaurantNotFoundException::new);
+        User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
 
         if(!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
@@ -47,8 +48,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation = reservationDao.create(restaurant, userMail, amount, dateTime, comments);
 
-        emailService.sendReservationToRestaurant(
-                reservation.getReservationId(), restaurant.getMail(), userMail, amount, dateTime, comments);
+        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation);
+        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user);
 
         return reservation;
     }
@@ -98,10 +99,14 @@ public class ReservationServiceImpl implements ReservationService {
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Not a restaurant"));
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(UnauthorizedReservationException::new);
+        Optional<User> reservationOwner = userService.getByUsername(reservation.getMail());
 
         if(reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {
             throw new UnauthorizedReservationException();
         }
+
+        emailService.sendReservationConfirmed(reservation.getMail(),
+                reservationOwner.isPresent()? reservationOwner.get().getFirstName() : "", reservation);
 
         return reservationDao.confirm(reservation.getReservationId());
     }

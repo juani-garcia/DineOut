@@ -17,13 +17,17 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
     private final UserToRoleService userToRoleService;
+    private final EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService, UserToRoleService userToRoleService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
+                           UserRoleService userRoleService, UserToRoleService userToRoleService,
+                           EmailService emailService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
         this.userToRoleService = userToRoleService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -48,7 +52,8 @@ public class UserServiceImpl implements UserService {
         UserToRole userToRole = userToRoleService.create(user.getId(), userRole.get().getId());
 
         // TODO: rollback if not able to create userToRole
-        // TODO : send email for succesful account creation mail
+
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
 
         return user;
     }
