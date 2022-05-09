@@ -35,9 +35,9 @@ public class ErrorController {
                 hintMessage = "error.404.hint";
                 break;
             }
-            case 500: {
-                titleMessage = "error.500.title";
-                hintMessage = "error.500.hint";
+            case 405: {
+                titleMessage = "error.405.title";
+                hintMessage = "error.405.hint";
                 break;
             }
             default: {
