@@ -55,8 +55,7 @@ public class RestaurantController {
     public ModelAndView restaurantProfile() {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
-        User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElse(null);
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
         if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
         mav.addObject("restaurant", restaurant);
 
@@ -101,8 +100,7 @@ public class RestaurantController {
             return sectionForm(form);
         }
 
-        User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(NotFoundException::new);
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
         menuSectionService.create(restaurant.getId(), form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
@@ -149,8 +147,7 @@ public class RestaurantController {
     @RequestMapping(value = "/item")
     public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
         ModelAndView mav = new ModelAndView("restaurant/item_form");
-        User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(NotFoundException::new);
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
         return mav;
@@ -169,8 +166,7 @@ public class RestaurantController {
             return itemForm(form);
         }
 
-        User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("No hay restaurante"));  // TODO: why do we need to acces the restaurant? @mateo
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);  // TODO: why do we need to acces the restaurant? @mateo
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
         return new ModelAndView("redirect:/restaurant");
     }
@@ -181,8 +177,7 @@ public class RestaurantController {
         ModelAndView mav = new ModelAndView("restaurant/item_edit_form");
         MenuItem menuItem = menuItemService.getById(itemId).orElseThrow(InvalidParameterException::new);
         mav.addObject("item", menuItem);
-        User user = securityService.getCurrentUser().get();
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).get();
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
         form.setName(menuItem.getName());
