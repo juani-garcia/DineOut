@@ -138,8 +138,7 @@ public class HomeController {
         if (!user.isPresent()) {
             return forgotMyPassword(passwordRecoveryForm);  // TODO: @juanigarcia use custom validator for email.
         }
-
-        userService.createPasswordResetTokenForUser(user.get(), request.getContextPath());
+        userService.createPasswordResetTokenForUser(user.get(), request.getScheme() + "://" + request.getHeader("host"));
         return new ModelAndView("redirect:/");  // TODO: cargar la misma vista que /forgot_my_password pero con un succes message.
     }
 

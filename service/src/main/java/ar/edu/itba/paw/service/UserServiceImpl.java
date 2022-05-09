@@ -20,7 +20,11 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, UserRoleService userRoleService, UserToRoleService userToRoleService, PasswordResetTokenService passwordResetTokenService, EmailService emailService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
+                           UserRoleService userRoleService, UserToRoleService userToRoleService,
+                           PasswordResetTokenService passwordResetTokenService, EmailService emailService) {
+
+
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
@@ -51,7 +55,8 @@ public class UserServiceImpl implements UserService {
         UserToRole userToRole = userToRoleService.create(user.getId(), userRole.get().getId());
 
         // TODO: rollback if not able to create userToRole
-        // TODO : send email for succesful account creation mail
+
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
 
         return user;
     }
@@ -70,7 +75,7 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;  // TODO: manage error
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
-        emailService.sendPasswordResetTokenEmail(contextPath, passwordResetToken, user);
+        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
     }
 
     @Override

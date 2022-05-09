@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h3 th:text="#{greetings(${recipient})}"></h3>
+<p th:text="#{reservation_created_restaurant(${firstName}, ${lastName}, ${amount}, ${date}, ${time})}"></p>
+<h4 th:text="#{regards}"></h4>
+<h4 th:text="#{signature}"></h4>
+</body>
+</html>
