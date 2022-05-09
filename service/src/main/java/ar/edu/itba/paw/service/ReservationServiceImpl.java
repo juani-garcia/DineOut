@@ -34,6 +34,9 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(RestaurantNotFoundException::new);
@@ -71,6 +74,7 @@ public class ReservationServiceImpl implements ReservationService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthorizedReservationException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(UnauthorizedReservationException::new);
         Optional<Restaurant> restaurant = restaurantService.getByUserID(user.getId());
+        User reservationOwner = userService.getByUsername(reservation.getMail()).orElseThrow(() -> new IllegalStateException("Reservation was made by unkown user"));
 
         boolean userMadeReservation = reservation.getMail().equals(user.getUsername()) && !restaurant.isPresent();
         boolean reservationWasMadeToRestaurant = restaurant.isPresent() && restaurant.get().getId() == reservation.getRestaurantId();
@@ -80,7 +84,10 @@ public class ReservationServiceImpl implements ReservationService {
             throw new UnauthorizedReservationException();
         }
 
-        // TODO: send mail telling that reservation was cancelled
+        emailService.sendReservationCancelledUser(
+                reservation.getMail(), reservationOwner.getFirstName(), reservation);
+        emailService.sendReservationCancelledRestaurant(
+                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, reservationOwner);
 
         reservationDao.delete(reservationId);
 
