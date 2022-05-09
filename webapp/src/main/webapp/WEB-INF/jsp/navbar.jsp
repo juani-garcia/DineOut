@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<nav class="default_dark" role="navigation">
+<nav class="transparent" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="<c:url value="/"/>" class="brand-logo megabold">Dine Out &#127836;</a>
 

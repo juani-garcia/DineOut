@@ -10,7 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
+<div id="index-banner" class="align_center">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold text_overflow_ellipsis flex_row flex_center"><c:out
@@ -38,8 +38,6 @@
             </h1>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background2.jpg"/>"
-                               alt=""></div>
 </div>
 
 <div class="flex_row">

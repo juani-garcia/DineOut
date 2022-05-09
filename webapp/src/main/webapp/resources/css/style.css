@@ -626,3 +626,16 @@ button {
 .confirm_delet_modal_height {
     height: 210px;
 }
+
+.margin_l_20px {
+    margin-left: 20px;
+}
+
+.width_75 {
+    width: 75% !important;
+}
+
+nav {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
