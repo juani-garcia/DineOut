@@ -16,7 +16,7 @@ public class MenuItemForm {
     private String detail;
 
     @NotNull
-    @Min(0)
+    @Min(0) // TODO: get another validator
     private double price;
 
     @NotNull

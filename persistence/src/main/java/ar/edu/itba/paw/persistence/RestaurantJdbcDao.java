@@ -119,6 +119,14 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
+    public boolean update(final long restaurantId, final String name, final String address, final String mail, final String detail, final Zone zone) {
+        String query = "UPDATE restaurant SET name = ?, address = ?, mail = ?, detail = ?, zone_id = ? WHERE id = ?";
+        Object[] args = new Object[]{name, address, mail, detail, zone != null ? zone.getId() : null, restaurantId};
+
+        return jdbcTemplate.update(query, args) == 1;
+    }
+
+    @Override
     public Long getCount() {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM restaurant",  Long.class);
     }

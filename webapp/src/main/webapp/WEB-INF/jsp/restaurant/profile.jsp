@@ -17,6 +17,12 @@
             <h1 class="header center white-text bold">
                 <c:out value="${restaurant.name}"/>
             </h1>
+            <c:url value="/restaurant/edit" var="editUrl"/>
+            <a href="${editUrl}">
+                <button class="btn waves-effect waves-light btn-floating default_yellow">
+                    <i class="material-icons left">edit</i>
+                </button>
+            </a>
         </div>
     </div>
     <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
