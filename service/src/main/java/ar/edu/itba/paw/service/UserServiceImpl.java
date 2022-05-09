@@ -75,8 +75,7 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;  // TODO: manage error
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
-        String token = null;
-        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), token);
+        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
     }
 
     @Override
