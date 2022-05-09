@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,6 +35,7 @@ public class RestaurantForm {
     private List<Long> categories;
 
     @NotNull
+    @NotEmpty
     private List<Long> shifts;
 
     public String getName() {
