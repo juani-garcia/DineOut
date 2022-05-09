@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -41,6 +42,9 @@ public class RestaurantController {
 
     @Autowired
     private ShiftService shiftService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private SecurityService securityService;
@@ -84,6 +88,37 @@ public class RestaurantController {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
 
         restaurantService.create(user.getId(), form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+
+        return new ModelAndView("redirect:/restaurant");
+    }
+
+    @RequestMapping("/edit")
+    public ModelAndView restaurantEditForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
+        ModelAndView mav = new ModelAndView("register/edit_restaurant");
+        Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().get().getId()).get();
+        mav.addObject("categories", Category.values());
+        mav.addObject("zones", Zone.values());
+        mav.addObject("shifts", Shift.values());
+        form.setName(restaurant.getName());
+        form.setAddress(restaurant.getAddress());
+        form.setEmail(restaurant.getMail());
+        form.setDetail(restaurant.getDetail());
+        form.setZone(restaurant.getZone().getName());
+        form.setCategories(categoryService.getByRestaurantId(restaurant.getId()).
+                stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
+        form.setShifts(shiftService.getByRestaurantId(restaurant.getId()).
+                stream().mapToLong(Shift::getId).boxed().collect(Collectors.toList()));
+        return mav;
+    }
+
+    @RequestMapping(value = "/edit", method = {RequestMethod.POST})
+    public ModelAndView restaurantEdit(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form,
+                                       final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return restaurantEditForm(form);
+        }
+
+        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
         return new ModelAndView("redirect:/restaurant");
     }
