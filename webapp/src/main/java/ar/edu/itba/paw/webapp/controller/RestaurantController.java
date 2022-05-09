@@ -274,9 +274,12 @@ public class RestaurantController {
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
+        long pages = reservationService.getPagesCountForCurrentRestaurant(past);
+        if (page != 1 && pages < page) return new ModelAndView("redirect:/restaurant/reservations" + "?page=" + pages);
+
         ModelAndView mav = new ModelAndView("restaurant/reservations");
         mav.addObject("past", past);
-        mav.addObject("pages", reservationService.getPagesCountForCurrentRestaurant(past));
+        mav.addObject("pages", pages);
         mav.addObject("reservations", reservationService.getAllForCurrentRestaurant(page, past));
         return mav;
     }
