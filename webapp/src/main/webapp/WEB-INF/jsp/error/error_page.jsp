@@ -9,7 +9,6 @@
     <%@ include file="../header.jsp" %>
 </head>
 <body>
-<%@ include file="../navbar.jsp" %>
 
 <div class="container margins_auto">
     <div class="section">
@@ -19,6 +18,7 @@
                     <div class="card default_red">
                         <div class="card-content">
                             <h1 class="white-text megabold">
+                                <c:out value="${code}" /> -
                                 <spring:message code="${title}"/>
                             </h1>
                         </div>
@@ -29,12 +29,18 @@
                 <h5><b><spring:message code="error.uri"/>:</b> <c:out
                         value="${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}"/>
                 </h5>
-                <div class="section flex_center">
+                <div class="section flex_center flex_row">
                     <button onClick="history.back()"
-                            class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1 ">
                         <i class="material-icons right">keyboard_backspace</i>
                         <spring:message code="error.back" />
                     </button>
+                    <a href="<c:url value="/"/>">
+                        <button class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <i class="material-icons right">home</i>
+                            <spring:message code="error.home" />
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
