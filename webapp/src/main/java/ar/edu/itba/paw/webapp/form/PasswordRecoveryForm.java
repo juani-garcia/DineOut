@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.UsernameExists;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
@@ -7,7 +8,7 @@ import javax.validation.constraints.NotNull;
 public class PasswordRecoveryForm {
 
     @NotNull
-    @Email
+    @UsernameExists
     private String username;
 
     public String getUsername() {
