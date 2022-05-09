@@ -21,4 +21,6 @@ public interface FavoriteService {
     List<Favorite> getAllOfLoggedUser(int page);
 
     long getFavoriteCount();
+
+    long getFavoritePageCount();
 }

@@ -61,4 +61,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     public long getFavoriteCount() {
         return favoriteDao.countByUserId(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
     }
+
+    @Override
+    public long getFavoritePageCount() {
+        return favoriteDao.countPagesByUserId(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
+    }
 }

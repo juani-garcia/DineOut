@@ -49,16 +49,16 @@
 
     </div>
 </div>
-<c:if test="${totalRestaurantCount > pageSize}">
-<div class="container flex_center" id="paginator">
-    <ul class="pagination padding-15px big">
-        <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
-                class="material-icons">chevron_left</i></a></li>
-        <li id="page_number_of_total" class="white-text regular"></li>
-        <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
-                class="material-icons">chevron_right</i></a></li>
-    </ul>
-</div>
+<c:if test="${pages > 1}">
+    <div class="container flex_center" id="paginator">
+        <ul class="pagination padding-15px big">
+            <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                    class="material-icons">chevron_left</i></a></li>
+            <li id="page_number_of_total" class="white-text regular"></li>
+            <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                    class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
 </c:if>
 
 <%@ include file="../footer.jsp" %>
@@ -103,7 +103,9 @@
     // Set up paginator
     document.addEventListener('DOMContentLoaded', function () {
         const paginator = document.getElementById("paginator");
-        if (<c:out value="${totalRestaurantCount}"/><<c:out value="${pageSize}"/>)
+        if (<c:out value="${pages}"/> ===
+        1
+    )
         {
             return;
         }
@@ -112,7 +114,7 @@
         let pageNumber = params.get("page");
         if (pageNumber == null) pageNumber = "1";
         var pageNumberElem = document.getElementById("page_number_of_total");
-        var pages = Math.ceil(<c:out value="${totalRestaurantCount / pageSize}"/>);
+        var pages = Math.ceil(<c:out value="${pages}"/>);
         pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
 
         pageNumber = parseInt(pageNumber);

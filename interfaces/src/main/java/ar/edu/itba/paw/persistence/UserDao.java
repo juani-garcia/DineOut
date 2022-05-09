@@ -9,4 +9,6 @@ public interface UserDao {
     Optional<User> getByUsername(final String username);
 
     User create(final String username, final String password, final String firstName, final String lastName);
+
+    boolean updatePassword(final String newPassword, final long userId);
 }

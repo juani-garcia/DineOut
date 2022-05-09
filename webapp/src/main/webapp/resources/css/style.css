@@ -598,3 +598,7 @@ button {
 .margin_left_20px {
     margin-left: 20px;
 }
+
+.display_hidden {
+    display: none;
+}

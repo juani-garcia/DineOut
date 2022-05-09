@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public class ReservationJdbcDao implements ReservationDao {
 
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 2;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
@@ -90,5 +90,33 @@ public class ReservationJdbcDao implements ReservationDao {
     public boolean confirm(long reservationId) {
         String query = "UPDATE reservation SET is_confirmed = true WHERE reservation_id = ?";
         return jdbcTemplate.update(query, reservationId) == 1;
+    }
+
+    @Override
+    public long getPagesCountForCurrentUser(String username, boolean past) {
+        return Double.valueOf(Math.ceil(getCountForCurrentUser(username, past).doubleValue() / PAGE_SIZE)).longValue();
+    }
+
+    @Override
+    public long getPagesCountForCurrentRestaurant(Restaurant self, boolean past) {
+        return Double.valueOf(Math.ceil(getCountForCurrentRestaurant(self, past).doubleValue() / PAGE_SIZE)).longValue();
+    }
+
+    private Long getCountForCurrentRestaurant(Restaurant self, boolean past) {
+        String cmp = past? "<=" : ">";
+        String query = "SELECT COUNT(*) FROM reservation " +
+                "WHERE restaurant_id = ? " +
+                "AND date_time " + cmp + " now() ";
+
+        return jdbcTemplate.queryForObject(query, new Object[]{self.getId()}, Long.class);
+    }
+
+    private Long getCountForCurrentUser(String username, boolean past) {
+        String cmp = past? "<=" : ">";
+        String query = "SELECT COUNT(*) FROM reservation " +
+                "WHERE user_mail = ? " +
+                "AND date_time " + cmp + " now() ";
+
+        return jdbcTemplate.queryForObject(query, new Object[]{username}, Long.class);
     }
 }
