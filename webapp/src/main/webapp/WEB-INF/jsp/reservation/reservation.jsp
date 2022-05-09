@@ -46,23 +46,18 @@
                         <a id="back-button"
                            class="btn-large waves-effect waves-red default_red white-text lighten-1 no-text-transform"
                            href="javascript:{}" onclick="history.back();">
-                            <spring:message code="reservation.reservation.form.back" />
+                            <spring:message code="reservation.reservation.form.back"/>
                         </a>
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red green white-text lighten-1 margin_l_20px no-text-transform"
-                           href="javascript:{}" onclick="document.getElementById('reservation_form').submit();">
-                            <spring:message code="reservation.reservation.form.submit" />
-                        </a>
+                        <button type="submit" id="register-button"
+                                class="btn-large waves-effect waves-red green white-text lighten-1 margin_l_20px no-text-transform"
+                                onclick="document.getElementById('reservation_form').submit();">
+                            <spring:message code="reservation.reservation.form.submit"/>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <%--    <div>--%>
-    <%--        <input type="submit" value="Register!"/>--%>
-    <%--    </div>--%>
-
 
 </form:form>
 <%@ include file="../footer.jsp" %>

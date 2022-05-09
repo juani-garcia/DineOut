@@ -135,6 +135,10 @@ footer.page-footer {
     color: #242B2A !important;
 }
 
+.default_dark_text_not_important {
+    color: #242B2A;
+}
+
 .default_red {
     background-color: #F54242 !important;
 }
