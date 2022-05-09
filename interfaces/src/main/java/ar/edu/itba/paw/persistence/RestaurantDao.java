@@ -21,6 +21,8 @@ public interface RestaurantDao {
 
     Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone);
 
+    boolean update(final long restaurantId, final String name, final String address, final String mail, final String detail, final Zone zone);
+
     Long getCount();
 
     Long getFilteredCount(String name, Category category, Shift shift, Zone zone);
@@ -32,4 +34,6 @@ public interface RestaurantDao {
     List<Restaurant> getTopTenByFavoriteOfUser(long userId);
 
     List<Restaurant> getTopTenByReservationsOfUser(long userId);
+
+    long getFilteredPagesCount(String name, Category category, Shift shift, Zone zone);
 }

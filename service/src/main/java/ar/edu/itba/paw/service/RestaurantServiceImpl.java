@@ -65,6 +65,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts) {
+        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
+        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone);
+    }
+
+    @Override
     public Optional<Restaurant> getByUserID(long id) {
         return restaurantDao.getByUserId(id);
     }
@@ -132,5 +139,21 @@ public class RestaurantServiceImpl implements RestaurantService {
         } else {
             return getRecommended();
         }
+    }
+
+    @Override
+    public long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId) {
+        Category category = Category.getById(categoryId);
+        Zone zone = Zone.getById(zoneId);
+        Shift shift = Shift.getById(shiftId);
+
+        return restaurantDao.getFilteredPagesCount(name, category, shift, zone);
+    }
+
+    @Override
+    public Optional<Restaurant> getOfLoggedUser() {
+        Optional<User> user = securityService.getCurrentUser();
+        if (user.isPresent()) return getByUserID(user.get().getId());
+        return Optional.empty();
     }
 }

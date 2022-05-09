@@ -119,6 +119,14 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
+    public boolean update(final long restaurantId, final String name, final String address, final String mail, final String detail, final Zone zone) {
+        String query = "UPDATE restaurant SET name = ?, address = ?, mail = ?, detail = ?, zone_id = ? WHERE id = ?";
+        Object[] args = new Object[]{name, address, mail, detail, zone != null ? zone.getId() : null, restaurantId};
+
+        return jdbcTemplate.update(query, args) == 1;
+    }
+
+    @Override
     public Long getCount() {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM restaurant",  Long.class);
     }
@@ -178,6 +186,11 @@ public class RestaurantJdbcDao implements RestaurantDao {
                 ") AS restaurant_with_reservation_count" +
                 " ORDER BY reservation_count DESC" +
                 " LIMIT 10", new Object[]{userId}, ROW_MAPPER);
+    }
+
+    @Override
+    public long getFilteredPagesCount(String name, Category category, Shift shift, Zone zone) {
+        return Double.valueOf(Math.ceil(getFilteredCount(name, category, shift, zone).doubleValue() / PAGE_SIZE)).longValue();
     }
 
 }

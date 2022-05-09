@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
-import ar.edu.itba.paw.model.exceptions.UnauthorizedReservationException;
+import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
-import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
-        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(RestaurantNotFoundException::new);
+        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
 
         if(!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
@@ -57,7 +55,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> getAllForCurrentUser(int page, boolean past) {
         String username = securityService.getCurrentUsername();
-        if(username == null) throw new IllegalStateException("Not logged in"); // TODO: change for is logged in
+        if(username == null) throw new UnauthenticatedUserException();
 
         return reservationDao.getAllByUsername(username, page, past);
     }
@@ -72,8 +70,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void delete(long reservationId) {
-        User user = securityService.getCurrentUser().orElseThrow(UnauthorizedReservationException::new);
-        Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(UnauthorizedReservationException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
         Optional<Restaurant> restaurant = restaurantService.getByUserID(user.getId());
         User reservationOwner = userService.getByUsername(reservation.getMail()).orElseThrow(() -> new IllegalStateException("Reservation was made by unkown user"));
 
@@ -82,7 +80,7 @@ public class ReservationServiceImpl implements ReservationService {
         boolean reservationIsFuture = reservation.getDateTime().isAfter(LocalDateTime.now());
 
         if((!userMadeReservation && !reservationWasMadeToRestaurant) || !reservationIsFuture) {
-            throw new UnauthorizedReservationException();
+            throw new ForbiddenActionException();
         }
 
         emailService.sendReservationCancelledUser(
@@ -96,18 +94,35 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public boolean confirm(long reservationId) {
-        User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Not a restaurant"));
-        Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(UnauthorizedReservationException::new);
+
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
+        Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
         Optional<User> reservationOwner = userService.getByUsername(reservation.getMail());
 
-        if(reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {
-            throw new UnauthorizedReservationException();
+        if(reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {  // TODO: change when we modify shifts
+            throw new ForbiddenActionException();
         }
 
         emailService.sendReservationConfirmed(reservation.getMail(),
                 reservationOwner.isPresent()? reservationOwner.get().getFirstName() : "", reservation);
 
         return reservationDao.confirm(reservation.getReservationId());
+    }
+
+    @Override
+    public long getPagesCountForCurrentUser(boolean past) {
+        String username = securityService.getCurrentUsername();
+        if(username == null) throw new UnauthenticatedUserException();
+
+        return reservationDao.getPagesCountForCurrentUser(username, past);
+    }
+
+    @Override
+    public long getPagesCountForCurrentRestaurant(boolean past) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
+
+        return reservationDao.getPagesCountForCurrentRestaurant(self, past);
     }
 }

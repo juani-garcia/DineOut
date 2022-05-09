@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,21 +46,27 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<Restaurant> getRestaurantList(int page) {
+        if (page <= 0) throw new InvalidPageException();
         List<Restaurant> restaurantList = new ArrayList<>();
         for (Favorite favorite : getAllOfLoggedUser(page)) {
-            restaurantList.add(restaurantService.getById(favorite.getRestaurantId()).orElseThrow(RestaurantNotFoundException::new));
+            restaurantList.add(restaurantService.getById(favorite.getRestaurantId()).orElseThrow(NotFoundException::new));
         }
         return restaurantList;
     }
 
     @Override
     public List<Favorite> getAllOfLoggedUser(int page) {
-        User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         return favoriteDao.getAllByUserId(user.getId(), page);
     }
 
     @Override
     public long getFavoriteCount() {
-        return favoriteDao.countByUserId(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
+        return favoriteDao.countByUserId(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
+    }
+
+    @Override
+    public long getFavoritePageCount() {
+        return favoriteDao.countPagesByUserId(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
     }
 }

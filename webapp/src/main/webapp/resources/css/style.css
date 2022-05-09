@@ -562,6 +562,22 @@ button {
     margin-right: 10px;
 }
 
+.margins_tb_10px {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.margins_tb_20px {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.margins_tb_30px {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+
 .margins_lr_5px {
     margin-left: 5px;
     margin-right: 5px;
@@ -597,4 +613,16 @@ button {
 
 .margin_left_20px {
     margin-left: 20px;
+}
+
+.display_hidden {
+    display: none;
+}
+
+.height_fit_content {
+    height: fit-content;
+}
+
+.confirm_delet_modal_height {
+    height: 210px;
 }

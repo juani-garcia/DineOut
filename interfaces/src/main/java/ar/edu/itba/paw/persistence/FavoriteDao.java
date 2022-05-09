@@ -15,4 +15,6 @@ public interface FavoriteDao {
     List<Favorite> getAllByUserId(long id, int page);
 
     long countByUserId(long id);
+
+    long countPagesByUserId(long id);
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.service.*;
@@ -28,9 +29,9 @@ public class DinerController {
 
     @RequestMapping("/profile")
     public ModelAndView profile() {
-        if (securityService.getCurrentUsername() == null) throw new IllegalStateException("Invalid user");
-
-        return new ModelAndView("diner/profile");
+        ModelAndView mav = new ModelAndView("diner/profile");
+        mav.addObject("user", securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new));
+        return mav;
     }
 
     @RequestMapping("/reservations")
@@ -38,22 +39,26 @@ public class DinerController {
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
         String username = securityService.getCurrentUsername();
-        if (username == null) throw new IllegalStateException("Invalid user");
+        if (username == null) throw new UnauthenticatedUserException();
 
         List<Reservation> reservationList = reservationService.getAllForCurrentUser(page, past);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
+        mav.addObject("pages", reservationService.getPagesCountForCurrentUser(past));
         mav.addObject("past", past);
         return mav;
     }
 
     @RequestMapping("/favorites")
     public ModelAndView favorites(@RequestParam(name = "page", defaultValue = "1") final int page) {
+        long pages = favoriteService.getFavoritePageCount();
+        if (page != 1 && pages < page) return new ModelAndView("redirect:/diner/favorites" + "?page=" + pages);
+        // This is because if a user has X favorites in page N and he un favorites them all, and goes back with <-
+        // a "no favorites" sign would be shown, although he has favorites in pages N-i (1 <= i < N).
         List<Restaurant> restaurantList = favoriteService.getRestaurantList(page);
         ModelAndView mav = new ModelAndView("diner/favorites");
         mav.addObject("restaurants", restaurantList);
-        mav.addObject("pageSize", 3); // TODO: remove magin number for PAGE_SIZE getter from dao.
-        mav.addObject("totalRestaurantCount", favoriteService.getFavoriteCount());
+        mav.addObject("pages", pages);
         return mav;
     }
 

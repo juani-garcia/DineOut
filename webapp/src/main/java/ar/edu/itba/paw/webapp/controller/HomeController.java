@@ -4,6 +4,8 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.*;
+import ar.edu.itba.paw.webapp.form.NewPasswordForm;
+import ar.edu.itba.paw.webapp.form.PasswordRecoveryForm;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,14 +60,13 @@ public class HomeController {
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
         mav.addObject("shifts", Shift.values());
-        mav.addObject("pageSize", 3); // TODO: remove magin number for PAGE_SIZE getter from dao.
-        mav.addObject("totalRestaurantCount", restaurantService.getFilteredCount(name, category, shift, zone));
+        mav.addObject("pages", restaurantService.getFilteredPagesCount(name, category, shift, zone));
         mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
         return mav;
     }
 
     @RequestMapping(value = "/restaurant_picker")
-    public ModelAndView restaurantPicker(HttpServletRequest request) {  // TODO: use tags and previous reservations to choose restaurant.
+    public ModelAndView restaurantPicker(HttpServletRequest request) {
         Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole("DINER"));
         return new ModelAndView("redirect:/restaurant/view/" + restaurant.getId());
     }
@@ -116,9 +117,53 @@ public class HomeController {
         throw new BadCredentialsException("Logged user is neither a RESTAURANT or a DINER");
     }
 
-    @ModelAttribute
-    public void addUser(Model model) {
-        model.addAttribute("user", securityService.getCurrentUser().orElse(null));
+    // Referenced from: https://www.baeldung.com/spring-security-registration-i-forgot-my-password
+    @RequestMapping("/forgot_my_password")
+    public ModelAndView forgotMyPassword(@ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm) {
+        ModelAndView mav = new ModelAndView("/forgot_my_password");
+
+        // TODO: @juanigarcia use custom validator for email.
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/reset_password", method = RequestMethod.POST)
+    public ModelAndView resetPassword(@ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm, HttpServletRequest request, final BindingResult errors) {
+
+        if (errors.hasErrors()) {
+            return forgotMyPassword(passwordRecoveryForm);
+        }
+
+        Optional<User> user = userService.getByUsername(passwordRecoveryForm.getUsername());
+        if (!user.isPresent()) {
+            return forgotMyPassword(passwordRecoveryForm);  // TODO: @juanigarcia use custom validator for email.
+        }
+
+        userService.createPasswordResetTokenForUser(user.get(), request.getContextPath());
+        return new ModelAndView("redirect:/");  // TODO: cargar la misma vista que /forgot_my_password pero con un succes message.
+    }
+
+    @RequestMapping("/change_password")
+    public ModelAndView changePassword(@RequestParam(name = "token") final String token, @ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm) {
+        String result = securityService.validatePasswordResetToken(token);
+        if (result == null) {
+            ModelAndView mav = new ModelAndView("/update_password");
+            mav.addObject("token", token);
+            return mav;
+        }
+        return new ModelAndView("redirect:/login");  // TODO: send error info.
+    }
+
+    @RequestMapping(value = "/save_password", method = RequestMethod.POST)
+    public ModelAndView savePassword(@ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm) {
+        String result = securityService.validatePasswordResetToken(newPasswordForm.getToken());
+
+        if (result != null) {
+            return new ModelAndView("redirect:/login");  // TODO: send error info.
+        }
+
+        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
+        return new ModelAndView("redirect:/login");  // TODO: send succes message.
     }
 
 }

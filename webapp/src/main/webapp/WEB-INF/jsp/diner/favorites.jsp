@@ -12,7 +12,7 @@
 
 <div class="section no-pad-bot">
     <div class="container">
-        <h1 class="header center white-text bold"><spring:message code="home.index.recommended.title"/></h1>
+        <h1 class="header center white-text bold"><spring:message code="diner.favorites.title"/></h1>
     </div>
 </div>
 
@@ -21,9 +21,16 @@
         <c:if test="${restaurants.size() == 0}">
             <div class="container">
                 <div class="card card_wrapper padding-15px default_dark">
-                    <h1 class="header center default_light_text">
-                        <spring:message code="home.restaurants.none_found"/>
-                    </h1>
+                    <h2 class="header center default_light_text">
+                        <spring:message code="diner.favorites.none_found"/>
+                        <div class="center default_light_text underline margins_tb_30px">
+                            <h6 class="grow_on_hover">
+                                <a class="default_light_text" href="<c:url value="/restaurants"/>">
+                                    <spring:message code="restaurant.reservation.explore"/>
+                                </a>
+                            </h6>
+                        </div>
+                    </h2>
                 </div>
             </div>
         </c:if>
@@ -49,16 +56,16 @@
 
     </div>
 </div>
-<c:if test="${totalRestaurantCount > pageSize}">
-<div class="container flex_center" id="paginator">
-    <ul class="pagination padding-15px big">
-        <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
-                class="material-icons">chevron_left</i></a></li>
-        <li id="page_number_of_total" class="white-text regular"></li>
-        <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
-                class="material-icons">chevron_right</i></a></li>
-    </ul>
-</div>
+<c:if test="${pages > 1}">
+    <div class="container flex_center" id="paginator">
+        <ul class="pagination padding-15px big">
+            <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                    class="material-icons">chevron_left</i></a></li>
+            <li id="page_number_of_total" class="white-text regular"></li>
+            <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                    class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
 </c:if>
 
 <%@ include file="../footer.jsp" %>
@@ -75,44 +82,16 @@
         }
     }
 
-    // Set up all selectors
-    document.addEventListener('DOMContentLoaded', function () {
-        const params = new URLSearchParams(window.location.search);
-
-        var categoryElems = document.getElementById("category_select").querySelectorAll('select');
-        var categoryInstances = M.FormSelect.init(categoryElems);
-        defaultSelector("category", "category_select_options", "category_select", params)
-
-
-        var shiftElems = document.getElementById("shift_select").querySelectorAll('select');
-        var shiftInstances = M.FormSelect.init(shiftElems);
-        defaultSelector("shift", "shift_select_options", "shift_select", params)
-
-
-        var zoneElems = document.getElementById("zone_select").querySelectorAll('select');
-        var zoneInstances = M.FormSelect.init(zoneElems);
-        defaultSelector("zone", "zone_select_options", "zone_select", params)
-
-        const name = params.get("name");
-        if (name != null && name !== "") {
-            const nameInput = document.getElementById("name_filter_input");
-            nameInput.value = name;
-        }
-    });
-
     // Set up paginator
     document.addEventListener('DOMContentLoaded', function () {
         const paginator = document.getElementById("paginator");
-        if (<c:out value="${totalRestaurantCount}"/><<c:out value="${pageSize}"/>)
-        {
-            return;
-        }
+        if (paginator === null) return;
 
         const params = new URLSearchParams(window.location.search);
         let pageNumber = params.get("page");
         if (pageNumber == null) pageNumber = "1";
         var pageNumberElem = document.getElementById("page_number_of_total");
-        var pages = Math.ceil(<c:out value="${totalRestaurantCount / pageSize}"/>);
+        var pages = Math.ceil(<c:out value="${pages}"/>);
         pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
 
         pageNumber = parseInt(pageNumber);
