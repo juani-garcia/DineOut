@@ -58,10 +58,10 @@ CREATE TABLE IF NOT EXISTS restaurant_opening_hours (
     PRIMARY KEY (restaurant_id, opening_hours_id)
 );
 
--- CREATE TABLE IF NOT EXISTS image (
---     id  SERIAL PRIMARY KEY,
---     source BYTEA
--- );
+CREATE TABLE IF NOT EXISTS image (
+    id  SERIAL PRIMARY KEY,
+    source BYTEA
+);
 
 CREATE TABLE IF NOT EXISTS favorite (
     restaurant_id INTEGER,
