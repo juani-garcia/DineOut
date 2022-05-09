@@ -12,7 +12,7 @@ public class ErrorControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such restaurant")
-    public ModelAndView restaurantNotFound(){
+    public ModelAndView restaurantNotFound() {
         ModelAndView mav = new ModelAndView("error/error_page");
         mav.addObject("title", "error.404.title");
         mav.addObject("hint", "error.404.hint");
@@ -22,7 +22,7 @@ public class ErrorControllerAdvice {
 
     @ExceptionHandler(InvalidPageException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid page number")
-    public ModelAndView invalidPage(){
+    public ModelAndView invalidPage() {
         System.out.println("**************************************");
         ModelAndView mav = new ModelAndView("error/error_page");
         mav.addObject("title", "error.400.title");
@@ -33,7 +33,7 @@ public class ErrorControllerAdvice {
 
     @ExceptionHandler(UnauthenticatedUserException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Unauthenticated user request")
-    public ModelAndView unauthenticatedUserRequest(){
+    public ModelAndView unauthenticatedUserRequest() {
         System.out.println("**************************************");
         ModelAndView mav = new ModelAndView("error/error_page");
         mav.addObject("title", "error.401.title");
@@ -44,7 +44,7 @@ public class ErrorControllerAdvice {
 
     @ExceptionHandler(ForbiddenActionException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Forbidden action")
-    public ModelAndView forbiddenAction(){
+    public ModelAndView forbiddenAction() {
         System.out.println("**************************************");
         ModelAndView mav = new ModelAndView("error/error_page");
         mav.addObject("title", "error.403.title");

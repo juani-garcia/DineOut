@@ -16,7 +16,7 @@ public class NewPasswordForm {
     @NotNull
     private String confirmPassword;
 
-    private  String token;
+    private String token;
 
     public String getPassword() {
         return password;

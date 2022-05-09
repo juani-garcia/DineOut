@@ -67,7 +67,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .invalidSessionUrl("/")
-            .and().authorizeRequests()
+                .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
                 .antMatchers("/login", "/register").anonymous()
                 .antMatchers("/restaurant/item").hasAuthority("canCreateRestaurant")
@@ -86,23 +86,23 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/diner/**").hasRole("DINER")
                 // TODO: add error pages to permitAll() when merged.
                 .anyRequest().authenticated()
-            .and().formLogin()
+                .and().formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", false)
                 .failureUrl("/login?error=true")
                 .loginPage("/login")
-            .and().rememberMe()
+                .and().rememberMe()
                 .rememberMeParameter("remember-me")
                 .userDetailsService(userDetailsService)
                 .key(env.getProperty("webauthconfig.rememberme.key"))
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-            .and().logout()
+                .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-            .and().exceptionHandling()
+                .and().exceptionHandling()
                 .accessDeniedPage("/403")
-            .and().csrf().disable();
+                .and().csrf().disable();
     }
 
     @Override

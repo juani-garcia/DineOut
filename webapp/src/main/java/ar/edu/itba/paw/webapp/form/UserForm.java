@@ -3,9 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validations.DuplicatedUsername;
 import ar.edu.itba.paw.webapp.validations.FieldsValueMatch;
 import ar.edu.itba.paw.webapp.validations.Password;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

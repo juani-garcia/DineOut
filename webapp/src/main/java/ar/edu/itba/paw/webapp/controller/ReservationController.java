@@ -31,14 +31,14 @@ public class ReservationController {
     public ModelAndView reservation(
             @PathVariable final long resId,
             @ModelAttribute("reservationForm") final ReservationForm form) {
-         final ModelAndView mav = new ModelAndView("reservation/reservation");
+        final ModelAndView mav = new ModelAndView("reservation/reservation");
 
-         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-         mav.addObject("restaurant", restaurant);
-         return mav;
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        mav.addObject("restaurant", restaurant);
+        return mav;
     }
 
-    @RequestMapping(value = "/create/{resId}", method = { RequestMethod.POST })
+    @RequestMapping(value = "/create/{resId}", method = {RequestMethod.POST})
     public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
 
         if (errors.hasErrors()) {
@@ -59,7 +59,7 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
     public ModelAndView delete(@PathVariable final long resId, HttpServletRequest request) {
         reservationService.delete(resId);
-        if(request.isUserInRole("DINER")) {
+        if (request.isUserInRole("DINER")) {
             return new ModelAndView("redirect:/diner/reservations");
         } else {
             return new ModelAndView("redirect:/restaurant/reservations");

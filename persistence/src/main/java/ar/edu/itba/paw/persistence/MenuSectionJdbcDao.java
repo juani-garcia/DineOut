@@ -39,7 +39,7 @@ public class MenuSectionJdbcDao implements MenuSectionDao {
         sectionData.put("name", name);
         final long sectionId = jdbcInsert.executeAndReturnKey(sectionData).longValue();
         Optional<MenuSection> newSection = getById(sectionId);
-        if (! newSection.isPresent()) {
+        if (!newSection.isPresent()) {
             throw new RuntimeException("Couldn't get created section");
         }
         return newSection.get();

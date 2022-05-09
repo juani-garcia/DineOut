@@ -26,15 +26,15 @@ public class MenuController {
     @Autowired
     private UserService userService;
 
-     @Autowired
-     private ErrorController errorController;
+    @Autowired
+    private ErrorController errorController;
 
     @RequestMapping("/menu/{resID}")
     public ModelAndView menu(@PathVariable final long resID) {
         final ModelAndView mav = new ModelAndView("reservation/menu");
         Restaurant restaurant = restaurantService.getById(resID).orElseThrow(NotFoundException::new);
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(resID);
-        for (MenuSection section: menuSectionList) {
+        for (MenuSection section : menuSectionList) {
             section.setMenuItemList(menuItemService.getBySectionId(section.getId()));
         }
         mav.addObject("sections", menuSectionList);

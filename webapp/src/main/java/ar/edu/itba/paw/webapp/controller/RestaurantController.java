@@ -188,7 +188,7 @@ public class RestaurantController {
         return mav;
     }
 
-    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
+    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ModelAndView item(@Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
         byte[] imageBytes = null;
         try {
@@ -225,8 +225,8 @@ public class RestaurantController {
 
     @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST})
     public ModelAndView itemEdit(@PathVariable final long itemId,
-                                    @ModelAttribute("itemForm") final MenuItemForm form,
-                                    final BindingResult errors) {
+                                 @ModelAttribute("itemForm") final MenuItemForm form,
+                                 final BindingResult errors) {
         if (errors.hasErrors()) {
             return itemEditForm(itemId, form);
         }

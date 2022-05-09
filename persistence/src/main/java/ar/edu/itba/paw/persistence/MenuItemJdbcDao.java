@@ -50,7 +50,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
         itemData.put("section_id", sectionId);
         itemData.put("image_id", imageId);
         long itemId = jdbcInsert.executeAndReturnKey(itemData).longValue();
-        return getById(itemId).orElseThrow( () -> new RuntimeException("Couldn't fetch created item"));
+        return getById(itemId).orElseThrow(() -> new RuntimeException("Couldn't fetch created item"));
     }
 
     @Override

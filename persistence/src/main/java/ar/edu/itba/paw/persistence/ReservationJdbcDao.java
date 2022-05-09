@@ -52,7 +52,7 @@ public class ReservationJdbcDao implements ReservationDao {
 
     @Override
     public List<Reservation> getAllByUsername(String username, int page, boolean past) {
-        String cmp = past? "<=" : ">";
+        String cmp = past ? "<=" : ">";
         String query = "SELECT * FROM reservation, restaurant " +
                 "WHERE reservation.restaurant_id = restaurant.id " +
                 "AND reservation.user_mail = ? " +
@@ -64,7 +64,7 @@ public class ReservationJdbcDao implements ReservationDao {
 
     @Override
     public List<Reservation> getAllByRestaurant(long restaurantId, int page, boolean past) {
-        String cmp = past? "<=" : ">";
+        String cmp = past ? "<=" : ">";
         String query = "SELECT * FROM reservation, restaurant " +
                 "WHERE reservation.restaurant_id = restaurant.id " +
                 "AND restaurant.id = ? " +
@@ -103,7 +103,7 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     private Long getCountForCurrentRestaurant(Restaurant self, boolean past) {
-        String cmp = past? "<=" : ">";
+        String cmp = past ? "<=" : ">";
         String query = "SELECT COUNT(*) FROM reservation " +
                 "WHERE restaurant_id = ? " +
                 "AND date_time " + cmp + " now() ";
@@ -112,7 +112,7 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     private Long getCountForCurrentUser(String username, boolean past) {
-        String cmp = past? "<=" : ">";
+        String cmp = past ? "<=" : ">";
         String query = "SELECT COUNT(*) FROM reservation " +
                 "WHERE user_mail = ? " +
                 "AND date_time " + cmp + " now() ";

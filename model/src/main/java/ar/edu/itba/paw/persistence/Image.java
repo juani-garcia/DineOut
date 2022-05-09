@@ -6,7 +6,7 @@ public class Image {
     private byte[] source;
 
     protected Image(final long id, final byte[] source) {
-        this.id  =id;
+        this.id = id;
         this.source = source;
     }
 

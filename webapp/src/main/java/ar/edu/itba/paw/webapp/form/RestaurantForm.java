@@ -24,7 +24,7 @@ public class RestaurantForm {
     @NotNull
     private String email;
 
-    @Size(max=400)
+    @Size(max = 400)
     @NotNull
     private String detail;
 
