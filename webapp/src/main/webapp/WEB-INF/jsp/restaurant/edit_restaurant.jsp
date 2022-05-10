@@ -35,7 +35,7 @@
                         <form:input path="address" type="text"/>
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row input-field">
+                    <div class="row input-field" id="zone_select_options">
                         <form:label path="zone" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.zone"/></form:label>
                         <form:select path="zone">
@@ -57,7 +57,7 @@
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row">
+                    <div class="row" id="category_select_options">
                         <form:label path="categories" cssClass="semibold label-text-size">
                             <spring:message code="register.restaurant.form.categories"/>
                         </form:label>
@@ -68,7 +68,7 @@
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row">
+                    <div class="row" id="shift_select_options">
                         <form:label path="shifts" cssClass="semibold label-text-size">
                             <spring:message code="register.restaurant.form.shifts"/>
                         </form:label>
@@ -103,13 +103,15 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var options = [];
-        <c:forEach items="${zones}" var="zone">
-        options.push("${zone.name}");
-        </c:forEach>
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems, options);
+    document.addEventListener('DOMContentLoaded', function () {
+        var zoneElems = document.getElementById('zone_select_options').querySelectorAll('select');
+        var zoneInstances = M.FormSelect.init(zoneElems);
+
+        var categoryElems = document.getElementById('category_select_options').querySelectorAll('select');
+        var categoryInstances = M.FormSelect.init(categoryElems);
+
+        var shiftElems = document.getElementById('shift_select_options').querySelectorAll('select');
+        var shiftInstances = M.FormSelect.init(shiftElems);
     });
 </script>
 </body>

@@ -64,7 +64,7 @@
                 <div class="card-content black-text">
                     <h1 class="megabold groovy center">
                         <c:if test="${sections.size() == 0}">
-                            <spring:message code="restaurant.public_detail.no_menu"/>. <!-- TODO add custom message -->
+                            <spring:message code="restaurant.detail.no_menu"/>.
                         </c:if>
                         <c:if test="${sections.size() != 0}">
                             <spring:message code="restaurant.public_detail.menu"/>:
@@ -72,11 +72,11 @@
                     </h1>
                     <div class="flex_row">
                         <a href="<c:url value="/restaurant/section"/>"
-                           class="btn-large waves-effect waves-light default_blue white-text no-text-transform">
+                           class="btn-large waves-effect waves-light default_dark white-text white-text no-text-transform">
                             <spring:message code="restaurant.profile.add_section"/>
                         </a>
                         <a href="<c:url value="/restaurant/item"/>"
-                           class="btn-large waves-effect waves-light default_blue white-text margin_left_auto no-text-transform">
+                           class="btn-large waves-effect waves-light default_dark white-text white-text margin_left_auto no-text-transform">
                             <spring:message code="restaurant.profile.add_item"/>
                         </a>
                     </div>
@@ -87,7 +87,7 @@
                             <c:if test="${section.ordering > 1}">
                                 <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
                                 <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
-                                    <button class="btn-large waves-effect waves-light btn-floating default_blue"
+                                    <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
                                             type="submit"
                                             name="action">
                                         <i class="material-icons left">arrow_upward</i>
@@ -97,7 +97,7 @@
                             <c:if test="${section.ordering < sections.size()}">
                                 <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                                 <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
-                                    <button class="btn-large waves-effect waves-light btn-floating default_blue" type="submit"
+                                    <button class="btn-large waves-effect waves-light btn-floating default_dark white-text" type="submit"
                                             name="action">
                                         <i class="material-icons left">arrow_downward</i>
                                     </button>
@@ -105,7 +105,7 @@
                             </c:if>
                             <c:url value="/restaurant/section/${section.id}/edit" var="editUrl"/>
                             <a href="${editUrl}" class="margin_l_5px margin_r_5px">
-                                <button class="btn-large waves-effect waves-light btn-floating default_yellow">
+                                <button class="btn-large waves-effect waves-light btn-floating default_dark white-text">
                                     <i class="material-icons left">edit</i>
                                 </button>
                             </a>
@@ -159,7 +159,7 @@
                                         <c:if test="${item.ordering > 1}">
                                             <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
                                             <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
-                                                <button class="btn-small waves-effect waves-light btn-floating default_blue"
+                                                <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"
                                                         type="submit" name="action">
                                                     <i class="material-icons left">arrow_upward</i>
                                                 </button>
@@ -168,7 +168,7 @@
                                         <c:if test="${item.ordering < section.menuItemList.size()}">
                                             <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
                                             <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
-                                                <button class="btn-small waves-effect waves-light btn-floating default_blue"
+                                                <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"
                                                         type="submit" name="action">
                                                     <i class="material-icons left">arrow_downward</i>
                                                 </button>
@@ -176,7 +176,7 @@
                                         </c:if>
                                         <c:url value="/restaurant/item/${item.id}/edit" var="editUrl"/>
                                         <a href="${editUrl}" class="margin_l_5px margin_r_5px">
-                                            <button class="btn-small waves-effect waves-light btn-floating default_yellow">
+                                            <button class="btn-small waves-effect waves-light btn-floating default_dark white-text">
                                                 <i class="material-icons left">edit</i>
                                             </button>
                                         </a>

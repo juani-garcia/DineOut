@@ -45,6 +45,7 @@
                         <form:label path="zone" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.zone"/></form:label>
                         <form:select path="zone">
+                            <form:option value=""><spring:message code="register.restaurant.zones"/></form:option>
                             <c:forEach items="${zones}" var="zone">
                                 <form:option value="${zone.name}"><c:out value="${zone.name}"/></form:option>
                             </c:forEach>
@@ -69,7 +70,8 @@
                         </form:label>
                         <form:select multiple="true" path="categories">
                             <c:forEach items="${categories}" var="category">
-                                <form:option value="${category.id}"><spring:message code="${category.message}"/></form:option>
+                                <form:option value="${category.id}"><spring:message
+                                        code="${category.message}"/></form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
@@ -104,7 +106,7 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var options = [];
         <c:forEach items="${zones}" var="zone">
         options.push("${zone.name}");
