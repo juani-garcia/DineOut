@@ -35,6 +35,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendReservationCreatedUser(String to, String name, Reservation reservation) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
+        model.put("restaurant", reservation.getRestaurant().getName());
         model.put("amount", reservation.getAmount());
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());

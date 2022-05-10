@@ -27,10 +27,24 @@
                         <form:errors path="amount" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <form:label path="dateTime" cssClass="semibold label-text-size"><spring:message
-                                code="reservation.reservation.form.date_and_time"/>*</form:label>
-                        <form:input path="dateTime" type="datetime-local"/>
-                        <form:errors path="dateTime" cssClass="isa_error" element="p"/>
+                        <form:label path="date" cssClass="semibold label-text-size">
+                            <spring:message code="reservation.reservation.form.date" />
+                        </form:label>
+                        <form:input path="date" type="date"/>
+                        <form:errors path="date" element="p" cssClass="isa_error"/>
+                    </div>
+                    <div class="row">
+                        <form:label path="time" cssClass="semibold label-text-size">
+                            <spring:message code="reservation.reservation.form.time"/>
+                         </form:label>
+                        <form:select path="time">
+                            <c:forEach items="${times}" var="time">
+                                <form:option value="${time}">
+                                    <c:out value="${time}"/>
+                                </form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="time" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row">
                         <form:label path="comments" cssClass="semibold label-text-size"><spring:message
@@ -39,8 +53,8 @@
                         <form:errors path="comments" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
-                                code="form.mandatory"/></h6>
+                        <h6 class="semibold label-text-size grey-text text-lighten-1">
+                            <spring:message code="form.mandatory"/></h6>
                     </div>
                     <div class="row center flex_row">
                         <a id="back-button"
@@ -61,5 +75,15 @@
 
 </form:form>
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
+        <c:forEach items="${times}" var="time">
+        options.push("${time}");
+        </c:forEach>
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
 </body>
 </html>
