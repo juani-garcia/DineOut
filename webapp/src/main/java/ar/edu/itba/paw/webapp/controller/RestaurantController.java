@@ -95,7 +95,7 @@ public class RestaurantController {
 
     @RequestMapping("/edit")
     public ModelAndView restaurantEditForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        ModelAndView mav = new ModelAndView("register/edit_restaurant");
+        ModelAndView mav = new ModelAndView("restaurant/edit_restaurant");
         Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().get().getId()).get();
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());

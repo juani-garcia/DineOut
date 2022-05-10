@@ -56,8 +56,6 @@
                                 code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
-                                code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
                     <div class="row">
                         <form:label path="categories" cssClass="semibold label-text-size">
@@ -65,8 +63,7 @@
                         </form:label>
                         <form:select multiple="true" path="categories">
                             <c:forEach items="${categories}" var="category">
-                                <form:option value="${category.id}"><spring:message
-                                        code="${category.message}"/></form:option>
+                                <form:option value="${category.id}"><spring:message code="${category.message}"/></form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
@@ -101,28 +98,13 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var zoneOptions = [];
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
         <c:forEach items="${zones}" var="zone">
-        zoneOptions.push("${zone.name}");
+        options.push("${zone.name}");
         </c:forEach>
-        var zoneElems = document.getElementById("zone_select").querySelectorAll('select');
-        M.FormSelect.init(zoneElems, zoneOptions);
-
-
-        var shiftOptions = [];
-        <c:forEach items="${shifts}" var="shift">
-        shiftOptions.push("${shift.name}");
-        </c:forEach>
-        var shiftElems = document.getElementById("shift_select").querySelectorAll('select');
-        M.FormSelect.init(shiftElems, shiftOptions);
-
-        var categoriesOptions = [];
-        <c:forEach items="${categories}" var="category">
-        categoriesOptions.push("${category.name}");
-        </c:forEach>
-        var categoriesElems = document.getElementById("category_select").querySelectorAll('select');
-        M.FormSelect.init(categoriesElems, categoriesOptions);
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
     });
 </script>
 </body>

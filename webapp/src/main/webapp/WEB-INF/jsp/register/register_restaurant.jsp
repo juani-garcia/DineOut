@@ -56,7 +56,6 @@
                                 code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
                     <div class="row">
                         <form:label path="categories" cssClass="semibold label-text-size">
@@ -78,7 +77,7 @@
                                 <form:option value="${shift.id}"><spring:message code="${shift.message}"/></form:option>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="categories" cssClass="isa_error" element="p"/>
+                        <form:errors path="shifts" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
