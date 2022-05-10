@@ -7,7 +7,7 @@
     <appender name="root-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <maxHistory>5</maxHistory>
-            <fileNamePattern>logs/warnings.paw2022a-10.%d{yyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/warnings.paw2022a-10.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>${defaultPattern:-}</pattern>
@@ -17,7 +17,7 @@
     <appender name="paw-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <maxHistory>5</maxHistory>
-            <fileNamePattern>logs/paw.paw2022a-10.%d{yyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/paw.paw2022a-10.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>${defaultPattern:-}</pattern>
@@ -31,4 +31,5 @@
     <logger name="ar.edu.itba.paw" level="INFO">
         <appender-ref ref="paw-appender"/>
     </logger>
+
 </configuration>
