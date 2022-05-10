@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.model;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum Shift {
     MORNING("shift.morning.name", LocalTime.of(8, 0), LocalTime.of(11, 59)),
@@ -66,5 +70,26 @@ public enum Shift {
             }
         }
         return false;
+    }
+
+    public static List<LocalTime> availableTimes(List<Shift> shifts, long step) {
+        List<LocalTime> ans = new LinkedList<>();
+        if(shifts.isEmpty()) shifts.addAll(Arrays.stream(Shift.values()).collect(Collectors.toList()));
+        for(Shift shift : shifts) {
+            ans.addAll(availableTimes(shift, step));
+        }
+        return ans.stream().sorted().collect(Collectors.toList());
+    }
+
+    public static List<LocalTime> availableTimes(Shift shift, long step) {
+        List<LocalTime> ans = new LinkedList<>();
+        LocalTime it = shift.getStart();
+        while (it.isBefore(shift.getEnd()) || it.equals(shift.getEnd())) {
+            ans.add(it);
+            LocalTime next = it.plus(step, ChronoUnit.MINUTES);
+            if (next.isBefore(shift.getStart())) break;
+            it = next;
+        }
+        return ans;
     }
 }

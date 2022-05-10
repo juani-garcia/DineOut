@@ -21,11 +21,9 @@ import javax.validation.Payload;
 @Constraint(validatedBy = {FormatValidator.class})
 public @interface Format {
 
-    String message() default "Invalid date: violates format {format}";
+    String message() default "Invalid date.";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
-
-    String pattern();
 
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
     @Retention(RUNTIME)

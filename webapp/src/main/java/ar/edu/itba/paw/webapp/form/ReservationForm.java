@@ -1,19 +1,21 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validations.Format;
-import ar.edu.itba.paw.webapp.validations.FutureString;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
+import ar.edu.itba.paw.webapp.validations.FutureDateTime;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 
+
+@FutureDateTime(
+        date = "date",
+        time = "time"
+)
 public class ReservationForm {
-
-    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
     @Size(max = 150)
     private String comments;
@@ -23,9 +25,27 @@ public class ReservationForm {
     private Integer amount;
 
     @NotNull
-    @FutureString(pattern = DATE_TIME_FORMAT)
-    @Format(pattern = DATE_TIME_FORMAT)
-    private String dateTime;
+    @Format
+    private String date;
+
+    @NotNull
+    private LocalTime time;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
+    }
 
     public String getComments() {
         return comments;
@@ -33,14 +53,6 @@ public class ReservationForm {
 
     public void setComments(String comments) {
         this.comments = comments;
-    }
-
-    public String getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
     }
 
     public Integer getAmount() {
@@ -52,7 +64,7 @@ public class ReservationForm {
     }
 
     public LocalDateTime getLocalDateTime() {
-        return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
+        return LocalDateTime.of(LocalDate.parse(date), time);
     }
 
 }

@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +26,9 @@ public class ReservationController {
     @Autowired
     private SecurityService securityService;
 
+    @Autowired
+    private ShiftService shiftService;
+
     @RequestMapping("/reserve/{resId}")
     public ModelAndView reservation(
             @PathVariable final long resId,
@@ -35,6 +37,7 @@ public class ReservationController {
 
          Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
          mav.addObject("restaurant", restaurant);
+         mav.addObject("times", Shift.availableTimes(shiftService.getByRestaurantId(resId), 30));
          return mav;
     }
 
@@ -45,13 +48,7 @@ public class ReservationController {
             return reservation(resId, form);
         }
 
-        // TODO: i18n.
-        try {
-            reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
-        } catch (InvalidTimeException e) {
-            errors.addError(new FieldError("reservationForm", "dateTime", "El horario de la reserva es inválido."));  // TODO: remove this error from here.
-            return reservation(resId, form);
-        }
+        reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
 
         return new ModelAndView("redirect:/diner/reservations");
     }
