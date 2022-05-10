@@ -24,7 +24,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
@@ -46,7 +45,7 @@ public class WebConfig {
     @Autowired
     private Environment env;
 
-    @Value ("classpath:sql/schema.sql")
+    @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
 
     @Bean

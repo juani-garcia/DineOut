@@ -17,7 +17,6 @@ public class UserJdbcDao implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    /* private X default=package-private for testing */
     static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
             new User(rs.getLong("id"), rs.getString("username"), rs.getString("password"), rs.getString("first_name"), rs.getString("last_name"));
 

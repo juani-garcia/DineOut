@@ -15,7 +15,7 @@
 <form:form id="reservation_form" modelAttribute="reservationForm" action="${postPath}" method="post">
     <div class="container">
         <div class="section">
-            <div class="row rounded shadowed white">
+            <div class="row rounded shadowed white width_75">
                 <div class="col s6 offset-s3">
                     <div class="row">
                         <h5 class="white bold"><spring:message code="reservation.reservation.form.header"/></h5>
@@ -56,22 +56,22 @@
                         <h6 class="semibold label-text-size grey-text text-lighten-1">
                             <spring:message code="form.mandatory"/></h6>
                     </div>
-                    <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}" onclick="document.getElementById('reservation_form').submit();">
-                            <spring:message code="reservation.reservation.form.submit" />
+                    <div class="row center flex_row">
+                        <a id="back-button"
+                           class="btn-large waves-effect waves-red default_red white-text lighten-1 no-text-transform"
+                           href="javascript:{}" onclick="history.back();">
+                            <spring:message code="reservation.reservation.form.back"/>
                         </a>
+                        <button type="submit" id="register-button"
+                                class="btn-large waves-effect waves-red green white-text lighten-1 margin_l_20px no-text-transform"
+                                onclick="document.getElementById('reservation_form').submit();">
+                            <spring:message code="reservation.reservation.form.submit"/>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <%--    <div>--%>
-    <%--        <input type="submit" value="Register!"/>--%>
-    <%--    </div>--%>
-
 
 </form:form>
 <%@ include file="../footer.jsp" %>

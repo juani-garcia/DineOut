@@ -19,13 +19,13 @@ public class FieldsValueMatchValidator implements ConstraintValidator<FieldsValu
     public boolean isValid(final Object value, final ConstraintValidatorContext context) {
 
         Object fieldValue = new BeanWrapperImpl(value)
-          .getPropertyValue(field);
+                .getPropertyValue(field);
         Object fieldMatchValue = new BeanWrapperImpl(value)
-          .getPropertyValue(fieldMatch);
+                .getPropertyValue(fieldMatch);
 
         boolean isValid = Objects.equals(fieldValue, fieldMatchValue);
 
-        if (! isValid) {
+        if (!isValid) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("Debe coincidir con la contrasena")
                     .addNode(fieldMatch).addConstraintViolation();

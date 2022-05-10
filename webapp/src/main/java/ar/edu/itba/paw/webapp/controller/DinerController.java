@@ -38,13 +38,13 @@ public class DinerController {
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
-        String username = securityService.getCurrentUsername();
-        if (username == null) throw new UnauthenticatedUserException();
+        long pages = reservationService.getPagesCountForCurrentUser(past);
+        if (page != 1 && pages < page) return new ModelAndView("redirect:/diner/reservations" + "?page=" + pages);
 
         List<Reservation> reservationList = reservationService.getAllForCurrentUser(page, past);
         ModelAndView mav = new ModelAndView("diner/reservations");
         mav.addObject("reservations", reservationList);
-        mav.addObject("pages", reservationService.getPagesCountForCurrentUser(past));
+        mav.addObject("pages", pages);
         mav.addObject("past", past);
         return mav;
     }

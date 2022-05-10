@@ -40,7 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
 
-        if(!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
+        if (!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
         }
 
@@ -55,7 +55,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> getAllForCurrentUser(int page, boolean past) {
         String username = securityService.getCurrentUsername();
-        if(username == null) throw new UnauthenticatedUserException();
+        if (username == null) throw new UnauthenticatedUserException();
 
         return reservationDao.getAllByUsername(username, page, past);
     }
@@ -79,7 +79,7 @@ public class ReservationServiceImpl implements ReservationService {
         boolean reservationWasMadeToRestaurant = restaurant.isPresent() && restaurant.get().getId() == reservation.getRestaurantId();
         boolean reservationIsFuture = reservation.getDateTime().isAfter(LocalDateTime.now());
 
-        if((!userMadeReservation && !reservationWasMadeToRestaurant) || !reservationIsFuture) {
+        if ((!userMadeReservation && !reservationWasMadeToRestaurant) || !reservationIsFuture) {
             throw new ForbiddenActionException();
         }
 
@@ -100,12 +100,12 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
         Optional<User> reservationOwner = userService.getByUsername(reservation.getMail());
 
-        if(reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {  // TODO: change when we modify shifts
+        if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {  // TODO: change when we modify shifts
             throw new ForbiddenActionException();
         }
 
         emailService.sendReservationConfirmed(reservation.getMail(),
-                reservationOwner.isPresent()? reservationOwner.get().getFirstName() : "", reservation);
+                reservationOwner.isPresent() ? reservationOwner.get().getFirstName() : "", reservation);
 
         return reservationDao.confirm(reservation.getReservationId());
     }
@@ -113,7 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public long getPagesCountForCurrentUser(boolean past) {
         String username = securityService.getCurrentUsername();
-        if(username == null) throw new UnauthenticatedUserException();
+        if (username == null) throw new UnauthenticatedUserException();
 
         return reservationDao.getPagesCountForCurrentUser(username, past);
     }

@@ -18,10 +18,9 @@ public class RestaurantJdbcDao implements RestaurantDao {
     private final JdbcTemplate jdbcTemplate;
     private static final int PAGE_SIZE = 3;
     private final SimpleJdbcInsert jdbcInsert;
-    /* private X default=package-private for testing */
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
             new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("address"),
-            rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
+                    rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
 
     @Autowired
     public RestaurantJdbcDao(final DataSource ds) {
@@ -49,10 +48,10 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM restaurant ORDER BY name LIMIT ? OFFSET ?", new Object[] {PAGE_SIZE, (page - 1) * PAGE_SIZE},  ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM restaurant ORDER BY name LIMIT ? OFFSET ?", new Object[]{PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
 
-    private static class Pair<A,B> {
+    private static class Pair<A, B> {
         public final A left;
         public final B right;
 
@@ -60,28 +59,30 @@ public class RestaurantJdbcDao implements RestaurantDao {
             this.left = left;
             this.right = right;
         }
-    };
+    }
+
+    ;
 
     private Pair<StringBuilder, List<Object>> filterBuilder(String name, Category category, Shift shift, Zone zone, StringBuilder sql, List<Object> args) {
         sql.append("FROM restaurant\n");
         sql.append("WHERE true\n");
 
-        if(name != null) {
+        if (name != null) {
             sql.append("AND LOWER(name) like ?\n");
             args.add('%' + name.toLowerCase() + '%');
         }
 
-        if(category != null) {
+        if (category != null) {
             sql.append("AND id in (SELECT restaurant_id FROM restaurant_category WHERE category_id = ?)\n");
             args.add(category.getId());
         }
 
-        if(shift != null) {
+        if (shift != null) {
             sql.append("AND id in (SELECT restaurant_id FROM restaurant_opening_hours WHERE opening_hours_id = ?)\n");
             args.add(shift.getId());
         }
 
-        if(zone != null) {
+        if (zone != null) {
             sql.append("AND zone_id = ?\n");
             args.add(zone.getId());
         }
@@ -128,7 +129,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public Long getCount() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM restaurant",  Long.class);
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM restaurant", Long.class);
     }
 
     @Override

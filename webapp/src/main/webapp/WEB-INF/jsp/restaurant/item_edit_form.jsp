@@ -38,7 +38,7 @@
                     <div class="row">
                         <form:label path="price" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.price"/>*</form:label>
-                        <form:input path="price" type="number" step="0.01" min="0"/>
+                        <form:input path="price" type="number" step="0.01" min="0" id="decimalnumberonly"/>
                         <form:errors path="price" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row input-field">

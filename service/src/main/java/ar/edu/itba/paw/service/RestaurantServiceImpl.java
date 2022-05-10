@@ -121,14 +121,16 @@ public class RestaurantServiceImpl implements RestaurantService {
         for (Restaurant favRestaurant : restaurantFavoriteList) {
             for (Restaurant resRestaurant : restaurantReservedList) {
                 if (favRestaurant.getId() == resRestaurant.getId()) {
-                     randomList.add(favRestaurant);
+                    randomList.add(favRestaurant);
                 }
             }
         }
         Random random = new Random();
         if (!randomList.isEmpty()) return randomList.get(random.nextInt(randomList.size()));
-        if (!restaurantFavoriteList.isEmpty()) return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        if (!restaurantReservedList.isEmpty()) return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
+        if (!restaurantFavoriteList.isEmpty())
+            return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
+        if (!restaurantReservedList.isEmpty())
+            return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
         return restaurantDao.getAll(1).stream().findFirst().orElseThrow(IllegalStateException::new);
     }
 

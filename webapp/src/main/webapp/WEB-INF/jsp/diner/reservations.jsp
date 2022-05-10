@@ -12,29 +12,29 @@
 
 <div class="container flex_center padding-15px">
     <div class="section flex_center width_100">
-        <div class="bold grow_on_hover">
-            <c:if test="${past}">
-                <c:url value="/diner/reservations" var="toggleUrl" />
-                <a href="${toggleUrl}" class = "white-text">
-                    <spring:message code="diner.show_future" />
-                </a>
-            </c:if>
-            <c:if test="${!past}">
-                <c:url value="/diner/reservations?past=true" var="toggleUrl" />
-                <a href="${toggleUrl}" class="white-text">
-                    <spring:message code="diner.show_past" />
-                </a>
-            </c:if>
-        </div>
         <div class="card menu_card">
             <h1 class="megabold flex_center groovy">
-                <c:if test="${past}" >
+                <c:if test="${past}">
                     <spring:message code="diner.past_reservations.title"/>
                 </c:if>
-                <c:if test="${!past}" >
+                <c:if test="${!past}">
                     <spring:message code="diner.future_reservations.title"/>
                 </c:if>
             </h1>
+            <div class="bold grow_on_hover default_dark_text">
+                <c:if test="${past}">
+                    <c:url value="/diner/reservations" var="toggleUrl"/>
+                    <a href="${toggleUrl}" class="default_dark_text">
+                        <spring:message code="diner.show_future"/>
+                    </a>
+                </c:if>
+                <c:if test="${!past}">
+                    <c:url value="/diner/reservations?past=true" var="toggleUrl"/>
+                    <a href="${toggleUrl}" class="default_dark_text">
+                        <spring:message code="diner.show_past"/>
+                    </a>
+                </c:if>
+            </div>
             <c:if test="${reservations.size() == 0}">
                 <h2 class="header center default_light_text">
                     <spring:message code="restaurant.reservation.no_reservations"/>
@@ -51,7 +51,8 @@
                 <hr/>
                 <div class="card-content default_dark_text flex_column">
                     <div class="flex_row">
-                        <a href="<c:url value ="/restaurant/view/${reservation.restaurant.id}"/>" class="grow_on_hover default_dark_text underline">
+                        <a href="<c:url value ="/restaurant/view/${reservation.restaurant.id}"/>"
+                           class="grow_on_hover default_dark_text underline">
                             <h5 class="medium"><b><c:out
                                     value="${reservation.restaurant.name}"/>: </b></h5>
                         </a>
@@ -68,26 +69,26 @@
                             <c:if test="${!past}">
                                 <div class="margins_lr_5px">
                                     <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
-                                            href="#delete_confirm_modal">
+                                       href="#delete_confirm_modal">
                                         <i class="material-icons left">delete</i>
                                     </a>
                                     <div id="delete_confirm_modal" class="modal confirm_delet_modal_height">
                                         <div class="modal-content">
                                             <h4 class="center">
                                                 <spring:message code="diner.reservation.confirmation"
-                                                arguments="${reservation.restaurant.name}"/>
+                                                                arguments="${reservation.restaurant.name}"/>
                                             </h4>
                                         </div>
                                         <div class="modal-footer">
                                             <div class="flex_row">
                                                 <a class="modal-close waves-effect btn-flat grow_on_hover">
-                                                    <spring:message code="diner.reservation.back" />
+                                                    <spring:message code="diner.reservation.back"/>
                                                 </a>
                                                 <form method="post"
                                                       action="<c:url value="/reservation/${reservation.reservationId}/delete"/>">
                                                     <button class="modal-close waves-effect red-text btn-flat grow_on_hover"
                                                             type="submit" name="action">
-                                                        <spring:message code="diner.reservation.continue" />
+                                                        <spring:message code="diner.reservation.continue"/>
                                                     </button>
                                                 </form>
                                             </div>
@@ -135,7 +136,7 @@
 </c:if>
 <%@ include file="../footer.jsp" %>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.modal').modal();
     });
 

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserRoleServiceImpl implements UserRoleService{
+public class UserRoleServiceImpl implements UserRoleService {
 
     private final UserRoleDao userRoleDao;
     private final UserToRoleService userToRoleService;
@@ -36,7 +36,8 @@ public class UserRoleServiceImpl implements UserRoleService{
         List<UserToRole> userToRoleList = userToRoleService.getByUserId(userId);
         for (UserToRole userToRole : userToRoleList) {
             Optional<UserRole> userRole = this.getByRoleId(userToRole.getRoleId());
-            if (!userRole.isPresent()) throw new IllegalStateException("Role: " + userToRole.getRoleId() + " does not exist");
+            if (!userRole.isPresent())
+                throw new IllegalStateException("Role: " + userToRole.getRoleId() + " does not exist");
             if (userRole.get().getRoleName().equals(role)) {
                 return true;
             }

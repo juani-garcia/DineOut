@@ -67,6 +67,7 @@ public class RestaurantController {
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: this should not be here, it could either be on the service or on a join in the dao.
         mav.addObject("sections", menuSectionList);
+        mav.addObject("shifts", shiftService.getByRestaurantId(restaurant.getId()));
         return mav;
     }
 
@@ -188,7 +189,7 @@ public class RestaurantController {
         return mav;
     }
 
-    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
+    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ModelAndView item(@Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
         byte[] imageBytes = null;
         try {
@@ -225,8 +226,8 @@ public class RestaurantController {
 
     @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST})
     public ModelAndView itemEdit(@PathVariable final long itemId,
-                                    @ModelAttribute("itemForm") final MenuItemForm form,
-                                    final BindingResult errors) {
+                                 @ModelAttribute("itemForm") final MenuItemForm form,
+                                 final BindingResult errors) {
         if (errors.hasErrors()) {
             return itemEditForm(itemId, form);
         }
@@ -265,8 +266,6 @@ public class RestaurantController {
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: same as bvefore this should not be here.
         mav.addObject("sections", menuSectionList);
-        List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
-        mav.addObject("shifts", shifts);
         return mav;
     }
 
@@ -274,9 +273,12 @@ public class RestaurantController {
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
+        long pages = reservationService.getPagesCountForCurrentRestaurant(past);
+        if (page != 1 && pages < page) return new ModelAndView("redirect:/restaurant/reservations" + "?page=" + pages);
+
         ModelAndView mav = new ModelAndView("restaurant/reservations");
         mav.addObject("past", past);
-        mav.addObject("pages", reservationService.getPagesCountForCurrentRestaurant(past));
+        mav.addObject("pages", pages);
         mav.addObject("reservations", reservationService.getAllForCurrentRestaurant(page, past));
         return mav;
     }

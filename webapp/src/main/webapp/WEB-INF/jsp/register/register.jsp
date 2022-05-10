@@ -10,14 +10,12 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
+<div id="index-banner" class="align_center">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold">¡Registra tu restaurante!</h1>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>   <!-- Custom restaurant image -->
 </div>
 
 <c:url value="/register" var="postUrl"/>

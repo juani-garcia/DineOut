@@ -4,7 +4,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Constraint(validatedBy = FieldsValueMatchValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldsValueMatch {
@@ -19,7 +19,7 @@ public @interface FieldsValueMatch {
 
     String fieldMatch();
 
-    @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+    @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     @interface List {
         FieldsValueMatch[] value();

@@ -102,7 +102,7 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             sendHtmlMessage(to, htmlBody);
-        } catch(MessagingException mex) {
+        } catch (MessagingException mex) {
             // TODO: Add to logger that mail could not be sent
             System.out.println("*********************************");
             System.out.println("MAIL COULD NOT BE SENT");

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<nav class="default_dark" role="navigation">
+<nav class="transparent" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="<c:url value="/"/>" class="brand-logo megabold">Dine Out &#127836;</a>
 
@@ -15,6 +15,11 @@
                 </a></li>
             </c:if>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
+                <li>
+                    <div class="white-text">
+                        <spring:message code="navbar.greeting" arguments="${user.firstName}" />
+                    </div>
+                </li>
                 <% if (request.isUserInRole("DINER")) { %>
                 <li>
                     <a href="<c:url value="/diner/reservations"/>"

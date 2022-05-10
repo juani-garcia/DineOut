@@ -3,8 +3,6 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.User;
 
-import java.time.LocalDateTime;
-
 public interface EmailService {
 
     void sendAccountCreationMail(String to, String name);

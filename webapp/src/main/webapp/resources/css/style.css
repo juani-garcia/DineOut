@@ -135,6 +135,10 @@ footer.page-footer {
     color: #242B2A !important;
 }
 
+.default_dark_text_not_important {
+    color: #242B2A;
+}
+
 .default_red {
     background-color: #F54242 !important;
 }
@@ -527,7 +531,7 @@ h1 {
 
 .restaurant_detail_section_data {
     box-sizing: border-box;
-    width: 30%;
+    width: 40%;
     margin-top: 25px;
     margin-left: auto;
     margin-right: auto;
@@ -554,7 +558,11 @@ button {
 }
 
 .margin_left_auto {
-    margin-left: auto;
+    margin-left: auto !important;
+}
+
+.margin_right_auto {
+    margin-right: auto;
 }
 
 .margins_lr_10px {
@@ -581,6 +589,18 @@ button {
 .margins_lr_5px {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.margin_l_5px {
+    margin-left: 5px;
+}
+
+.margin_r_5px {
+    margin-right: 5px;
+}
+
+.margin_r_15px {
+    margin-right: 15px;
 }
 
 .margins_15px {
@@ -625,4 +645,22 @@ button {
 
 .confirm_delet_modal_height {
     height: 210px;
+}
+
+.margin_l_20px {
+    margin-left: 20px;
+}
+
+.width_75 {
+    width: 75% !important;
+}
+
+nav {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.no_border {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
 }
