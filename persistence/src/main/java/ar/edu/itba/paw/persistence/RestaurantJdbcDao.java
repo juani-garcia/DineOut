@@ -19,7 +19,8 @@ public class RestaurantJdbcDao implements RestaurantDao {
     private static final int PAGE_SIZE = 3;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
-            new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("address"),
+            new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
+                    rs.getLong("image_id"), rs.getString("address"),
                     rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
 
     @Autowired
@@ -106,7 +107,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone) {
+    public Restaurant create(final long userID, final String name, final long imageId, final String address, final String mail, final String detail, final Zone zone) {
         final Map<String, Object> restaurantData = new HashMap<>();
         restaurantData.put("user_id", userID);
         restaurantData.put("name", name);
@@ -114,9 +115,10 @@ public class RestaurantJdbcDao implements RestaurantDao {
         restaurantData.put("mail", mail);
         restaurantData.put("detail", detail);
         restaurantData.put("zone_id", zone != null ? zone.getId() : null);
+        restaurantData.put("image_id", imageId);
 
         final long restaurantId = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
-        return new Restaurant(restaurantId, userID, name, address, mail, detail, zone);
+        return new Restaurant(restaurantId, userID, name, imageId, address, mail, detail, zone);
     }
 
     @Override

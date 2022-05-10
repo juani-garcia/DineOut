@@ -4,7 +4,6 @@ import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.ImageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service

@@ -37,10 +37,9 @@ public class ImageJdbcDao implements ImageDao {
 
     @Override
     public Optional<Image> getById(final long id) {
-        List<Image> query = jdbcTemplate.query("SELECT * FROM image WHERE id = ?", new Object[]{id}, IMAGE_ROW_MAPPER);
+        List<Image> query = jdbcTemplate.query("SELECT * FROM image WHERE id = ?", new Object[] {id}, IMAGE_ROW_MAPPER);
         return query.stream().findFirst();
     }
-
 
     @Override
     public boolean edit(final long id, final byte[] source) {

@@ -16,7 +16,7 @@ public interface RestaurantService {
 
     List<Restaurant> filter(int page, String name, int category, int shift, int zone);
 
-    Restaurant create(final long userID, final String name, final String address, final String mail, final String detail, final Zone zone, final List<Long> categories, final List<Long> shifts);
+    Restaurant create(final String name, final byte[] image, final String address, final String mail, final String detail, final Zone zone, final List<Long> categories, final List<Long> shifts);
 
     boolean updateCurrentRestaurant(final String name, final String address, final String mail, final String detail, final Zone zone, final List<Long> categories, final List<Long> shifts);
 

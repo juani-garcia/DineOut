@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,6 +14,8 @@ public class RestaurantForm {
     @Size(min = 1, max = 100)
     @NotNull
     private String name;
+
+    private MultipartFile image;
 
     @Size(min = 2, max = 180)
     @NotNull
@@ -42,6 +45,10 @@ public class RestaurantForm {
         return name;
     }
 
+    public MultipartFile getImage() {
+        return image;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -56,6 +63,10 @@ public class RestaurantForm {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     public String getZone() {
