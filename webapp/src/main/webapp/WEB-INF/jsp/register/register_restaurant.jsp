@@ -15,7 +15,7 @@
 
 
 <c:url value="/restaurant/register" var="postPath"/>
-<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post">
+<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="section">
             <div class="row rounded shadowed white">
@@ -28,6 +28,12 @@
                                 code="register.restaurant.form.name"/>*</form:label>
                         <form:input type="text" path="name"/>
                         <form:errors path="name" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
+                        <form:label path="image" cssClass="semibold label-text-size"><spring:message
+                                code="register.restaurant.form.image"/></form:label>
+                        <form:input path="image" type="file"/>
+                        <form:errors path="image" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
                         <form:label path="address" cssClass="semibold label-text-size"><spring:message
