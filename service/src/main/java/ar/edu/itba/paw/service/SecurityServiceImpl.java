@@ -48,6 +48,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         return !passToken.isPresent() ? "invalidToken"
                 : isTokenExpired(passToken.get()) ? "expired"
+                : passToken.get().isUsed() ? "used"
                 : null;
     }
 

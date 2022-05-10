@@ -149,7 +149,7 @@ public class HomeController {
             mav.addObject("token", token);
             return mav;
         }
-        return new ModelAndView("redirect:/login");  // TODO: send error info.
+        return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping(value = "/save_password", method = RequestMethod.POST)
