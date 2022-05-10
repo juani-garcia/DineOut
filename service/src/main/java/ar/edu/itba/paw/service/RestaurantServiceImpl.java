@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     private FavoriteService favoriteService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public Optional<Restaurant> getById(long id) {
@@ -50,9 +54,13 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant create(long userID, String name, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
-
-        Restaurant restaurant = restaurantDao.create(userID, name, address, mail, detail, zone);
+    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Image restaurantImage = null;
+        if (image != null && image.length > 0) {
+            restaurantImage = imageService.create(image);
+        }
+        Restaurant restaurant = restaurantDao.create(user.getId(), name, restaurantImage != null ? restaurantImage.getId() : null, address, mail, detail, zone);
         for (Long categoryId : categories) {
             Category category = Category.getById(categoryId);
             categoryService.add(restaurant.getId(), category);

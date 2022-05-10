@@ -85,10 +85,14 @@ public class RestaurantController {
         if (errors.hasErrors()) {
             return restaurantForm(form);
         }
-
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-
-        restaurantService.create(user.getId(), form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+        byte[] image = null;
+        try {
+            image = form.getImage().getBytes();
+        } catch (IOException e) {
+            errors.addError(new FieldError("restaurantForm", "image", "Couldn't get image"));  // TODO: i18n & move elsewere.
+            return restaurantForm(form);
+        }
+        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
         return new ModelAndView("redirect:/restaurant");
     }
