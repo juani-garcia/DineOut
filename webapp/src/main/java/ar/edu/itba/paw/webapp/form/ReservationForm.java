@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validations.Format;
+import ar.edu.itba.paw.webapp.validations.FutureDateTime;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+
+@FutureDateTime(
+        date = "date",
+        time = "time"
+)
 public class ReservationForm {
 
     @Size(max = 150)
