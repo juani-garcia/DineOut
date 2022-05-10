@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createPasswordResetTokenForUser(User user, String contextPath) {
-        if (passwordResetTokenService.hasValidToken(user.getId())) return;  // TODO: manage error
+        if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
         emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
     }

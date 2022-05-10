@@ -127,9 +127,8 @@ public class HomeController {
         return mav;
     }
 
-    @RequestMapping(value = "/reset_password", method = RequestMethod.POST)
-    public ModelAndView resetPassword(@ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm, HttpServletRequest request, final BindingResult errors) {
-
+    @RequestMapping(value = "/reset_password", method = {RequestMethod.POST})
+    public ModelAndView resetPassword(@Valid @ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm, final BindingResult errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
             return forgotMyPassword(passwordRecoveryForm);
         }
@@ -154,7 +153,10 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/save_password", method = RequestMethod.POST)
-    public ModelAndView savePassword(@ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm) {
+    public ModelAndView savePassword(@Valid @ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm, final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return changePassword(newPasswordForm.getToken(), newPasswordForm);
+        }
         String result = securityService.validatePasswordResetToken(newPasswordForm.getToken());
 
         if (result != null) {

@@ -65,7 +65,6 @@ public class RestaurantController {
 
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: this should not be here, it could either be on the service or on a join in the dao.
         mav.addObject("sections", menuSectionList);
         mav.addObject("shifts", shiftService.getByRestaurantId(restaurant.getId()));
         return mav;
@@ -255,7 +254,7 @@ public class RestaurantController {
     }
 
     @RequestMapping("/view/{resId}")
-    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
+    public ModelAndView reservation(@PathVariable final long resId) {
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
 
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
@@ -264,7 +263,6 @@ public class RestaurantController {
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", shiftService.getByRestaurantId(resId));
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: same as bvefore this should not be here.
         mav.addObject("sections", menuSectionList);
         return mav;
     }
