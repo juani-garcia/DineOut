@@ -67,6 +67,7 @@ public class RestaurantController {
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: this should not be here, it could either be on the service or on a join in the dao.
         mav.addObject("sections", menuSectionList);
+        mav.addObject("shifts", shiftService.getByRestaurantId(restaurant.getId()));
         return mav;
     }
 
@@ -265,8 +266,6 @@ public class RestaurantController {
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: same as bvefore this should not be here.
         mav.addObject("sections", menuSectionList);
-        List<Shift> shifts = shiftService.getByRestaurantId(restaurant.getId());
-        mav.addObject("shifts", shifts);
         return mav;
     }
 
