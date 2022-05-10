@@ -13,45 +13,25 @@ public class ErrorControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such restaurant")
     public ModelAndView restaurantNotFound() {
-        ModelAndView mav = new ModelAndView("error/error_page");
-        mav.addObject("title", "error.404.title");
-        mav.addObject("hint", "error.404.hint");
-        mav.addObject("code", 404);
-        return mav;
+        return new ModelAndView("forward:/404");
     }
 
     @ExceptionHandler(InvalidPageException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid page number")
     public ModelAndView invalidPage() {
-        System.out.println("**************************************");
-        ModelAndView mav = new ModelAndView("error/error_page");
-        mav.addObject("title", "error.400.title");
-        mav.addObject("hint", "error.400.hint");
-        mav.addObject("code", 400);
-        return mav;
+        return new ModelAndView("forward:/400");
     }
 
     @ExceptionHandler(UnauthenticatedUserException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Unauthenticated user request")
     public ModelAndView unauthenticatedUserRequest() {
-        System.out.println("**************************************");
-        ModelAndView mav = new ModelAndView("error/error_page");
-        mav.addObject("title", "error.401.title");
-        mav.addObject("hint", "error.401.hint");
-        mav.addObject("code", 401);
-        return mav;
+        return new ModelAndView("forward:/401");
     }
 
     @ExceptionHandler(ForbiddenActionException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Forbidden action")
     public ModelAndView forbiddenAction() {
-        System.out.println("**************************************");
-        ModelAndView mav = new ModelAndView("error/error_page");
-        mav.addObject("title", "error.403.title");
-        mav.addObject("hint", "error.403.hint");
-        mav.addObject("code", 403);
-        return mav;
+        return new ModelAndView("forward:/403");
     }
-
 
 }
