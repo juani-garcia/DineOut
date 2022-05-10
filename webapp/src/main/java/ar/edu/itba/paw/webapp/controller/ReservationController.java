@@ -5,7 +5,6 @@ import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
-import ar.edu.itba.paw.webapp.validations.Format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,9 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 @Controller
 public class ReservationController {
@@ -39,14 +35,9 @@ public class ReservationController {
             @ModelAttribute("reservationForm") final ReservationForm form) {
          final ModelAndView mav = new ModelAndView("reservation/reservation");
 
-        List<LocalTime> times = Shift.availableTimes(shiftService.getByRestaurantId(resId), 30);
-        for(LocalTime time : times) {
-            System.out.println(time);
-        }
-
          Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
          mav.addObject("restaurant", restaurant);
-         mav.addObject("times", times);
+         mav.addObject("times", Shift.availableTimes(shiftService.getByRestaurantId(resId), 30));
          return mav;
     }
 
