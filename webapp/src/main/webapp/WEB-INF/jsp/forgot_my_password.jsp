@@ -38,7 +38,7 @@
                         <button type="submit" name="action"
                                 class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
                             <spring:message code="password.recovery.continue"/>
-                            <i class="material-icons right">send</i>  <!-- TODO: add floating message -->
+                            <i class="material-icons right">send</i>
                         </button>
                     </div>
                 </div>

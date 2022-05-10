@@ -45,7 +45,7 @@
                     <div class="row center">
                         <button type="submit" name="action"
                                 class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
-                            <spring:message code="register.restaurant.form.continue"/>
+                            <spring:message code="password.update.continue"/>
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
