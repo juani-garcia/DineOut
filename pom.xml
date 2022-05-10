@@ -21,13 +21,13 @@
         <mockito.version>2.25.1</mockito.version>
         <org.hsqldb.version>2.3.1</org.hsqldb.version>
         <org.junit.version>4.13.2</org.junit.version>
-        <org.springframework.spring-boot-starter-mail.version>2.5.6</org.springframework.spring-boot-starter-mail.version>
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
         <org.slf4j.version>1.7.5</org.slf4j.version>
         <logback.version>1.1.2</logback.version>
         <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <thymeleaf-version>3.0.11.RELEASE</thymeleaf-version>
+        <javax.mail.version>1.6.2</javax.mail.version>
     </properties>
 
 
@@ -104,11 +104,6 @@
                 <version>5.2.8.RELEASE</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-mail</artifactId>
-                <version>${org.springframework.spring-boot-starter-mail.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
                 <version>${spring-security.version}</version>
@@ -157,6 +152,11 @@
                 <groupId>org.thymeleaf</groupId>
                 <artifactId>thymeleaf-spring4</artifactId>
                 <version>${thymeleaf-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>javax.mail</artifactId>
+                <version>${javax.mail.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
