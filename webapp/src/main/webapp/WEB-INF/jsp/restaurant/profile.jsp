@@ -109,16 +109,39 @@
                                     <i class="material-icons left">edit</i>
                                 </button>
                             </a>
-                            <c:url value="/restaurant/section/${section.id}/delete" var="deleteUrl"/>
-                            <form method="post" action="${deleteUrl}" class="margin_l_5px">
-                                <button class="btn-large waves-effect waves-light btn-floating default_red"
-                                        type="submit" name="action">
-                                    <i class="material-icons left">delete</i>
-                                </button>
-                            </form>
+
+
+
+                            <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
+                               href="#delete_section_confirm_modal">
+                                <i class="material-icons left">delete</i>
+                            </a>
+                            <div id="delete_section_confirm_modal" class="modal confirm_delete_modal_height">
+                                <div class="modal-content">
+                                    <h4 class="center">
+                                        <spring:message code="restaurant.detail.delete_section"
+                                                        arguments="${section.name}"/>
+                                    </h4>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="flex_row">
+                                        <a class="modal-close waves-effect btn-flat grow_on_hover">
+                                            <spring:message code="diner.reservation.back"/>
+                                        </a>
+                                        <c:url value="/restaurant/section/${section.id}/delete" var="deleteUrl"/>
+                                        <form method="post" action="${deleteUrl}" class="margin_l_5px">
+                                            <button class="modal-close waves-effect red-text btn-flat grow_on_hover"
+                                                    type="submit" name="action">
+                                                <spring:message code="diner.reservation.continue"/>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <c:if test="${section.menuItemList.size() == 0}">
-                            <h6><spring:message code="restaurant.public_detail.no_items"/></h6>  <!-- TODO: custom message -->
+                            <h6><spring:message code="restaurant.public_detail.no_items"/></h6>
                         </c:if>
                         <c:forEach items="${section.menuItemList}" var="item">
                             <hr/>
@@ -157,13 +180,34 @@
                                                 <i class="material-icons left">edit</i>
                                             </button>
                                         </a>
-                                        <c:url value="/restaurant/item/${item.id}/delete" var="deleteUrl"/>
-                                        <form method="post" action="${deleteUrl}" class="margin_l_5px">
-                                            <button class="btn-small waves-effect waves-light btn-floating default_red"
-                                                    type="submit" name="action">
+                                        <div class="margin_l_5px">
+                                            <a class="btn-small waves-effect waves-light btn-floating default_red modal-trigger"
+                                               href="#delete_item_confirm_modal">
                                                 <i class="material-icons left">delete</i>
-                                            </button>
-                                        </form>
+                                            </a>
+                                            <div id="delete_item_confirm_modal" class="modal confirm_delete_modal_height">
+                                                <div class="modal-content">
+                                                    <h4 class="center">
+                                                        <spring:message code="restaurant.detail.delete_item"
+                                                                        arguments="${item.name}"/>
+                                                    </h4>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="flex_row">
+                                                        <a class="modal-close waves-effect btn-flat grow_on_hover">
+                                                            <spring:message code="diner.reservation.back"/>
+                                                        </a>
+                                                        <c:url value="/restaurant/item/${item.id}/delete" var="deleteUrl"/>
+                                                        <form method="post" action="${deleteUrl}" class="margin_l_5px">
+                                                            <button class="modal-close waves-effect red-text btn-flat grow_on_hover"
+                                                                    type="submit" name="action">
+                                                                <spring:message code="diner.reservation.continue"/>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <p class="regular"><c:out value="${item.detail}"/></p>
                                 </div>
@@ -178,5 +222,10 @@
 
 
 <%@ include file="../footer.jsp" %>
+<script>
+    $(document).ready(function () {
+        $('.modal').modal();
+    });
+</script>
 </body>
 </html>

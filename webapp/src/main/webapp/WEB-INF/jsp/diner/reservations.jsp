@@ -21,19 +21,21 @@
                     <spring:message code="diner.future_reservations.title"/>
                 </c:if>
             </h1>
-            <div class="bold grow_on_hover default_dark_text">
-                <c:if test="${past}">
-                    <c:url value="/diner/reservations" var="toggleUrl"/>
-                    <a href="${toggleUrl}" class="default_dark_text">
-                        <spring:message code="diner.show_future"/>
-                    </a>
-                </c:if>
-                <c:if test="${!past}">
-                    <c:url value="/diner/reservations?past=true" var="toggleUrl"/>
-                    <a href="${toggleUrl}" class="default_dark_text">
-                        <spring:message code="diner.show_past"/>
-                    </a>
-                </c:if>
+            <div class="flex_center">
+                <h6 class="grow_on_hover default_dark_text bold underline">
+                    <c:if test="${past}">
+                        <c:url value="/restaurant/reservations" var="toggleUrl"/>
+                        <a href="${toggleUrl}" class="default_dark_text">
+                            <spring:message code="restaurant.reservations.show_future"/>
+                        </a>
+                    </c:if>
+                    <c:if test="${!past}">
+                        <c:url value="/restaurant/reservations?past=true" var="toggleUrl"/>
+                        <a href="${toggleUrl}" class="default_dark_text">
+                            <spring:message code="restaurant.reservations.show_past"/>
+                        </a>
+                    </c:if>
+                </h6>
             </div>
             <c:if test="${reservations.size() == 0}">
                 <h2 class="header center default_light_text">
@@ -60,7 +62,7 @@
                                 <%--                            <div class="margins_lr_5px">--%>
                                 <%--                                <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>--%>
                                 <%--                                <form method="post" action="${deleteUrl}">--%>
-                                <%--                                    <button class="btn-large waves-effect waves-light btn-floating default_dark"--%>
+                                <%--                                    <button class="btn-|large waves-effect waves-light btn-floating default_dark"--%>
                                 <%--                                            type="submit" name="action">--%>
                                 <%--                                        <i class="material-icons left">create</i>--%>
                                 <%--                                    </button>--%>
@@ -72,7 +74,7 @@
                                        href="#delete_confirm_modal">
                                         <i class="material-icons left">delete</i>
                                     </a>
-                                    <div id="delete_confirm_modal" class="modal confirm_delet_modal_height">
+                                    <div id="delete_confirm_modal" class="modal confirm_delete_modal_height">
                                         <div class="modal-content">
                                             <h4 class="center">
                                                 <spring:message code="diner.reservation.confirmation"

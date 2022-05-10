@@ -38,6 +38,9 @@
                             <spring:message code="reservation.reservation.form.time"/>
                          </form:label>
                         <form:select path="time">
+                            <form:option value="" disabled="true">
+                                <spring:message code="reservation.reservation.pick_time"/>
+                            </form:option>
                             <c:forEach items="${times}" var="time">
                                 <form:option value="${time}">
                                     <c:out value="${time}"/>
