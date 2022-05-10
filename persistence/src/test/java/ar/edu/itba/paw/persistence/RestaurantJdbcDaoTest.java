@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 // @Sql(scripts = {"classpath:sql/schema.sql"})
 @ContextConfiguration(classes = TestConfig.class)
+// @Rollback
 public class RestaurantJdbcDaoTest {
 
     private static final String RESTAURANT_TABLE = "restaurant";
