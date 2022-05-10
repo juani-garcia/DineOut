@@ -142,6 +142,7 @@
                 <groupId>org.logback-extensions</groupId>
                 <artifactId>logback-ext-spring</artifactId>
                 <version>${logback-ext-spring.version}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>commons-fileupload</groupId>
@@ -195,6 +196,9 @@
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>3.2.2</version>
+                    <configuration>
+                        <packagingExcludes>**/logback-test.xml</packagingExcludes>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
