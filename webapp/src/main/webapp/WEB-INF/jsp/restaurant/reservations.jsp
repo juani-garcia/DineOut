@@ -77,7 +77,7 @@
                                        href="#delete_confirm_modal">
                                         <i class="material-icons left">delete</i>
                                     </a>
-                                    <div id="delete_confirm_modal" class="modal confirm_delet_modal_height">
+                                    <div id="delete_confirm_modal" class="modal confirm_delete_modal_height">
                                         <div class="modal-content">
                                             <h4 class="center">
                                                 <spring:message code="restaurant.reservation.confirmation"
