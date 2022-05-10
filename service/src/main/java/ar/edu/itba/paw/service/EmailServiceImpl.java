@@ -93,8 +93,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reset-password.html");
     }
 
-    @Async
-    void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
+    public void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
 
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
@@ -110,7 +109,8 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    private void sendHtmlMessage(String to, String htmlBody) throws MessagingException {
+    @Async
+    public void sendHtmlMessage(String to, String htmlBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setTo(to);
