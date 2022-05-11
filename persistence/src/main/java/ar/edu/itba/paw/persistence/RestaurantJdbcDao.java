@@ -102,7 +102,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     @Override
     public List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
         StringBuilder sql = new StringBuilder("SELECT *, \n");
-        sql.append("(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) fav_count ");
+        sql.append("(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) as fav_count ");
         List<Object> args = new ArrayList<>();
 
         Pair<StringBuilder, List<Object>> filterPair = this.filterBuilder(name, category, shift, zone, sql, args);
@@ -158,7 +158,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByFavorite() {
-        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+        return jdbcTemplate.query("SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) as fav_count FROM restaurant NATURAL JOIN (" +
                 "    SELECT restaurant_id AS id, COUNT(user_id) AS likes" +
                 "    FROM favorite" +
                 "    GROUP BY restaurant_id" +
@@ -169,7 +169,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByFavoriteOfUser(long userId) {
-        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+        return jdbcTemplate.query("SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) as fav_count FROM restaurant NATURAL JOIN (" +
                 "    SELECT restaurant_id AS id" +
                 "    FROM favorite" +
                 "    WHERE user_id = ?" +
@@ -180,7 +180,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByReservations() {
-        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+        return jdbcTemplate.query("SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) as fav_count FROM restaurant NATURAL JOIN (" +
                 "    SELECT restaurant_id AS id, COUNT(user_mail) AS reservation_count" +
                 "    FROM reservation" +
                 "    GROUP BY restaurant_id" +
@@ -191,7 +191,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByReservationsOfUser(String username) {
-        return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
+        return jdbcTemplate.query("SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) as fav_count FROM restaurant NATURAL JOIN (" +
                 "    SELECT restaurant_id AS id, COUNT(user_mail) AS reservation_count" +
                 "    FROM reservation" +
                 "    WHERE user_mail = ?" +
@@ -204,6 +204,16 @@ public class RestaurantJdbcDao implements RestaurantDao {
     @Override
     public long getFilteredPagesCount(String name, Category category, Shift shift, Zone zone) {
         return Double.valueOf(Math.ceil(getFilteredCount(name, category, shift, zone).doubleValue() / PAGE_SIZE)).longValue();
+    }
+
+    @Override
+    public List<Restaurant> getTopTenByZone(Zone key) {
+        return jdbcTemplate.query("SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count FROM restaurant WHERE zone_id = ? LIMIT 10", new Object[]{key.getId()}, ROW_MAPPER);
+    }
+
+    @Override
+    public List<Restaurant> getTopTenByCategory(Category key) {
+        return jdbcTemplate.query("SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count FROM restaurant WHERE id IN (SELECT restaurant_id FROM restaurant_category WHERE category_id = ?) LIMIT 10", new Object[]{key.getId()}, ROW_MAPPER);
     }
 
 }

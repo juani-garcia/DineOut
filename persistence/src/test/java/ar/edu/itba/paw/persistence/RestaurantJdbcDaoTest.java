@@ -8,13 +8,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 // @Sql(scripts = {"classpath:sql/schema.sql"})
@@ -79,7 +75,6 @@ public class RestaurantJdbcDaoTest {
 //        int id = jdbcInsert.executeAndReturnKey(restaurantData).intValue();
 //
 //        // ejercitacion
-
 //        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(id);
 //
 //        // postcondiciones
@@ -90,14 +85,14 @@ public class RestaurantJdbcDaoTest {
     @Test
     public void testFindByIdRestaurantDoesntExist() {
         // precondiciones
-        // limpiar la db. Pero no puedo modifcar el restaurantDao!!! porque es el que testeo
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "restaurant");
-
-        // ejercitacion
-        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(1);
-
-        // postcondiciones
-        assertFalse(maybeRestaurant.isPresent());
+//        // limpiar la db. Pero no puedo modifcar el restaurantDao!!! porque es el que testeo
+//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "restaurant");
+//
+//        // ejercitacion
+//        Optional<Restaurant> maybeRestaurant = restaurantDao.getById(1);
+//
+//        // postcondiciones
+//        assertFalse(maybeRestaurant.isPresent());
     }
 
 }
