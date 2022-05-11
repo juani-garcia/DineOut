@@ -1,9 +1,9 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
 public class Favorite {
     private final Long restaurantId, userId;
 
-    protected Favorite(Long restaurantId, Long userId) {
+    public Favorite(Long restaurantId, Long userId) {
         this.restaurantId = restaurantId;
         this.userId = userId;
     }

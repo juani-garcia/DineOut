@@ -8,6 +8,4 @@ CREATE TABLE IF NOT EXISTS password_reset_token (
     PRIMARY KEY (id)
 );
 
-ALTER TABLE reservation
-ADD COLUMN is_confirmed BOOLEAN NOT NULL
-DEFAULT false
+ALTER TABLE reservation ADD COLUMN IF NOT EXISTS is_confirmed BOOLEAN NOT NULL DEFAULT false

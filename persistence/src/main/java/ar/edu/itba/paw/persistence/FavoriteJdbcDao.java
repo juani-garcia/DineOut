@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Favorite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,7 +13,7 @@ import java.util.List;
 public class FavoriteJdbcDao implements FavoriteDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 8;
     private static final RowMapper<Favorite> ROW_MAPPER = (rs, rowNum) ->
             new Favorite(rs.getLong("restaurant_id"), rs.getLong("user_id"));
 

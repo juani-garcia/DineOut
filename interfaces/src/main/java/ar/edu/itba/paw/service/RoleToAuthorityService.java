@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.RoleToAuthority;
+import ar.edu.itba.paw.model.RoleToAuthority;
 
 import java.util.List;
 

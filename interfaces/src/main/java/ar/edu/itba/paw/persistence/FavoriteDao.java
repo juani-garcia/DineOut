@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Favorite;
+
 import java.util.List;
 
 public interface FavoriteDao {

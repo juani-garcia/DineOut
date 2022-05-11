@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.Favorite;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;

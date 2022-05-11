@@ -22,7 +22,14 @@ public class FutureDateTimeValidator implements ConstraintValidator<FutureDateTi
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        LocalTime time = (LocalTime) new BeanWrapperImpl(value).getPropertyValue(this.time);
+        LocalTime time;
+
+        try {
+            time = LocalTime.parse((String) new BeanWrapperImpl(value).getPropertyValue(this.time));
+        } catch (DateTimeParseException ex) {
+            return false;
+        }
+
         LocalDate date;
 
         try {
@@ -31,7 +38,15 @@ public class FutureDateTimeValidator implements ConstraintValidator<FutureDateTi
             return false;
         }
 
-        return LocalDateTime.of(date, time).isAfter(LocalDateTime.now());
+        boolean valid = LocalDateTime.of(date, time).isAfter(LocalDateTime.now());
+
+        if (!valid) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("Date time is past")
+                    .addNode(this.date).addConstraintViolation();
+        }
+
+        return valid;
 
     }
 }

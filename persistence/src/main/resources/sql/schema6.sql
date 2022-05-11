@@ -9,12 +9,12 @@ ALTER TABLE menu_section ADD CONSTRAINT menu_section_ordering_unique UNIQUE(rest
 
 -- Automatically order into last place for new sections
 CREATE OR REPLACE FUNCTION insert_section_ordering()
-    RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS '
 BEGIN
     SELECT COUNT(*) + 1 INTO NEW.ordering FROM menu_section WHERE restaurant_id = NEW.restaurant_id;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS insert_item_section_trigger ON menu_section;
 CREATE TRIGGER insert_item_section_trigger
@@ -24,7 +24,7 @@ EXECUTE PROCEDURE insert_section_ordering();
 
 -- Automatically rearrangement of orders when deletion
 CREATE OR REPLACE FUNCTION delete_section_ordering()
-    RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS '
 DECLARE
     cursor CURSOR FOR SELECT *
                       FROM menu_section
@@ -42,7 +42,7 @@ BEGIN
     CLOSE cursor;
     RETURN OLD;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS delete_item_section_trigger ON menu_section;
 CREATE TRIGGER delete_item_section_trigger
@@ -52,7 +52,7 @@ EXECUTE PROCEDURE delete_section_ordering();
 
 -- Automatically swap orders
 CREATE OR REPLACE FUNCTION update_section_ordering()
-    RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS '
 DECLARE
     cursor CURSOR FOR SELECT *
                       FROM menu_section
@@ -65,7 +65,7 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_item_section_trigger ON menu_section;
 CREATE TRIGGER update_item_section_trigger
@@ -81,12 +81,12 @@ ALTER TABLE menu_item ADD CONSTRAINT menu_item_ordering_unique UNIQUE(section_id
 
 -- Automatically order into last place for new sections
 CREATE OR REPLACE FUNCTION insert_item_ordering()
-    RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS '
 BEGIN
     SELECT COUNT(*) + 1 INTO NEW.ordering FROM menu_item WHERE section_id = NEW.section_id;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS insert_item_trigger ON menu_item;
 CREATE TRIGGER insert_item_trigger
@@ -96,7 +96,7 @@ EXECUTE PROCEDURE insert_item_ordering();
 
 -- Automatically rearrangement of orders when deletion
 CREATE OR REPLACE FUNCTION delete_item_ordering()
-    RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS '
 DECLARE
     cursor CURSOR FOR SELECT *
                       FROM menu_item
@@ -114,7 +114,7 @@ BEGIN
     CLOSE cursor;
     RETURN OLD;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS delete_item_trigger ON menu_item;
 CREATE TRIGGER delete_item_trigger
@@ -124,7 +124,7 @@ EXECUTE PROCEDURE delete_item_ordering();
 
 -- Automatically swap orders
 CREATE OR REPLACE FUNCTION update_item_ordering()
-    RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS '
 DECLARE
     cursor CURSOR FOR SELECT *
                       FROM menu_item
@@ -136,7 +136,7 @@ BEGIN
     END IF;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+' LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_item_trigger ON menu_item;
 CREATE TRIGGER update_item_trigger

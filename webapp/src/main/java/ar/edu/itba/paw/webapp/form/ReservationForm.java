@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.validations.Format;
+import ar.edu.itba.paw.webapp.validations.DateFormat;
 import ar.edu.itba.paw.webapp.validations.FutureDateTime;
+import ar.edu.itba.paw.webapp.validations.TimeFormat;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 
 @FutureDateTime(
         date = "date",
@@ -25,11 +25,12 @@ public class ReservationForm {
     private Integer amount;
 
     @NotNull
-    @Format
+    @DateFormat(format = "yyyy-MM-dd")
     private String date;
 
     @NotNull
-    private LocalTime time;
+    @TimeFormat(format = "HH:mm")
+    private String time;
 
     public String getDate() {
         return date;
@@ -39,11 +40,11 @@ public class ReservationForm {
         this.date = date;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -64,7 +65,7 @@ public class ReservationForm {
     }
 
     public LocalDateTime getLocalDateTime() {
-        return LocalDateTime.of(LocalDate.parse(date), time);
+        return LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(time));
     }
 
 }
