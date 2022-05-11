@@ -83,7 +83,7 @@ public class UserJdbcDaoTest {
         userData.put("password", PASSWORD);
         userData.put("first_name", FIRST_NAME);
         userData.put("last_name", LAST_NAME);
-        long id = jdbcInsert.executeAndReturnKey(userData).intValue();
+        long id = jdbcInsert.executeAndReturnKey(userData).longValue();
 
 
         Optional<User> maybeUser = userJdbcDao.getById(id);
@@ -189,7 +189,7 @@ public class UserJdbcDaoTest {
     @Test
     public void testUpdatePasswordInexistingUser() {
 
-        assertThrows(RuntimeException.class, () -> userJdbcDao.updatePassword(NEW_PASSWORD, ID));
+        assertFalse(userJdbcDao.updatePassword(NEW_PASSWORD, ID));
 
     }
 

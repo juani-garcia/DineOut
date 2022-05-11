@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -76,8 +75,6 @@ public class ReservationServiceImplTest {
                 thenReturn(reservation);
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(securityService.getCurrentUsername()).
-                thenReturn(USER_FIRST_NAME);
     }
 
     @Test
@@ -103,8 +100,6 @@ public class ReservationServiceImplTest {
     public void testRequireLogin() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
-        when(securityService.getCurrentUsername()).
-                thenReturn(null);
 
         Assert.assertThrows(IllegalStateException.class, () -> reservationService.create(RESTAURANT_ID, RESTAURANT_MAIL, AMOUNT, DATETIME, COMMENTS));
     }
