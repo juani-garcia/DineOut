@@ -18,7 +18,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image create(final byte[] source) {
-        // TODO: ? Check size?
         return imageDao.create(source);
     }
 
