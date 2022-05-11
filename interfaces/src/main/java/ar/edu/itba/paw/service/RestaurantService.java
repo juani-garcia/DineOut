@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.Restaurant;
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 
 import java.util.List;

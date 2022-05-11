@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.Reservation;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.User;
 
 public interface EmailService {
 

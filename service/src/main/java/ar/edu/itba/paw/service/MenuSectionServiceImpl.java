@@ -1,12 +1,10 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
-import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.MenuSection;
+import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.persistence.MenuSectionDao;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import org.junit.Assert;

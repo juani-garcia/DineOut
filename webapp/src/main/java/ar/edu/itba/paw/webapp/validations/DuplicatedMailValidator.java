@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.validations;
 
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.model.UserToRole;
 import ar.edu.itba.paw.persistence.*;
 import org.junit.Assert;
 import org.junit.Test;

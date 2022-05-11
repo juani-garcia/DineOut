@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.persistence.MenuItem;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

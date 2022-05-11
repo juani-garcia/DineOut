@@ -2,10 +2,10 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
-import ar.edu.itba.paw.persistence.Reservation;
+import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

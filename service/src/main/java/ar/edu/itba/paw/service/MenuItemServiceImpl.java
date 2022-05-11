@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.persistence.Image;
-import ar.edu.itba.paw.persistence.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

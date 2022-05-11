@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ public class PasswordResetToken {
 
     private final boolean isUsed;
 
-    protected PasswordResetToken(Long id, String token, long userId, LocalDateTime expiryDate, boolean isUsed) {
+    public PasswordResetToken(Long id, String token, long userId, LocalDateTime expiryDate, boolean isUsed) {
         this.id = id;
         this.token = token;
         this.userId = userId;

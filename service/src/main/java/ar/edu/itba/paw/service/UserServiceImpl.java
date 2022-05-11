@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.PasswordResetToken;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.model.UserToRole;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
