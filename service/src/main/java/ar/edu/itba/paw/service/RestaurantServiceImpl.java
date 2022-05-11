@@ -77,10 +77,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts) {
+    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
-        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone);
+        Long imageId = restaurant.getImageId();
+        if (imageBytes.length > 0) {
+            if (restaurant.getImageId() != null) {
+                imageService.delete(restaurant.getImageId());
+            }
+            imageId = imageService.create(imageBytes).getId();
+        }
+        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone, imageId);
     }
 
     @Override
@@ -105,25 +112,51 @@ public class RestaurantServiceImpl implements RestaurantService {
     private Restaurant getRecommendedOfLoggedUser() {
         List<Restaurant> restaurantFavoriteList = restaurantDao.getTopTenByFavoriteOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
         List<Restaurant> restaurantReservedList = restaurantDao.getTopTenByReservationsOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getUsername());
+        if (restaurantFavoriteList.isEmpty() && restaurantReservedList.isEmpty()) return getRecommended();
+
         HashMap<Zone, Integer> zoneIntegerHashMap = new HashMap<>();
         HashMap<Category, Integer> categoryIntegerHashMap = new HashMap<>();
-        for (Restaurant favRestaurant : restaurantFavoriteList) {
+        for (
+                Restaurant favRestaurant : restaurantFavoriteList) {
             zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(favRestaurant.getZone(), 0) + 1);
             for (Category category : categoryService.getByRestaurantId(favRestaurant.getId())) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
-        for (Restaurant resRestaurant : restaurantReservedList) {
+        for (
+                Restaurant resRestaurant : restaurantReservedList) {
             zoneIntegerHashMap.put(resRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(resRestaurant.getZone(), 0) + 1);
             for (Category category : categoryService.getByRestaurantId(resRestaurant.getId())) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
+
         List<Restaurant> randomList = new ArrayList<>();
 
-        // TODO
+        Map.Entry<Category, Integer> favCategory = categoryIntegerHashMap.entrySet().stream().findFirst().orElse(null);
+        Map.Entry<Zone, Integer> favZone = zoneIntegerHashMap.entrySet().stream().findFirst().orElse(null);
 
-        return getRecommended();
+        for (Map.Entry<Zone, Integer> zoneIntegerEntry : zoneIntegerHashMap.entrySet()) {
+            if (favZone.getValue() < zoneIntegerEntry.getValue()) {
+                favZone = zoneIntegerEntry;
+            }
+            for (Map.Entry<Category, Integer> categoryIntegerEntry : categoryIntegerHashMap.entrySet()) {
+                if (favCategory.getValue() < categoryIntegerEntry.getValue()) {
+                    favCategory = categoryIntegerEntry;
+                }
+            }
+        }
+
+        if (favZone != null) {
+            randomList.addAll(restaurantDao.getTopTenByZone(favZone.getKey()));
+        }
+        if (favCategory != null) {
+            randomList.addAll(restaurantDao.getTopTenByCategory(favCategory.getKey()));
+        }
+
+        if (randomList.isEmpty()) return getRecommended();
+        Random random = new Random();
+        return randomList.get(random.nextInt(randomList.size()));
     }
 
     private Restaurant getRecommended() {

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.persistence.ReservationDao;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -42,6 +43,8 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         Reservation reservation = reservationDao.create(restaurant, user, amount, dateTime, comments);
+
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
 
         emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation);
         emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user);
@@ -80,6 +83,8 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ForbiddenActionException();
         }
 
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
+
         emailService.sendReservationCancelledUser(
                 reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation);
         emailService.sendReservationCancelledRestaurant(
@@ -96,9 +101,11 @@ public class ReservationServiceImpl implements ReservationService {
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
 
-        if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {  // TODO: change when we modify shifts
-            throw new ForbiddenActionException();
+        if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {
+            throw new InvalidTimeException();
         }
+
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
 
         User owner = reservation.getOwner();
         emailService.sendReservationConfirmed(reservation.getMail(),

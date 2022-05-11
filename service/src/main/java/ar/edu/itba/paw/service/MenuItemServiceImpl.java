@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,9 +63,17 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, menuItem.getImageId());
     }
 
+    @Transactional
     @Override
     public boolean edit(long itemId, String name, String detail, double price, long sectionId, byte[] imageBytes) {
         MenuItem menuItem = validateItem(itemId);
+        Long imageId = menuItem.getImageId();
+        if (imageBytes.length > 0) {
+            if (menuItem.getImageId() != null) {
+                imageService.delete(menuItem.getImageId());
+            }
+            imageId = imageService.create(imageBytes).getId();
+        }
         return menuItemDao.edit(itemId, name, detail, price, sectionId, menuItem.getOrdering(), menuItem.getImageId());
     }
 

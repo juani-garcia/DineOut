@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.model.UserToRole;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
         if (!userRole.isPresent()) throw new IllegalStateException("El rol " + role + " no esta presente en la bbdd");
         UserToRole userToRole = userToRoleService.create(user.getId(), userRole.get().getId());
 
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
 
         return user;
@@ -79,7 +81,9 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
+
     }
 
     @Override
