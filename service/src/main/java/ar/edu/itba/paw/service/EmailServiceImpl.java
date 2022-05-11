@@ -25,6 +25,7 @@ public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
     private static final String ADDRESS = "dineout.graphene@gmail.com";
+    private static final String SENDER_NAME = "DineOut";
 
     @Autowired
     private JavaMailSender emailSender;
@@ -130,7 +131,7 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setTo(to);
-        helper.setFrom(ADDRESS);
+        helper.setFrom(String.format("%s <%s>", SENDER_NAME, ADDRESS));
         helper.setSubject(subject);
         String plainTextBody = htmlBody.replaceAll("((<script>[^<]*</script>)|(<style>[^<]*</style>))|(<[^>]*>)", "");  // As per: https://www.baeldung.com/java-remove-html-tags this could bring some issues but for our uses it is enough.
         helper.setText(plainTextBody, htmlBody);
