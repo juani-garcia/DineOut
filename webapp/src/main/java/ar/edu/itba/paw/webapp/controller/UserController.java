@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.persistence.User;
 import ar.edu.itba.paw.service.RestaurantService;
@@ -25,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -99,11 +99,7 @@ public class UserController {
     // Referenced from: https://www.baeldung.com/spring-security-registration-i-forgot-my-password
     @RequestMapping("/forgot_my_password")
     public ModelAndView forgotMyPassword(@ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm) {
-        ModelAndView mav = new ModelAndView("/forgot_my_password");
-
-        // TODO: @juanigarcia use custom validator for email.
-
-        return mav;
+        return new ModelAndView("/forgot_my_password");
     }
 
     @RequestMapping(value = "/reset_password", method = {RequestMethod.POST})
@@ -112,12 +108,9 @@ public class UserController {
             return forgotMyPassword(passwordRecoveryForm);
         }
 
-        Optional<User> user = userService.getByUsername(passwordRecoveryForm.getUsername());
-        if (!user.isPresent()) {
-            return forgotMyPassword(passwordRecoveryForm);  // TODO: @juanigarcia use custom validator for email.
-        }
-        userService.createPasswordResetTokenForUser(user.get(), request.getScheme() + "://" + request.getHeader("host"));
-        return new ModelAndView("redirect:/");  // TODO: cargar la misma vista que /forgot_my_password pero con un succes message.
+        User user = userService.getByUsername(passwordRecoveryForm.getUsername()).orElseThrow(NotFoundException::new);
+        userService.createPasswordResetTokenForUser(user, request.getScheme() + "://" + request.getHeader("host"));
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping("/change_password")
@@ -139,10 +132,10 @@ public class UserController {
         String result = securityService.validatePasswordResetToken(newPasswordForm.getToken());
 
         if (result != null) {
-            return new ModelAndView("redirect:/login");  // TODO: send error info.
+            return new ModelAndView("redirect:/login");
         }
 
         userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
-        return new ModelAndView("redirect:/login");  // TODO: send succes message.
+        return new ModelAndView("redirect:/login");
     }
 }
