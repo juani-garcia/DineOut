@@ -2,6 +2,8 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.Reservation;
 import ar.edu.itba.paw.persistence.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,6 +19,8 @@ import java.util.Map;
 
 @Component
 public class EmailServiceImpl implements EmailService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Autowired
     private JavaMailSender emailSender;
@@ -102,10 +106,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             sendHtmlMessage(to, htmlBody);
         } catch (MessagingException mex) {
-            // TODO: Add to logger that mail could not be sent
-            System.out.println("*********************************");
-            System.out.println("MAIL COULD NOT BE SENT");
-            System.out.println("*********************************");
+            LOGGER.warn("Could not send email to {} with template {}", to, template, mex);
         }
     }
 
