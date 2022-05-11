@@ -13,7 +13,7 @@
 <div id="index-banner" class="align_center">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold">¡Registra tu restaurante!</h1>
+            <h1 class="header center white-text bold"><spring:message code="home.register"/></h1>
         </div>
     </div>
 </div>

@@ -116,7 +116,8 @@ public class EmailServiceImpl implements EmailService {
         helper.setTo(to);
         helper.setFrom("dineout.graphene@gmail.com");
         helper.setSubject("DineOut");
-        helper.setText(htmlBody, true);
+        String plainTextBody = htmlBody.replaceAll("((<[^>]*>)|(<style>*</style>))|(<script>*</script>)", "");  // As per: https://www.baeldung.com/java-remove-html-tags this could bring some issues but for our uses it is enough.
+        helper.setText(plainTextBody, htmlBody);
         emailSender.send(message);
     }
 }
