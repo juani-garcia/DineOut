@@ -191,5 +191,7 @@ public class MenuSectionServiceImplTest {
 
     }
 
+    // TODO: Test triggers
+
 
 }
