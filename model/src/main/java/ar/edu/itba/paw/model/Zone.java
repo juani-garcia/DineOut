@@ -237,7 +237,7 @@ public enum Zone {
 
     public long getId() {
         return ordinal();
-    }  // TODO: check this @juangarcia, it is weird
+    }
 
     public static Zone getById(long id) {
         for (Zone zone : Zone.values()) {

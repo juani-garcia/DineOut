@@ -35,7 +35,7 @@
                         <i class="material-icons right">keyboard_backspace</i>
                         <spring:message code="error.back" />
                     </button>
-                    <a href="<c:url value="/"/>">
+                    <a href="<c:url value="/"/>" class="margin_l_20px">
                         <button class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
                             <i class="material-icons right">home</i>
                             <spring:message code="error.home" />

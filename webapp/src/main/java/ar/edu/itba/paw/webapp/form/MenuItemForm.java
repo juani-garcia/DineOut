@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
@@ -16,7 +17,8 @@ public class MenuItemForm {
     private String detail;
 
     @NotNull
-    @Min(0) // TODO: get another validator
+    @Min(0)
+    @NumberFormat
     private double price;
 
     @NotNull
