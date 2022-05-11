@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,8 @@ public class UserServiceImpl implements UserService {
 
         // TODO: rollback if not able to create userToRole
 
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
+
         emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
 
         return user;
@@ -75,7 +78,9 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
+
     }
 
     @Override
