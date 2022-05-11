@@ -8,7 +8,7 @@ public class MenuSection {
     private String name;
     private List<MenuItem> menuItemList;
 
-    protected MenuSection(long id, String name, long restaurantId, long ordering) {
+    public MenuSection(long id, String name, long restaurantId, long ordering) {
         this.id = id;
         this.name = name;
         this.restaurantId = restaurantId;
