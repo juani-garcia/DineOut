@@ -28,14 +28,14 @@
                     </div>
                     <div class="row">
                         <form:label path="date" cssClass="semibold label-text-size">
-                            <spring:message code="reservation.reservation.form.date" />
+                            <spring:message code="reservation.reservation.form.date" />*
                         </form:label>
                         <form:input path="date" type="date"/>
                         <form:errors path="date" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row">
                         <form:label path="time" cssClass="semibold label-text-size">
-                            <spring:message code="reservation.reservation.form.time"/>
+                            <spring:message code="reservation.reservation.form.time"/>*
                          </form:label>
                         <form:select path="time">
                             <form:option value="" disabled="true">
