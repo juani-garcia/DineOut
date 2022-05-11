@@ -3,11 +3,11 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.model.Zone;
 
 public class Restaurant {
-    private final Long id, userID, imageId;
+    private final Long id, userID, imageId, favCount;
     private final String name, mail, address, detail;
     private final Zone zone;
 
-    protected Restaurant(long id, Long userID, String name, Long imageId, String address, String mail, String detail, Zone zone) {
+    protected Restaurant(long id, Long userID, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
         this.id = id;
         this.userID = userID;
         this.name = name;
@@ -16,6 +16,7 @@ public class Restaurant {
         this.detail = detail;
         this.mail = mail;
         this.zone = zone;
+        this.favCount = favCount;
     }
 
     public long getId() {
@@ -48,5 +49,9 @@ public class Restaurant {
 
     public String getMail() {
         return mail;
+    }
+
+    public Long getFavCount() {
+        return favCount;
     }
 }
