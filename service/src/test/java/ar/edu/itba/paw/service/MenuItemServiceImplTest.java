@@ -121,6 +121,8 @@ public class MenuItemServiceImplTest {
                 thenReturn(Optional.of(RESTAURANT));
         when(menuItemDao.getById(anyLong())).
                 thenReturn(Optional.of(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID)));
+        when(imageService.create(any())).
+                thenReturn(new Image(1, new byte[] {0, 1}));
 
         try {
             menuItemService.edit(ID, NAME, DETAIL, PRICE, SECTION_ID, IMAGE_BYTES);
