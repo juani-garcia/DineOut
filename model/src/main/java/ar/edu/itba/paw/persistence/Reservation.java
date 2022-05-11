@@ -9,16 +9,17 @@ public class Reservation {
     private final long reservationId;
     private final int amount;
     private final LocalDateTime dateTime;
-    private final String userMail, comments;
+    private final String comments;
     private final Restaurant restaurant;
     private final boolean isConfirmed;
+    private final User owner;
 
-    protected Reservation(long reservationId, String userMail, int amount, LocalDateTime dateTime,
-                          String comments, Restaurant restaurant, boolean isConfirmed) {
+    protected Reservation(long reservationId, int amount, LocalDateTime dateTime,
+                          String comments, Restaurant restaurant, User owner, boolean isConfirmed) {
         this.reservationId = reservationId;
         this.amount = amount;
         this.dateTime = dateTime;
-        this.userMail = userMail;
+        this.owner = owner;
         this.comments = comments;
         this.restaurant = restaurant;
         this.isConfirmed = isConfirmed;
@@ -48,8 +49,12 @@ public class Reservation {
         return comments;
     }
 
+    public User getOwner() {
+        return owner;
+    }
+
     public String getMail() {
-        return userMail;
+        return getOwner().getUsername();
     }
 
     public String getDateString() {
