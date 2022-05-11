@@ -33,7 +33,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public Optional<Restaurant> getById(long id) {
-        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
+        String sql = "SELECT restaurant.*, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
                      "FROM restaurant WHERE id = ?";
         List<Restaurant> query = jdbcTemplate.query(sql, new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();
@@ -41,7 +41,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public Optional<Restaurant> getByMail(String mail) {
-        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
+        String sql = "SELECT restaurant.*, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
                      "FROM restaurant WHERE mail = ?";
         List<Restaurant> query = jdbcTemplate.query(sql, new Object[]{mail}, ROW_MAPPER);
         return query.stream().findFirst();
@@ -49,7 +49,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public Optional<Restaurant> getByUserId(long id) {
-        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
+        String sql = "SELECT restaurant.*, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
                      "FROM restaurant WHERE user_id = ?";
         List<Restaurant> query = jdbcTemplate.query(sql, new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();
@@ -57,7 +57,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getAll(int page) {
-        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) fav_count " +
+        String sql = "SELECT restaurant.*, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) fav_count " +
                      "FROM restaurant ORDER BY fav_count LIMIT ? OFFSET ? ";
         return jdbcTemplate.query(sql, new Object[]{PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
