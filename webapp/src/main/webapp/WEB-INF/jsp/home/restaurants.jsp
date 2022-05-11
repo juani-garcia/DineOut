@@ -10,12 +10,6 @@
 <body>
 <%@ include file="../navbar.jsp" %>
 
-<div class="section no-pad-bot">
-    <div class="container">
-        <h1 class="header center white-text bold"><spring:message code="home.index.recommended.title"/></h1>
-    </div>
-</div>
-
 <div class="container">
     <div class="row">
         <%@include file="../search_bar.jsp" %>
@@ -90,6 +84,9 @@
         var categoryOptions = document.getElementById('category_select_options').querySelectorAll('option');
         categoryOptions[categoryOption - -1].removeAttribute('selected');
         categoryOptions[0].setAttribute('selected', 'selected');
+        document.getElementById(document.getElementById('category_select').children.item(0).children.item(0).getAttribute("data-target")).childNodes.forEach(function(el) {el.setAttribute("class", "")})
+        document.getElementById(document.getElementById('category_select').children.item(0).children.item(0).getAttribute("data-target")).children.item(0).setAttribute("class", "selected");
+        document.getElementById(document.getElementById('category_select').children.item(0).children.item(0).getAttribute("data-target")).children.item(0).click()
         document.getElementById('category_select').children.item(0).children.item(0).value = categoryOptions[0].text;
 
         params.set('zone', '');
@@ -97,6 +94,9 @@
         var zoneOptions = document.getElementById('zone_select_options').querySelectorAll('option');
         zoneOptions[zoneOption - -1].removeAttribute('selected');
         zoneOptions[0].setAttribute('selected', 'selected');
+        document.getElementById(document.getElementById('zone_select').children.item(0).children.item(0).getAttribute("data-target")).childNodes.forEach(function(el) {el.setAttribute("class", "")})
+        document.getElementById(document.getElementById('zone_select').children.item(0).children.item(0).getAttribute("data-target")).children.item(0).setAttribute("class", "selected");
+        document.getElementById(document.getElementById('zone_select').children.item(0).children.item(0).getAttribute("data-target")).children.item(0).click()
         document.getElementById('zone_select').children.item(0).children.item(0).value = zoneOptions[0].text;
 
         params.set('shift', '');
@@ -104,6 +104,9 @@
         var shiftOptions = document.getElementById('shift_select_options').querySelectorAll('option');
         shiftOptions[shiftOption - -1].removeAttribute('selected');
         shiftOptions[0].setAttribute('selected', 'selected');
+        document.getElementById(document.getElementById('shift_select').children.item(0).children.item(0).getAttribute("data-target")).childNodes.forEach(function(el) {el.setAttribute("class", "")})
+        document.getElementById(document.getElementById('shift_select').children.item(0).children.item(0).getAttribute("data-target")).children.item(0).setAttribute("class", "selected");
+        document.getElementById(document.getElementById('shift_select').children.item(0).children.item(0).getAttribute("data-target")).children.item(0).click()
         document.getElementById('shift_select').children.item(0).children.item(0).value = shiftOptions[0].text;
 
         document.getElementById("search_form").submit()

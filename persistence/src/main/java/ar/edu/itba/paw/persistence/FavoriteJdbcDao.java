@@ -12,7 +12,7 @@ import java.util.List;
 public class FavoriteJdbcDao implements FavoriteDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 8;
     private static final RowMapper<Favorite> ROW_MAPPER = (rs, rowNum) ->
             new Favorite(rs.getLong("restaurant_id"), rs.getLong("user_id"));
 
