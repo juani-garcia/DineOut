@@ -104,9 +104,9 @@ public class WebConfig {
         mailSender.setPassword(env.getProperty("spring.mail.password"));
 
         Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.transport.protocol", env.getProperty("spring.mail.properties.transport.protocol"));
+        props.put("mail.smtp.auth", env.getProperty("spring.mail.properties.mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable", env.getProperty("spring.mail.properties.mail.smtp.starttls.enable"));
         props.put("mail.debug", "true");
 
         return mailSender;
