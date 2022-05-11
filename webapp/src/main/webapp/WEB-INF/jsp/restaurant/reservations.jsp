@@ -46,8 +46,9 @@
                 <hr/>
                 <div class="card-content default_dark_text flex_column">
                     <div class="flex_row">
-                        <h5 class="medium"><b><c:out
-                                value="${reservation.mail}"/>:
+                        <h5 class="medium"><b>
+                            <c:out value="${reservation.owner.firstName}"/>
+                            <c:out value="${reservation.owner.lastName}"/>:
                         </b></h5>
                         <div class="margin_left_auto flex_row">
                                 <%--                            <div class="margins_lr_5px">--%>
@@ -81,7 +82,7 @@
                                         <div class="modal-content">
                                             <h4 class="center">
                                                 <spring:message code="restaurant.reservation.confirmation"
-                                                                arguments="${reservation.mail}"/>
+                                                 arguments="${reservation.owner.firstName}, ${reservation.owner.lastName}"/>
                                             </h4>
                                         </div>
                                         <div class="modal-footer">
