@@ -4,7 +4,7 @@ public class User {
     private final long id;
     private final String username, password, firstName, lastName;
 
-    protected User(final long id, final String username, final String password, final String firstName, final String lastName) {
+    public User(final long id, final String username, final String password, final String firstName, final String lastName) {
         this.id = id;
         this.username = username;
         this.password = password;

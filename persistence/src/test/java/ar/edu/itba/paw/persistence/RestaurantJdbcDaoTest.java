@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Zone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,24 +25,30 @@ public class RestaurantJdbcDaoTest {
 
     private static final String RESTAURANT_TABLE = "restaurant";
 
-    private static final String RESTAURANT_NAME = "Atuel";
-    private static final String RESTAURANT_ADDRESS = "Los Patos 2301";
-    private static final String RESTAURANT_MAIL = "atuel@mail.com";
-    private static final String RESTAURANT_DETAIL = "Detalle de Atuel";
-    private static final String RESTAURANT_IMAGE = "Imagen de Atuel";
+    private static final long ID = 1;
+    private static final long USER_ID = 1;
+    private static final String NAME = "Atuel";
+    private static final Long IMAGE_ID = null;
+    private static final String ADDRESS = "Los Patos 2301";
+    private static final String MAIL = "atuel@mail.com";
+    private static final String DETAIL = "Detalle de Atuel";
+    private static final Zone ZONE = Zone.ADROGUE;
 
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert jdbcInsert;
+    @Autowired
     private RestaurantJdbcDao restaurantDao;
 
     @Autowired
     private DataSource ds;
+
+    private JdbcTemplate jdbcTemplate;
+    private SimpleJdbcInsert jdbcInsert;
 
     @Before
     public void setUp() {
         restaurantDao = new RestaurantJdbcDao(ds);
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcInsert = new SimpleJdbcInsert(ds).withTableName(RESTAURANT_TABLE).usingGeneratedKeyColumns("id");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, RESTAURANT_TABLE);
     }
 
     @Test
@@ -59,12 +66,18 @@ public class RestaurantJdbcDaoTest {
         // JdbcTestUtils.deleteFromTables(jdbcTemplate, USER_TABLE);
 
         // ejercitacion
-        // Restaurant restaurant = restaurantDao.create(...)
+        Restaurant restaurant = restaurantDao.create(USER_ID, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE);
 
         // postcondiciones
-        // assertNotNull(restaurant);
-        // assertEquals(NOMBRE, restaurant.getName())
-        // assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, USER_TABLE));
+        assertNotNull(restaurant);
+        assertEquals(USER_ID, restaurant.getUserID());
+        assertEquals(NAME, restaurant.getName());
+        assertEquals(IMAGE_ID, restaurant.getImageId());
+        assertEquals(ADDRESS, restaurant.getAddress());
+        assertEquals(MAIL, restaurant.getMail());
+        assertEquals(DETAIL, restaurant.getDetail());
+        assertEquals(ZONE, restaurant.getZone());
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, RESTAURANT_TABLE));
     }
 
 //    @Test

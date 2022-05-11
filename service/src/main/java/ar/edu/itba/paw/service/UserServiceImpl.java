@@ -4,6 +4,7 @@ import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
         return userDao.getByUsername(username);
     }
 
+    @Transactional
     @Override
     public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant) {
         User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
@@ -53,8 +55,6 @@ public class UserServiceImpl implements UserService {
         userRole = userRoleService.getByRoleName(role);
         if (!userRole.isPresent()) throw new IllegalStateException("El rol " + role + " no esta presente en la bbdd");
         UserToRole userToRole = userToRoleService.create(user.getId(), userRole.get().getId());
-
-        // TODO: rollback if not able to create userToRole
 
         emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
 

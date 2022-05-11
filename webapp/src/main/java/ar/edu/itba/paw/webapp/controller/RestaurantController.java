@@ -204,7 +204,6 @@ public class RestaurantController {
             return itemForm(form);
         }
 
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);  // TODO: why do we need to acces the restaurant? @mateo
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
         return new ModelAndView("redirect:/restaurant");
     }

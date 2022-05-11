@@ -31,6 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private SecurityService securityService;
+
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);

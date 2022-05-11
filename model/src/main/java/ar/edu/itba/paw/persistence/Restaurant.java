@@ -7,7 +7,7 @@ public class Restaurant {
     private final String name, mail, address, detail;
     private final Zone zone;
 
-    protected Restaurant(long id, Long userID, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
+    public Restaurant(long id, Long userID, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
         this.id = id;
         this.userID = userID;
         this.name = name;
