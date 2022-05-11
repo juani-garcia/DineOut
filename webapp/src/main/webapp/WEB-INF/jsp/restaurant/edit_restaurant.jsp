@@ -15,7 +15,7 @@
 
 
 <c:url value="/restaurant/edit" var="postPath"/>
-<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post">
+<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="section">
             <div class="row rounded shadowed white">
