@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

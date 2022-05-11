@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,16 +74,6 @@ public class DineOutUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_BASIC_USER"));
             userToRoleService.create(user.getId(), userRole.get().getId());
         }
-
-        // Migrate users with un-hashed password
-        // Not necessary for us (didn't have users)
-        /* String password = user.getPassword();
-        if (! BCRYPT_PATTERN.matcher(password).matches()) {
-            // TODO : Update user password in db!
-            password = passwordEncoder.encode(password);
-        } */
-
-        // if (user. ...) roles.add(new SimpleGrantedAuthority("ROLE_EDITOR))
 
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
     }

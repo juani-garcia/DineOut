@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

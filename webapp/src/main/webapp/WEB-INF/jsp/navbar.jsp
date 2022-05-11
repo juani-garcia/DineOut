@@ -23,7 +23,7 @@
                 <% if (request.isUserInRole("DINER")) { %>
                 <li>
                     <a href="<c:url value="/diner/reservations"/>"
-                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
                                 <spring:message code="navbar.reservations" />
@@ -33,7 +33,7 @@
                 </li>
                 <li>
                     <a href="<c:url value="/diner/favorites"/>"
-                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
                                 <spring:message code="navbar.favorites" />
@@ -55,7 +55,7 @@
                 <% if (request.isUserInRole("RESTAURANT")) { %>
                 <li>
                     <a href="<c:url value="/restaurant/reservations"/>"
-                       class="btn-small no-text-transform waves-effect waves-red default_light black-text bold">
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
                                 <spring:message code="navbar.reservations" />

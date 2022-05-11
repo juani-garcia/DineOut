@@ -2,10 +2,10 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.persistence.Reservation;
+import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
-import ar.edu.itba.paw.persistence.Restaurant;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private SecurityService securityService;
+
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);

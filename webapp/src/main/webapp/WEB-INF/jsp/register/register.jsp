@@ -53,7 +53,7 @@
                                 code="home.register.form.confirmPassword"/></form:label>
                         <form:input type="password" path="confirmPassword"/>
                     </div>
-                    <div class="row"> <%-- TODO: modify to accept form:checkbox --%>
+                    <div class="row">
                         <label>
                             <input type="checkbox" id="isRestaurant" name="isRestaurant"/>
                             <span><spring:message code="home.register.form.roleSelector"/></span>

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.MenuItem;
+import ar.edu.itba.paw.model.MenuItem;
 
 import java.util.List;
 import java.util.Optional;

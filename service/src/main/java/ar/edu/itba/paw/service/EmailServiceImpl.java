@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.persistence.Reservation;
-import ar.edu.itba.paw.persistence.User;
+import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -53,9 +54,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantDao.filter(page, name, category, shift, zone);
     }
 
+    @Transactional
     @Override
     public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        if (getByUserID(user.getId()).isPresent())
+            throw new IllegalStateException();
         Image restaurantImage = null;
         if (image != null && image.length > 0) {
             restaurantImage = imageService.create(image);

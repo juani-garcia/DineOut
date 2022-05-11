@@ -1,6 +1,5 @@
 -- Add menu section ordering maintenance on insert
--- CREATE OR REPLACE FUNCTION maintain_ordering_menusection() RETURNS trigger AS $maintain_ordering_menusection$
-CREATE OR REPLACE FUNCTION maintain_ordering_menusection() RETURNS trigger AS '
+CREATE OR REPLACE FUNCTION maintain_ordering_menusection() RETURNS trigger AS $maintain_ordering_menusection$
 DECLARE
     query_cursor CURSOR FOR SELECT *
                             FROM menu_section
@@ -18,8 +17,7 @@ BEGIN
     CLOSE query_cursor;
     RETURN NEW;
 END;
-' LANGUAGE plpgsql;
--- $maintain_ordering_menusection$' LANGUAGE plpgsql;
+$maintain_ordering_menusection$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS dineout_menusection_ordering ON menu_section;
 
@@ -29,8 +27,7 @@ CREATE TRIGGER dineout_menusection_ordering
     EXECUTE PROCEDURE maintain_ordering_menusection();
 
 -- Add menu item ordering maintenance on insert
--- CREATE OR REPLACE FUNCTION maintain_ordering_menuitem() RETURNS trigger AS $maintain_ordering_menuitem$
-CREATE OR REPLACE FUNCTION maintain_ordering_menuitem() RETURNS trigger AS '
+CREATE OR REPLACE FUNCTION maintain_ordering_menuitem() RETURNS trigger AS $maintain_ordering_menuitem$
 DECLARE
     query_cursor CURSOR FOR SELECT *
                             FROM menu_item
@@ -48,8 +45,7 @@ BEGIN
     CLOSE query_cursor;
     RETURN NEW;
 END;
-' LANGUAGE plpgsql;
--- $maintain_ordering_menuitem$ LANGUAGE plpgsql;
+$maintain_ordering_menuitem$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS dineout_menuitem_ordering ON menu_item;
 

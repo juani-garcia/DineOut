@@ -40,7 +40,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String hierarchy = "ROLE_ADMIN > ROLE_RESTAURANT \n ROLE_ADMIN > ROLE_DINER \n ROLE_DINER > ROLE_BASIC_USER \n ROLE_RESTAURANT > ROLE_BASIC_USER";  // TODO: parametrize this so that we do not have a magic string.
+        String hierarchy = "ROLE_ADMIN > ROLE_RESTAURANT \n ROLE_ADMIN > ROLE_DINER \n ROLE_DINER > ROLE_BASIC_USER \n ROLE_RESTAURANT > ROLE_BASIC_USER";
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
     }
