@@ -21,7 +21,8 @@ public class RestaurantJdbcDao implements RestaurantDao {
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
             new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
                     rs.getLong("image_id") == 0 ? null : rs.getLong("image_id"), rs.getString("address"),
-                    rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
+                    rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")),
+                    rs.getLong("fav_count"));
 
     @Autowired
     public RestaurantJdbcDao(final DataSource ds) {
@@ -31,25 +32,33 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public Optional<Restaurant> getById(long id) {
-        List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE id = ?", new Object[]{id}, ROW_MAPPER);
+        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
+                     "FROM restaurant WHERE id = ?";
+        List<Restaurant> query = jdbcTemplate.query(sql, new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();
     }
 
     @Override
     public Optional<Restaurant> getByMail(String mail) {
-        List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE mail = ?", new Object[]{mail}, ROW_MAPPER);
+        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
+                     "FROM restaurant WHERE mail = ?";
+        List<Restaurant> query = jdbcTemplate.query(sql, new Object[]{mail}, ROW_MAPPER);
         return query.stream().findFirst();
     }
 
     @Override
     public Optional<Restaurant> getByUserId(long id) {
-        List<Restaurant> query = jdbcTemplate.query("SELECT * FROM restaurant WHERE user_id = ?", new Object[]{id}, ROW_MAPPER);
+        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) AS fav_count " +
+                     "FROM restaurant WHERE user_id = ?";
+        List<Restaurant> query = jdbcTemplate.query(sql, new Object[]{id}, ROW_MAPPER);
         return query.stream().findFirst();
     }
 
     @Override
     public List<Restaurant> getAll(int page) {
-        return jdbcTemplate.query("SELECT * FROM restaurant ORDER BY name LIMIT ? OFFSET ?", new Object[]{PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
+        String sql = "SELECT *, (SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) fav_count " +
+                     "FROM restaurant ORDER BY fav_count LIMIT ? OFFSET ? ";
+        return jdbcTemplate.query(sql, new Object[]{PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
 
     private static class Pair<A, B> {
@@ -92,14 +101,15 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
-        StringBuilder sql = new StringBuilder("SELECT *\n");
+        StringBuilder sql = new StringBuilder("SELECT *, \n");
+        sql.append("(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = restaurant.id) fav_count ");
         List<Object> args = new ArrayList<>();
 
         Pair<StringBuilder, List<Object>> filterPair = this.filterBuilder(name, category, shift, zone, sql, args);
 
         sql = filterPair.left;
         args = filterPair.right;
-        sql.append("LIMIT ? OFFSET ?");
+        sql.append("ORDER BY fav_count DESC LIMIT ? OFFSET ?");
         args.add(PAGE_SIZE);
         args.add((page - 1) * PAGE_SIZE);
 
@@ -118,7 +128,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
         restaurantData.put("image_id", imageId);
 
         final long restaurantId = jdbcInsert.executeAndReturnKey(restaurantData).longValue();
-        return new Restaurant(restaurantId, userID, name, imageId, address, mail, detail, zone);
+        return new Restaurant(restaurantId, userID, name, imageId, address, mail, detail, zone, 0L);
     }
 
     @Override
