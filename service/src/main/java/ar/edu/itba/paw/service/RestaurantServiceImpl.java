@@ -60,7 +60,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (image != null && image.length > 0) {
             restaurantImage = imageService.create(image);
         }
-        Restaurant restaurant = restaurantDao.create(user.getId(), name, restaurantImage != null ? restaurantImage.getId() : null, address, mail, detail, zone);
+        Restaurant restaurant = restaurantDao.create(user.getId(), name, (restaurantImage != null ? restaurantImage.getId() : null), address, mail, detail, zone);
         for (Long categoryId : categories) {
             Category category = Category.getById(categoryId);
             categoryService.add(restaurant.getId(), category);
@@ -100,7 +100,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private Restaurant getRecommendedOfLoggedUser() {
         List<Restaurant> restaurantFavoriteList = restaurantDao.getTopTenByFavoriteOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
-        List<Restaurant> restaurantReservedList = restaurantDao.getTopTenByReservationsOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
+        List<Restaurant> restaurantReservedList = restaurantDao.getTopTenByReservationsOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getUsername());
         HashMap<Zone, Integer> zoneIntegerHashMap = new HashMap<>();
         HashMap<Category, Integer> categoryIntegerHashMap = new HashMap<>();
         for (Restaurant favRestaurant : restaurantFavoriteList) {
