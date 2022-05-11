@@ -113,7 +113,27 @@ public class MenuItemServiceImplTest {
     }
 
     @Test
-    public void testEditIfNotAuthenticated() {
+    public void testEditMenuItem() {
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(USER));
+        when(menuSectionService.getById(anyLong())).
+                thenReturn(Optional.of(MENU_SECTION));
+        when(restaurantService.getById(anyLong())).
+                thenReturn(Optional.of(RESTAURANT));
+        when(menuItemDao.getById(anyLong())).
+                thenReturn(Optional.of(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID)));
+
+        try {
+            menuItemService.edit(ID, NAME, DETAIL, PRICE, SECTION_ID, IMAGE_BYTES);
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            Assert.fail("Unexpected error during operation create menuItem: " + e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testCannotEditIfNotAuthenticated() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
@@ -142,6 +162,26 @@ public class MenuItemServiceImplTest {
                 thenReturn(Optional.of(RESTAURANT));
 
         Assert.assertThrows(IllegalArgumentException.class, () -> menuItemService.edit(ID, NAME, DETAIL, PRICE, SECTION_ID, IMAGE_BYTES));
+
+    }
+
+    @Test
+    public void testDeleteMenuItem() {
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(USER));
+        when(menuSectionService.getById(anyLong())).
+                thenReturn(Optional.of(MENU_SECTION));
+        when(restaurantService.getById(anyLong())).
+                thenReturn(Optional.of(RESTAURANT));
+        when(menuItemDao.getById(anyLong())).
+                thenReturn(Optional.of(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID)));
+
+        try {
+            menuItemService.delete(ID);
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            Assert.fail("Unexpected error during operation create menuItem: " + e.getMessage());
+        }
 
     }
 

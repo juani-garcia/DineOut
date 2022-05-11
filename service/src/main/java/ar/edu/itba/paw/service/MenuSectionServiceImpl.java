@@ -42,15 +42,16 @@ public class MenuSectionServiceImpl implements MenuSectionService {
 
     @Override
     public MenuSection create(final long restaurantId, final String name) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(IllegalArgumentException::new);
+        if (user.getId() != restaurant.getUserID())
+            throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return menuSectionDao.create(restaurantId, name);
     }
 
     @Override
     public boolean delete(final long sectionId) {
-        MenuSection menuSection = getById(sectionId).orElseThrow(() -> new RuntimeException("Invalid section"));
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(NotFoundException::new);
-        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId())
-            throw new RuntimeException("Invalid permissions");
+        MenuSection menuSection = validateSection(sectionId);
         return menuSectionDao.delete(sectionId);
     }
 
@@ -61,19 +62,16 @@ public class MenuSectionServiceImpl implements MenuSectionService {
 
     @Override
     public boolean updateName(final long sectionId, final String newName) {
-        MenuSection menuSection = getById(sectionId).orElseThrow(MenuSectionNotFoundException::new);
+        MenuSection menuSection = validateSection(sectionId);
         return edit(sectionId, newName, menuSection.getRestaurantId(), menuSection.getOrdering());
     }
 
     private boolean move(final long sectionId, boolean moveUp) {
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new RuntimeException("Invalid user"));
-        List<MenuSection> menuSections = getByRestaurantId(restaurant.getId());
-        Optional<MenuSection> optionalMenuSection = getById(sectionId);
-        if (!optionalMenuSection.isPresent() || (moveUp ? optionalMenuSection.get().getOrdering() <= 1 : optionalMenuSection.get().getOrdering() >= menuSections.size()) || menuSections.stream().noneMatch((section) -> section.getId() == sectionId)) {
-            throw new RuntimeException("Invalid sectionId");
+        MenuSection menuSection = validateSection(sectionId);
+        List<MenuSection> menuSections = getByRestaurantId(menuSection.getRestaurantId());
+        if ((moveUp ? menuSection.getOrdering() <= 1 : menuSection.getOrdering() >= menuSections.size())) {
+            throw new IllegalArgumentException("Cannot move this section");
         }
-        MenuSection menuSection = optionalMenuSection.get();
         return edit(sectionId, menuSection.getName(), menuSection.getRestaurantId(), menuSection.getOrdering() + (moveUp ? -1 : 1));
     }
 
@@ -86,4 +84,14 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     public boolean moveDown(long sectionId) {
         return move(sectionId, false);
     }
+
+    protected MenuSection validateSection(final long sectionId) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        MenuSection menuSection = getById(sectionId).orElseThrow(IllegalArgumentException::new);
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        if (user.getId() != restaurant.getUserID())
+            throw new IllegalArgumentException("Cannot use someone else's restaurant");
+        return menuSection;
+    }
+
 }
