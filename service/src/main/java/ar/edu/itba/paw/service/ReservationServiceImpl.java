@@ -100,8 +100,8 @@ public class ReservationServiceImpl implements ReservationService {
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
 
-        if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {  // TODO: change when we modify shifts
-            throw new ForbiddenActionException();
+        if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {
+            throw new InvalidTimeException();
         }
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
