@@ -46,7 +46,7 @@ public class TestConfig {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(JDBCDriver.class);
         ds.setUrl("jdbc:hsqldb:mem:paw");
-        ds.setUsername("ha");  // TODO: add to env file
+        ds.setUsername("ha");
         ds.setPassword("");
 
         return ds;
@@ -67,7 +67,7 @@ public class TestConfig {
         dbp.addScripts(hsqldbSql,
                 hsqldbSql1, hsqldbSql2, hsqldbSql3,
                 hsqldbSql4,
-                // hsqldbSql5, hsqldbSql6, // TODO: Find translation or migrate triggers to hsqldb
+                // hsqldbSql5, hsqldbSql6,
                 hsqldbSql7, hsqldbSql8,
                 hsqldbSql9);
         // dbp.addScript(schemaSql);

@@ -34,7 +34,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     @Override
     public List<MenuSection> getByRestaurantId(long restaurantId) {
         List<MenuSection> menuSectionList = menuSectionDao.getByRestaurantId(restaurantId);
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO:  join in the dao.
+        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
         return menuSectionList;
     }
 

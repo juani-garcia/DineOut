@@ -75,16 +75,6 @@ public class DineOutUserDetailsService implements UserDetailsService {
             userToRoleService.create(user.getId(), userRole.get().getId());
         }
 
-        // Migrate users with un-hashed password
-        // Not necessary for us (didn't have users)
-        /* String password = user.getPassword();
-        if (! BCRYPT_PATTERN.matcher(password).matches()) {
-            // TODO : Update user password in db!
-            password = passwordEncoder.encode(password);
-        } */
-
-        // if (user. ...) roles.add(new SimpleGrantedAuthority("ROLE_EDITOR))
-
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
     }
 
