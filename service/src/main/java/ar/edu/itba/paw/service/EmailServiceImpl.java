@@ -28,6 +28,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private SpringTemplateEngine thymeleafTemplateEngine;
 
+    @Async
     @Override
     public void sendAccountCreationMail(String to, String name) {
         Map<String, Object> model = new HashMap<>();
@@ -35,6 +36,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "account-creation.html");
     }
 
+    @Async
     @Override
     public void sendReservationCreatedUser(String to, String name, Reservation reservation) {
         Map<String, Object> model = new HashMap<>();
@@ -46,6 +48,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reservation-created-user.html");
     }
 
+    @Async
     @Override
     public void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user) {
         Map<String, Object> model = new HashMap<>();
@@ -58,6 +61,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reservation-created-restaurant.html");
     }
 
+    @Async
     @Override
     public void sendReservationCancelledUser(String to, String name, Reservation reservation) {
         Map<String, Object> model = new HashMap<>();
@@ -68,6 +72,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-user.html");
     }
 
+    @Async
     @Override
     public void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user) {
         Map<String, Object> model = new HashMap<>();
@@ -79,6 +84,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-restaurant.html");
     }
 
+    @Async
     @Override
     public void sendReservationConfirmed(String to, String name, Reservation reservation) {
         Map<String, Object> model = new HashMap<>();
@@ -89,6 +95,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reservation-confirmed.html");
     }
 
+    @Async
     @Override
     public void sendChangePassword(String to, String name, String recoveryLink) {
         Map<String, Object> model = new HashMap<>();
@@ -97,7 +104,7 @@ public class EmailServiceImpl implements EmailService {
         sendMessageUsingThymeleafTemplate(to, model, "reset-password.html");
     }
 
-    public void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
+    private void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
 
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
@@ -110,8 +117,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Async
-    public void sendHtmlMessage(String to, String htmlBody) throws MessagingException {
+    private void sendHtmlMessage(String to, String htmlBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setTo(to);
