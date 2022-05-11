@@ -16,7 +16,7 @@ import java.util.*;
 public class RestaurantJdbcDao implements RestaurantDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 8;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
             new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),

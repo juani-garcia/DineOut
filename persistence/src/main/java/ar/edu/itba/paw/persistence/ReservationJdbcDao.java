@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public class ReservationJdbcDao implements ReservationDao {
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 8;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
