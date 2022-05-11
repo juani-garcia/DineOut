@@ -40,6 +40,8 @@
                         </c:if>
                         <% } %>
                     </h1>
+                    <h3 class="center bold text_overflow_ellipsis flex_row flex_center"><i class="material-icons default_red_text left">favorite</i><c:out
+                            value="${restaurant.favCount}"/></h3>
                 </div>
                 <c:if test="${restaurant.imageId != null}">
                     <div class="card-image">

@@ -28,7 +28,6 @@
 
             <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                    ${restaurant.imageId}
                 <c:if test="${restaurant.imageId != null}">
                     <div class="card-image flex_center">
                         <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
@@ -38,8 +37,12 @@
                 <div class="card-content default_dark_text">
                     <div class="flex_row">
                         <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>
-                        <h6 class="medium text_overflow_ellipsis margin_left_auto">&#128205;<c:out
+                        <div class="flex_column margin_left_auto">
+                            <h6 class="medium text_overflow_ellipsis">&#128205;<c:out
                                 value="${restaurant.zone.name}"/></h6>
+                            <h6 class="medium text_overflow_ellipsis"><i class="material-icons default_red_text left">favorite</i><c:out
+                                    value="${restaurant.favCount}"/></h6>
+                        </div>
                     </div>
                     <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
                     <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>: <c:out

@@ -143,6 +143,10 @@ footer.page-footer {
     background-color: #F54242 !important;
 }
 
+.default_red_text {
+    color: #F54242 !important;
+}
+
 .default_light {
     background-color: #E6E6E6 !important;
 }
