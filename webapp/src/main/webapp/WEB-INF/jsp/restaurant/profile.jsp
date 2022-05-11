@@ -25,10 +25,12 @@
                         </a>
                     </h1>
                 </div>
-                <div class="card-image">
-                    <c:url value="/image/${item.imageId}" var="imagePath"/>
-                    <img src="<c:url value="/resources/media/background1.jpg"/>" class="scale_down rounded" alt=""/>
-                </div>
+                <c:if test="${restaurant.imageId != null}">
+                    <div class="card-image flex_center">
+                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                    </div>
+                </c:if>
                 <div class="card-content same_width_elements">
                     <div class="icon-block">
                         <h2 class="center text_overflow_ellipsis"><i class="material-icons">restaurant_menu</i></h2>
@@ -75,10 +77,12 @@
                            class="btn-large waves-effect waves-light default_dark white-text white-text no-text-transform">
                             <spring:message code="restaurant.profile.add_section"/>
                         </a>
-                        <a href="<c:url value="/restaurant/item"/>"
-                           class="btn-large waves-effect waves-light default_dark white-text white-text margin_left_auto no-text-transform">
-                            <spring:message code="restaurant.profile.add_item"/>
-                        </a>
+                        <c:if test="${sections.size() != 0}">
+                            <a href="<c:url value="/restaurant/item"/>"
+                               class="btn-large waves-effect waves-light default_dark white-text white-text margin_left_auto no-text-transform">
+                                <spring:message code="restaurant.profile.add_item"/>
+                            </a>
+                        </c:if>
                     </div>
                     <br><br>
                     <c:forEach items="${sections}" var="section">
@@ -97,7 +101,8 @@
                             <c:if test="${section.ordering < sections.size()}">
                                 <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                                 <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
-                                    <button class="btn-large waves-effect waves-light btn-floating default_dark white-text" type="submit"
+                                    <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
+                                            type="submit"
                                             name="action">
                                         <i class="material-icons left">arrow_downward</i>
                                     </button>
@@ -109,7 +114,6 @@
                                     <i class="material-icons left">edit</i>
                                 </button>
                             </a>
-
 
 
                             <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
@@ -146,7 +150,7 @@
                         <c:forEach items="${section.menuItemList}" var="item">
                             <hr/>
                             <div class="card horizontal item_card">
-                                <c:if test="${item.imageId > 0}">
+                                <c:if test="${item.imageId != null}">
                                     <div class="card-image">
                                         <c:url value="/image/${item.imageId}" var="imagePath"/>
                                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
@@ -185,7 +189,8 @@
                                                href="#delete_item_confirm_modal">
                                                 <i class="material-icons left">delete</i>
                                             </a>
-                                            <div id="delete_item_confirm_modal" class="modal confirm_delete_modal_height">
+                                            <div id="delete_item_confirm_modal"
+                                                 class="modal confirm_delete_modal_height">
                                                 <div class="modal-content">
                                                     <h4 class="center">
                                                         <spring:message code="restaurant.detail.delete_item"
@@ -197,7 +202,8 @@
                                                         <a class="modal-close waves-effect btn-flat grow_on_hover">
                                                             <spring:message code="diner.reservation.back"/>
                                                         </a>
-                                                        <c:url value="/restaurant/item/${item.id}/delete" var="deleteUrl"/>
+                                                        <c:url value="/restaurant/item/${item.id}/delete"
+                                                               var="deleteUrl"/>
                                                         <form method="post" action="${deleteUrl}" class="margin_l_5px">
                                                             <button class="modal-close waves-effect red-text btn-flat grow_on_hover"
                                                                     type="submit" name="action">

@@ -38,10 +38,12 @@
 
             <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                <div class="card-image flex_center">
-                    <img src="<c:url value="/resources/media/background1.jpg"/>" alt="rest_img"
-                         class="scale_down rounded"/>
-                </div>
+                <c:if test="${restaurant.imageId != null}">
+                    <div class="card-image flex_center">
+                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                    </div>
+                </c:if>
                 <div class="card-content default_dark_text">
                     <div class="flex_row">
                         <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>

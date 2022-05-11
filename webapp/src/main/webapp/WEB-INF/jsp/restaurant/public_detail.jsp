@@ -41,10 +41,12 @@
                         <% } %>
                     </h1>
                 </div>
-                <div class="card-image">
-                    <c:url value="/image/${item.imageId}" var="imagePath"/>
-                    <img src="<c:url value="/resources/media/background1.jpg"/>" class="scale_down rounded" alt=""/>
-                </div>
+                <c:if test="${restaurant.imageId != null}">
+                    <div class="card-image">
+                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                    </div>
+                </c:if>
                 <div class="card-content same_width_elements">
                     <div class="icon-block">
                         <h2 class="center text_overflow_ellipsis"><i class="material-icons">restaurant_menu</i></h2>
@@ -118,7 +120,7 @@
                         <c:forEach items="${section.menuItemList}" var="item">
                             <hr/>
                             <div class="card horizontal item_card">
-                                <c:if test="${item.imageId > 0}">
+                                <c:if test="${item.imageId != null}">
                                     <div class="card-image">
                                         <c:url value="/image/${item.imageId}" var="imagePath"/>
                                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
