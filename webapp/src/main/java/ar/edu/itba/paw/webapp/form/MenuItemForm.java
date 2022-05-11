@@ -15,7 +15,7 @@ public class MenuItemForm {
     @Size(min = 1, max = 50)
     private String name;
 
-    @Size(max = 100)
+    @Size(max = 1000)
     private String detail;
 
     @NotNull

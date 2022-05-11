@@ -41,6 +41,16 @@
                         </div>
                     </a>
                 </li>
+                <li>
+                    <a href="<c:url value="/profile"/>"
+                       class="btn-small no-text-transform waves-effect waves-red white black-text bold">
+                        <div class="logged-in-panel">
+                            <p class="padding-5px">
+                                <spring:message code="navbar.profile" />
+                            </p>
+                        </div>
+                    </a>
+                </li>
                 <% } %>
                 <% if (request.isUserInRole("RESTAURANT")) { %>
                 <li>
@@ -53,17 +63,17 @@
                         </div>
                     </a>
                 </li>
-                <% } %>
                 <li>
                     <a href="<c:url value="/profile"/>"
                        class="btn-small no-text-transform waves-effect waves-red white black-text bold">
                         <div class="logged-in-panel">
                             <p class="padding-5px">
-                                <spring:message code="navbar.profile" />
+                                <spring:message code="navbar.my_restaurant" />
                             </p>
                         </div>
                     </a>
                 </li>
+                <% } %>
                 <li>
                     <a href="<c:url value="/logout"/>"
                        class="btn-small no-text-transform waves-effect waves-red default_red black-text bold">

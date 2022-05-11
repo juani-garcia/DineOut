@@ -73,10 +73,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts) {
+    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
-        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone);
+        Long imageId = restaurant.getImageId();
+        if (imageBytes.length > 0) {
+            if (restaurant.getImageId() != null) {
+                imageService.delete(restaurant.getImageId());
+            }
+            imageId = imageService.create(imageBytes).getId();
+        }
+        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone, imageId);
     }
 
     @Override
