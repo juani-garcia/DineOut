@@ -69,4 +69,13 @@ public class FavoriteServiceImpl implements FavoriteService {
     public long getFavoritePageCount() {
         return favoriteDao.countPagesByUserId(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
     }
+
+    @Override
+    public void set(long resId, long id, boolean set) {
+        if (set) {
+            create(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
+        } else {
+            delete(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
+        }
+    }
 }

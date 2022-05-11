@@ -61,13 +61,13 @@ public class UserController {
             return registerForm(form);
         }
 
-        User user = userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant());
+        userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant());
         authenticateUserAndSetSession(request, form.getUsername(), form.getPassword());
 
         return new ModelAndView("redirect:/profile");
     }
 
-    /* Retrived from : https://www.baeldung.com/spring-security-auto-login-user-after-registration#authManager*/
+    /* Referenced from : https://www.baeldung.com/spring-security-auto-login-user-after-registration#authManager */
     private void authenticateUserAndSetSession(HttpServletRequest request, String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 

@@ -22,4 +22,6 @@ public interface FavoriteService {
     long getFavoriteCount();
 
     long getFavoritePageCount();
+
+    void set(long resId, long id, boolean set);
 }

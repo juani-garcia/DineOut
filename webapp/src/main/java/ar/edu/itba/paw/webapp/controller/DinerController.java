@@ -64,11 +64,7 @@ public class DinerController {
 
     @RequestMapping(value = "/set_favorite/{resId}/{set}", method = {RequestMethod.POST})
     public ModelAndView setFavorite(@PathVariable final long resId, @PathVariable final boolean set) {
-        if (set) {
-            favoriteService.create(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
-        } else {
-            favoriteService.delete(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
-        }
+        favoriteService.set(resId, securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId(), set);
         return new ModelAndView("redirect:/restaurant/view/" + resId);
     }
 }
