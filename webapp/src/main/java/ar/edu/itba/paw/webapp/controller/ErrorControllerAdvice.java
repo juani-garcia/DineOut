@@ -28,6 +28,13 @@ public class ErrorControllerAdvice {
         return new ModelAndView("forward:/400");
     }
 
+    @ExceptionHandler(InvalidTimeException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid page number")
+    public ModelAndView invalidTime(InvalidTimeException ex) {
+        LOGGER.warn(ex.getMessage());
+        return new ModelAndView("forward:/400");
+    }
+
     @ExceptionHandler(UnauthenticatedUserException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Unauthenticated user request")
     public ModelAndView unauthenticatedUserRequest(UnauthenticatedUserException ex) {
