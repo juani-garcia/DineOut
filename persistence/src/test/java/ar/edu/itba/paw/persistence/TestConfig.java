@@ -22,6 +22,24 @@ public class TestConfig {
 
     @Value("classpath:sql/hsqldb.sql")
     private Resource hsqldbSql;
+    @Value("classpath:sql/hsqldb1.sql")
+    private Resource hsqldbSql1;
+    @Value("classpath:sql/hsqldb2.sql")
+    private Resource hsqldbSql2;
+    @Value("classpath:sql/hsqldb3.sql")
+    private Resource hsqldbSql3;
+    @Value("classpath:sql/hsqldb4.sql")
+    private Resource hsqldbSql4;
+    @Value("classpath:sql/hsqldb5.sql")
+    private Resource hsqldbSql5;
+    @Value("classpath:sql/hsqldb6.sql")
+    private Resource hsqldbSql6;
+    @Value("classpath:sql/hsqldb7.sql")
+    private Resource hsqldbSql7;
+    @Value("classpath:sql/hsqldb8.sql")
+    private Resource hsqldbSql8;
+    @Value("classpath:sql/hsqldb9.sql")
+    private Resource hsqldbSql9;
 
     @Bean
     public DataSource dataSource() {
@@ -46,8 +64,13 @@ public class TestConfig {
     @Bean
     public DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(hsqldbSql);
-        dbp.addScript(schemaSql);
+        dbp.addScripts(hsqldbSql,
+                hsqldbSql1, hsqldbSql2, hsqldbSql3,
+                hsqldbSql4,
+                // hsqldbSql5, hsqldbSql6, // TODO: Find translation or migrate triggers to hsqldb
+                hsqldbSql7, hsqldbSql8,
+                hsqldbSql9);
+        // dbp.addScript(schemaSql);
         return dbp;
     }
 
