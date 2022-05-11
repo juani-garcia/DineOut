@@ -20,7 +20,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Restaurant> ROW_MAPPER = (rs, rowNum) ->
             new Restaurant(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
-                    rs.getLong("image_id"), rs.getString("address"),
+                    rs.getLong("image_id") == 0 ? null : rs.getLong("image_id"), rs.getString("address"),
                     rs.getString("mail"), rs.getString("detail"), Zone.getById(rs.getLong("zone_id")));
 
     @Autowired
@@ -92,7 +92,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
-        StringBuilder sql = new StringBuilder("SELECT id, name, address, mail, detail, zone_id, user_id\n");
+        StringBuilder sql = new StringBuilder("SELECT *\n");
         List<Object> args = new ArrayList<>();
 
         Pair<StringBuilder, List<Object>> filterPair = this.filterBuilder(name, category, shift, zone, sql, args);
@@ -107,7 +107,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public Restaurant create(final long userID, final String name, final long imageId, final String address, final String mail, final String detail, final Zone zone) {
+    public Restaurant create(final long userID, final String name, final Long imageId, final String address, final String mail, final String detail, final Zone zone) {
         final Map<String, Object> restaurantData = new HashMap<>();
         restaurantData.put("user_id", userID);
         restaurantData.put("name", name);
@@ -180,7 +180,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
     }
 
     @Override
-    public List<Restaurant> getTopTenByReservationsOfUser(long userId) {
+    public List<Restaurant> getTopTenByReservationsOfUser(String username) {
         return jdbcTemplate.query("SELECT * FROM restaurant NATURAL JOIN (" +
                 "    SELECT restaurant_id AS id, COUNT(user_mail) AS reservation_count" +
                 "    FROM reservation" +
@@ -188,7 +188,7 @@ public class RestaurantJdbcDao implements RestaurantDao {
                 "    GROUP BY restaurant_id" +
                 ") AS restaurant_with_reservation_count" +
                 " ORDER BY reservation_count DESC" +
-                " LIMIT 10", new Object[]{userId}, ROW_MAPPER);
+                " LIMIT 10", new Object[]{username}, ROW_MAPPER);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
+import ar.edu.itba.paw.webapp.validations.ValidImage;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ public class RestaurantForm {
     @NotNull
     private String name;
 
+    @ValidImage
     private MultipartFile image;
 
     @Size(min = 2, max = 180)
