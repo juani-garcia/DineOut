@@ -21,13 +21,15 @@ public class ReservationJdbcDao implements ReservationDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
-            new Reservation(rs.getLong("reservation_id"), rs.getString("user_mail"),
+            new Reservation(rs.getLong("reservation_id"),
                     rs.getInt("amount"), rs.getObject("date_time", LocalDateTime.class),
                     rs.getString("comments"),
                     new Restaurant(rs.getLong("id"), rs.getLong("user_id"),
                             rs.getString("name"), rs.getLong("image_id"),
                             rs.getString("address"), rs.getString("mail"),
                             rs.getString("detail"), Zone.getById(rs.getLong("zone_id"))),
+                    new User(rs.getLong("id"), rs.getString("username"),
+                             null, rs.getString("first_name"), rs.getString("last_name")),
                     rs.getBoolean("is_confirmed"));
 
     @Autowired
@@ -37,27 +39,28 @@ public class ReservationJdbcDao implements ReservationDao {
     }
 
     @Override
-    public Reservation create(Restaurant restaurant, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    public Reservation create(Restaurant restaurant, User user, int amount, LocalDateTime dateTime, String comments) {
         final Map<String, Object> reservationData = new HashMap<>();
         reservationData.put("restaurant_id", restaurant.getId());
-        reservationData.put("user_mail", userMail);
+        reservationData.put("user_mail", user.getUsername());
         reservationData.put("amount", amount);
         reservationData.put("date_time", dateTime);
         reservationData.put("comments", comments);
         reservationData.put("is_confirmed", false);
         final long reservationId = jdbcInsert.executeAndReturnKey(reservationData).intValue();
 
-        return new Reservation(reservationId, userMail, amount, dateTime, comments, restaurant, false);
+        return new Reservation(reservationId, amount, dateTime, comments, restaurant, user, false);
     }
 
     @Override
     public List<Reservation> getAllByUsername(String username, int page, boolean past) {
         String cmp = past ? "<=" : ">";
-        String query = "SELECT * FROM reservation, restaurant " +
-                "WHERE reservation.restaurant_id = restaurant.id " +
-                "AND reservation.user_mail = ? " +
+        String query = "SELECT * FROM " +
+                "(SELECT * FROM restaurant, reservation WHERE restaurant.id = reservation.restaurant_id) as rr " +
+                "LEFT OUTER JOIN account ON rr.user_mail = account.username " +
+                "WHERE username = ? " +
                 "AND date_time " + cmp + " now() " +
-                "ORDER BY date_time, restaurant.name LIMIT ? OFFSET ?";
+                "ORDER BY date_time, rr.name LIMIT ? OFFSET ?";
 
         return jdbcTemplate.query(query, new Object[]{username, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
@@ -65,11 +68,12 @@ public class ReservationJdbcDao implements ReservationDao {
     @Override
     public List<Reservation> getAllByRestaurant(long restaurantId, int page, boolean past) {
         String cmp = past ? "<=" : ">";
-        String query = "SELECT * FROM reservation, restaurant " +
-                "WHERE reservation.restaurant_id = restaurant.id " +
-                "AND restaurant.id = ? " +
+        String query = "SELECT * FROM " +
+                "(SELECT * FROM restaurant, reservation WHERE restaurant.id = reservation.restaurant_id) as rr " +
+                "LEFT OUTER JOIN account ON rr.user_mail = account.username " +
+                "WHERE rr.id = ?" +
                 "AND date_time " + cmp + " now() " +
-                "ORDER BY date_time, restaurant.name LIMIT ? OFFSET ?";
+                "ORDER BY date_time, rr.name LIMIT ? OFFSET ?";
 
         return jdbcTemplate.query(query, new Object[]{restaurantId, PAGE_SIZE, (page - 1) * PAGE_SIZE}, ROW_MAPPER);
     }
