@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistence.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +16,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -106,7 +108,8 @@ public class EmailServiceImpl implements EmailService {
 
     private void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template) {
 
-        Context thymeleafContext = new Context();
+        Locale locale = LocaleContextHolder.getLocale();
+        Context thymeleafContext = new Context(locale);
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
