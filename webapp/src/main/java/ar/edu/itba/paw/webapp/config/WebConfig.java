@@ -51,6 +51,22 @@ public class WebConfig {
 
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
+    @Value("classpath:sql/schema2.sql")
+    private Resource schemaSql2;
+    @Value("classpath:sql/schema3.sql")
+    private Resource schemaSql3;
+    @Value("classpath:sql/schema4.sql")
+    private Resource schemaSql4;
+    @Value("classpath:sql/schema5.sql")
+    private Resource schemaSql5;
+    @Value("classpath:sql/schema6.sql")
+    private Resource schemaSql6;
+    @Value("classpath:sql/schema7.sql")
+    private Resource schemaSql7;
+    @Value("classpath:sql/schema8.sql")
+    private Resource schemaSql8;
+    @Value("classpath:sql/schema9.sql")
+    private Resource schemaSql9;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -85,7 +101,9 @@ public class WebConfig {
     @Bean
     public DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(schemaSql);
+        populator.addScripts(schemaSql, schemaSql2, schemaSql3,
+                schemaSql4, schemaSql5, schemaSql6, schemaSql7,
+                schemaSql8, schemaSql9);
         return populator;
     }
 
