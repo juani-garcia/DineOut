@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface ReservationDao {
 
-    Reservation create(Restaurant restaurant, String userMail, int amount, LocalDateTime dateTime, String comments);
+    Reservation create(Restaurant restaurant, User user, int amount, LocalDateTime dateTime, String comments);
 
     List<Reservation> getAllByUsername(String username, int page, boolean past);
 
