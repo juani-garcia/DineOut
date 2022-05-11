@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Category;
+import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.MenuItem;
+import ar.edu.itba.paw.persistence.MenuSection;
+import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.form.MenuItemForm;
+import ar.edu.itba.paw.webapp.form.MenuSectionForm;
+import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -26,9 +31,6 @@ import java.util.stream.Collectors;
 public class RestaurantController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private RestaurantService restaurantService;
 
     @Autowired
@@ -36,9 +38,6 @@ public class RestaurantController {
 
     @Autowired
     private MenuItemService menuItemService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Autowired
     private ShiftService shiftService;
@@ -84,12 +83,11 @@ public class RestaurantController {
         if (errors.hasErrors()) {
             return restaurantForm(form);
         }
-        byte[] image = null;
+        byte[] image;
         try {
             image = form.getImage().getBytes();
         } catch (IOException e) {
-            errors.addError(new FieldError("restaurantForm", "image", "Couldn't get image"));  // TODO: i18n & move elsewere.
-            return restaurantForm(form);
+            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
         }
         restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
