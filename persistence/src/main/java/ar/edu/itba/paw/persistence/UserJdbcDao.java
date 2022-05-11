@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +17,6 @@ public class UserJdbcDao implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    /* private X default=package-private for testing */
     static final RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
             new User(rs.getLong("id"), rs.getString("username"), rs.getString("password"), rs.getString("first_name"), rs.getString("last_name"));
 
@@ -51,6 +48,11 @@ public class UserJdbcDao implements UserDao {
 
         final long userId = jdbcInsert.executeAndReturnKey(userData).longValue();
         return new User(userId, username, password, firstName, lastName);
+    }
+
+    @Override
+    public boolean updatePassword(String newPassword, final long userId) {
+        return jdbcTemplate.update("UPDATE account SET password = ? WHERE id = ?", newPassword, userId) == 1;
     }
 
 }

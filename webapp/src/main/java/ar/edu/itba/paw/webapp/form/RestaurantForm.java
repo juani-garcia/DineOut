@@ -1,16 +1,23 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
+import ar.edu.itba.paw.webapp.validations.ValidImage;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 public class RestaurantForm {
+
     @Size(min = 1, max = 100)
     @NotNull
     private String name;
+
+    @ValidImage
+    private MultipartFile image;
 
     @Size(min = 2, max = 180)
     @NotNull
@@ -18,10 +25,11 @@ public class RestaurantForm {
 
     @Size(min = 6, max = 100)
     @Email
+    @DuplicatedMail
     @NotNull
     private String email;
 
-    @Size(max=400)
+    @Size(max = 400)
     @NotNull
     private String detail;
 
@@ -31,8 +39,16 @@ public class RestaurantForm {
     @NotNull
     private List<Long> categories;
 
+    @NotNull
+    @NotEmpty
+    private List<Long> shifts;
+
     public String getName() {
         return name;
+    }
+
+    public MultipartFile getImage() {
+        return image;
     }
 
     public String getAddress() {
@@ -49,6 +65,10 @@ public class RestaurantForm {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     public String getZone() {
@@ -78,4 +98,13 @@ public class RestaurantForm {
     public void setCategories(List<Long> categories) {
         this.categories = categories;
     }
+
+    public List<Long> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<Long> shifts) {
+        this.shifts = shifts;
+    }
+
 }

@@ -10,14 +10,12 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
+<div id="index-banner" class="align_center">
     <div class="section no-pad-bot">
         <div class="container">
-            <h1 class="header center white-text bold">¡Registra tu restaurante!</h1>
+            <h1 class="header center white-text bold"><spring:message code="home.register"/></h1>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>   <!-- Custom restaurant image -->
 </div>
 
 <c:url value="/register" var="postUrl"/>
@@ -55,18 +53,30 @@
                                 code="home.register.form.confirmPassword"/></form:label>
                         <form:input type="password" path="confirmPassword"/>
                     </div>
-                    <div class="row input-field">
-                        <form:label path="role"><spring:message
-                                code="home.register.form.roleSelector"/></form:label>
-                        <form:select path="role" items="${roleItems}" size="${roleItems.size()}"/>
-                        <form:errors path="role" element="p" cssClass="isa_error"/>
+                    <div class="row"> <%-- TODO: modify to accept form:checkbox --%>
+                        <label>
+                            <input type="checkbox" id="isRestaurant" name="isRestaurant"/>
+                            <span><spring:message code="home.register.form.roleSelector"/></span>
+                        </label>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('register_form').submit();"><spring:message
-                                code="home.register.form.button"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="home.register.form.button"/>
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                    <div class="row center">
+                        <div class="flex_row">
+                            <h6 class="flex_row">
+                                <spring:message code="home.has_account"/>
+                                <div class="grow_on_hover margins_lr_10px">
+                                    <a class="thin underline default_dark_text" href="<c:url value="/login"/>">
+                                        <spring:message code="home.login"/>
+                                    </a>
+                                </div>
+                            </h6>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,15 +86,5 @@
 
 
 <%@ include file="../footer.jsp" %>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var options = [];
-        <c:forEach items="${roleItems}" var="roleItem">
-        options.push("${roleItem}");
-        </c:forEach>
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems, options);
-    });
-</script>
 </body>
 </html>

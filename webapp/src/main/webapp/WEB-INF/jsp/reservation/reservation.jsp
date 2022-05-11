@@ -10,33 +10,44 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../diner_detailed_navbar.jsp" %>
 
 <c:url value="/create/${resId}" var="postPath"/>
 <form:form id="reservation_form" modelAttribute="reservationForm" action="${postPath}" method="post">
     <div class="container">
         <div class="section">
-            <div class="row rounded shadowed white">
+            <div class="row rounded shadowed white width_75">
                 <div class="col s6 offset-s3">
                     <div class="row">
                         <h5 class="white bold"><spring:message code="reservation.reservation.form.header"/></h5>
                     </div>
-                    <c:if test="${formSuccess == true}">
-                        <div class="isa_success">
-                            Se realizo la reserva exitosamente!
-                        </div>
-                    </c:if>
                     <div class="row">
                         <form:label path="amount" cssClass="semibold label-text-size"><spring:message
                                 code="reservation.reservation.form.amount"/>*</form:label>
-                        <form:input path="amount" type="number"/>
+                        <form:input path="amount" type="number" id="numberonly" min="0"/>
                         <form:errors path="amount" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <form:label path="dateTime" cssClass="semibold label-text-size"><spring:message
-                                code="reservation.reservation.form.date_and_time"/>*</form:label>
-                        <form:input path="dateTime" type="datetime-local"/>
-                        <form:errors path="dateTime" cssClass="isa_error" element="p"/>
+                        <form:label path="date" cssClass="semibold label-text-size">
+                            <spring:message code="reservation.reservation.form.date" />
+                        </form:label>
+                        <form:input path="date" type="date"/>
+                        <form:errors path="date" element="p" cssClass="isa_error"/>
+                    </div>
+                    <div class="row">
+                        <form:label path="time" cssClass="semibold label-text-size">
+                            <spring:message code="reservation.reservation.form.time"/>
+                         </form:label>
+                        <form:select path="time">
+                            <form:option value="" disabled="true">
+                                <spring:message code="reservation.reservation.pick_time"/>
+                            </form:option>
+                            <c:forEach items="${times}" var="time">
+                                <form:option value="${time}">
+                                    <c:out value="${time}"/>
+                                </form:option>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="time" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row">
                         <form:label path="comments" cssClass="semibold label-text-size"><spring:message
@@ -45,27 +56,37 @@
                         <form:errors path="comments" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
-                                code="form.mandatory"/></h6>
+                        <h6 class="semibold label-text-size grey-text text-lighten-1">
+                            <spring:message code="form.mandatory"/></h6>
                     </div>
-                    <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}" onclick="document.getElementById('reservation_form').submit();">
-                            <spring:message code="reservation.reservation.form.submit" />
+                    <div class="row center flex_row">
+                        <a id="back-button"
+                           class="btn-large waves-effect waves-red default_red white-text lighten-1 no-text-transform"
+                           href="javascript:{}" onclick="history.back();">
+                            <spring:message code="reservation.reservation.form.back"/>
                         </a>
+                        <button type="submit" id="register-button"
+                                class="btn-large waves-effect waves-red green white-text lighten-1 margin_l_20px no-text-transform"
+                                onclick="document.getElementById('reservation_form').submit();">
+                            <spring:message code="reservation.reservation.form.submit"/>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <%--    <div>--%>
-    <%--        <input type="submit" value="Register!"/>--%>
-    <%--    </div>--%>
-
-
 </form:form>
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = [];
+        <c:forEach items="${times}" var="time">
+        options.push("${time}");
+        </c:forEach>
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+    });
+</script>
 </body>
 </html>

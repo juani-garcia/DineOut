@@ -10,15 +10,13 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
+<div id="index-banner" class="align_center">
     <div class="section no-pad-bot">
         <div class="container">
             <h1 class="header center white-text bold"><spring:message
                     code="home.login"/></h1>
         </div>
     </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>   <!-- Custom restaurant image -->
 </div>
 
 <c:url value="/login" var="postUrl"/>
@@ -46,11 +44,30 @@
                         </label>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('login_form').submit();"><spring:message
-                                code="home.login"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="home.login"/>
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                    <div class="row center">
+                        <div class="flex_row">
+                            <h6>
+                                <div class="grow_on_hover">
+                                    <a class="thin underline default_dark_text" href="<c:url value="/forgot_my_password"/>">
+                                        <spring:message code="home.forgot_password"/>
+                                    </a>
+                                </div>
+                            </h6>
+                            <h6 class="margin_left_auto flex_row">
+                                <spring:message code="home.no_account"/>
+                                <div class="grow_on_hover margins_lr_10px">
+                                    <a class="thin underline default_dark_text" href="<c:url value="/register"/>">
+                                        <spring:message code="home.register"/>
+                                    </a>
+                                </div>
+                            </h6>
+                        </div>
                     </div>
                 </div>
             </div>

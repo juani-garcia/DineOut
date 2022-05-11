@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -22,6 +25,9 @@ import java.util.concurrent.TimeUnit;
 @EnableWebSecurity
 @Configuration
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private DineOutUserDetailsService userDetailsService;
@@ -46,6 +52,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return expressionHandler;
     }
 
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -55,41 +67,47 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                 .invalidSessionUrl("/")
-            .and().authorizeRequests()
+                .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
-                .antMatchers("/image/**").permitAll()
                 .antMatchers("/login", "/register").anonymous()
-                .antMatchers("/restaurant/item").hasAuthority("canCreateRestaurant")
-                .antMatchers("/restaurant/section").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/item/**").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/section/**").hasAuthority("canCreateRestaurant")
                 .antMatchers("/restaurant/register").hasAuthority("canCreateRestaurant")
+                .antMatchers("/restaurant/edit").hasAuthority("canCreateRestaurant")
                 .antMatchers("/restaurant").hasRole("RESTAURANT")
                 .antMatchers("/restaurant/view/**").permitAll()
+                .antMatchers("/restaurant_picker").permitAll()
+                .antMatchers("/forgot_my_password").permitAll()
+                .antMatchers("/reset_password").permitAll()
+                .antMatchers("/change_password").permitAll()
+                .antMatchers("/save_password").permitAll()
                 .antMatchers("/reserve/**").hasAuthority("canReserveTable")
                 .antMatchers("/create/**").hasAuthority("canReserveTable")
+                .antMatchers("/reservation/**/confirm").hasRole("RESTAURANT")
                 .antMatchers("/diner/**").hasRole("DINER")
                 .anyRequest().authenticated()
-            .and().formLogin()
+                .and().formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", false)
                 .failureUrl("/login?error=true")
                 .loginPage("/login")
-            .and().rememberMe()
+                .and().rememberMe()
                 .rememberMeParameter("remember-me")
                 .userDetailsService(userDetailsService)
-                .key("TODO: CAMBIAR") // TODO: Cambiar la llave
+                .key(env.getProperty("webauthconfig.rememberme.key"))
                 .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-            .and().logout()
+                .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-            .and().exceptionHandling()
+                .and().exceptionHandling()
                 .accessDeniedPage("/403")
-            .and().csrf().disable();
+                .and().csrf().disable();
     }
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**", "/image/**");
     }
 
 }

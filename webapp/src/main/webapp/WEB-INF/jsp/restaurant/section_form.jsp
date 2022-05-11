@@ -10,7 +10,6 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <h2 class="megabold center white-text"><spring:message code="register.restaurant.form.title" /></h2>
 
@@ -30,23 +29,16 @@
                         <form:input type="text" path="name"/>
                         <form:errors path="name" cssClass="isa_error" element="p"/>
                     </div>
-
-                    <div class="row">
-                        <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
-                                code="restaurant.section.form.ordering"/>*</form:label>
-                        <form:input path="ordering" type="number" step="1" min="1" value="1"/>
-                        <form:errors path="ordering" cssClass="isa_error" element="p"/>
-                    </div>
                     <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('section_form').submit();">
-                            <spring:message code="restaurant.section.form.submit"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="restaurant.section.form.submit"/>
+                            <i class="material-icons right">send</i>
+                        </button>
                     </div>
                 </div>
             </div>

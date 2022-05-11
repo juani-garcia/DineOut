@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.persistence.User;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -12,9 +10,15 @@ public interface UserService {
 
     Optional<User> getByUsername(final String username);
 
-    User create(final String username, final String password, final String firstName, final String lastName);
+    User create(final String username, final String password, final String firstName, final String lastName, final Boolean isRestaurant);
 
     boolean isRestaurant(long userId);
 
     boolean isDiner(long userId);
+
+    void createPasswordResetTokenForUser(User user, String contextPath);
+
+    Optional<User> getUserByPasswordResetToken(String token);
+
+    void changePasswordByUserToken(String token, String newPassword);
 }

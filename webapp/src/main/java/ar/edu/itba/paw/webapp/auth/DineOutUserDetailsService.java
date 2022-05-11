@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.persistence.*;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,7 +44,7 @@ public class DineOutUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final User user = userService.getByUsername(username)
-                .orElseThrow( () -> new UsernameNotFoundException("No user '" + username + "'") );
+                .orElseThrow(() -> new UsernameNotFoundException("No user '" + username + "'"));
 
         final Collection<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -63,7 +61,8 @@ public class DineOutUserDetailsService implements UserDetailsService {
             for (RoleToAuthority userRoleToAuthority : roleToAuthorityService.getByRoleId(userRole.get().getId())) {
                 Optional<RoleAuthority> roleAuthority = roleAuthorityService.getByAuthorityId(userRoleToAuthority.getAuthorityId());
 
-                if (!roleAuthority.isPresent()) throw new IllegalStateException("El privielgio del rol del usuario es invalido");
+                if (!roleAuthority.isPresent())
+                    throw new IllegalStateException("El privielgio del rol del usuario es invalido");
 
                 authorities.add(new SimpleGrantedAuthority(roleAuthority.get().getAuthorityName()));
             }

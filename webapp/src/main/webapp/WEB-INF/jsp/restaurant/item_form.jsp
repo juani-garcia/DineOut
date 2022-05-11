@@ -10,13 +10,12 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<%@ include file="../restaurant_detailed_navbar.jsp" %>
 
 <h2 class="megabold center white-text"><spring:message code="register.restaurant.form.title" /></h2>
 
 
 <c:url value="/restaurant/item" var="postPath"/>
-<form:form id="item_form" modelAttribute="itemForm" action="${postPath}" method="post">
+<form:form id="item_form" modelAttribute="itemForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="section">
             <div class="row rounded shadowed white">
@@ -39,7 +38,7 @@
                     <div class="row">
                         <form:label path="price" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.price"/>*</form:label>
-                        <form:input path="price" type="number" step="0.01" min="0"/>
+                        <form:input path="price" type="number" step="0.01" min="0" id="decimalnumberonly"/>
                         <form:errors path="price" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row input-field">
@@ -52,28 +51,22 @@
                         </form:select>
                         <form:errors path="menuSectionId" element="p" cssClass="isa_error"/>
                     </div>
-                    <!-- <div class="row">
+                    <div class="row">
                         <form:label path="image" cssClass="semibold label-text-size"><spring:message
                                 code="restaurant.item.form.image"/></form:label>
-                        <form:input path="image" type="text"/>
+                        <form:input path="image" type="file"/>
                         <form:errors path="image" cssClass="isa_error" element="p"/>
-                    </div> -->
-                    <div class="row">
-                        <form:label path="ordering" cssClass="semibold label-text-size"><spring:message
-                                code="restaurant.item.form.ordering"/>*</form:label>
-                        <form:input path="ordering" type="number" step="1" min="1" value="1"/>
-                        <form:errors path="ordering" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
                     <div class="row center">
-                        <a type="submit" id="register-button"
-                           class="btn-large waves-effect waves-red white black-text lighten-1"
-                           href="javascript:{}"
-                           onclick="document.getElementById('item_form').submit();">
-                            <spring:message code="restaurant.item.form.submit"/></a>
+                        <button type="submit" name="action"
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                            <spring:message code="restaurant.item.form.submit"/>
+                            <i class="material-icons right">send</i>
+                        </button>
                     </div>
                 </div>
             </div>

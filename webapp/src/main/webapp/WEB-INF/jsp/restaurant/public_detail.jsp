@@ -10,81 +10,134 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<div id="index-banner" class="parallax-container parallax-container-small align_center">
-    <div class="section no-pad-bot">
+<div class="flex_row">
+    <div class="display_flex restaurant_detail_section_data">
         <div class="container">
-            <h1 class="header center white-text bold text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h1>
-        </div>
-    </div>
-    <div class="parallax"><img src="<c:url value="/resources/media/background1.jpg"/>"
-                               alt=""></div>   <!-- Custom restaurant image -->
-</div>
-
-<div class="container">
-    <div class="section restaurant_detail_flex_container">
-        <!--   Icon Section   -->
-        <div class="card horizontal card_wrapper default_dark white-text align_center same_width_elements">
-            <div class="card-content same_width_elements">
-                <div class="icon-block">
-                    <h2 class="center"><i class="material-icons">restaurant_menu</i></h2>
-                    <h5 class="center"><c:out value="${restaurant.detail}"/></h5>
+            <div class="card card_wrapper default_dark white-text same_width_elements">
+                <div class="card-content same_width_elements">
+                    <h1 class="header center bold text_overflow_ellipsis flex_row flex_center">
+                        <c:out value="${restaurant.name}"/>
+                        <% if (request.isUserInRole("DINER")) { %>
+                        <c:if test="${isUserFavorite}">
+                            <c:url value="/diner/set_favorite/${restaurant.id}/false" var="setFavorite"/>
+                            <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
+                                <button class="btn-large waves-effect waves-light btn-floating default_red"
+                                        type="submit"
+                                        name="action">
+                                    <i class="material-icons left">favorite</i>
+                                </button>
+                            </form>
+                        </c:if>
+                        <c:if test="${!isUserFavorite}">
+                            <c:url value="/diner/set_favorite/${restaurant.id}/true" var="setFavorite"/>
+                            <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
+                                <button class="btn-large waves-effect waves-light btn-floating default_red"
+                                        type="submit"
+                                        name="action">
+                                    <i class="material-icons left">favorite_border</i>
+                                </button>
+                            </form>
+                        </c:if>
+                        <% } %>
+                    </h1>
                 </div>
-            </div>
-            <div class="card-content same_width_elements">
-                <h5 class="center">&#128205;<c:out value="${restaurant.address}"/></h5>
-            </div>
-            <div class="card-content same_width_elements flex_center">
-                <h5 class="center">Horarios:</h5>
-                <c:if test="${shifts.size() == 0}">
-                    <h6 class="center">Las 24hs.</h6>
+                <c:if test="${restaurant.imageId != null}">
+                    <div class="card-image">
+                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                    </div>
                 </c:if>
-                <c:forEach items="${shifts}" var="shift">
-                    <h6 class="center"><c:out value="${shift.name}"/> <c:out value="${shift.start}"/> a <c:out
-                            value="${shift.end}"/></h6>
-                </c:forEach>
+                <div class="card-content same_width_elements">
+                    <div class="icon-block">
+                        <h2 class="center text_overflow_ellipsis"><i class="material-icons">restaurant_menu</i></h2>
+                        <h5 class="center text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></h5>
+                    </div>
+                </div>
+                <div class="card-content same_width_elements">
+                    <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
+                </div>
+                <div class="card-content same_width_elements flex_center">
+                    <h5 class="center text_overflow_ellipsis">
+                        <spring:message code="restaurant.public_detail.time"/>:
+                    </h5>
+                    <c:if test="${shifts.size() == 0}">
+                        <h6 class="center text_overflow_ellipsis"><spring:message
+                                code="restaurant.public_detail.all_day"/>
+                        </h6>
+                    </c:if>
+                    <c:forEach items="${shifts}" var="shift">
+                        <h6 class="center text_overflow_ellipsis">
+                            <spring:message code="${shift.message}"/>
+                            <c:out value="${shift.start}"/> a
+                            <c:out value="${shift.end}"/></h6>
+                    </c:forEach>
+                </div>
+                <% if (request.isUserInRole("DINER")) { %>
+                <div class="card-content same_width_elements">
+                    <div class="container">
+                        <div class="row center">
+                            <a href="<c:url value ="/reserve/${restaurant.id}"/>"
+                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
+                                <spring:message code="reservation.reservation.form.submit"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <% if (!request.isUserInRole("RESTAURANT") && !request.isUserInRole("DINER")) { %>
+                <div class="card-content same_width_elements">
+                    <div class="container">
+                        <div class="row center">
+                            <a href="<c:url value ="/register"/>"
+                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
+                                <spring:message code="reservation.reservation.form.register"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container flex_center padding-15px">
-    <div class="menu_title_card flex_center align_center rounded shadowed padding-15px">
-        <h1 class="megabold flex_center groovy">
-            <c:if test="${sections.size() == 0}">
-                <spring:message code="restaurant.public_detail.no_menu"/>.
-            </c:if>
-            <c:if test="${sections.size() != 0}">
-                <spring:message code="restaurant.public_detail.menu"/>:
-            </c:if>
-        </h1>
-    </div>
-    <c:if test="${sections.size() != 0}">
-        <div class="section flex_center width_100">
+    <div class="restaurant_detail_section_menu padding-15px">
+        <div class="section width_100">
             <div class="card menu_card">
                 <div class="card-content black-text">
+                    <h1 class="megabold groovy center">
+                        <c:if test="${sections.size() == 0}">
+                            <spring:message code="restaurant.public_detail.no_menu"/>.
+                        </c:if>
+                        <c:if test="${sections.size() != 0}">
+                            <spring:message code="restaurant.public_detail.menu"/>:
+                        </c:if>
+                    </h1>
                     <c:forEach items="${sections}" var="section">
-                        <h2 class="bold"><c:out value="${section.name}"/></h2>
+                        <h4 class="groovy bold"><c:out value="${section.name}"/></h4>
+                        <c:if test="${section.menuItemList.size() == 0}">
+                            <h6><spring:message code="restaurant.public_detail.no_items"/></h6>
+                        </c:if>
                         <c:forEach items="${section.menuItemList}" var="item">
-                            <div class="section_item_container align_center">
-                                <h4><c:out value="${item.name}"/></h4>
-                                <p>$ <c:out value="${item.price}"/></p>
+                            <hr/>
+                            <div class="card horizontal item_card">
+                                <c:if test="${item.imageId != null}">
+                                    <div class="card-image">
+                                        <c:url value="/image/${item.imageId}" var="imagePath"/>
+                                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                                    </div>
+                                </c:if>
+                                <div class="card-content">
+                                    <div class="section_item_container align_center">
+                                        <h6 class="bold"><c:out value="${item.name}"/></h6>
+                                        <p>$ <c:out value="${item.price}"/></p>
+                                    </div>
+                                    <p class="regular"><c:out value="${item.detail}"/></p>
+                                </div>
                             </div>
-                            <hr>
-                            <p><c:out value="${item.detail}"/></p>
                         </c:forEach>
                     </c:forEach>
                 </div>
             </div>
-        </div>
-    </c:if>
-</div>
-<div class="section no-pad-bot">
-    <div class="container">
-        <div class="row center scale_up">
-            <a href="<c:url value ="/reserve/${restaurant.id}"/>"
-               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                ¡Reserva!
-            </a>
         </div>
     </div>
 </div>

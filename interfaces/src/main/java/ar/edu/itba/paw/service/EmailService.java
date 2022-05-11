@@ -1,9 +1,21 @@
 package ar.edu.itba.paw.service;
 
-import java.time.LocalDateTime;
+import ar.edu.itba.paw.persistence.Reservation;
+import ar.edu.itba.paw.persistence.User;
 
 public interface EmailService {
 
-    void sendReservationToRestaurant(long reservation_id, String to, String from, int amount, LocalDateTime when,  String comments);
+    void sendAccountCreationMail(String to, String name);
 
+    void sendReservationCreatedUser(String to, String name, Reservation reservation);
+
+    void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user);
+
+    void sendReservationCancelledUser(String to, String name, Reservation reservation);
+
+    void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user);
+
+    void sendReservationConfirmed(String to, String name, Reservation reservation);
+
+    void sendChangePassword(String to, String name, String token);
 }

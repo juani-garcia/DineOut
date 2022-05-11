@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -14,16 +17,14 @@ public class MenuItemForm {
     private String detail;
 
     @NotNull
+    @Min(0)
+    @NumberFormat
     private double price;
 
     @NotNull
     private long menuSectionId;
 
-    @NotNull
-    @Min(1)
-    private int ordering;
-
-    private String image;
+    private MultipartFile image;
 
     public String getName() {
         return name;
@@ -57,19 +58,11 @@ public class MenuItemForm {
         this.menuSectionId = menuSectionId;
     }
 
-    public int getOrdering() {
-        return ordering;
-    }
-
-    public void setOrdering(int ordering) {
-        this.ordering = ordering;
-    }
-
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

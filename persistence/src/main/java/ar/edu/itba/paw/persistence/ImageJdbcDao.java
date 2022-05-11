@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,7 +40,6 @@ public class ImageJdbcDao implements ImageDao {
         List<Image> query = jdbcTemplate.query("SELECT * FROM image WHERE id = ?", new Object[] {id}, IMAGE_ROW_MAPPER);
         return query.stream().findFirst();
     }
-
 
     @Override
     public boolean edit(final long id, final byte[] source) {

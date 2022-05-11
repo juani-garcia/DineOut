@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.persistence.UserRole;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRoleService {

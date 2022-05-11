@@ -1,25 +1,18 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.MenuSection;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.exceptions.InvalidTimeException;
-import ar.edu.itba.paw.service.MenuItemService;
-import ar.edu.itba.paw.service.MenuSectionService;
-import ar.edu.itba.paw.service.ReservationService;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
+import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.persistence.Restaurant;
+import ar.edu.itba.paw.service.*;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class ReservationController {
@@ -31,46 +24,49 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
-    private MessageSource messageSource;
+    private SecurityService securityService;
 
     @Autowired
-    private MenuSectionService menuSectionService;
-
-    @Autowired
-    private MenuItemService menuItemService;
-
-    @Autowired
-    private SecurityController securityController;
+    private ShiftService shiftService;
 
     @RequestMapping("/reserve/{resId}")
-    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form,  @RequestParam(name = "formSuccess", defaultValue = "false") final boolean formSuccess) {
-         final ModelAndView mav = new ModelAndView("reservation/reservation");
-
-         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new);
+    public ModelAndView reservation(
+            @PathVariable final long resId,
+            @ModelAttribute("reservationForm") final ReservationForm form) {
+        final ModelAndView mav = new ModelAndView("reservation/reservation");
+         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
          mav.addObject("restaurant", restaurant);
-         mav.addObject("formSuccess", formSuccess);
+         mav.addObject("times", Shift.availableTimes(shiftService.getByRestaurantId(resId), 30));
          return mav;
     }
 
-    @RequestMapping(value = "/create/{resId}", method = { RequestMethod.POST })
+    @RequestMapping(value = "/create/{resId}", method = {RequestMethod.POST})
     public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
 
-        // TODO: i18n.
-        try {
-            reservationService.create(resId, securityController.getCurrentUserName(), form.getAmount(), form.getLocalDateTime(), form.getComments());
-        } catch (InvalidTimeException e) {
-            errors.addError(new FieldError("reservationForm", "dateTime", "El horario de la reserva es inválido."));
-        }
-
         if (errors.hasErrors()) {
-            return reservation(resId, form, false);
+            return reservation(resId, form);
         }
 
+        reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
 
-        final ModelAndView mav =  new ModelAndView("redirect:/reserve/" + resId);
-        mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(RestaurantNotFoundException::new));
-        mav.addObject("formSuccess", true);
-        return mav;
+        return new ModelAndView("redirect:/diner/reservations");
     }
+
+    @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
+    public ModelAndView delete(@PathVariable final long resId, HttpServletRequest request) {
+        reservationService.delete(resId);
+        if (request.isUserInRole("DINER")) {
+            return new ModelAndView("redirect:/diner/reservations");
+        } else {
+            return new ModelAndView("redirect:/restaurant/reservations");
+        }
+    }
+
+    @RequestMapping(value = "/reservation/{resId}/confirm", method = {RequestMethod.POST})
+    public ModelAndView confirm(@PathVariable final long resId) {
+        reservationService.confirm(resId);
+        return new ModelAndView("redirect:/restaurant/reservations");
+    }
+
 
 }

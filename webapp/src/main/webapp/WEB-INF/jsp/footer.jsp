@@ -1,39 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<footer class="page-footer default_red">
-    <%--    <div class="container">--%>
-    <%--        <div class="section">--%>
-    <%--            <div class="row rounded shadowed white">--%>
-    <%--            </div>--%>
-    <%--        </div>--%>
-    <%--    </div>--%>
-    <div class="container">
-        <div class="row">
-            <div class="col l6 s12">
-                <h5 class="white-text"><spring:message code="home.index.info.title"/></h5>
-                <p class="light white-text"><spring:message code="home.index.info.description"/></p>
-
-
-            </div>
-            <%--            <div class="col l3 s12">--%>
-            <%--                <h5 class="white-text">Lorem ipsum</h5>--%>
-            <%--                <ul>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 1</a></li>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 2</a></li>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 3</a></li>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 4</a></li>--%>
-            <%--                </ul>--%>
-            <%--            </div>--%>
-            <%--            <div class="col l3 s12">--%>
-            <%--                <h5 class="white-text">Lorem ipsum</h5>--%>
-            <%--                <ul>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 1</a></li>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 2</a></li>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 3</a></li>--%>
-            <%--                    <li><a class="white-text" href="#!">Link 4</a></li>--%>
-            <%--                </ul>--%>
-        </div>
-    </div>
-    <div class="footer-copyright">
+<footer class="page-footer transparent">
+    <div class="footer-copyright transparent">
         <div class="container">
             <spring:message code="webapp.footer.project"/>
             <text class="bold"><spring:message code="company.name"/>
@@ -47,8 +14,27 @@
 <script src="<c:url value="/resources/js/materialize.js"/>"></script>
 <script src="<c:url value="/resources/js/init.js"/>"></script>
 <script>
-    /* document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems);
-    }); */
+    // Retrieved from: https://stackoverflow.com/questions/18156824/restricting-an-input-box-to-only-numbers-0-9#18156861
+    if (document.getElementById('numberonly') !== null) {
+        document.getElementById('numberonly').addEventListener('keydown', function(e) {
+            var key   = e.keyCode ? e.keyCode : e.which;
+            if (!( [8, 9, 13, 27, 46, 110].indexOf(key) !== -1 ||  // Remove 190 -> "."
+                (key === 65 && ( e.ctrlKey || e.metaKey  ) ) ||
+                (key >= 35 && key <= 40) ||
+                (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
+                (key >= 96 && key <= 105)
+            )) e.preventDefault();
+        });
+    }
+    if (document.getElementById('decimalnumberonly') !== null) {  // TODO: fix "." and ":" repetition and deny ":"
+        document.getElementById('decimalnumberonly').addEventListener('keydown', function(e) {
+            var key   = e.keyCode ? e.keyCode : e.which;
+            if (!( [8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||  // Allow 190 -> "."
+                (key === 65 && ( e.ctrlKey || e.metaKey  ) ) ||
+                (key >= 35 && key <= 40) ||
+                (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
+                (key >= 96 && key <= 105)
+            )) e.preventDefault();
+        });
+    }
 </script>
