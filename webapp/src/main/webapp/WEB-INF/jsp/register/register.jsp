@@ -66,6 +66,18 @@
                             <i class="material-icons right">send</i>
                         </button>
                     </div>
+                    <div class="row center">
+                        <div class="flex_row">
+                            <h6 class="flex_row">
+                                <spring:message code="home.has_account"/>
+                                <div class="grow_on_hover margins_lr_10px">
+                                    <a class="thin underline default_dark_text" href="<c:url value="/login"/>">
+                                        <spring:message code="home.login"/>
+                                    </a>
+                                </div>
+                            </h6>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

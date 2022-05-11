@@ -643,12 +643,16 @@ button {
     height: fit-content;
 }
 
-.confirm_delet_modal_height {
+.confirm_delete_modal_height {
     height: 210px;
 }
 
 .margin_l_20px {
     margin-left: 20px;
+}
+
+.margin_b_5px {
+    margin-bottom: 5px;
 }
 
 .width_75 {
@@ -663,4 +667,8 @@ nav {
 .no_border {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
+}
+
+.no_bottom_margin {
+    margin-bottom: 0px !important;
 }

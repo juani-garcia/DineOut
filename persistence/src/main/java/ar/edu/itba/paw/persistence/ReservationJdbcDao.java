@@ -25,9 +25,9 @@ public class ReservationJdbcDao implements ReservationDao {
                     rs.getInt("amount"), rs.getObject("date_time", LocalDateTime.class),
                     rs.getString("comments"),
                     new Restaurant(rs.getLong("id"), rs.getLong("user_id"),
-                            rs.getString("name"), rs.getString("address"),
-                            rs.getString("mail"), rs.getString("detail"),
-                            Zone.getById(rs.getLong("zone_id"))),
+                            rs.getString("name"), rs.getLong("image_id"),
+                            rs.getString("address"), rs.getString("mail"),
+                            rs.getString("detail"), Zone.getById(rs.getLong("zone_id"))),
                     rs.getBoolean("is_confirmed"));
 
     @Autowired

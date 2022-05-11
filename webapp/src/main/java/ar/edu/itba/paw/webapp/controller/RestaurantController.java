@@ -1,12 +1,18 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Category;
+import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.MenuItem;
+import ar.edu.itba.paw.persistence.MenuSection;
+import ar.edu.itba.paw.persistence.Restaurant;
 import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.form.MenuItemForm;
+import ar.edu.itba.paw.webapp.form.MenuSectionForm;
+import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -26,9 +32,6 @@ import java.util.stream.Collectors;
 public class RestaurantController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private RestaurantService restaurantService;
 
     @Autowired
@@ -36,9 +39,6 @@ public class RestaurantController {
 
     @Autowired
     private MenuItemService menuItemService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Autowired
     private ShiftService shiftService;
@@ -65,7 +65,6 @@ public class RestaurantController {
 
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: this should not be here, it could either be on the service or on a join in the dao.
         mav.addObject("sections", menuSectionList);
         mav.addObject("shifts", shiftService.getByRestaurantId(restaurant.getId()));
         return mav;
@@ -85,18 +84,21 @@ public class RestaurantController {
         if (errors.hasErrors()) {
             return restaurantForm(form);
         }
-
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-
-        restaurantService.create(user.getId(), form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+        byte[] image;
+        try {
+            image = form.getImage().getBytes();
+        } catch (IOException e) {
+            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+        }
+        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
         return new ModelAndView("redirect:/restaurant");
     }
 
     @RequestMapping("/edit")
     public ModelAndView restaurantEditForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        ModelAndView mav = new ModelAndView("register/edit_restaurant");
-        Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().get().getId()).get();
+        ModelAndView mav = new ModelAndView("restaurant/edit_restaurant");
+        Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId()).orElseThrow(NotFoundException::new);
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
         mav.addObject("shifts", Shift.values());
@@ -255,7 +257,7 @@ public class RestaurantController {
     }
 
     @RequestMapping("/view/{resId}")
-    public ModelAndView reservation(@PathVariable final long resId, @ModelAttribute("reservationForm") final ReservationForm form) {
+    public ModelAndView reservation(@PathVariable final long resId) {
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
 
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
@@ -264,7 +266,6 @@ public class RestaurantController {
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", shiftService.getByRestaurantId(resId));
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));  // TODO: same as bvefore this should not be here.
         mav.addObject("sections", menuSectionList);
         return mav;
     }

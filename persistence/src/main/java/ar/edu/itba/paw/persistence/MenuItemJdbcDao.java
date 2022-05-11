@@ -21,7 +21,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
             new MenuItem(rs.getLong("id"), rs.getString("name"),
                     rs.getString("detail"), rs.getDouble("price"),
                     rs.getLong("section_id"), rs.getLong("ordering"),
-                    Long.getLong(rs.getString("image_id")));
+                    rs.getLong("image_id") == 0 ? null : rs.getLong("image_id"));
 
     @Autowired
     public MenuItemJdbcDao(final DataSource ds) {
@@ -50,7 +50,7 @@ public class MenuItemJdbcDao implements MenuItemDao {
         itemData.put("section_id", sectionId);
         itemData.put("image_id", imageId);
         long itemId = jdbcInsert.executeAndReturnKey(itemData).longValue();
-        return getById(itemId).orElseThrow(() -> new RuntimeException("Couldn't fetch created item"));
+        return getById(itemId).orElseThrow(IllegalStateException::new);
     }
 
     @Override

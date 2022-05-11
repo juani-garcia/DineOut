@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="transparent" role="navigation">
     <div class="nav-wrapper container">
-        <a id="logo-container" href="<c:url value="/"/>" class="brand-logo megabold">Dine Out &#127836;</a>
+        <a id="logo-container" href="<c:url value="/"/>" class="brand-logo megabold">Dine Out <img style="height: 2.1rem" src="https://images.emojiterra.com/google/android-pie/512px/1f35c.png"></a>
 
         <ul class="right hide-on-small-and-down">
             <c:if test="${pageContext.request.userPrincipal.name == null}">

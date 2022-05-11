@@ -15,7 +15,7 @@
 
 
 <c:url value="/restaurant/register" var="postPath"/>
-<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post">
+<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="section">
             <div class="row rounded shadowed white">
@@ -30,6 +30,12 @@
                         <form:errors path="name" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
+                        <form:label path="image" cssClass="semibold label-text-size"><spring:message
+                                code="register.restaurant.form.image"/></form:label>
+                        <form:input path="image" type="file"/>
+                        <form:errors path="image" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
                         <form:label path="address" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.address"/>*</form:label>
                         <form:input path="address" type="text"/>
@@ -39,6 +45,7 @@
                         <form:label path="zone" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.zone"/></form:label>
                         <form:select path="zone">
+                            <form:option value=""><spring:message code="register.restaurant.zones"/></form:option>
                             <c:forEach items="${zones}" var="zone">
                                 <form:option value="${zone.name}"><c:out value="${zone.name}"/></form:option>
                             </c:forEach>
@@ -56,7 +63,6 @@
                                 code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
                     <div class="row">
                         <form:label path="categories" cssClass="semibold label-text-size">
@@ -64,7 +70,8 @@
                         </form:label>
                         <form:select multiple="true" path="categories">
                             <c:forEach items="${categories}" var="category">
-                                <form:option value="${category.id}"><spring:message code="${category.message}"/></form:option>
+                                <form:option value="${category.id}"><spring:message
+                                        code="${category.message}"/></form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
@@ -78,7 +85,7 @@
                                 <form:option value="${shift.id}"><spring:message code="${shift.message}"/></form:option>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="categories" cssClass="isa_error" element="p"/>
+                        <form:errors path="shifts" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
@@ -99,7 +106,7 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var options = [];
         <c:forEach items="${zones}" var="zone">
         options.push("${zone.name}");

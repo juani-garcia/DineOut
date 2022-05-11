@@ -26,16 +26,19 @@
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
                     <div class="row">
-                        <form:label path="username" cssClass="semibold label-text-size"><spring:message
-                                code="password.recovery.username"/>*</form:label>
-                        <form:input path="username" type="text"/>
-                        <form:errors path="username" cssClass="isa_error" element="p"/>
+                        <form:errors path="username" element="p" cssClass="isa_error"/>
+                        <form:label path="username"><spring:message code="password.recovery.username"/>*</form:label>
+                        <form:input type="text" path="username"/>
+                    </div>
+                    <div class="row">
+                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
+                                code="password.recovery.sendEmail"/></h6>
                     </div>
                     <div class="row center">
                         <button type="submit" name="action"
                                 class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
                             <spring:message code="password.recovery.continue"/>
-                            <i class="material-icons right">send</i>  <!-- TODO: add floating message -->
+                            <i class="material-icons right">send</i>
                         </button>
                     </div>
                 </div>

@@ -4,7 +4,6 @@ import ar.edu.itba.paw.persistence.Image;
 import ar.edu.itba.paw.persistence.ImageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -19,7 +18,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image create(final byte[] source) {
-        // TODO: ? Check size?
         return imageDao.create(source);
     }
 

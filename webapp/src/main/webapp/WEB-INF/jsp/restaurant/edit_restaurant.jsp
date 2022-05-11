@@ -35,7 +35,7 @@
                         <form:input path="address" type="text"/>
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row input-field">
+                    <div class="row input-field" id="zone_select_options">
                         <form:label path="zone" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.zone"/></form:label>
                         <form:select path="zone">
@@ -52,26 +52,29 @@
                         <form:errors path="email" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="row">
+                        <form:label path="image" cssClass="semibold label-text-size"><spring:message
+                                code="register.restaurant.form.image"/></form:label>
+                        <form:input path="image" type="file"/>
+                        <form:errors path="image" cssClass="isa_error" element="p"/>
+                    </div>
+                    <div class="row">
                         <form:label path="detail" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.detail"/></form:label>
                         <form:input path="detail" type="text"/>
                         <form:errors path="detail" cssClass="isa_error" element="p"/>
-                        <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
-                                code="register.restaurant.form.detail.footnote"/></h6>
                     </div>
-                    <div class="row">
+                    <div class="row" id="category_select_options">
                         <form:label path="categories" cssClass="semibold label-text-size">
                             <spring:message code="register.restaurant.form.categories"/>
                         </form:label>
                         <form:select multiple="true" path="categories">
                             <c:forEach items="${categories}" var="category">
-                                <form:option value="${category.id}"><spring:message
-                                        code="${category.message}"/></form:option>
+                                <form:option value="${category.id}"><spring:message code="${category.message}"/></form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row">
+                    <div class="row" id="shift_select_options">
                         <form:label path="shifts" cssClass="semibold label-text-size">
                             <spring:message code="register.restaurant.form.shifts"/>
                         </form:label>
@@ -86,9 +89,14 @@
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
-                    <div class="row center">
+                    <div class="row center flex_row">
+                        <a id="back-button"
+                           class="btn-large waves-effect waves-red default_red white-text lighten-1 no-text-transform"
+                           href="javascript:{}" onclick="history.back();">
+                            <spring:message code="restaurant.edit.form.back"/>
+                        </a>
                         <button type="submit" name="action"
-                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1 margin_left_auto">
                             <spring:message code="register.restaurant.form.update"/>
                             <i class="material-icons right">send</i>
                         </button>
@@ -102,27 +110,14 @@
 <%@ include file="../footer.jsp" %>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var zoneOptions = [];
-        <c:forEach items="${zones}" var="zone">
-        zoneOptions.push("${zone.name}");
-        </c:forEach>
-        var zoneElems = document.getElementById("zone_select").querySelectorAll('select');
-        M.FormSelect.init(zoneElems, zoneOptions);
+        var zoneElems = document.getElementById('zone_select_options').querySelectorAll('select');
+        var zoneInstances = M.FormSelect.init(zoneElems);
 
+        var categoryElems = document.getElementById('category_select_options').querySelectorAll('select');
+        var categoryInstances = M.FormSelect.init(categoryElems);
 
-        var shiftOptions = [];
-        <c:forEach items="${shifts}" var="shift">
-        shiftOptions.push("${shift.name}");
-        </c:forEach>
-        var shiftElems = document.getElementById("shift_select").querySelectorAll('select');
-        M.FormSelect.init(shiftElems, shiftOptions);
-
-        var categoriesOptions = [];
-        <c:forEach items="${categories}" var="category">
-        categoriesOptions.push("${category.name}");
-        </c:forEach>
-        var categoriesElems = document.getElementById("category_select").querySelectorAll('select');
-        M.FormSelect.init(categoriesElems, categoriesOptions);
+        var shiftElems = document.getElementById('shift_select_options').querySelectorAll('select');
+        var shiftInstances = M.FormSelect.init(shiftElems);
     });
 </script>
 </body>

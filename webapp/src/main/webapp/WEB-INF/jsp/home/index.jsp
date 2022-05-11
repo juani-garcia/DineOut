@@ -48,6 +48,33 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
+    function clearSearchSelection() {
+        const params = new URLSearchParams(window.location.search);
+
+        params.set('category', '');
+        var categoryOption = document.getElementById('category_select_options').value;
+        var categoryOptions = document.getElementById('category_select_options').querySelectorAll('option');
+        categoryOptions[categoryOption - -1].removeAttribute('selected');
+        categoryOptions[0].setAttribute('selected', 'selected');
+        document.getElementById('category_select').children.item(0).children.item(0).value = categoryOptions[0].text;
+
+        params.set('zone', '');
+        var zoneOption = document.getElementById('zone_select_options').value;
+        var zoneOptions = document.getElementById('zone_select_options').querySelectorAll('option');
+        zoneOptions[zoneOption - -1].removeAttribute('selected');
+        zoneOptions[0].setAttribute('selected', 'selected');
+        document.getElementById('zone_select').children.item(0).children.item(0).value = zoneOptions[0].text;
+
+        params.set('shift', '');
+        var shiftOption = document.getElementById('shift_select_options').value;
+        var shiftOptions = document.getElementById('shift_select_options').querySelectorAll('option');
+        shiftOptions[shiftOption - -1].removeAttribute('selected');
+        shiftOptions[0].setAttribute('selected', 'selected');
+        document.getElementById('shift_select').children.item(0).children.item(0).value = shiftOptions[0].text;
+
+        document.getElementById("search_form").submit()
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         // Add category, zone and shift options for search.
         var category_options = [];
