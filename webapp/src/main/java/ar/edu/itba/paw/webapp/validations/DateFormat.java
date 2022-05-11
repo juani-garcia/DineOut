@@ -12,17 +12,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {FormatValidator.class})
-public @interface Format {
+@Constraint(validatedBy = {DateFormatValidator.class})
+public @interface DateFormat {
 
     String message() default "Invalid date.";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
+    String format();
 
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        Format[] format();
+        DateFormat[] format();
     }
 }

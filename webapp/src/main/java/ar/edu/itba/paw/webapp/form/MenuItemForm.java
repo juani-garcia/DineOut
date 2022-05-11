@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.FileSize;
+import ar.edu.itba.paw.webapp.validations.FileType;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +26,8 @@ public class MenuItemForm {
     @NotNull
     private long menuSectionId;
 
+    @FileSize(mb = 10)
+    @FileType(types = {"image/png", "image/jpeg"})
     private MultipartFile image;
 
     public String getName() {
