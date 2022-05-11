@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.model.exceptions.ForbiddenActionException;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.persistence.Image;
-import ar.edu.itba.paw.persistence.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +64,14 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public boolean edit(long itemId, String name, String detail, double price, long sectionId, byte[] imageBytes) {
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(() -> new RuntimeException("Invalid itemId"));
-        return menuItemDao.edit(itemId, name, detail, price, sectionId, menuItem.getOrdering(), menuItem.getImageId());
+        Long imageId = menuItem.getImageId();
+        if (imageBytes.length > 0) {
+            if (menuItem.getImageId() != null) {
+                imageService.delete(menuItem.getImageId());
+            }
+            imageId = imageService.create(imageBytes).getId();
+        }
+        return menuItemDao.edit(itemId, name, detail, price, sectionId, menuItem.getOrdering(), imageId);
     }
 
     private boolean move(final long itemId, boolean moveUp) {
