@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.MenuItem;
 import ar.edu.itba.paw.persistence.MenuSection;
 import ar.edu.itba.paw.persistence.Restaurant;
@@ -97,7 +98,7 @@ public class RestaurantController {
     @RequestMapping("/edit")
     public ModelAndView restaurantEditForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("restaurant/edit_restaurant");
-        Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().get().getId()).get();
+        Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId()).orElseThrow(NotFoundException::new);
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
         mav.addObject("shifts", Shift.values());
