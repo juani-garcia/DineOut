@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +19,7 @@ import java.util.Optional;
 @Repository
 public class ReservationJdbcDao implements ReservationDao {
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 8;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     static final RowMapper<Reservation> ROW_MAPPER = (rs, rowNum) ->
@@ -85,7 +87,11 @@ public class ReservationJdbcDao implements ReservationDao {
 
     @Override
     public Optional<Reservation> getReservation(long reservationId) {
-        return jdbcTemplate.query("SELECT * FROM reservation, restaurant WHERE restaurant_id = id AND reservation_id = ?",
+        String query = "SELECT * FROM " +
+                "(SELECT * FROM restaurant, reservation WHERE restaurant.id = reservation.restaurant_id) as rr " +
+                "LEFT OUTER JOIN account ON rr.user_mail = account.username " +
+                "WHERE reservation_id = ? ";
+        return jdbcTemplate.query(query,
                 new Object[]{reservationId},
                 ROW_MAPPER).stream().findFirst();
     }

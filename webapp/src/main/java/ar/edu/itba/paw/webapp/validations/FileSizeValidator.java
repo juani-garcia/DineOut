@@ -6,11 +6,13 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.io.IOException;
 
-public class ValidImageValidator implements ConstraintValidator<ValidImage, MultipartFile> {
+public class FileSizeValidator implements ConstraintValidator<FileSize, MultipartFile> {
+
+    private long mb;
 
     @Override
-    public void initialize(ValidImage constraintAnnotation) {
-
+    public void initialize(FileSize constraintAnnotation) {
+        mb = constraintAnnotation.mb();
     }
 
     @Override
@@ -21,6 +23,6 @@ public class ValidImageValidator implements ConstraintValidator<ValidImage, Mult
         } catch (IOException e) {
             return false;
         }
-        return value.getSize() <= 1024*1024;
+        return value.getSize() <= mb * 1024*1024;
     }
 }

@@ -6,9 +6,9 @@ import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.MenuItem;
-import ar.edu.itba.paw.persistence.MenuSection;
-import ar.edu.itba.paw.persistence.Restaurant;
+import ar.edu.itba.paw.model.MenuItem;
+import ar.edu.itba.paw.model.MenuSection;
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -79,7 +78,7 @@ public class RestaurantController {
         return mav;
     }
 
-    @RequestMapping(value = "/register", method = {RequestMethod.POST})
+    @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ModelAndView create(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
             return restaurantForm(form);
@@ -95,7 +94,7 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
-    @RequestMapping("/edit")
+    @RequestMapping(value = "/edit")
     public ModelAndView restaurantEditForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
         ModelAndView mav = new ModelAndView("restaurant/edit_restaurant");
         Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId()).orElseThrow(NotFoundException::new);
@@ -111,17 +110,30 @@ public class RestaurantController {
                 stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
         form.setShifts(shiftService.getByRestaurantId(restaurant.getId()).
                 stream().mapToLong(Shift::getId).boxed().collect(Collectors.toList()));
+
         return mav;
     }
 
-    @RequestMapping(value = "/edit", method = {RequestMethod.POST})
+    @RequestMapping(value = "/edit", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ModelAndView restaurantEdit(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form,
                                        final BindingResult errors) {
         if (errors.hasErrors()) {
             return restaurantEditForm(form);
         }
 
-        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+        byte[] image;
+        try {
+            image = form.getImage().getBytes();
+        } catch (IOException e) {
+            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+        }
+
+
+        System.out.println(image.toString());
+        System.out.println(image);
+
+
+        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts(), image);
 
         return new ModelAndView("redirect:/restaurant");
     }
@@ -155,7 +167,7 @@ public class RestaurantController {
 
     @RequestMapping(value = "/section/{sectionId}/edit", method = {RequestMethod.POST})
     public ModelAndView sectionEdit(@PathVariable final long sectionId,
-                                    @ModelAttribute("sectionForm") final MenuSectionForm form,
+                                    @Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
                                     final BindingResult errors) {
         if (errors.hasErrors()) {
             return sectionEditForm(sectionId, form);
@@ -193,19 +205,18 @@ public class RestaurantController {
 
     @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ModelAndView item(@Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
-        byte[] imageBytes = null;
-        try {
-            imageBytes = form.getImage().getBytes();
-        } catch (IOException e) {
-            errors.addError(new FieldError("itemForm", "image", "Couldn't get image"));  // TODO: i18n & move elsewere.
-        }
-
         if (errors.hasErrors()) {
             return itemForm(form);
         }
 
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);  // TODO: why do we need to acces the restaurant? @mateo
-        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), imageBytes);
+        byte[] image;
+        try {
+            image = form.getImage().getBytes();
+        } catch (IOException e) {
+            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+        }
+
+        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
         return new ModelAndView("redirect:/restaurant");
     }
 
@@ -222,19 +233,25 @@ public class RestaurantController {
         form.setDetail(menuItem.getDetail());
         form.setPrice(menuItem.getPrice());
         form.setMenuSectionId(menuItem.getSectionId());
-        // form.setImage(new CommonsMultipartFile(image.getSource()));
         return mav;
     }
 
-    @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST})
+    @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ModelAndView itemEdit(@PathVariable final long itemId,
-                                 @ModelAttribute("itemForm") final MenuItemForm form,
+                                 @Valid @ModelAttribute("itemForm") final MenuItemForm form,
                                  final BindingResult errors) {
         if (errors.hasErrors()) {
             return itemEditForm(itemId, form);
         }
-        // TODO: manage image update
-        menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), null);
+
+        byte[] image;
+        try {
+            image = form.getImage().getBytes();
+        } catch (IOException e) {
+            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+        }
+
+        menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
         return new ModelAndView("redirect:/restaurant");
     }
 

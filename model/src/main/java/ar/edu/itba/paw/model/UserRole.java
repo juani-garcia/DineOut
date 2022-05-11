@@ -1,10 +1,10 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
 public class UserRole {
     private final long id;
     private final String roleName;
 
-    protected UserRole(long id, String roleName) {
+    public UserRole(long id, String roleName) {
         this.id = id;
         this.roleName = roleName;
     }

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class Reservation {
     private final boolean isConfirmed;
     private final User owner;
 
-    protected Reservation(long reservationId, int amount, LocalDateTime dateTime,
+    public Reservation(long reservationId, int amount, LocalDateTime dateTime,
                           String comments, Restaurant restaurant, User owner, boolean isConfirmed) {
         this.reservationId = reservationId;
         this.amount = amount;

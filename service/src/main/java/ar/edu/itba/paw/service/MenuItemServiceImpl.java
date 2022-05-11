@@ -1,12 +1,11 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.model.exceptions.ForbiddenActionException;
 import ar.edu.itba.paw.persistence.*;
-import ar.edu.itba.paw.persistence.Image;
-import ar.edu.itba.paw.persistence.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +40,11 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItem create(String name, String detail, double price, long sectionId, byte[] imageBytes) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(IllegalArgumentException::new);
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        if (user.getId() != restaurant.getUserID())
+            throw new IllegalArgumentException("Cannot create item in someone else's restaurant");
         Image image = null;
         if (imageBytes != null && imageBytes.length > 0) {
             image = imageService.create(imageBytes);
@@ -50,31 +54,31 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public boolean delete(final long itemId) {
-        MenuItem menuItem = getById(itemId).orElseThrow(() -> new RuntimeException("Invalid itemId"));  // TODO: Modularizar
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId())
-            throw new RuntimeException("Invalid permissions");
+        MenuItem menuItem = validateItem(itemId);
         return menuItemDao.delete(itemId);
     }
 
-    public boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
-        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(() -> new RuntimeException("Invalid itemId"));
+    boolean edit(long itemId, String name, String detail, double price, long sectionId, long ordering, byte[] imageBytes) {
+        MenuItem menuItem = validateItem(itemId);
         return menuItemDao.edit(itemId, name, detail, price, sectionId, ordering, menuItem.getImageId());
     }
 
+    @Transactional
     @Override
     public boolean edit(long itemId, String name, String detail, double price, long sectionId, byte[] imageBytes) {
-        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(() -> new RuntimeException("Invalid itemId"));
+        MenuItem menuItem = validateItem(itemId);
+        Long imageId = menuItem.getImageId();
+        if (imageBytes.length > 0) {
+            if (menuItem.getImageId() != null) {
+                imageService.delete(menuItem.getImageId());
+            }
+            imageId = imageService.create(imageBytes).getId();
+        }
         return menuItemDao.edit(itemId, name, detail, price, sectionId, menuItem.getOrdering(), menuItem.getImageId());
     }
 
     private boolean move(final long itemId, boolean moveUp) {
-        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(() -> new RuntimeException("Invalid itemId"));
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (restaurant.getUserID() != securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId())
-            throw new ForbiddenActionException();
+        MenuItem menuItem = validateItem(itemId);
         return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() + (moveUp ? -1 : 1), null);
 
     }
@@ -87,6 +91,16 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public boolean moveDown(final long itemId) {
         return move(itemId, false);
+    }
+
+    protected MenuItem validateItem(final long itemId) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(IllegalArgumentException::new);
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        if (restaurant.getUserID() != user.getId())
+            throw new IllegalArgumentException("Cannot edit someone else's item");
+        return menuItem;
     }
 
 }

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.persistence;
+package ar.edu.itba.paw.model;
 
 public class MenuItem {
 
@@ -7,7 +7,7 @@ public class MenuItem {
     private long sectionId, id, ordering;
     private Long imageId;
 
-    protected MenuItem(long id, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+    public MenuItem(long id, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
         this.id = id;
         this.name = name;
         this.detail = detail;
