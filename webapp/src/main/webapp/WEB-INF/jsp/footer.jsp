@@ -26,7 +26,7 @@
             )) e.preventDefault();
         });
     }
-    if (document.getElementById('decimalnumberonly') !== null) {  // TODO: fix "." and ":" repetition and deny ":"
+    if (document.getElementById('decimalnumberonly') !== null) {
         document.getElementById('decimalnumberonly').addEventListener('keydown', function(e) {
             var key   = e.keyCode ? e.keyCode : e.which;
             if (!( [8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||  // Allow 190 -> "."
