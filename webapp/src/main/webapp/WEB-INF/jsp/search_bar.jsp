@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="section">
-        <div class="search_bar">
+        <div class="search_bar flex_center">
             <div class="card flex_column">
                 <c:url value="/restaurants" var="getPath"/>
                 <form action="${getPath}" method="get"
