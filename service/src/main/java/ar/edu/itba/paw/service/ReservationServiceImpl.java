@@ -31,10 +31,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private SecurityService securityService;
-
-    @Autowired
-    private UserService userService;
-
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
@@ -44,7 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new InvalidTimeException();
         }
 
-        Reservation reservation = reservationDao.create(restaurant, userMail, amount, dateTime, comments);
+        Reservation reservation = reservationDao.create(restaurant, user, amount, dateTime, comments);
 
         emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation);
         emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user);
@@ -73,7 +69,7 @@ public class ReservationServiceImpl implements ReservationService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
         Optional<Restaurant> restaurant = restaurantService.getByUserID(user.getId());
-        User reservationOwner = userService.getByUsername(reservation.getMail()).orElseThrow(() -> new IllegalStateException("Reservation was made by unkown user"));
+        User owner = reservation.getOwner();
 
         boolean userMadeReservation = reservation.getMail().equals(user.getUsername()) && !restaurant.isPresent();
         boolean reservationWasMadeToRestaurant = restaurant.isPresent() && restaurant.get().getId() == reservation.getRestaurantId();
@@ -84,9 +80,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         emailService.sendReservationCancelledUser(
-                reservation.getMail(), reservationOwner.getFirstName(), reservation);
+                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation);
         emailService.sendReservationCancelledRestaurant(
-                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, reservationOwner);
+                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner);
 
         reservationDao.delete(reservationId);
 
@@ -98,14 +94,14 @@ public class ReservationServiceImpl implements ReservationService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
-        Optional<User> reservationOwner = userService.getByUsername(reservation.getMail());
 
         if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {  // TODO: change when we modify shifts
             throw new ForbiddenActionException();
         }
 
+        User owner = reservation.getOwner();
         emailService.sendReservationConfirmed(reservation.getMail(),
-                reservationOwner.isPresent() ? reservationOwner.get().getFirstName() : "", reservation);
+                owner == null? "" : owner.getFirstName(), reservation);
 
         return reservationDao.confirm(reservation.getReservationId());
     }
