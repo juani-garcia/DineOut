@@ -65,10 +65,10 @@
                             <c:if test="${!past}">
                                 <div class="margins_lr_5px">
                                     <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
-                                       href="#delete_confirm_modal${reservation.reservationId}">
+                                       href="#delete_confirm_modal_${reservation.reservationId}">
                                         <i class="material-icons left">delete</i>
                                     </a>
-                                    <div id="delete_confirm_modal${reservation.reservationId}"
+                                    <div id="delete_confirm_modal_${reservation.reservationId}"
                                          class="modal confirm_delete_modal_height">
                                         <div class="modal-content">
                                             <h4 class="center">
