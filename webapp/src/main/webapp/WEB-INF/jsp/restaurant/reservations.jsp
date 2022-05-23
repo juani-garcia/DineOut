@@ -51,15 +51,6 @@
                             <c:out value="${reservation.owner.lastName}"/>:
                         </b></h5>
                         <div class="margin_left_auto flex_row">
-                                <%--                            <div class="margins_lr_5px">--%>
-                                <%--                                <c:url value="/reservation/${reservation.reservationId}/delete" var="deleteUrl"/>--%>
-                                <%--                                <form method="post" action="${deleteUrl}">--%>
-                                <%--                                    <button class="btn-large waves-effect waves-light btn-floating default_dark"--%>
-                                <%--                                            type="submit" name="action">--%>
-                                <%--                                        <i class="material-icons left">create</i>--%>
-                                <%--                                    </button>--%>
-                                <%--                                </form>--%>
-                                <%--                            </div>--%>
                             <c:if test="${!reservation.isConfirmed}">
                                 <div class="margins_lr_5px">
                                     <form method="post"
@@ -73,12 +64,12 @@
                             </c:if>
                             <c:if test="${!past}">
                                 <div class="margins_lr_5px">
-
                                     <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
-                                       href="#delete_confirm_modal">
+                                       href="#delete_confirm_modal_${reservation.reservationId}">
                                         <i class="material-icons left">delete</i>
                                     </a>
-                                    <div id="delete_confirm_modal" class="modal confirm_delete_modal_height">
+                                    <div id="delete_confirm_modal_${reservation.reservationId}"
+                                         class="modal confirm_delete_modal_height">
                                         <div class="modal-content">
                                             <h4 class="center">
                                                 <spring:message code="restaurant.reservation.confirmation"

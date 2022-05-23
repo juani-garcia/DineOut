@@ -117,10 +117,10 @@
 
 
                             <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
-                               href="#delete_section_confirm_modal">
+                               href="#delete_section_confirm_modal_${section.id}">
                                 <i class="material-icons left">delete</i>
                             </a>
-                            <div id="delete_section_confirm_modal" class="modal confirm_delete_modal_height">
+                            <div id="delete_section_confirm_modal_${section.id}" class="modal confirm_delete_modal_height">
                                 <div class="modal-content">
                                     <h4 class="center">
                                         <spring:message code="restaurant.detail.delete_section"
@@ -186,10 +186,10 @@
                                         </a>
                                         <div class="margin_l_5px">
                                             <a class="btn-small waves-effect waves-light btn-floating default_red modal-trigger"
-                                               href="#delete_item_confirm_modal">
+                                               href="#delete_item_confirm_modal_${item.id}">
                                                 <i class="material-icons left">delete</i>
                                             </a>
-                                            <div id="delete_item_confirm_modal"
+                                            <div id="delete_item_confirm_modal_${item.id}"
                                                  class="modal confirm_delete_modal_height">
                                                 <div class="modal-content">
                                                     <h4 class="center">
