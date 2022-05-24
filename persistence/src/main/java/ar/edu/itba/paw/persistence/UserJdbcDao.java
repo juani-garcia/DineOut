@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+// @Repository
 public class UserJdbcDao implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
