@@ -69,7 +69,7 @@ public class UserJdbcDaoTest {
         User user = UserJdbcDao.ROW_MAPPER.mapRow(resultSet, 1);
 
         Assert.assertNotNull(user);
-        Assert.assertEquals(ID, user.getId());
+        Assert.assertEquals(Long.valueOf(ID), user.getId());
         Assert.assertEquals(USERNAME, user.getUsername());
         Assert.assertEquals(PASSWORD, user.getPassword());
         Assert.assertEquals(FIRST_NAME, user.getFirstName());
@@ -90,7 +90,7 @@ public class UserJdbcDaoTest {
 
         assertTrue(maybeUser.isPresent());
         User user = maybeUser.get();
-        Assert.assertEquals(id, user.getId());
+        Assert.assertEquals(Long.valueOf(id), user.getId());
         Assert.assertEquals(USERNAME, user.getUsername());
         Assert.assertEquals(PASSWORD, user.getPassword());
         Assert.assertEquals(FIRST_NAME, user.getFirstName());
@@ -121,7 +121,7 @@ public class UserJdbcDaoTest {
 
         assertTrue(maybeUser.isPresent());
         User user = maybeUser.get();
-        Assert.assertEquals(id, user.getId());
+        Assert.assertEquals(Long.valueOf(id), user.getId());
         Assert.assertEquals(USERNAME, user.getUsername());
         Assert.assertEquals(PASSWORD, user.getPassword());
         Assert.assertEquals(FIRST_NAME, user.getFirstName());

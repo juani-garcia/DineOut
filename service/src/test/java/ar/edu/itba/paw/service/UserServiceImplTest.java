@@ -63,7 +63,7 @@ public class UserServiceImplTest {
         }
 
         Assert.assertNotNull(user);
-        Assert.assertEquals(ID, user.getId());
+        Assert.assertEquals(Long.valueOf(ID), user.getId());
     }
 
 }
