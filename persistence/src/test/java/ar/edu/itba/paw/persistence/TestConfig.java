@@ -69,8 +69,7 @@ public class TestConfig {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(
-            final EntityManagerFactory emf) {
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
 
@@ -79,10 +78,19 @@ public class TestConfig {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPackagesToScan("ar.edu.itba.paw.model");
         factoryBean.setDataSource(dataSource());
+
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
+
         final Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update"); // Research and consider using "validate"!
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.show-sql", "true");
+        properties.setProperty("spring.jpa.hibernate.ddl-auto", "update");
+        properties.setProperty("format_sql", "true");
+
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }
