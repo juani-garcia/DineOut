@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "account", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
@@ -22,6 +23,13 @@ public class User {
 
     @Column(nullable = false, name = "last_name")
     private String lastName;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "favorite",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
+    private Collection<Restaurant> favorites;
 
     protected User() {
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     public MenuSection create(final long restaurantId, final String name) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(IllegalArgumentException::new);
-        if (user.getId() != restaurant.getUserID())
+        if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return menuSectionDao.create(restaurantId, name);
     }
@@ -87,7 +88,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuSection menuSection = getById(sectionId).orElseThrow(IllegalArgumentException::new);
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (user.getId() != restaurant.getUserID())
+        if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return menuSection;
     }

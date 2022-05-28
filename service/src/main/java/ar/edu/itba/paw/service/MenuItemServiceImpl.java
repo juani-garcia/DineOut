@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,7 +44,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(IllegalArgumentException::new);
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (user.getId() != restaurant.getUserID())
+        if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot create item in someone else's restaurant");
         Image image = null;
         if (imageBytes != null && imageBytes.length > 0) {
@@ -98,7 +99,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(IllegalArgumentException::new);
         MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (restaurant.getUserID() != user.getId())
+        if (!Objects.equals(restaurant.getUser().getId(), user.getId()))
             throw new IllegalArgumentException("Cannot edit someone else's item");
         return menuItem;
     }
