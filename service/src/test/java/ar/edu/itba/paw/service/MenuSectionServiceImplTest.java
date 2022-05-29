@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static ar.edu.itba.paw.service.TestValues.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -34,22 +35,22 @@ public class MenuSectionServiceImplTest {
     @Test
     public void testCreateMenuSection() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(TestValues.USER));
+                thenReturn(Optional.of(USER));
         when(menuSectionDao.create(anyLong(), anyString())).
-                thenReturn(new MenuSection(TestValues.ID, TestValues.NAME, TestValues.RESTAURANT_ID, TestValues.ORDERING));
+                thenReturn(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING));
         when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(TestValues.RESTAURANT));
+                thenReturn(Optional.of(RESTAURANT));
 
         MenuSection menuSection = null;
         try {
-            menuSection = menuSectionService.create(TestValues.RESTAURANT_ID, TestValues.NAME);
+            menuSection = menuSectionService.create(RESTAURANT_ID, NAME);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
         }
 
         Assert.assertNotNull(menuSection);
-        Assert.assertEquals(TestValues.ID, menuSection.getId());
+        Assert.assertEquals(ID, menuSection.getId());
     }
 
     @Test
@@ -57,30 +58,30 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(TestValues.RESTAURANT_ID, TestValues.NAME));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(RESTAURANT_ID, NAME));
     }
 
     @Test
     public void testCannotCreateIfNotOwner() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(new User(TestValues.USER_ID + 1, TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME)));
+                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
         when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(TestValues.RESTAURANT));
+                thenReturn(Optional.of(RESTAURANT));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(TestValues.RESTAURANT_ID, TestValues.NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(RESTAURANT_ID, NAME));
     }
 
     @Test
     public void testUpdateNameMenuSection() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(TestValues.USER));
+                thenReturn(Optional.of(USER));
         when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(TestValues.RESTAURANT));
+                thenReturn(Optional.of(RESTAURANT));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(TestValues.ID, TestValues.NAME, TestValues.RESTAURANT_ID, TestValues.ORDERING)));
+                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
 
         try {
-            menuSectionService.updateName(TestValues.ID, TestValues.NAME);
+            menuSectionService.updateName(ID, NAME);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
@@ -93,43 +94,43 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.updateName(TestValues.ID, TestValues.NAME));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.updateName(ID, NAME));
     }
 
     @Test
     public void testCannotUpdateNameIfNotExists() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(TestValues.USER));
+                thenReturn(Optional.of(USER));
         when(menuSectionService.getById(anyLong())).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(TestValues.ID, TestValues.NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(ID, NAME));
     }
 
     @Test
     public void testCannotUpdateNameIfNotOwner() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(new User(TestValues.USER_ID + 1, TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME)));
+                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(TestValues.ID, TestValues.NAME, TestValues.RESTAURANT_ID, TestValues.ORDERING)));
+                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
         when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(TestValues.RESTAURANT));
+                thenReturn(Optional.of(RESTAURANT));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(TestValues.ID, TestValues.NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(ID, NAME));
 
     }
 
     @Test
     public void testDeleteMenuSection() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(TestValues.USER));
+                thenReturn(Optional.of(USER));
         when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(TestValues.RESTAURANT));
+                thenReturn(Optional.of(RESTAURANT));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(TestValues.ID, TestValues.NAME, TestValues.RESTAURANT_ID, TestValues.ORDERING)));
+                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
 
         try {
-            menuSectionService.delete(TestValues.ID);
+            menuSectionService.delete(ID);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
@@ -142,29 +143,29 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.delete(TestValues.RESTAURANT_ID));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.delete(RESTAURANT_ID));
     }
 
     @Test
     public void testCannotDeleteIfNotExists() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(TestValues.USER));
+                thenReturn(Optional.of(USER));
         when(menuSectionDao.getById(anyLong())).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(TestValues.RESTAURANT_ID));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(RESTAURANT_ID));
     }
 
     @Test
     public void testCannotDeleteIfNotOwner() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(new User(TestValues.USER_ID + 1, TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME)));
+                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(TestValues.ID, TestValues.NAME, TestValues.RESTAURANT_ID, TestValues.ORDERING)));
+                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
         when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(TestValues.RESTAURANT));
+                thenReturn(Optional.of(RESTAURANT));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(TestValues.ID));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(ID));
 
     }
 

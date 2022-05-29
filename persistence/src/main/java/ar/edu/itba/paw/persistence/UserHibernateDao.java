@@ -36,4 +36,5 @@ public class UserHibernateDao implements UserDao {
         em.persist(user);
         return user;
     }
+
 }
