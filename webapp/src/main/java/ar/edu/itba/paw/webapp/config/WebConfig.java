@@ -87,14 +87,18 @@ public class WebConfig {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPackagesToScan("ar.edu.itba.paw.model");
         factoryBean.setDataSource(dataSource());
+
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
+
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+
         // TODO: Si ponen esto en prod, hay tabla!!!
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("format_sql", "true");
+        properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("format_sql", env.getProperty("format_sql"));
+
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

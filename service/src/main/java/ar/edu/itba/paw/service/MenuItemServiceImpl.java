@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,7 +44,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(IllegalArgumentException::new);
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (user.getId() != restaurant.getUserID())
+        if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot create item in someone else's restaurant");
         Image image = null;
         if (imageBytes != null && imageBytes.length > 0) {
@@ -79,7 +80,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     private boolean move(final long itemId, boolean moveUp) {
         MenuItem menuItem = validateItem(itemId);
-        return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() + (moveUp ? -1 : 1), null);
+        return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSection().getId(), menuItem.getOrdering() + (moveUp ? -1 : 1), null);
 
     }
 
@@ -96,9 +97,9 @@ public class MenuItemServiceImpl implements MenuItemService {
     protected MenuItem validateItem(final long itemId) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(IllegalArgumentException::new);
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSection().getId()).orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (restaurant.getUserID() != user.getId())
+        if (!Objects.equals(restaurant.getUser().getId(), user.getId()))
             throw new IllegalArgumentException("Cannot edit someone else's item");
         return menuItem;
     }

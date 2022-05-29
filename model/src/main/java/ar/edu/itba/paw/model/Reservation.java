@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Reservation {
+
     private final long reservationId;
     private final int amount;
     private final LocalDateTime dateTime;

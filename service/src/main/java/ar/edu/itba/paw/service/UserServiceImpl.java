@@ -93,12 +93,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void changePasswordByUserToken(String token, String newPassword) {
         User user = getUserByPasswordResetToken(token).orElseThrow(IllegalStateException::new);
-        if (userDao.updatePassword(passwordEncoder.encode(newPassword), user.getId())) {
-            passwordResetTokenService.setUsed(token);
-        }
-
+        user.setPassword(passwordEncoder.encode(newPassword));  // TODO: Check if not changed?
+        passwordResetTokenService.setUsed(token);
     }
 
 }

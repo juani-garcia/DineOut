@@ -1,33 +1,40 @@
 //package ar.edu.itba.paw.persistence;
 //
+//import org.junit.Before;
 //import org.junit.runner.RunWith;
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.test.annotation.Rollback;
 //import org.springframework.test.context.ContextConfiguration;
 //import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+//import org.springframework.transaction.annotation.Transactional;
+//
+//import javax.persistence.EntityManager;
+//import javax.persistence.PersistenceContext;
 //
 //@RunWith(SpringJUnit4ClassRunner.class)
-//// @Sql(scripts = {"classpath:sql/schema.sql"})
 //@ContextConfiguration(classes = TestConfig.class)
-//@Rollback
-//public class RestaurantJdbcDaoTest {
-
-
+//@Transactional
+//public class RestaurantHibernateDaoTest {
+//
+//
 //    @Autowired
 //    private RestaurantJdbcDao restaurantDao;
-//
 //    @Autowired
-//    private DataSource ds;
+//    private UserHibernateDao userHibernateDao;
 //
-//    private JdbcTemplate jdbcTemplate;
-//    private SimpleJdbcInsert jdbcInsert;
-//    private SimpleJdbcInsert userJdbcInsert;
+//    @PersistenceContext
+//    private EntityManager em;
 //
 //    @Before
 //    public void setUp() {
-//        restaurantDao = new RestaurantJdbcDao(ds);
-//        jdbcTemplate = new JdbcTemplate(ds);
-//        jdbcInsert = new SimpleJdbcInsert(ds).withTableName(TestValues.RESTAURANT_TABLE).usingGeneratedKeyColumns("id");
-//        JdbcTestUtils.deleteFromTables(jdbcTemplate, TestValues.RESTAURANT_TABLE);
+//        // Create user
+//        userHibernateDao.create(TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME);
+//
+//
+//    }
+//
+//    @Before
+//    public void setUp() {
 //
 //        userJdbcInsert = new SimpleJdbcInsert(ds).withTableName(TestValues.USER_TABLE);
 //        JdbcTestUtils.deleteFromTables(jdbcTemplate, TestValues.USER_TABLE);

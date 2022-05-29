@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DuplicatedMailValidator implements ConstraintValidator<DuplicatedMail, String> {
@@ -28,6 +29,6 @@ public class DuplicatedMailValidator implements ConstraintValidator<DuplicatedMa
         Optional<Restaurant> restaurant = restaurantService.getByMail(value);
         Optional<User> user = securityService.getCurrentUser();
         return !restaurant.isPresent() ||
-                (user.isPresent() && user.get().getId() == restaurant.get().getUserID());
+                (user.isPresent() && Objects.equals(user.get().getId(), restaurant.get().getUser().getId()));
     }
 }

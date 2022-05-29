@@ -3,7 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.model.UserToRole;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.UserDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 
@@ -63,7 +62,28 @@ public class UserServiceImplTest {
         }
 
         Assert.assertNotNull(user);
-        Assert.assertEquals(ID, user.getId());
+        Assert.assertEquals(Long.valueOf(ID), user.getId());
+    }
+
+    @Test
+    public void testChangePasswordByUserToken() {
+        when(userDao.create(anyString(), any(), anyString(), anyString())).
+                thenReturn(new User(ID, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME));
+        when(userRoleService.getByRoleName(anyString())).
+                thenReturn(Optional.of(new UserRole(1, "DINER")));
+        when(userToRoleService.create(anyLong(), anyLong())).
+                thenReturn(new UserToRole(1, ID, 1));
+
+        User user = null;
+        try {
+            user = userService.create(USERNAME, PASSWORD, FIRST_NAME, LAST_NAME, IS_RESTAURANT);
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+            Assert.fail("Unexpected error during operation create user: " + e.getMessage());
+        }
+
+        Assert.assertNotNull(user);
+        Assert.assertEquals(Long.valueOf(ID), user.getId());
     }
 
 }

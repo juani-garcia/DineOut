@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.MenuSection;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.MenuSectionDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,35 +13,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
+import static ar.edu.itba.paw.service.TestValues.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MenuSectionServiceImplTest {
 
-    private static final long ID = 1;
-    private static final String NAME = "Restaurant";
-    private static final long RESTAURANT_ID = 1;
-    private static final Long ORDERING = 1L;
-
-    private static final long USER_ID = 1;
-    private static final String USER_USERNAME = "user@mail.com";
-    private static final String USER_PASSWORD = "1234567890User";
-    private static final String USER_FIRST_NAME = "John";
-    private static final String USER_LAST_NAME = "Doe";
-    private static final User USER = new User(USER_ID, USER_USERNAME,
-            USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME);
-
-    private static final String RESTAURANT_NAME = "Restaurant";
-    private static final Long RESTAURANT_IMAGE_ID = null;
-    private static final String RESTAURANT_ADDRESS = "Address";
-    private static final String RESTAURANT_MAIL = "restaurant@mail.com";
-    private static final String RESTAURANT_DETAIL = null;
-    private static final Zone RESTAURANT_ZONE = Zone.ACASSUSO;
-    private static final Long RESTAURANT_FAV_COUNT = 0L;
-    private static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID,
-            USER_ID, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
-            RESTAURANT_DETAIL, RESTAURANT_ZONE, RESTAURANT_FAV_COUNT);
 
     @InjectMocks
     private MenuSectionServiceImpl menuSectionService;
@@ -54,8 +31,6 @@ public class MenuSectionServiceImplTest {
     private RestaurantService restaurantService;
     @Mock
     private MenuSectionDao menuSectionDao;
-    @Mock
-    private MenuItemService menuItemService;
 
     @Test
     public void testCreateMenuSection() {
@@ -85,6 +60,7 @@ public class MenuSectionServiceImplTest {
 
         Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(RESTAURANT_ID, NAME));
     }
+
     @Test
     public void testCannotCreateIfNotOwner() {
         when(securityService.getCurrentUser()).

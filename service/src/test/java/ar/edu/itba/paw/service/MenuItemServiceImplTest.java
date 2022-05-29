@@ -44,8 +44,9 @@ public class MenuItemServiceImplTest {
     private static final String RESTAURANT_DETAIL = null;
     private static final Zone RESTAURANT_ZONE = Zone.ACASSUSO;
     private static final Long RESTAURANT_FAV_COUNT = 0L;
+
     private static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID,
-            USER_ID, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
+            USER, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
             RESTAURANT_DETAIL, RESTAURANT_ZONE, RESTAURANT_FAV_COUNT);
 
     private static final String SECTION_NAME = "Section";
