@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.ImageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +28,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public boolean edit(final long id, final byte[] source) {
-        return imageDao.edit(id, source);
+    public void edit(final long id, final byte[] source) {
+        Image image = getById(id).orElseThrow(NotFoundException::new);
+        image.setSource(source);
     }
 
     @Override
-    public boolean delete(final long id) {
-        return imageDao.delete(id);
+    public void delete(final long id) {
+        imageDao.delete(id);
     }
 
 }
