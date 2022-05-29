@@ -45,7 +45,6 @@ public class Restaurant {
     private Zone zone;
 
     protected Restaurant() {
-
     }
 
     public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {

@@ -74,4 +74,17 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void addFavorite(Restaurant restaurant) {
+        this.favorites.add(restaurant);
+    }
+
+    public Collection<Restaurant> getFavorites() {
+        return favorites;
+    }
+
+    public void removeFavorite(Restaurant restaurant) {
+        this.favorites.remove(restaurant);
+    }
+
 }
