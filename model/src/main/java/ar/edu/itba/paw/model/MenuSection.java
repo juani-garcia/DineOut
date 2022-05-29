@@ -15,7 +15,7 @@ public class MenuSection {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 

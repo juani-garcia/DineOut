@@ -20,7 +20,7 @@ public class MenuItem {
     @Column(nullable = false)
     private double price;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "section_id", nullable = false)
     private MenuSection menuSection;
 
