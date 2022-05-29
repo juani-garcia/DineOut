@@ -1,17 +1,43 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "menu_section")
 public class MenuSection {
 
-    private long id, restaurantId, ordering;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_section_id_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "menu_section_id_seq", name = "menu_section_id_seq")
+    private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    @Column(nullable = false)
+    private long ordering;
+
+    @OneToMany(mappedBy = "menuSection")
     private List<MenuItem> menuItemList;
 
+    MenuSection() {
+    }
+
+    public MenuSection(String name, Restaurant restaurant) {
+        this.name = name;
+        this.restaurant = restaurant;
+    }
+
+    @Deprecated
     public MenuSection(long id, String name, long restaurantId, long ordering) {
         this.id = id;
         this.name = name;
-        this.restaurantId = restaurantId;
+        // this.restaurantId = restaurantId;
         this.ordering = ordering;
     }
 
@@ -47,12 +73,12 @@ public class MenuSection {
         this.name = name;
     }
 
-    public long getRestaurantId() {
-        return restaurantId;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantId(long restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override
