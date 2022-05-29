@@ -111,7 +111,7 @@ public class ReservationServiceImpl implements ReservationService {
         emailService.sendReservationConfirmed(reservation.getMail(),
                 owner == null? "" : owner.getFirstName(), reservation);
 
-        return reservationDao.confirm(reservation.getReservationId());
+        return reservationDao.confirm(reservation.getId());
     }
 
     @Override
