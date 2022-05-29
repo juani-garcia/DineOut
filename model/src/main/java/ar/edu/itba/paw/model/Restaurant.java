@@ -45,6 +45,7 @@ public class Restaurant {
     @Enumerated(EnumType.ORDINAL)
     private Zone zone;
 
+    // TODO: Correct
     @ManyToMany(targetEntity = Shift.class, fetch = FetchType.LAZY)
     @JoinTable(name = "restaurant_shift",
             joinColumns = @JoinColumn(name = "restaurant_id"),
