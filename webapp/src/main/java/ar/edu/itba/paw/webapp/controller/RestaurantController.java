@@ -232,7 +232,7 @@ public class RestaurantController {
         form.setName(menuItem.getName());
         form.setDetail(menuItem.getDetail());
         form.setPrice(menuItem.getPrice());
-        form.setMenuSectionId(menuItem.getSectionId());
+        form.setMenuSectionId(menuItem.getSection().getId());
         return mav;
     }
 

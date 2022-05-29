@@ -80,7 +80,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     private boolean move(final long itemId, boolean moveUp) {
         MenuItem menuItem = validateItem(itemId);
-        return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSectionId(), menuItem.getOrdering() + (moveUp ? -1 : 1), null);
+        return edit(itemId, menuItem.getName(), menuItem.getDetail(), menuItem.getPrice(), menuItem.getSection().getId(), menuItem.getOrdering() + (moveUp ? -1 : 1), null);
 
     }
 
@@ -97,7 +97,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     protected MenuItem validateItem(final long itemId) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(IllegalArgumentException::new);
-        MenuSection menuSection = menuSectionService.getById(menuItem.getSectionId()).orElseThrow(IllegalStateException::new);
+        MenuSection menuSection = menuSectionService.getById(menuItem.getSection().getId()).orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
         if (!Objects.equals(restaurant.getUser().getId(), user.getId()))
             throw new IllegalArgumentException("Cannot edit someone else's item");
