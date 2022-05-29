@@ -20,7 +20,6 @@ public class UserHibernateDao implements UserDao {
     private EntityManager em;
 
     @Override
-    @Transactional
     public Optional<User> getById(long id) {
         return Optional.ofNullable(em.find(User.class, id));
     }
@@ -32,7 +31,6 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
-    @Transactional
     public User create(String username, String password, String firstName, String lastName) {
         final User user = new User(username, password, firstName, lastName);
         em.persist(user);
