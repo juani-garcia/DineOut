@@ -11,7 +11,6 @@ public class Restaurant {
     @SequenceGenerator(allocationSize = 1, sequenceName = "restaurant_id_seq", name = "restaurant_id_seq")
     private Long id;
 
-
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)  // TODO: cascade = CascadeType.REMOVE?
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
@@ -48,7 +47,6 @@ public class Restaurant {
 
     }
 
-
     public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
         this.id = id;
         this.name = name;
@@ -58,6 +56,19 @@ public class Restaurant {
         this.detail = detail;
         this.mail = mail;
         this.zone = zone;
+    }
+
+    @Deprecated
+    public Restaurant(long id, Long userID, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
+        this.id = id;
+        // this.userID = userID;
+        this.name = name;
+        this.imageId = imageId;
+        this.address = address;
+        this.detail = detail;
+        this.mail = mail;
+        this.zone = zone;
+        // this.favCount = favCount;
     }
 
     public long getId() {
