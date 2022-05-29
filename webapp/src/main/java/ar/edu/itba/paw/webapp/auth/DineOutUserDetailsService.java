@@ -23,7 +23,6 @@ public class DineOutUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
     private final UserRoleService userRoleService;
-    private final UserToRoleService userToRoleService;
     private final RoleToAuthorityService roleToAuthorityService;
     private final RoleAuthorityService roleAuthorityService;
     private final PasswordEncoder passwordEncoder;
@@ -32,11 +31,10 @@ public class DineOutUserDetailsService implements UserDetailsService {
 
 
     @Autowired
-    public DineOutUserDetailsService(final UserService userService, final PasswordEncoder passwordEncoder, final UserRoleService userRoleService, final UserToRoleService userToRoleService, RoleToAuthorityService roleToAuthorityService, RoleAuthorityService roleAuthorityService) {
+    public DineOutUserDetailsService(final UserService userService, final PasswordEncoder passwordEncoder, final UserRoleService userRoleService, RoleToAuthorityService roleToAuthorityService, RoleAuthorityService roleAuthorityService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
-        this.userToRoleService = userToRoleService;
         this.roleToAuthorityService = roleToAuthorityService;
         this.roleAuthorityService = roleAuthorityService;
     }
@@ -45,34 +43,29 @@ public class DineOutUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final User user = userService.getByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user '" + username + "'"));
+        final Collection<UserRole> userRoleList = user.getRoles(); // TODO: Check if works
 
         final Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        List<UserToRole> userToRoleList = userToRoleService.getByUserId(user.getId());
-
-        for (UserToRole userToRole : userToRoleList) {
+        for (UserRole userRole : userRoleList) {
             // Paso por todos los roles del usuario y por cada uno me guardo su nombre y todos sus privilegios.
-            Optional<UserRole> userRole = userRoleService.getByRoleId(userToRole.getRoleId());
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRoleName()));
 
-            if (!userRole.isPresent()) throw new IllegalStateException("El rol del usuario es invalido");
-
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.get().getRoleName()));
-
-            for (RoleToAuthority userRoleToAuthority : roleToAuthorityService.getByRoleId(userRole.get().getId())) {
+            for (RoleToAuthority userRoleToAuthority : roleToAuthorityService.getByRoleId(userRole.getId())) {
                 Optional<RoleAuthority> roleAuthority = roleAuthorityService.getByAuthorityId(userRoleToAuthority.getAuthorityId());
 
                 if (!roleAuthority.isPresent())
-                    throw new IllegalStateException("El privielgio del rol del usuario es invalido");
+                    throw new IllegalStateException("El privilegio del rol del usuario es invalido");
 
                 authorities.add(new SimpleGrantedAuthority(roleAuthority.get().getAuthorityName()));
             }
         }
 
-        if (userToRoleList.isEmpty()) {
-            Optional<UserRole> userRole = userRoleService.getByRoleName("BASIC_USER");
-            if (!userRole.isPresent()) throw new IllegalStateException("ROLE_BASIC_USER missing from db");
+        if (userRoleList.isEmpty()) {
+            UserRole userRole = userRoleService.getByRoleName("BASIC_USER")
+                    .orElseThrow( () -> new IllegalStateException("ROLE_BASIC_USER missing from db"));
             authorities.add(new SimpleGrantedAuthority("ROLE_BASIC_USER"));
-            userToRoleService.create(user.getId(), userRole.get().getId());
+            user.addRole(userRole); // TODO: Check if works
         }
 
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
