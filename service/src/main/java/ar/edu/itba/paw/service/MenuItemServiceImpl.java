@@ -43,7 +43,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public MenuItem create(String name, String detail, double price, long sectionId, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(IllegalArgumentException::new);
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = menuSection.getRestaurant();
         if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot create item in someone else's restaurant");
         Image image = null;
@@ -98,7 +98,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuItem menuItem = menuItemDao.getById(itemId).orElseThrow(IllegalArgumentException::new);
         MenuSection menuSection = menuSectionService.getById(menuItem.getSection().getId()).orElseThrow(IllegalStateException::new);
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = menuSection.getRestaurant();
         if (!Objects.equals(restaurant.getUser().getId(), user.getId()))
             throw new IllegalArgumentException("Cannot edit someone else's item");
         return menuItem;

@@ -62,16 +62,17 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     @Override
     public boolean updateName(final long sectionId, final String newName) {
         MenuSection menuSection = validateSection(sectionId);
-        return edit(sectionId, newName, menuSection.getRestaurantId(), menuSection.getOrdering());
+        return edit(sectionId, newName, menuSection.getRestaurant().getId(), menuSection.getOrdering());
     }
 
     private boolean move(final long sectionId, boolean moveUp) {
         MenuSection menuSection = validateSection(sectionId);
-        List<MenuSection> menuSections = getByRestaurantId(menuSection.getRestaurantId());
+        List<MenuSection> menuSections = getByRestaurantId(menuSection.getRestaurant().getId()); // TODO: Migrate
         if ((moveUp ? menuSection.getOrdering() <= 1 : menuSection.getOrdering() >= menuSections.size())) {
             throw new IllegalArgumentException("Cannot move this section");
         }
-        return edit(sectionId, menuSection.getName(), menuSection.getRestaurantId(), menuSection.getOrdering() + (moveUp ? -1 : 1));
+        // TODO> Migrate to model modification
+        return edit(sectionId, menuSection.getName(), menuSection.getRestaurant().getId(), menuSection.getOrdering() + (moveUp ? -1 : 1));
     }
 
     @Override
@@ -87,7 +88,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     protected MenuSection validateSection(final long sectionId) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuSection menuSection = getById(sectionId).orElseThrow(IllegalArgumentException::new);
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
+        Restaurant restaurant = menuSection.getRestaurant();
         if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return menuSection;
