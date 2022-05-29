@@ -12,10 +12,10 @@ public class User {
     @SequenceGenerator(allocationSize = 1, sequenceName = "account_id_seq", name = "account_id_seq")
     private Long id;
 
-    @Column(nullable = false, unique = true, name = "username")
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, name = "password")
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, name = "first_name")
