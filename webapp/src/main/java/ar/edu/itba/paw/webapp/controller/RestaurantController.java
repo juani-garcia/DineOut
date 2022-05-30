@@ -40,9 +40,6 @@ public class RestaurantController {
     private MenuItemService menuItemService;
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private SecurityService securityService;
 
     @Autowired
@@ -103,7 +100,7 @@ public class RestaurantController {
         form.setEmail(restaurant.getMail());
         form.setDetail(restaurant.getDetail());
         form.setZone(restaurant.getZone().getName());
-        form.setCategories(categoryService.getByRestaurantId(restaurant.getId()).
+        form.setCategories(restaurant.getCategories().
                 stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
         form.setShifts(restaurant.getShifts().
                 stream().mapToLong(Shift::getId).boxed().collect(Collectors.toList()));
