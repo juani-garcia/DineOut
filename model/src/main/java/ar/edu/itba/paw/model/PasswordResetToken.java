@@ -19,7 +19,7 @@ public class PasswordResetToken {
 
     // TODO: Check orphanRemoval
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "expiry_date", nullable = false)
@@ -65,6 +65,10 @@ public class PasswordResetToken {
 
     public boolean isUsed() {
         return isUsed;
+    }
+
+    public void use() {
+        isUsed = true;
     }
 
 }
