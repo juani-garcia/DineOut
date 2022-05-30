@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "menu_section")
+@Table(name = "menu_section",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"restaurant_id", "ordering"})})
 public class MenuSection {
 
     @Id
