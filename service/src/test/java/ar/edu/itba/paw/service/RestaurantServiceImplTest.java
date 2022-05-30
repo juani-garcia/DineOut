@@ -48,8 +48,6 @@ public class RestaurantServiceImplTest {
     @Mock
     private CategoryService categoryService;
     @Mock
-    private ShiftService shiftService;
-    @Mock
     private RestaurantDao restaurantDao;
     @Mock
     private SecurityService securityService;
@@ -75,7 +73,7 @@ public class RestaurantServiceImplTest {
 
         Assert.assertNotNull(restaurant);
         Assert.assertEquals(ID, restaurant.getId());
-        Assert.assertTrue(shiftService.getByRestaurantId(restaurant.getId()).containsAll(SHIFTS));
+        Assert.assertTrue(restaurant.getShifts().containsAll(SHIFTS));
     }
 
     @Test
