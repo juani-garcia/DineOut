@@ -26,13 +26,13 @@ public class Reservation {
     @Column(nullable = false)
     private int amount;
 
-    @Column(nullable = false)
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
     @Column
     private String comments;
 
-    @Column(nullable = false)
+    @Column(name = "is_confirmed", nullable = false)
     private boolean isConfirmed;
 
     Reservation() {
