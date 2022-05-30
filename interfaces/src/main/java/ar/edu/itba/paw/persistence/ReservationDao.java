@@ -20,8 +20,6 @@ public interface ReservationDao {
 
     Optional<Reservation> getReservation(long reservationId);
 
-    boolean confirm(long reservationId);
-
     long getPagesCountForCurrentUser(String username, boolean past);
 
     long getPagesCountForCurrentRestaurant(Restaurant self, boolean past);

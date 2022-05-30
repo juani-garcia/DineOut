@@ -106,4 +106,9 @@ public class Reservation {
     public boolean getIsConfirmed() {
         return isConfirmed;
     }
+
+    public void confirm() {
+        isConfirmed = true;
+    }
+
 }

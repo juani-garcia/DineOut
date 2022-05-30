@@ -92,7 +92,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean confirm(long reservationId) {
+    public void confirm(long reservationId) {
 
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
@@ -108,7 +108,7 @@ public class ReservationServiceImpl implements ReservationService {
         emailService.sendReservationConfirmed(reservation.getMail(),
                 owner == null? "" : owner.getFirstName(), reservation);
 
-        return reservationDao.confirm(reservation.getId());
+        reservation.confirm();
     }
 
     @Override
