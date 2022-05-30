@@ -47,11 +47,10 @@ public class Restaurant {
     @Enumerated(EnumType.ORDINAL)
     private Zone zone;
 
-    // TODO: Correct
-    @ManyToMany(targetEntity = Shift.class, fetch = FetchType.LAZY)
-    @JoinTable(name = "restaurant_shift",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "opening_hours_id"))
+    @ElementCollection(targetClass = Shift.class)
+    @CollectionTable(name = "restaurant_opening_hours",
+            joinColumns = @JoinColumn(name = "restaurant_id"))
+    @Column(name = "opening_hours_id")
     @Enumerated(EnumType.ORDINAL)
     private Set<Shift> shifts;
 
