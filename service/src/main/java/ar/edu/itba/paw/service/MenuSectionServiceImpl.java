@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,15 +60,15 @@ public class MenuSectionServiceImpl implements MenuSectionService {
         menuSection.setName(newName);
     }
 
-    private boolean move(final long sectionId, boolean moveUp) {
+    private void move(final long sectionId, boolean moveUp) {
         MenuSection menuSection = validateSection(sectionId);
         List<MenuSection> menuSectionList = menuSection.getRestaurant().getMenuSectionList();
+        final int index = menuSectionList.indexOf(menuSection);
 
-        if ((moveUp ? menuSection.getOrdering() <= 1 : menuSection.getOrdering() >= menuSections.size())) {
+        if ((moveUp ? index <= 1 : index >= menuSectionList.size())) {
             throw new IllegalArgumentException("Cannot move this section");
         }
-        // TODO> Migrate to model modification
-        return edit(sectionId, menuSection.getName(), menuSection.getRestaurant().getId(), menuSection.getOrdering() + (moveUp ? -1 : 1));
+        Collections.swap(menuSectionList, index, index + (moveUp ? 1 : -1));
     }
 
     @Override

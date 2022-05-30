@@ -52,7 +52,7 @@ public class DineOutUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRoleName()));
 
             for (RoleToAuthority userRoleToAuthority : roleToAuthorityService.getByRoleId(userRole.getId())) {
-                Optional<RoleAuthority> roleAuthority = roleAuthorityService.getByAuthorityId(userRoleToAuthority.getAuthorityId());
+                Optional<RoleAuthority> roleAuthority = roleAuthorityService.getByAuthorityId(userRoleToAuthority.getAuthority().getId());
 
                 if (!roleAuthority.isPresent())
                     throw new IllegalStateException("El privilegio del rol del usuario es invalido");
