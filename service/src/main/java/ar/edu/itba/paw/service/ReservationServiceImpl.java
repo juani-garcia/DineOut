@@ -28,9 +28,6 @@ public class ReservationServiceImpl implements ReservationService {
     private EmailService emailService;
 
     @Autowired
-    private ShiftService shiftService;
-
-    @Autowired
     private SecurityService securityService;
 
     @Override
@@ -38,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
 
-        if (!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
+        if (!Shift.belongs(restaurant.getShifts(), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
         }
 
@@ -111,7 +108,7 @@ public class ReservationServiceImpl implements ReservationService {
         emailService.sendReservationConfirmed(reservation.getMail(),
                 owner == null? "" : owner.getFirstName(), reservation);
 
-        return reservationDao.confirm(reservation.getReservationId());
+        return reservationDao.confirm(reservation.getId());
     }
 
     @Override

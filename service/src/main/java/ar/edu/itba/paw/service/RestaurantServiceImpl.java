@@ -8,15 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private ShiftService shiftService;
 
     @Autowired
     private RestaurantDao restaurantDao;
@@ -69,10 +67,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             Category category = Category.getById(categoryId);
             categoryService.add(restaurant.getId(), category);
         }
-        for (Long shiftId : shifts) {
-            Shift shift = Shift.getById(shiftId);
-            shiftService.add(restaurant.getId(), shift);
-        }
+        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
         return restaurant;
     }
 
@@ -87,6 +82,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             }
             imageId = imageService.create(imageBytes).getId();
         }
+        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
         return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone, imageId);
     }
 
