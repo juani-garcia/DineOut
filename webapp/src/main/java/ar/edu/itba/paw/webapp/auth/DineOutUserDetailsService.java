@@ -3,8 +3,6 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.model.RoleAuthority;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
-import ar.edu.itba.paw.service.RoleAuthorityService;
-import ar.edu.itba.paw.service.RoleToAuthorityService;
 import ar.edu.itba.paw.service.UserRoleService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class DineOutUserDetailsService implements UserDetailsService {
 
 
     @Autowired
-    public DineOutUserDetailsService(final UserService userService, final PasswordEncoder passwordEncoder, final UserRoleService userRoleService, RoleToAuthorityService roleToAuthorityService, RoleAuthorityService roleAuthorityService) {
+    public DineOutUserDetailsService(final UserService userService, final UserRoleService userRoleService) {
         this.userService = userService;
         this.userRoleService = userRoleService;
     }
