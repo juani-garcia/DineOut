@@ -9,9 +9,8 @@ import java.util.Optional;
 public interface PasswordResetTokenDao {
     Optional<PasswordResetToken> getByUserId(long userId);
 
-    PasswordResetToken create(String token, User user, LocalDateTime expiryDate, boolean isUsed);
+    PasswordResetToken create(String token, User user, LocalDateTime expiryDate);
 
     Optional<PasswordResetToken> getByToken(String token);
 
-    void setUsed(String token);
 }
