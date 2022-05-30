@@ -125,6 +125,12 @@ public class Restaurant {
         return menuSectionList;
     }
 
+    public MenuSection addMenuSection(final String name) {
+        final MenuSection menuSection = new MenuSection(name, this);
+        this.menuSectionList.add(menuSection);
+        return menuSection;
+    }
+
     public void setShifts(Collection<Shift> shifts) {
         this.shifts.clear();
         this.shifts.addAll(shifts);

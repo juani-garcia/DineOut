@@ -20,7 +20,7 @@ public class MenuSection {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    @Column(nullable = false)
+    @OrderColumn(name = "ordering", nullable = false)
     private long ordering;
 
     @OneToMany(mappedBy = "menuSection")
@@ -32,6 +32,7 @@ public class MenuSection {
     public MenuSection(String name, Restaurant restaurant) {
         this.name = name;
         this.restaurant = restaurant;
+        this.ordering = restaurant.getMenuSectionList().size();
     }
 
     @Deprecated
