@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface PasswordResetTokenService {
-    PasswordResetToken create(String token, User user, LocalDateTime expiryDate, boolean isUsed);
+    PasswordResetToken create(String token, User user, LocalDateTime expiryDate);
 
     Optional<PasswordResetToken> getByUserId(long userId);
 
