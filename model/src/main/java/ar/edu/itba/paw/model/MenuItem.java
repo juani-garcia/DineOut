@@ -3,7 +3,8 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "menu_item")
+@Table(name = "menu_item",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"section_id", "ordering"}) })
 public class MenuItem {
 
     @Id
