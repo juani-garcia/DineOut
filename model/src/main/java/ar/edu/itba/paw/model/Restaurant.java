@@ -111,6 +111,12 @@ public class Restaurant {
         return menuSectionList;
     }
 
+    public MenuSection addMenuSection(final String name) {
+        final MenuSection menuSection = new MenuSection(name, this);
+        this.menuSectionList.add(menuSection);
+        return menuSection;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

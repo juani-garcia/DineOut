@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.persistence.MenuSectionDao;
@@ -33,10 +34,9 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     }
 
     @Override
-    public List<MenuSection> getByRestaurantId(long restaurantId) {
-        List<MenuSection> menuSectionList = menuSectionDao.getByRestaurantId(restaurantId);
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
-        return menuSectionList;
+    public List<MenuSection> getByRestaurantId(final long restaurantId) {
+        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
+        return restaurant.getMenuSectionList();
     }
 
     @Override
@@ -45,29 +45,24 @@ public class MenuSectionServiceImpl implements MenuSectionService {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(IllegalArgumentException::new);
         if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
-        return menuSectionDao.create(restaurantId, name);
+        return restaurant.addMenuSection(name);
     }
 
     @Override
-    public boolean delete(final long sectionId) {
+    public void delete(final long menuSectionId) {
+        MenuSection menuSection = validateSection(menuSectionId);
+        menuSectionDao.delete(menuSectionId);
+    }
+    @Override
+    public void updateName(final long sectionId, final String newName) {
         MenuSection menuSection = validateSection(sectionId);
-        return menuSectionDao.delete(sectionId);
-    }
-
-    @Override
-    public boolean edit(long sectionId, String name, long restaurantId, long ordering) {
-        return menuSectionDao.edit(sectionId, name, restaurantId, ordering);
-    }
-
-    @Override
-    public boolean updateName(final long sectionId, final String newName) {
-        MenuSection menuSection = validateSection(sectionId);
-        return edit(sectionId, newName, menuSection.getRestaurant().getId(), menuSection.getOrdering());
+        menuSection.setName(newName);
     }
 
     private boolean move(final long sectionId, boolean moveUp) {
         MenuSection menuSection = validateSection(sectionId);
-        List<MenuSection> menuSections = getByRestaurantId(menuSection.getRestaurant().getId()); // TODO: Migrate
+        List<MenuSection> menuSectionList = menuSection.getRestaurant().getMenuSectionList();
+
         if ((moveUp ? menuSection.getOrdering() <= 1 : menuSection.getOrdering() >= menuSections.size())) {
             throw new IllegalArgumentException("Cannot move this section");
         }
@@ -76,13 +71,13 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     }
 
     @Override
-    public boolean moveUp(final long sectionId) {
-        return move(sectionId, true);
+    public void moveUp(final long menuSectionId) {
+        move(menuSectionId, true);
     }
 
     @Override
-    public boolean moveDown(long sectionId) {
-        return move(sectionId, false);
+    public void moveDown(final long menuSectionId) {
+        move(menuSectionId, false);
     }
 
     protected MenuSection validateSection(final long sectionId) {
