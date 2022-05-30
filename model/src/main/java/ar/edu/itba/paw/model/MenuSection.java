@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "menu_section")
@@ -81,8 +82,27 @@ public class MenuSection {
         this.restaurant = restaurant;
     }
 
+    public MenuItem addMenuItem(final String name, final String detail, final double price, final Long imageId) {
+        final MenuItem menuItem = new MenuItem(name, detail, price, this, imageId);
+        this.menuItemList.add(menuItem);
+        return menuItem;
+    }
+
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuSection that = (MenuSection) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

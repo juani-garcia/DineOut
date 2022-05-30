@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -43,6 +44,9 @@ public class Restaurant {
     @Column(name = "zone_id", columnDefinition = "Zone")
     @Enumerated(EnumType.ORDINAL)
     private Zone zone;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<MenuSection> menuSectionList;
 
     protected Restaurant() {
     }
@@ -101,6 +105,10 @@ public class Restaurant {
 
     public String getMail() {
         return mail;
+    }
+
+    public List<MenuSection> getMenuSectionList() {
+        return menuSectionList;
     }
 
     @Override
