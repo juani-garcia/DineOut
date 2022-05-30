@@ -73,8 +73,8 @@ public class MenuItemServiceImplTest {
     public void testCreateMenuItem() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(menuItemDao.create(anyString(), any(), anyDouble(), anyLong(), any())).
-                thenReturn(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID));
+//        when(menuItemDao.create(anyString(), any(), anyDouble(), anyLong(), any())).
+//                thenReturn(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID));
         when(menuSectionService.getById(anyLong())).
                 thenReturn(Optional.of(MENU_SECTION));
         when(restaurantService.getById(anyLong())).
@@ -224,8 +224,8 @@ public class MenuItemServiceImplTest {
     public void testImageIsCreated() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(menuItemDao.create(anyString(), any(), anyDouble(), anyLong(), any())).
-                thenReturn(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID));
+//        when(menuItemDao.create(anyString(), any(), anyDouble(), anyLong(), any())).
+//                thenReturn(new MenuItem(ID, NAME, DETAIL, PRICE, SECTION_ID, ORDERING, IMAGE_ID));
         when(menuSectionService.getById(anyLong())).
                 thenReturn(Optional.of(MENU_SECTION));
         when(restaurantService.getById(anyLong())).

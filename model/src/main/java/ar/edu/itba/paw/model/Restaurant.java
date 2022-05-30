@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -53,6 +54,9 @@ public class Restaurant {
             inverseJoinColumns = @JoinColumn(name = "opening_hours_id"))
     @Enumerated(EnumType.ORDINAL)
     private Set<Shift> shifts;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<MenuSection> menuSectionList;
 
     protected Restaurant() {
     }
@@ -111,6 +115,14 @@ public class Restaurant {
 
     public String getMail() {
         return mail;
+    }
+
+    public Set<Shift> getShifts() {
+        return shifts;
+    }
+
+    public List<MenuSection> getMenuSectionList() {
+        return menuSectionList;
     }
 
     public void setShifts(Collection<Shift> shifts) {
