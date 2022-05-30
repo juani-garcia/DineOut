@@ -33,12 +33,12 @@ public class MenuItem {
     MenuItem() {
     }
 
-    public MenuItem(String name, String detail, double price, MenuSection menuSection, long ordering, Long imageId) {
+    public MenuItem(String name, String detail, double price, MenuSection menuSection, Long imageId) {
         this.name = name;
         this.detail = detail;
         this.price = price;
         this.menuSection = menuSection;
-        this.ordering = ordering;
+        this.ordering = menuSection.getMenuItemList().size();
         this.imageId = imageId;
     }
 
