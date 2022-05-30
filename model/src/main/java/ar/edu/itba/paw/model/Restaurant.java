@@ -15,7 +15,7 @@ public class Restaurant {
     @SequenceGenerator(allocationSize = 1, sequenceName = "restaurant_id_seq", name = "restaurant_id_seq")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)  // TODO: cascade = CascadeType.REMOVE?
+    @OneToOne(optional = false, fetch = FetchType.LAZY, orphanRemoval = true)  // TODO: cascade = CascadeType.REMOVE?
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
     private User user;

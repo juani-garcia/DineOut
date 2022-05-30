@@ -1,23 +1,44 @@
 package ar.edu.itba.paw.model;
 
-public class RoleToAuthority {
-    public final long id, authorityId, roleId;
+import javax.persistence.*;
 
-    public RoleToAuthority(long id, long authorityId, long roleId) {
-        this.id = id;
-        this.authorityId = authorityId;
-        this.roleId = roleId;
+@Entity
+@Table(name = "role_to_authority")
+public class RoleToAuthority {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_to_authority_id_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "role_to_authority_id_seq", name = "role_to_authority_id_seq")
+    private Long id;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "authority_id", nullable = false)
+    private RoleAuthority roleAuthority;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id")
+    private UserRole userRole;
+
+    RoleToAuthority() {
     }
 
-    public long getId() {
+    @Deprecated
+    public RoleToAuthority(long id, long authorityId, long roleId) {
+        this.id = id;
+        // this.authorityId = authorityId;
+        // this.roleId = roleId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public long getAuthorityId() {
-        return authorityId;
+    public RoleAuthority getAuthority() {
+        return roleAuthority;
     }
 
-    public long getRoleId() {
-        return roleId;
+    public UserRole getRoleId() {
+        return userRole;
     }
+
 }
