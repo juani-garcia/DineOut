@@ -40,9 +40,6 @@ public class RestaurantController {
     private MenuItemService menuItemService;
 
     @Autowired
-    private ShiftService shiftService;
-
-    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -65,7 +62,7 @@ public class RestaurantController {
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
-        mav.addObject("shifts", shiftService.getByRestaurantId(restaurant.getId()));
+        mav.addObject("shifts", restaurant.getShifts());
         return mav;
     }
 
@@ -108,7 +105,7 @@ public class RestaurantController {
         form.setZone(restaurant.getZone().getName());
         form.setCategories(categoryService.getByRestaurantId(restaurant.getId()).
                 stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
-        form.setShifts(shiftService.getByRestaurantId(restaurant.getId()).
+        form.setShifts(restaurant.getShifts().
                 stream().mapToLong(Shift::getId).boxed().collect(Collectors.toList()));
 
         return mav;
@@ -281,7 +278,7 @@ public class RestaurantController {
         mav.addObject("restaurant", restaurant);
         mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
-        mav.addObject("shifts", shiftService.getByRestaurantId(resId));
+        mav.addObject("shifts", restaurant.getShifts());
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
         return mav;

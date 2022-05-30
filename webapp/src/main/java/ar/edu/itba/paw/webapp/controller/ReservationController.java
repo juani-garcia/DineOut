@@ -26,9 +26,6 @@ public class ReservationController {
     @Autowired
     private SecurityService securityService;
 
-    @Autowired
-    private ShiftService shiftService;
-
     @RequestMapping("/reserve/{resId}")
     public ModelAndView reservation(
             @PathVariable final long resId,
@@ -36,7 +33,7 @@ public class ReservationController {
         final ModelAndView mav = new ModelAndView("reservation/reservation");
          Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
          mav.addObject("restaurant", restaurant);
-         mav.addObject("times", Shift.availableTimes(shiftService.getByRestaurantId(resId), 30));
+         mav.addObject("times", Shift.availableTimes(restaurant.getShifts(), 30));
          return mav;
     }
 

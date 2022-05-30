@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public enum Shift {
                 (time.isBefore(end) || time.equals(end));
     }
 
-    public static boolean belongs(List<Shift> hours, LocalTime time) {
+    public static boolean belongs(Collection<Shift> hours, LocalTime time) {
         if (hours.isEmpty()) return true;
 
         for (Shift hour : hours) {
@@ -72,7 +73,7 @@ public enum Shift {
         return false;
     }
 
-    public static List<LocalTime> availableTimes(List<Shift> shifts, long step) {
+    public static List<LocalTime> availableTimes(Collection<Shift> shifts, long step) {
         List<LocalTime> ans = new LinkedList<>();
         if(shifts.isEmpty()) shifts.addAll(Arrays.stream(Shift.values()).collect(Collectors.toList()));
         for(Shift shift : shifts) {

@@ -29,8 +29,6 @@ public class ReservationServiceImplTest {
     @Mock
     private EmailService emailService;
     @Mock
-    private ShiftService shiftService;
-    @Mock
     private SecurityService securityService;
     @Mock
     private ReservationDao reservationDao;

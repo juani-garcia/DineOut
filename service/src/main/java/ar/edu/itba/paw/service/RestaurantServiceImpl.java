@@ -17,9 +17,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     private CategoryService categoryService;
 
     @Autowired
-    private ShiftService shiftService;
-
-    @Autowired
     private RestaurantDao restaurantDao;
 
     @Autowired
