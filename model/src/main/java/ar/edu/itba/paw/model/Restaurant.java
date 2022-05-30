@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,6 +46,14 @@ public class Restaurant {
     @Column(name = "zone_id", columnDefinition = "Zone")
     @Enumerated(EnumType.ORDINAL)
     private Zone zone;
+
+    // TODO: Correct
+    @ManyToMany(targetEntity = Shift.class, fetch = FetchType.LAZY)
+    @JoinTable(name = "restaurant_shift",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "opening_hours_id"))
+    @Enumerated(EnumType.ORDINAL)
+    private Set<Shift> shifts;
 
     @OneToMany(mappedBy = "restaurant")
     private List<MenuSection> menuSectionList;
@@ -107,8 +117,17 @@ public class Restaurant {
         return mail;
     }
 
+    public Set<Shift> getShifts() {
+        return shifts;
+    }
+
     public List<MenuSection> getMenuSectionList() {
         return menuSectionList;
+    }
+
+    public void setShifts(Collection<Shift> shifts) {
+        this.shifts.clear();
+        this.shifts.addAll(shifts);
     }
 
     @Override

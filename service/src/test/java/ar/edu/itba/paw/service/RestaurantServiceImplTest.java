@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,8 @@ public class RestaurantServiceImplTest {
     private static final Zone ZONE = Zone.ACASSUSO;
     private static final long FAV_COUNT = 0;
     private static final List<Long> CATEGORIES = Arrays.asList(Category.AMERICAN.getId(), Category.JAPANESE.getId());
-    private static final List<Long> SHIFTS = Arrays.asList(Shift.MORNING.getId(), Shift.NOON.getId());
+    private static final List<Shift> SHIFTS = Arrays.asList(Shift.MORNING, Shift.NOON);
+    private static final List<Long> SHIFTS_IDS = SHIFTS.stream().map(Shift::getId).collect(Collectors.toList());
 
     private static final String USER_USERNAME = "user@mail.com";
     private static final String USER_PASSWORD = "1234567890User";
@@ -65,7 +67,7 @@ public class RestaurantServiceImplTest {
 
         Restaurant restaurant = null;
         try {
-            restaurant = restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS);
+            restaurant = restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS_IDS);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create restaurant: " + e.getMessage());
@@ -73,6 +75,7 @@ public class RestaurantServiceImplTest {
 
         Assert.assertNotNull(restaurant);
         Assert.assertEquals(ID, restaurant.getId());
+        Assert.assertTrue(shiftService.getByRestaurantId(restaurant.getId()).containsAll(SHIFTS));
     }
 
     @Test
@@ -80,7 +83,7 @@ public class RestaurantServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS_IDS));
     }
 
     @Test
@@ -90,7 +93,7 @@ public class RestaurantServiceImplTest {
         when(restaurantDao.getByUserId(anyLong())).
                 thenReturn(Optional.of(new Restaurant(ID, USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT)));
 
-        Assert.assertThrows(IllegalStateException.class, () -> restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS));
+        Assert.assertThrows(IllegalStateException.class, () -> restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS_IDS));
     }
 
     @Test
@@ -104,7 +107,7 @@ public class RestaurantServiceImplTest {
         when(imageService.create(any())).
                 thenReturn(new Image(1, new byte[] {0, 1, 0, 1}));
 
-        Restaurant restaurant = restaurantService.create(NAME, new byte[] {0}, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS);
+        Restaurant restaurant = restaurantService.create(NAME, new byte[] {0}, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS_IDS);
 
         Assert.assertNotNull(restaurant);
         Assert.assertNotNull(restaurant.getImageId());
