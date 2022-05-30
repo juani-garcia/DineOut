@@ -62,6 +62,7 @@ public class Restaurant {
     private Set<Category> categories;
     
     @OneToMany(mappedBy = "restaurant")
+    @OrderColumn(name = "ordering")
     private List<MenuSection> menuSectionList;
 
     protected Restaurant() {
