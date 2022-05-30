@@ -11,11 +11,13 @@ public class RoleToAuthority {
     @SequenceGenerator(allocationSize = 1, sequenceName = "role_to_authority_id_seq", name = "role_to_authority_id_seq")
     private Long id;
 
-    @Column(name = "authority_id", nullable = false)
-    private Long authorityId;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "authority_id", nullable = false)
+    private RoleAuthority roleAuthority;
 
-    @Column(name = "role_id", nullable = false)
-    private Long roleId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id")
+    private UserRole userRole;
 
     RoleToAuthority() {
     }
@@ -23,20 +25,20 @@ public class RoleToAuthority {
     @Deprecated
     public RoleToAuthority(long id, long authorityId, long roleId) {
         this.id = id;
-        this.authorityId = authorityId;
-        this.roleId = roleId;
+        // this.authorityId = authorityId;
+        // this.roleId = roleId;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getAuthorityId() {
-        return authorityId;
+    public RoleAuthority getAuthority() {
+        return roleAuthority;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public UserRole getRoleId() {
+        return userRole;
     }
 
 }
