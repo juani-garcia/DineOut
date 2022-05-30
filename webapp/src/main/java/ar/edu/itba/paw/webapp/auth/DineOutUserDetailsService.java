@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.service.*;
+import ar.edu.itba.paw.model.RoleAuthority;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.service.RoleAuthorityService;
+import ar.edu.itba.paw.service.RoleToAuthorityService;
+import ar.edu.itba.paw.service.UserRoleService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,8 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Component
@@ -23,20 +25,13 @@ public class DineOutUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
     private final UserRoleService userRoleService;
-    private final RoleToAuthorityService roleToAuthorityService;
-    private final RoleAuthorityService roleAuthorityService;
-    private final PasswordEncoder passwordEncoder;
-
     private final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
 
     @Autowired
     public DineOutUserDetailsService(final UserService userService, final PasswordEncoder passwordEncoder, final UserRoleService userRoleService, RoleToAuthorityService roleToAuthorityService, RoleAuthorityService roleAuthorityService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
-        this.roleToAuthorityService = roleToAuthorityService;
-        this.roleAuthorityService = roleAuthorityService;
     }
 
     @Override
@@ -51,13 +46,8 @@ public class DineOutUserDetailsService implements UserDetailsService {
             // Paso por todos los roles del usuario y por cada uno me guardo su nombre y todos sus privilegios.
             authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRoleName()));
 
-            for (RoleToAuthority userRoleToAuthority : roleToAuthorityService.getByRoleId(userRole.getId())) {
-                Optional<RoleAuthority> roleAuthority = roleAuthorityService.getByAuthorityId(userRoleToAuthority.getAuthority().getId());
-
-                if (!roleAuthority.isPresent())
-                    throw new IllegalStateException("El privilegio del rol del usuario es invalido");
-
-                authorities.add(new SimpleGrantedAuthority(roleAuthority.get().getAuthorityName()));
+            for (RoleAuthority roleAuthority : userRole.getAuthorities()) {
+                authorities.add(new SimpleGrantedAuthority(roleAuthority.getAuthorityName()));
             }
         }
 

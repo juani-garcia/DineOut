@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +15,13 @@ public class UserRole {
 
     @Column(name = "role_name", nullable = false)
     private String roleName;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "role_to_authority",
+            joinColumns = @JoinColumn(name = "authority_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<RoleAuthority> authorities;
 
     UserRole() {
     }
@@ -45,4 +53,7 @@ public class UserRole {
         return Objects.hash(id);
     }
 
+    public Collection<RoleAuthority> getAuthorities() {
+        return authorities;
+    }
 }
