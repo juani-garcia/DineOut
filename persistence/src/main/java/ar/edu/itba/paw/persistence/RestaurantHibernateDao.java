@@ -151,7 +151,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
                 "AS fav_count " +
                 "FROM restaurant r " +
                 "WHERE zone_id = :zone) restaurant_favs " +
-                "ORDER BY fav_count DESC";
+                "ORDER BY fav_count DESC " +
+                "LIMIT 10";
 
         Map<String, Object> params = new HashMap<>();
         params.put("zone", key.getId());
@@ -165,7 +166,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
                 "AS fav_count " +
                 "FROM restaurant r " +
                 "WHERE r.id IN (SELECT restaurant_id FROM category WHERE id = :category) restaurant_favs " +
-                "ORDER BY fav_count DESC";
+                "ORDER BY fav_count DESC " +
+                "LIMIT 10";
 
         Map<String, Object> params = new HashMap<>();
         params.put("category", key.getId());
