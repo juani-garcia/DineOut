@@ -198,6 +198,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
         for(Object o : query.getResultList()) {
             ids.add((Long) o);
         }
+        if (ids.isEmpty())
+            return new ArrayList<>();
 
         TypedQuery<Restaurant> restaurants = em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
         restaurants.setParameter("ids", ids);
