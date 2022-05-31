@@ -47,7 +47,7 @@ public class ReservationHibernateDao implements ReservationDao {
                 "AND date_time " + cmp + " now() " +
                 "ORDER BY date_time, rr.name ";
 
-        String idsQuery = "SELECT id " + baseQuery + "LIMIT :limit OFFSET :offset";
+        String idsQuery = "SELECT rr.id " + baseQuery + "LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("username", username);
         query.setParameter("limit", PAGE_SIZE);
@@ -81,7 +81,7 @@ public class ReservationHibernateDao implements ReservationDao {
                 "AND date_time " + cmp + " now() " +
                 "ORDER BY date_time, rr.name ";
 
-        String idsQuery = "SELECT id " + baseQuery + "LIMIT :limit OFFSET :offset";
+        String idsQuery = "SELECT rr.id " + baseQuery + "LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("restaurantId", restaurantId);
         query.setParameter("limit", PAGE_SIZE);
