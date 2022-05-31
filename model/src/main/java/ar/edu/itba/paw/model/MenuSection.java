@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class MenuSection {
 
     @OneToMany(mappedBy = "menuSection")
     @OrderColumn(name = "ordering")
-    private List<MenuItem> menuItemList;
+    private List<MenuItem> menuItemList = new ArrayList<>();
 
     MenuSection() {
     }
@@ -38,10 +39,11 @@ public class MenuSection {
     }
 
     @Deprecated
-    public MenuSection(long id, String name, long restaurantId, long ordering) {
+    /* Only for testing purposes */
+    public MenuSection(long id, String name, Restaurant restaurant, long ordering) {
         this.id = id;
         this.name = name;
-        // this.restaurantId = restaurantId;
+        this.restaurant = restaurant;
         this.ordering = ordering;
     }
 
