@@ -24,6 +24,7 @@ public class MenuSection {
     private long ordering;
 
     @OneToMany(mappedBy = "menuSection")
+    @OrderColumn(name = "ordering")
     private List<MenuItem> menuItemList;
 
     MenuSection() {
