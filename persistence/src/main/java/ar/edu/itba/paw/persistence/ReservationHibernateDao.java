@@ -63,6 +63,8 @@ public class ReservationHibernateDao implements ReservationDao {
         @SuppressWarnings("unchecked")
         long count = ((Integer) query.getResultList().stream().findFirst().orElse(0)).longValue();
 
+        if (ids.isEmpty())
+            return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Reservation> reservations =
                 em.createQuery("from Reservation where id IN :ids", Reservation.class);
@@ -97,6 +99,8 @@ public class ReservationHibernateDao implements ReservationDao {
         @SuppressWarnings("unchecked")
         long count = ((Integer) query.getResultList().stream().findFirst().orElse(0)).longValue();
 
+        if (ids.isEmpty())
+            return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Reservation> reservations =
                 em.createQuery("from Reservation where id IN :ids", Reservation.class);
