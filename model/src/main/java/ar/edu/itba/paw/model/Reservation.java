@@ -26,7 +26,9 @@ public class Reservation {
     @Column(nullable = false)
     private int amount;
 
-    @Column(name = "date_time", nullable = false)
+    @Basic
+    @Column(name = "date_time", nullable = false,
+    columnDefinition = "timestamp") // TODO: Try to remove
     private LocalDateTime dateTime;
 
     @Column
