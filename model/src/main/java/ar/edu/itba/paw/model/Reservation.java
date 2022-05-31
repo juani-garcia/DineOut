@@ -50,9 +50,9 @@ public class Reservation {
     }
 
     @Deprecated
-    public Reservation(long reservationId, int amount, LocalDateTime dateTime,
-                          String comments, Restaurant restaurant, User owner, boolean isConfirmed) {
-        // this.reservationId = reservationId;
+    /* Only for testing purposes */
+    public Reservation(long id, Restaurant restaurant, User owner, int amount, LocalDateTime dateTime, String comments, boolean isConfirmed) {
+        this.id = id;
         this.amount = amount;
         this.dateTime = dateTime;
         this.owner = owner;
