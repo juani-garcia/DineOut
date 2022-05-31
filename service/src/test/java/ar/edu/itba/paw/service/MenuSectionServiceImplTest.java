@@ -34,8 +34,6 @@ public class MenuSectionServiceImplTest {
     public void testCreateMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-//        when(menuSectionDao.create(anyLong(), anyString())).
-//                thenReturn(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING));
         when(restaurantService.getById(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
@@ -48,7 +46,8 @@ public class MenuSectionServiceImplTest {
         }
 
         Assert.assertNotNull(menuSection);
-        Assert.assertEquals(ID, menuSection.getId());
+        Assert.assertEquals(RESTAURANT, menuSection.getRestaurant());
+        Assert.assertTrue(RESTAURANT.getMenuSectionList().contains(menuSection));
     }
 
     @Test
@@ -61,8 +60,8 @@ public class MenuSectionServiceImplTest {
 
     @Test
     public void testCannotCreateIfNotOwner() {
-//        when(securityService.getCurrentUser()).
-//                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(AUX_USER));
         when(restaurantService.getById(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
@@ -73,10 +72,8 @@ public class MenuSectionServiceImplTest {
     public void testUpdateNameMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
-//        when(menuSectionDao.getById(anyLong())).
-//                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
+        when(menuSectionDao.getById(anyLong())).
+                thenReturn(Optional.of(new MenuSection(NAME, RESTAURANT)));
 
         try {
             menuSectionService.updateName(ID, NAME);
@@ -107,12 +104,10 @@ public class MenuSectionServiceImplTest {
 
     @Test
     public void testCannotUpdateNameIfNotOwner() {
-//        when(securityService.getCurrentUser()).
-//                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
-//        when(menuSectionDao.getById(anyLong())).
-//                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(AUX_USER));
+        when(menuSectionDao.getById(anyLong())).
+                thenReturn(Optional.of(new MenuSection(NAME, RESTAURANT)));
 
         Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(ID, NAME));
 
@@ -122,10 +117,8 @@ public class MenuSectionServiceImplTest {
     public void testDeleteMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
-//        when(menuSectionDao.getById(anyLong())).
-//                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
+        when(menuSectionDao.getById(anyLong())).
+                thenReturn(Optional.of(new MenuSection(NAME, RESTAURANT)));
 
         try {
             menuSectionService.delete(ID);
@@ -156,16 +149,25 @@ public class MenuSectionServiceImplTest {
 
     @Test
     public void testCannotDeleteIfNotOwner() {
-//        when(securityService.getCurrentUser()).
-//                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
-//        when(menuSectionDao.getById(anyLong())).
-//                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(AUX_USER));
+        when(menuSectionDao.getById(anyLong())).
+                thenReturn(Optional.of(new MenuSection(NAME, RESTAURANT)));
+
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(ID));
+    }
+
+    @Test
+    public void testGetByRestaurantId() {
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(USER));
         when(restaurantService.getById(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(ID));
+        Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).isEmpty());
 
+        MenuSection menuSection = menuSectionService.create(RESTAURANT.getId(), NAME); // This method is already tested so we can use it here to test the getter.
+
+        Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).contains(menuSection));
     }
-
-
 }
