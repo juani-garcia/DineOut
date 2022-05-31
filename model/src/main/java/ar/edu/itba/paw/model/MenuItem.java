@@ -45,14 +45,15 @@ public class MenuItem {
     }
 
     @Deprecated
-    public MenuItem(long id, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+    /* Only for testing purposes */
+    public MenuItem(long id, String name, String detail, double price, MenuSection section, long ordering, Image image) {
         this.id = id;
         this.name = name;
         this.detail = detail;
         this.price = price;
-        // this.sectionId = sectionId;
+        this.menuSection = section;
         this.ordering = ordering;
-        // this.imageId = imageId;
+        this.image = image;
     }
 
     public long getOrdering() {
