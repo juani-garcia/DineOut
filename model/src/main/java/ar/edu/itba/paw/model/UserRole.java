@@ -13,7 +13,7 @@ public class UserRole {
     @SequenceGenerator(allocationSize = 1, sequenceName = "account_role_id_seq", name = "account_role_id_seq")
     private Long id;
 
-    @Column(name = "role_name", nullable = false)
+    @Column(name = "role_name", nullable = false, unique = true)
     private String roleName;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

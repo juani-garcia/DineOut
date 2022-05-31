@@ -56,7 +56,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         if (imageBytes != null && imageBytes.length > 0) {
             image = imageService.create(imageBytes);
         }
-        return menuSection.addMenuItem(name, detail, price, (image != null) ? image.getId() : null);
+        return menuSection.addMenuItem(name, detail, price, image);
     }
 
     @Override
@@ -77,15 +77,16 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItem.setDetail(detail);
         menuItem.setPrice(price);
         menuItem.setSection(menuSection);
+        Image image = menuItem.getImage();
         if (imageBytes == null || imageBytes.length == 0) {
-            if (menuItem.getImageId() != null) {
-                imageService.delete(menuItem.getImageId());
+            if (image != null) {
+                imageService.delete(image.getId());
             }
         } else {
-            if (menuItem.getImageId() != null) {
-                imageService.edit(menuItem.getImageId(), imageBytes);
+            if (image != null) {
+                imageService.edit(image.getId(), imageBytes);
             } else {
-                menuItem.setImageId(imageService.create(imageBytes).getId());
+                menuItem.setImage(imageService.create(imageBytes));
             }
         }
     }

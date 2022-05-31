@@ -43,7 +43,7 @@ public class Restaurant {
     @Column(name = "detail")
     private String detail;
 
-    @Column(name = "zone_id", columnDefinition = "Zone")
+    @Column(name = "zone_id")
     @Enumerated(EnumType.ORDINAL)
     private Zone zone;
 

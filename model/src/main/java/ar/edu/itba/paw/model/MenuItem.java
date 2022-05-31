@@ -3,7 +3,8 @@ package ar.edu.itba.paw.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "menu_item")
+@Table(name = "menu_item",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"section_id", "ordering"}) })
 public class MenuItem {
 
     @Id
@@ -27,19 +28,20 @@ public class MenuItem {
     @Column(nullable = false)
     private long ordering;
 
-    // TODO: Check if id or model
-    private Long imageId;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     MenuItem() {
     }
 
-    public MenuItem(String name, String detail, double price, MenuSection menuSection, Long imageId) {
+    public MenuItem(String name, String detail, double price, MenuSection menuSection, Image image) {
         this.name = name;
         this.detail = detail;
         this.price = price;
         this.menuSection = menuSection;
         this.ordering = menuSection.getMenuItemList().size();
-        this.imageId = imageId;
+        this.image = image;
     }
 
     @Deprecated
@@ -50,7 +52,7 @@ public class MenuItem {
         this.price = price;
         // this.sectionId = sectionId;
         this.ordering = ordering;
-        this.imageId = imageId;
+        // this.imageId = imageId;
     }
 
     public long getOrdering() {
@@ -101,12 +103,12 @@ public class MenuItem {
         this.menuSection = menuSection;
     }
 
-    public Long getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageId(Long imageId) {
-        this.imageId = imageId;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     @Override

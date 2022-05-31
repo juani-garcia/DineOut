@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "menu_section")
+@Table(name = "menu_section",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"restaurant_id", "ordering"})})
 public class MenuSection {
 
     @Id
@@ -84,8 +85,8 @@ public class MenuSection {
         this.restaurant = restaurant;
     }
 
-    public MenuItem addMenuItem(final String name, final String detail, final double price, final Long imageId) {
-        final MenuItem menuItem = new MenuItem(name, detail, price, this, imageId);
+    public MenuItem addMenuItem(final String name, final String detail, final double price, final Image image) {
+        final MenuItem menuItem = new MenuItem(name, detail, price, this, image);
         this.menuItemList.add(menuItem);
         return menuItem;
     }
