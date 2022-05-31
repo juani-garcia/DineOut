@@ -56,8 +56,8 @@ public class RestaurantServiceImplTest {
 
     @Test
     public void testCreateRestaurant() {
-        when(restaurantDao.create(anyLong(), anyString(), any(), anyString(), anyString(), anyString(), any())).
-                thenReturn(new Restaurant(ID, USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT));
+        when(restaurantDao.create(any(), anyString(), any(), anyString(), anyString(), anyString(), any())).
+                thenReturn(new Restaurant(USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT));
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
 
@@ -87,7 +87,7 @@ public class RestaurantServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
         when(restaurantDao.getByUserId(anyLong())).
-                thenReturn(Optional.of(new Restaurant(ID, USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT)));
+                thenReturn(Optional.of(new Restaurant(USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT)));
 
         Assert.assertThrows(IllegalStateException.class, () -> restaurantService.create(NAME, null, ADDRESS, MAIL, DETAIL, ZONE, CATEGORIES, SHIFTS_IDS));
     }
@@ -98,8 +98,8 @@ public class RestaurantServiceImplTest {
                 thenReturn(Optional.of(USER));
         when(restaurantDao.getByUserId(anyLong())).
                 thenReturn(Optional.empty());
-        when(restaurantDao.create(anyLong(), anyString(), any(), anyString(), anyString(), anyString(), any())).
-                thenReturn(new Restaurant(ID, USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT));
+        when(restaurantDao.create(any(), anyString(), any(), anyString(), anyString(), anyString(), any())).
+                thenReturn(new Restaurant(USER, NAME, IMAGE_ID, ADDRESS, MAIL, DETAIL, ZONE, FAV_COUNT));
         when(imageService.create(any())).
                 thenReturn(new Image(1, new byte[] {0, 1, 0, 1}));
 
