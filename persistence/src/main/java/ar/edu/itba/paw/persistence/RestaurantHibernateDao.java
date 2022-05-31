@@ -31,7 +31,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public Optional<Restaurant> getByUserId(long id) {
-        final TypedQuery<Restaurant> query = em.createQuery("from Restaurant as r where r.id = :id",
+        final TypedQuery<Restaurant> query = em.createQuery("from Restaurant as r where r.user.id = :id",
                 Restaurant.class).setParameter("id", id);
         return query.getResultList().stream().findFirst();
     }
