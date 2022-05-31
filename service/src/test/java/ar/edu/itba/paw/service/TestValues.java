@@ -25,6 +25,9 @@ public class TestValues {
     static final User USER = new User(USER_ID, USER_USERNAME,
             USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME);
 
+    static final User AUX_USER = new User(USER_ID + 1, "aux_" + USER_USERNAME,
+            USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME);
+
     static final String RESTAURANT_NAME = "Restaurant";
     static final Long RESTAURANT_IMAGE_ID = null;
     static final String RESTAURANT_ADDRESS = "Address";
@@ -32,9 +35,8 @@ public class TestValues {
     static final String RESTAURANT_DETAIL = null;
     static final Zone RESTAURANT_ZONE = Zone.ACASSUSO;
     static final Long RESTAURANT_FAV_COUNT = 0L;
-    static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID,
-            USER, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
-            RESTAURANT_DETAIL, RESTAURANT_ZONE, RESTAURANT_FAV_COUNT);
+    static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID, USER, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
+            RESTAURANT_DETAIL, RESTAURANT_ZONE);
 
     static final int AMOUNT = 1;
     static final LocalDateTime DATETIME = LocalDateTime.now();
