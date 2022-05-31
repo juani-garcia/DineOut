@@ -39,12 +39,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Restaurant> getAll(int page) {
-        return restaurantDao.getAll(page);
-    }
-
-    @Override
-    public List<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
+    public PagedQuery<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
         Category category = Category.getById(categoryId);
         Zone zone = Zone.getById(zoneId);
         Shift shift = Shift.getById(shiftId);
@@ -62,7 +57,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (image != null && image.length > 0) {
             restaurantImage = imageService.create(image);
         }
-        Restaurant restaurant = restaurantDao.create(user.getId(), name, (restaurantImage != null ? restaurantImage.getId() : null), address, mail, detail, zone);
+        Restaurant restaurant = restaurantDao.create(user, name, (restaurantImage != null ? restaurantImage.getId() : null), address, mail, detail, zone);
         for (Long categoryId : categories) {
             Category category = Category.getById(categoryId);
             categoryService.add(restaurant.getId(), category);
@@ -172,7 +167,8 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
         if (!restaurantReservedList.isEmpty())
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        return restaurantDao.getAll(1).stream().findFirst().orElseThrow(IllegalStateException::new);
+        return restaurantDao.filter(1, null, null, null, null)
+                .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
     }
 
     @Override
