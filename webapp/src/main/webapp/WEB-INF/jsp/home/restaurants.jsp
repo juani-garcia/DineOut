@@ -24,7 +24,7 @@
                 </div>
             </div>
         </c:if>
-        <c:forEach items="${restaurants}" var="restaurant">
+        <c:forEach items="${restaurants.content}" var="restaurant">
 
             <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
