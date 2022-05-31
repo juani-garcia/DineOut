@@ -43,19 +43,26 @@ public class Restaurant {
     @Column(name = "detail")
     private String detail;
 
-    @Column(name = "zone_id", columnDefinition = "Zone")
+    @Column(name = "zone_id")
     @Enumerated(EnumType.ORDINAL)
     private Zone zone;
 
-    // TODO: Correct
-    @ManyToMany(targetEntity = Shift.class, fetch = FetchType.LAZY)
-    @JoinTable(name = "restaurant_shift",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name = "opening_hours_id"))
+    @ElementCollection(targetClass = Shift.class)
+    @CollectionTable(name = "restaurant_opening_hours",
+            joinColumns = @JoinColumn(name = "restaurant_id"))
+    @Column(name = "opening_hours_id")
     @Enumerated(EnumType.ORDINAL)
     private Set<Shift> shifts;
 
+    @ElementCollection(targetClass = Category.class)
+    @CollectionTable(name = "restaurant_category",
+            joinColumns = @JoinColumn(name = "restaurant_id"))
+    @Column(name = "category_id")
+    @Enumerated(EnumType.ORDINAL)
+    private Set<Category> categories;
+    
     @OneToMany(mappedBy = "restaurant")
+    @OrderColumn(name = "ordering")
     private List<MenuSection> menuSectionList;
 
     protected Restaurant() {
@@ -120,6 +127,10 @@ public class Restaurant {
         return shifts;
     }
 
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
     public List<MenuSection> getMenuSectionList() {
         return menuSectionList;
     }
@@ -133,6 +144,11 @@ public class Restaurant {
     public void setShifts(Collection<Shift> shifts) {
         this.shifts.clear();
         this.shifts.addAll(shifts);
+    }
+
+    public void setCategories(final Collection<Category> categories) {
+        this.categories.clear();
+        this.categories.addAll(categories);
     }
 
     @Override

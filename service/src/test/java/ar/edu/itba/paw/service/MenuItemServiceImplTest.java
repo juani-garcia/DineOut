@@ -234,8 +234,8 @@ public class MenuItemServiceImplTest {
         MenuItem menuItem = menuItemService.create(NAME, DETAIL, PRICE, SECTION_ID, new byte[] {0, 1});
 
         Assert.assertNotNull(menuItem);
-        Assert.assertNotNull(menuItem.getImageId());
-        Assert.assertNotEquals(Long.valueOf(0), menuItem.getImageId());
+        Assert.assertNotNull(menuItem.getImage());
+        Assert.assertNotEquals(Long.valueOf(0), menuItem.getImage().getId());
     }
 
 

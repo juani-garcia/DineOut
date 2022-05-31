@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private RestaurantDao restaurantDao;
 
     @Autowired
@@ -58,10 +55,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantImage = imageService.create(image);
         }
         Restaurant restaurant = restaurantDao.create(user, name, (restaurantImage != null ? restaurantImage.getId() : null), address, mail, detail, zone);
-        for (Long categoryId : categories) {
-            Category category = Category.getById(categoryId);
-            categoryService.add(restaurant.getId(), category);
-        }
+        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
         restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
         return restaurant;
     }
@@ -110,14 +104,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         for (
                 Restaurant favRestaurant : restaurantFavoriteList) {
             zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(favRestaurant.getZone(), 0) + 1);
-            for (Category category : categoryService.getByRestaurantId(favRestaurant.getId())) {
+            for (Category category : favRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
         for (
                 Restaurant resRestaurant : restaurantReservedList) {
             zoneIntegerHashMap.put(resRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(resRestaurant.getZone(), 0) + 1);
-            for (Category category : categoryService.getByRestaurantId(resRestaurant.getId())) {
+            for (Category category : resRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }

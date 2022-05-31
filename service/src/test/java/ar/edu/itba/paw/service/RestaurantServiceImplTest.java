@@ -46,8 +46,6 @@ public class RestaurantServiceImplTest {
     private RestaurantServiceImpl restaurantService;
 
     @Mock
-    private CategoryService categoryService;
-    @Mock
     private RestaurantDao restaurantDao;
     @Mock
     private SecurityService securityService;

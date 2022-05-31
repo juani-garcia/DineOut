@@ -12,6 +12,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_reservation_id_seq")
     @SequenceGenerator(allocationSize = 1, sequenceName = "reservation_reservation_id_seq", name = "reservation_reservation_id_seq")
+    @Column(name = "reservation_id")
     private Long id;
 
     @ManyToOne(optional = false)
@@ -25,13 +26,13 @@ public class Reservation {
     @Column(nullable = false)
     private int amount;
 
-    @Column(nullable = false)
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
     @Column
     private String comments;
 
-    @Column(nullable = false)
+    @Column(name = "is_confirmed", nullable = false)
     private boolean isConfirmed;
 
     Reservation() {

@@ -83,22 +83,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
-        PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
+        PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
 
     }
 
     @Override
-    public Optional<User> getUserByPasswordResetToken(String token) {
+    public User getUserByPasswordResetToken(String token) {
         PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).orElseThrow(IllegalStateException::new);
-        return getById(passwordResetToken.getUserId());
+        return passwordResetToken.getUser();
     }
 
     @Override
     @Transactional
     public void changePasswordByUserToken(String token, String newPassword) {
-        User user = getUserByPasswordResetToken(token).orElseThrow(IllegalStateException::new);
+        User user = getUserByPasswordResetToken(token);
         user.setPassword(passwordEncoder.encode(newPassword));  // TODO: Check if not changed?
         passwordResetTokenService.setUsed(token);
     }

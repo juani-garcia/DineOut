@@ -11,7 +11,7 @@ public class RoleAuthority {
     @SequenceGenerator(allocationSize = 1, sequenceName = "role_authorities_id_seq", name = "role_authorities_id_seq")
     private long id;
 
-    @Column(name = "authority_name", nullable = false)
+    @Column(name = "authority_name", nullable = false, unique = true)
     private String authorityName;
 
     RoleAuthority() {

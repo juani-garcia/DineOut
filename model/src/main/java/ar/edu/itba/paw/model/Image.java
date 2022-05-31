@@ -26,7 +26,7 @@ public class Image {
         this.source = source;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
