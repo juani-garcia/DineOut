@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistence.RoleAuthorityDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -20,5 +21,10 @@ public class RoleAuthorityServiceImpl implements RoleAuthorityService {
     @Override
     public Optional<RoleAuthority> getByAuthorityId(long authorityId) {
         return roleAuthorityDao.getByAuthorityId(authorityId);
+    }
+
+    @Override
+    public Collection<RoleAuthority> getAuthoritiesOf(Long roleId) {
+        return roleAuthorityDao.getAuthoritiesOf(roleId);
     }
 }
