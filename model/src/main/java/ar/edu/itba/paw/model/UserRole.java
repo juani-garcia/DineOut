@@ -2,7 +2,9 @@ package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "account_role")
@@ -21,7 +23,7 @@ public class UserRole {
             name = "role_to_authority",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
-    private Collection<RoleAuthority> authorities;
+    private Set<RoleAuthority> authorities;
 
     UserRole() {
     }
@@ -30,7 +32,8 @@ public class UserRole {
     public UserRole(long id, String roleName, Collection<RoleAuthority> authorities) {
         this.id = id;
         this.roleName = roleName;
-        this.authorities = authorities;
+        this.authorities = new HashSet<>();
+        this.authorities.addAll(authorities);
     }
 
     public long getId() {
@@ -54,7 +57,7 @@ public class UserRole {
         return Objects.hash(id);
     }
 
-    public Collection<RoleAuthority> getAuthorities() {
+    public Set<RoleAuthority> getAuthorities() {
         return this.authorities;
     }
 }

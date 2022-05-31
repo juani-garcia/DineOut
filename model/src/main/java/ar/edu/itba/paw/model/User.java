@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "account")
@@ -31,14 +32,14 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Collection<UserRole> roles;
+    private Set<UserRole> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "favorite",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
-    private Collection<Restaurant> favorites;
+    private Set<Restaurant> favorites = new HashSet<>();
 
     protected User() {
     }
