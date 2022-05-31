@@ -21,13 +21,8 @@ public interface RestaurantService {
 
     Optional<Restaurant> getByUserID(long id);
 
-    Long getCount();
-
-    Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId);
-
     Restaurant getRecommendedRestaurant(boolean isDiner);
 
-    long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId);
 
     Optional<Restaurant> getOfLoggedUser();
 }

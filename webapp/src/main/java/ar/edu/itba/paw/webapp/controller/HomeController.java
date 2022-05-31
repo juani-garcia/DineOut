@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.Category;
+import ar.edu.itba.paw.model.PagedQuery;
+import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.service.RestaurantService;
@@ -41,15 +43,16 @@ public class HomeController {
             @RequestParam(name = "category", defaultValue = "-1") final int category,
             @RequestParam(name = "zone", defaultValue = "-1") final int zone,
             @RequestParam(name = "shift", defaultValue = "-1") final int shift) {
-        long pages = restaurantService.getFilteredPagesCount(name, category, shift, zone);
-        if (page != 1 && pages < page)
-            return new ModelAndView("redirect:/restaurants" + "?page=" + pages + "&name=" + name + "&category=" + category + "&zone=" + zone + "&shift=" + shift);
+        PagedQuery<Restaurant> restaurants = restaurantService.filter(page, name, category, shift, zone);
+        if (page != 1 && restaurants.getPageCount() < page)
+            return new ModelAndView("redirect:/restaurants" + "?page=" + restaurants.getPageCount() +
+                    "&name=" + name + "&category=" + category + "&zone=" + zone + "&shift=" + shift);
 
         final ModelAndView mav = new ModelAndView("home/restaurants");
         mav.addObject("categories", Category.values());
         mav.addObject("zones", Zone.values());
         mav.addObject("shifts", Shift.values());
-        mav.addObject("restaurants", restaurantService.filter(page, name, category, shift, zone));
+        mav.addObject("restaurants", restaurants);
         return mav;
     }
 

@@ -80,20 +80,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantDao.getByUserId(id);
     }
 
-    @Override
-    public Long getCount() {
-        return restaurantDao.getCount();
-    }
-
-    @Override
-    public Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId) {
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.getFilteredCount(name, category, shift, zone);
-    }
-
     private Restaurant getRecommendedOfLoggedUser() {
         List<Restaurant> restaurantFavoriteList = restaurantDao.getTopTenByFavoriteOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getId());
         List<Restaurant> restaurantReservedList = restaurantDao.getTopTenByReservationsOfUser(securityService.getCurrentUser().orElseThrow(IllegalStateException::new).getUsername());
@@ -172,15 +158,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         } else {
             return getRecommended();
         }
-    }
-
-    @Override
-    public long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId) {
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.getFilteredPagesCount(name, category, shift, zone);
     }
 
     @Override
