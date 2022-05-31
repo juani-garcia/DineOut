@@ -61,8 +61,7 @@ public class Restaurant {
     protected Restaurant() {
     }
 
-    public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
-        this.id = id;
+    public Restaurant(User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
         this.name = name;
         this.user = user;
         this.imageId = imageId;
