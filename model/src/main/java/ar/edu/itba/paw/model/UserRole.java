@@ -27,9 +27,10 @@ public class UserRole {
     }
 
     @Deprecated
-    public UserRole(long id, String roleName) {
+    public UserRole(long id, String roleName, Collection<RoleAuthority> authorities) {
         this.id = id;
         this.roleName = roleName;
+        this.authorities = authorities;
     }
 
     public long getId() {
@@ -54,6 +55,6 @@ public class UserRole {
     }
 
     public Collection<RoleAuthority> getAuthorities() {
-        return authorities;
+        return this.authorities;
     }
 }

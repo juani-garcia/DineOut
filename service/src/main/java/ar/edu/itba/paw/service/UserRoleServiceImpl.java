@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistence.UserRoleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public Optional<UserRole> getByRoleName(String roleName) {
         return userRoleDao.getByRoleName(roleName);
+    }
+
+    @Override
+    public Collection<UserRole> getRolesOf(Long userId) {
+        return userRoleDao.getRolesOf(userId);
     }
 
 }

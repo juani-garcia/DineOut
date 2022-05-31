@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.UserRole;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface UserRoleService {
@@ -10,4 +11,5 @@ public interface UserRoleService {
 
     Optional<UserRole> getByRoleName(String roleName);
 
+    Collection<UserRole> getRolesOf(Long userId);
 }
