@@ -110,19 +110,4 @@ public class ReservationHibernateDao implements ReservationDao {
         em.remove(em.find(Reservation.class, reservationId));
     }
 
-    // TODO: Remove duplicate code
-    // String sql should always SELECT desired restaurants ids
-    private List<Reservation> makeJPAQueryFromNative(String sql, Map<String, Object> params) {
-        Query query = em.createNativeQuery(sql);
-        if(params != null) params.forEach(query::setParameter);
-        List<Long> ids = new ArrayList<>();
-        for(Object o : query.getResultList()) {
-            ids.add((Long) o);
-        }
-
-        TypedQuery<Reservation> reservations = em.createQuery("from Reservation where r.id IN :ids", Reservation.class);
-        reservations.setParameter("ids", ids);
-        return reservations.getResultList();
-    }
-
 }

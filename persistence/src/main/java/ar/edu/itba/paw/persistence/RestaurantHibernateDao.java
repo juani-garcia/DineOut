@@ -46,6 +46,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
         for(String key : filter.args.keySet()) {
             query.setParameter(key, filter.args.get(key));
         }
+        query.setParameter("limit", PAGE_SIZE);
+        query.setParameter("offset", PAGE_SIZE * (page - 1));
 
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
@@ -95,9 +97,6 @@ public class RestaurantHibernateDao implements RestaurantDao {
             sql.append("AND zone_id = :zone\n");
             args.put("zone", zone.getId());
         }
-
-        args.put("limit", PAGE_SIZE);
-        args.put("offset", PAGE_SIZE * (page - 1));
 
         return new ParametrizedQuery(sql.toString(), args);
     }
