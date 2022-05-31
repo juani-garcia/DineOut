@@ -38,7 +38,7 @@ public class DineOutUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final User user = userService.getByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user '" + username + "'"));
-        final Collection<UserRole> userRoleList = userRoleService.getRolesOf(user.getId()); // TODO: Check if works
+        final Collection<UserRole> userRoleList = userRoleService.getRolesOf(user.getId());
 
         final Collection<GrantedAuthority> authorities = new ArrayList<>();
 
