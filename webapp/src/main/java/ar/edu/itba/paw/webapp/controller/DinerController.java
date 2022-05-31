@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.service.*;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.service.FavoriteService;
+import ar.edu.itba.paw.service.ReservationService;
+import ar.edu.itba.paw.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,12 +41,12 @@ public class DinerController {
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
-        long pages = reservationService.getPagesCountForCurrentUser(past);
+        PagedQuery<Reservation> reservationList = reservationService.getAllForCurrentUser(page, past);
+        long pages = reservationList.getPageCount();
         if (page != 1 && pages < page) return new ModelAndView("redirect:/diner/reservations" + "?page=" + pages);
 
-        List<Reservation> reservationList = reservationService.getAllForCurrentUser(page, past);
         ModelAndView mav = new ModelAndView("diner/reservations");
-        mav.addObject("reservations", reservationList);
+        mav.addObject("reservations", reservationList.getContent());
         mav.addObject("pages", pages);
         mav.addObject("past", past);
         return mav;
