@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.util.*;
 
 @Repository
@@ -62,11 +63,14 @@ public class RestaurantHibernateDao implements RestaurantDao {
         }
 
         @SuppressWarnings("unchecked")
-        long count = ((Integer) query.getResultList().stream().findFirst().orElse(0)).longValue();
+        long count = ((BigInteger) query.getResultList().stream().findFirst().orElse(0)).longValue();
+
+        if (ids.isEmpty())
+            return new PagedQuery<Restaurant>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Restaurant> restaurants =
-                em.createQuery("from Restaurant where id IN :ids", Restaurant.class);
-        restaurants.setParameter("ids", ids);
+                em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
+         restaurants.setParameter("ids", ids);
 
         return new PagedQuery<>(restaurants.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
     }
@@ -195,7 +199,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
             ids.add((Long) o);
         }
 
-        TypedQuery<Restaurant> restaurants = em.createQuery("from Restaurant where r.id IN :ids", Restaurant.class);
+        TypedQuery<Restaurant> restaurants = em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
         restaurants.setParameter("ids", ids);
         return restaurants.getResultList();
     }
