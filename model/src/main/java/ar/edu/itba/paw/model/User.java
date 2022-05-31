@@ -50,6 +50,7 @@ public class User {
     }
 
     @Deprecated
+    /* Only for testing purposes */
     public User(final long id, final String username, final String password, final String firstName, final String lastName) {
         this.id = id;
         this.username = username;

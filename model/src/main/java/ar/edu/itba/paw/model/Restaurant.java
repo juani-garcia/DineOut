@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "restaurant")
@@ -63,7 +60,7 @@ public class Restaurant {
     
     @OneToMany(mappedBy = "restaurant")
     @OrderColumn(name = "ordering")
-    private List<MenuSection> menuSectionList;
+    private List<MenuSection> menuSectionList = new ArrayList<>();
 
     protected Restaurant() {
     }
@@ -79,16 +76,16 @@ public class Restaurant {
     }
 
     @Deprecated
-    public Restaurant(long id, Long userID, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
+    /* Only for testing purposes */
+    public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone) {
         this.id = id;
-        // this.userID = userID;
+        this.user = user;
         this.name = name;
         this.imageId = imageId;
         this.address = address;
         this.detail = detail;
         this.mail = mail;
         this.zone = zone;
-        // this.favCount = favCount;
     }
 
     public long getId() {
