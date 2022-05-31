@@ -31,7 +31,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public Optional<Restaurant> getByUserId(long id) {
-        final TypedQuery<Restaurant> query = em.createQuery("from Restaurant as r where r.id = :id",
+        final TypedQuery<Restaurant> query = em.createQuery("from Restaurant as r where r.user.id = :id",
                 Restaurant.class).setParameter("id", id);
         return query.getResultList().stream().findFirst();
     }
@@ -136,12 +136,25 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByFavoriteOfUser(long userId) {
-        return null;
+        String sql = "SELECT id " +
+                "FROM favorite " +
+                "WHERE favorite.user_id = :userId " +
+                " LIMIT 10";
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        return makeJPAQueryFromNative(sql, params);
     }
 
     @Override
     public List<Restaurant> getTopTenByReservationsOfUser(String username) {
-        return null;
+        String sql = "SELECT id " +
+                "FROM restaurant JOIN reservation ON restaurant.id = reservation.restaurant_id " +
+                "WHERE reservation.user_mail = :username" +
+                "ORDER BY COUNT(*) " +
+                "LIMIT 10";
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", username);
+        return makeJPAQueryFromNative(sql, params);
     }
 
     @Override
