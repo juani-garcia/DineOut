@@ -20,7 +20,7 @@
                         <c:out value="${restaurant.name}"/>
                         <c:url value="/restaurant/edit" var="editUrl"/>
                         <a class="btn-large waves-effect waves-light btn-floating default_red"
-                           href="${editUrl}">
+                           style="margin-left: 20px" href="${editUrl}">
                             <i class="material-icons left">edit</i>
                         </a>
                     </h1>
