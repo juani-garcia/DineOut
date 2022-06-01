@@ -191,7 +191,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
         if(params != null) params.forEach(query::setParameter);
         List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add((Long) o);
+            ids.add(((BigInteger) o).longValue());
         }
         if (ids.isEmpty())
             return new ArrayList<>();
