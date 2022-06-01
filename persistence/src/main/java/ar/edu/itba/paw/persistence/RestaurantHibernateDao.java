@@ -134,7 +134,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByFavoriteOfUser(long userId) {
-        String sql = "SELECT id " +
+        String sql = "SELECT restaurant_id " +
                 "FROM favorite " +
                 "WHERE favorite.user_id = :userId " +
                 " LIMIT 10";
