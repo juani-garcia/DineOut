@@ -27,8 +27,7 @@ public class Reservation {
     private int amount;
 
     @Basic
-    @Column(name = "date_time", nullable = false,
-    columnDefinition = "timestamp") // TODO: Try to remove
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
     @Column
