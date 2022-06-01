@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -16,13 +18,17 @@ public class Restaurant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Long getFavCount() {
+        return favCount;
+    }
+
     @OneToOne
     @JoinColumn(name = "image_id")
     private Image image;
 
 
-//    @Formula  // TODO: ask about this.
-//    private BigDecimal favCount;
+    @Formula(value = "(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = id)")
+    private Long favCount;
 
     @Column(name = "name")
     private String name;
