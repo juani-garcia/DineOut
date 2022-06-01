@@ -108,6 +108,14 @@ public class Reservation {
         return isConfirmed;
     }
 
+    public boolean getIsConfirmable() {
+        return !getIsConfirmed() && this.dateTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean getIsValidTime() {
+        return this.dateTime.isAfter(LocalDateTime.now());
+    }
+
     public void confirm() {
         isConfirmed = true;
     }

@@ -47,7 +47,7 @@ public class ReservationHibernateDao implements ReservationDao {
                 "WHERE username = :username " +
                 "AND date_time " + cmp + " now() ";
 
-        String idsQuery = "SELECT rr.id " + baseQuery +
+        String idsQuery = "SELECT rr.reservation_id " + baseQuery +
                 "ORDER BY rr.date_time, rr.name " +
                 "LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
@@ -56,7 +56,7 @@ public class ReservationHibernateDao implements ReservationDao {
         query.setParameter("offset", PAGE_SIZE * (page - 1));
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((BigInteger) o).longValue());
+            ids.add(((Integer) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*) " + baseQuery;
@@ -84,14 +84,14 @@ public class ReservationHibernateDao implements ReservationDao {
                 "WHERE rr.id = :restaurantId " +
                 "AND date_time " + cmp + " now() ";
 
-        String idsQuery = "SELECT rr.id " + baseQuery + "ORDER BY date_time, rr.name LIMIT :limit OFFSET :offset";
+        String idsQuery = "SELECT rr.reservation_id " + baseQuery + "ORDER BY date_time, rr.name LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("restaurantId", restaurantId);
         query.setParameter("limit", PAGE_SIZE);
         query.setParameter("offset", PAGE_SIZE * (page - 1));
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((BigInteger) o).longValue());
+            ids.add(((Integer) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*) " + baseQuery;

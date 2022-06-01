@@ -51,10 +51,10 @@
                             <c:out value="${reservation.owner.lastName}"/>:
                         </b></h5>
                         <div class="margin_left_auto flex_row">
-                            <c:if test="${!reservation.isConfirmed}">
+                            <c:if test="${reservation.isConfirmable}">
                                 <div class="margins_lr_5px">
                                     <form method="post"
-                                          action="<c:url value="/reservation/${reservation.reservationId}/confirm"/>">
+                                          action="<c:url value="/reservation/${reservation.id}/confirm"/>">
                                         <button class="btn-large waves-effect waves-light btn-floating green modal-trigger"
                                                 type="submit" name="action">
                                             <i class="material-icons left">check</i>
@@ -65,10 +65,10 @@
                             <c:if test="${!past}">
                                 <div class="margins_lr_5px">
                                     <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
-                                       href="#delete_confirm_modal_${reservation.reservationId}">
+                                       href="#delete_confirm_modal_${reservation.id}">
                                         <i class="material-icons left">delete</i>
                                     </a>
-                                    <div id="delete_confirm_modal_${reservation.reservationId}"
+                                    <div id="delete_confirm_modal_${reservation.id}"
                                          class="modal confirm_delete_modal_height">
                                         <div class="modal-content">
                                             <h4 class="center">
@@ -82,7 +82,7 @@
                                                     <spring:message code="restaurant.reservation.back"/>
                                                 </a>
                                                 <form method="post"
-                                                      action="<c:url value="/reservation/${reservation.reservationId}/delete"/>">
+                                                      action="<c:url value="/reservation/${reservation.id}/delete"/>">
                                                     <button class="modal-close waves-effect red-text btn-flat"
                                                             type="submit" name="action">
                                                         <spring:message code="restaurant.reservation.continue"/>
@@ -104,12 +104,12 @@
                         <h6 class="regular"><spring:message code="diner.reservation.comments"/> <c:out
                                 value="${reservation.comments}"/></h6>
                     </c:if>
-                    <c:if test="${!reservation.isConfirmed}">
+                    <c:if test="${!reservation.isConfirmed && reservation.isValidTime}">
                         <h6 class="isa_warning">
                             <spring:message code="restaurant.reservation.pending"/>
                         </h6>
                     </c:if>
-                    <c:if test="${reservation.isConfirmed}">
+                    <c:if test="${reservation.isConfirmed && reservation.isValidTime}">
                         <h6 class="isa_success">
                             <spring:message code="restaurant.reservation.approved"/>
                         </h6>
