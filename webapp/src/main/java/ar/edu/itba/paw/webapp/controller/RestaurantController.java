@@ -196,7 +196,7 @@ public class RestaurantController {
         try {
             image = form.getImage().getBytes();
         } catch (IOException e) {
-            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+            throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
