@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.exceptions.ForbiddenActionException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.model.MenuSection;
@@ -8,6 +9,7 @@ import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -65,17 +67,19 @@ public class MenuSectionServiceImpl implements MenuSectionService {
         List<MenuSection> menuSectionList = menuSection.getRestaurant().getMenuSectionList();
         final int index = menuSectionList.indexOf(menuSection);
 
-        if ((moveUp ? index <= 1 : index >= menuSectionList.size())) {
+        if ((moveUp && index == 0) || (!moveUp && index == menuSectionList.size() - 1))
             throw new IllegalArgumentException("Cannot move this section");
-        }
-        Collections.swap(menuSectionList, index, index + (moveUp ? 1 : -1));
+
+        Collections.swap(menuSectionList, index, index + (moveUp ? -1 : 1));
     }
 
+    @Transactional
     @Override
     public void moveUp(final long menuSectionId) {
         move(menuSectionId, true);
     }
 
+    @Transactional
     @Override
     public void moveDown(final long menuSectionId) {
         move(menuSectionId, false);

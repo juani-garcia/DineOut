@@ -59,7 +59,7 @@ public class Restaurant {
     @Enumerated(EnumType.ORDINAL)
     private Set<Category> categories = new HashSet<>();
     
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     @OrderColumn(name = "ordering")
     private List<MenuSection> menuSectionList = new ArrayList<>();
 

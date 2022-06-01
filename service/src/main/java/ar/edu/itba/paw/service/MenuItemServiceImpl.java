@@ -99,14 +99,16 @@ public class MenuItemServiceImpl implements MenuItemService {
         if ((moveUp && index == 0) || (!moveUp && index == menuItemList.size() - 1))
             throw new IllegalArgumentException();
 
-        Collections.swap(menuItemList, index, index + (moveUp ? 1 : -1));
+        Collections.swap(menuItemList, index, index + (moveUp ? -1 : 1));
     }
 
+    @Transactional
     @Override
     public void moveUp(final long menuItemId) {
         move(menuItemId, true);
     }
 
+    @Transactional
     @Override
     public void moveDown(final long menuItemId) {
         move(menuItemId, false);

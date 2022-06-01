@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "menu_section",
-        uniqueConstraints = { @UniqueConstraint(columnNames = {"restaurant_id", "ordering"})})
+@Table(name = "menu_section")
+        // uniqueConstraints = { @UniqueConstraint(columnNames = {"restaurant_id", "ordering"})})
 public class MenuSection {
 
     @Id
@@ -25,7 +25,7 @@ public class MenuSection {
     @OrderColumn(name = "ordering", nullable = false)
     private long ordering;
 
-    @OneToMany(mappedBy = "menuSection")
+    @OneToMany(mappedBy = "menuSection", cascade = CascadeType.ALL)
     @OrderColumn(name = "ordering")
     private List<MenuItem> menuItemList = new ArrayList<>();
 
