@@ -145,9 +145,10 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByReservationsOfUser(String username) {
-        String sql = "SELECT id " +
+        String sql = "SELECT restaurant.id " +
                 "FROM restaurant JOIN reservation ON restaurant.id = reservation.restaurant_id " +
-                "WHERE reservation.user_mail = :username" +
+                "WHERE reservation.user_mail = :username " +
+                "GROUP BY restaurant.id " +
                 "ORDER BY COUNT(*) " +
                 "LIMIT 10";
         Map<String, Object> params = new HashMap<>();
