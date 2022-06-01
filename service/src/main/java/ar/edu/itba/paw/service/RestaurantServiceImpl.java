@@ -54,7 +54,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (image != null && image.length > 0) {
             restaurantImage = imageService.create(image);
         }
-        Restaurant restaurant = restaurantDao.create(user, name, (restaurantImage != null ? restaurantImage.getId() : null), address, mail, detail, zone);
+        Restaurant restaurant = restaurantDao.create(user, name, restaurantImage, address, mail, detail, zone);
         restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
         restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
         return restaurant;

@@ -43,9 +43,9 @@
                     <h3 class="center bold text_overflow_ellipsis flex_row flex_center"><i class="material-icons default_red_text left">favorite</i><c:out
                             value="${restaurant.favCount}"/></h3>
                 </div>
-                <c:if test="${restaurant.imageId != null}">
+                <c:if test="${restaurant.image != null}">
                     <div class="card-image">
-                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>

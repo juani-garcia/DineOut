@@ -25,9 +25,9 @@
                         </a>
                     </h1>
                 </div>
-                <c:if test="${restaurant.imageId != null}">
+                <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
-                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
@@ -150,9 +150,9 @@
                         <c:forEach items="${section.menuItemList}" var="item">
                             <hr/>
                             <div class="card horizontal item_card">
-                                <c:if test="${item.imageId != null}">
+                                <c:if test="${item.image != null}">
                                     <div class="card-image">
-                                        <c:url value="/image/${item.imageId}" var="imagePath"/>
+                                        <c:url value="/image/${item.image.id}" var="imagePath"/>
                                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                                     </div>
                                 </c:if>

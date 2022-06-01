@@ -38,9 +38,9 @@
 
             <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                <c:if test="${restaurant.imageId != null}">
+                <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
-                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>

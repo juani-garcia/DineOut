@@ -17,8 +17,9 @@ public class Restaurant {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "image_id")
-    private Long imageId;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
 
 //    @ManyToMany(fetch = FetchType.LAZY)
@@ -65,10 +66,10 @@ public class Restaurant {
     protected Restaurant() {
     }
 
-    public Restaurant(User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Long favCount) {
+    public Restaurant(User user, String name, Image image, String address, String mail, String detail, Zone zone) {
         this.name = name;
         this.user = user;
-        this.imageId = imageId;
+        this.image = image;
         this.address = address;
         this.detail = detail;
         this.mail = mail;
@@ -81,7 +82,7 @@ public class Restaurant {
         this.id = id;
         this.user = user;
         this.name = name;
-        this.imageId = imageId;
+        // this.imageId = imageId;
         this.address = address;
         this.detail = detail;
         this.mail = mail;
@@ -96,8 +97,8 @@ public class Restaurant {
         return name;
     }
 
-    public Long getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
 
     public String getAddress() {

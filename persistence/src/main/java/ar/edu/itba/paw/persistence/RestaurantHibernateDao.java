@@ -106,8 +106,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public Restaurant create(User user, String name, Long imageId, String address, String mail, String detail, Zone zone) {
-        Restaurant restaurant = new Restaurant(user, name, imageId, address, mail, detail, zone, 0L);
+    public Restaurant create(User user, String name, Image image, String address, String mail, String detail, Zone zone) {
+        Restaurant restaurant = new Restaurant(user, name, image, address, mail, detail, zone);
         em.persist(restaurant);
         return restaurant;
     }
