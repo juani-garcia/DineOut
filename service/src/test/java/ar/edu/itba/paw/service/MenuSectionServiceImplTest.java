@@ -34,7 +34,7 @@ public class MenuSectionServiceImplTest {
     public void testCreateMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(restaurantService.getById(anyLong())).
+        when(restaurantService.getByUserID(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
         MenuSection menuSection = null;
@@ -62,7 +62,7 @@ public class MenuSectionServiceImplTest {
     public void testCannotCreateIfNotOwner() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(AUX_USER));
-        when(restaurantService.getById(anyLong())).
+        when(restaurantService.getByUserID(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
         Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
@@ -162,6 +162,8 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
         when(restaurantService.getById(anyLong())).
+                thenReturn(Optional.of(RESTAURANT));
+        when(restaurantService.getByUserID(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
         Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).isEmpty());

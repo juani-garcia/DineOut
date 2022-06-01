@@ -49,7 +49,7 @@
                         <c:if test="${restaurant.categories.size() != 0}">
                             <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.categories"/>:
                                 <c:forEach items="${restaurant.categories}" var="category">
-                                    <c:out value="${category} "/>
+                                    <spring:message code="${category.message}"/>
                                 </c:forEach>
                             </p>
                         </c:if>
@@ -59,7 +59,7 @@
                         </c:if>
                         <h6 class="medium text_overflow_ellipsis margin_left_auto"><i
                                 class="material-icons default_red_text left">favorite</i><c:out
-                                value="${restaurant.favCount}"/></h6>
+                                value="${restaurant.id}"/></h6>
                     </div>
                 </div>
             </a>
