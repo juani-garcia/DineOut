@@ -41,9 +41,22 @@
                                 value="${restaurant.zone.name}"/></h6>
                     </div>
                     <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
-                    <div class="flex_row">
+                    <c:if test="${restaurant.categories.size() != 0}">
                         <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
                             <c:out value="${restaurant.address}"/></p>
+                    </c:if>
+                    <div class="flex_row">
+                        <c:if test="${restaurant.categories.size() != 0}">
+                            <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.categories"/>:
+                                <c:forEach items="${restaurant.categories}" var="category">
+                                    <c:out value="${category} "/>
+                                </c:forEach>
+                            </p>
+                        </c:if>
+                        <c:if test="${restaurant.categories.size() == 0}">
+                            <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
+                                <c:out value="${restaurant.address}"/></p>
+                        </c:if>
                         <h6 class="medium text_overflow_ellipsis margin_left_auto"><i
                                 class="material-icons default_red_text left">favorite</i><c:out
                                 value="${restaurant.favCount}"/></h6>
