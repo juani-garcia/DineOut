@@ -5,6 +5,8 @@ import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.ImageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
@@ -17,6 +19,7 @@ public class ImageServiceImpl implements ImageService {
         this.imageDao = imageDao;
     }
 
+    @Transactional
     @Override
     public Image create(final byte[] source) {
         return imageDao.create(source);
@@ -27,12 +30,14 @@ public class ImageServiceImpl implements ImageService {
         return imageDao.getById(id);
     }
 
+    @Transactional
     @Override
     public void edit(final long id, final byte[] source) {
         Image image = getById(id).orElseThrow(NotFoundException::new);
         image.setSource(source);
     }
 
+    @Transactional
     @Override
     public void delete(final long id) {
         imageDao.delete(id);
