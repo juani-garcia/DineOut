@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
@@ -10,8 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,10 +45,11 @@ public class ReservationHibernateDao implements ReservationDao {
         String baseQuery = "FROM (SELECT * FROM restaurant, reservation WHERE restaurant.id = reservation.restaurant_id) as rr " +
                 "LEFT OUTER JOIN account ON rr.user_mail = account.username " +
                 "WHERE username = :username " +
-                "AND date_time " + cmp + " now() " +
-                "ORDER BY date_time, rr.name ";
+                "AND date_time " + cmp + " now() ";
 
-        String idsQuery = "SELECT rr.id " + baseQuery + "LIMIT :limit OFFSET :offset";
+        String idsQuery = "SELECT rr.id " + baseQuery +
+                "ORDER BY rr.date_time, rr.name " +
+                "LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("username", username);
         query.setParameter("limit", PAGE_SIZE);
@@ -61,13 +63,13 @@ public class ReservationHibernateDao implements ReservationDao {
         query = em.createNativeQuery(countQuery);
         query.setParameter("username", username);
         @SuppressWarnings("unchecked")
-        long count = ((Integer) query.getResultList().stream().findFirst().orElse(0)).longValue();
+        long count = ((BigInteger) query.getResultList().stream().findFirst().orElse(0)).longValue();
 
         if (ids.isEmpty())
             return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Reservation> reservations =
-                em.createQuery("from Reservation where id IN :ids", Reservation.class);
+                em.createQuery("from Reservation as r where r.id IN :ids", Reservation.class);
         reservations.setParameter("ids", ids);
 
         return new PagedQuery<>(reservations.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
@@ -97,13 +99,13 @@ public class ReservationHibernateDao implements ReservationDao {
         query = em.createNativeQuery(countQuery);
         query.setParameter("restaurantId", restaurantId);
         @SuppressWarnings("unchecked")
-        long count = ((Integer) query.getResultList().stream().findFirst().orElse(0)).longValue();
+        long count = ((BigInteger) query.getResultList().stream().findFirst().orElse(0)).longValue();
 
         if (ids.isEmpty())
             return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Reservation> reservations =
-                em.createQuery("from Reservation where id IN :ids", Reservation.class);
+                em.createQuery("from Reservation as r where r.id IN :ids", Reservation.class);
         reservations.setParameter("ids", ids);
 
         return new PagedQuery<>(reservations.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
