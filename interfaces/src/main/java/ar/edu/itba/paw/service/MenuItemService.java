@@ -13,11 +13,11 @@ public interface MenuItemService {
 
     MenuItem create(String name, String detail, double price, long sectionId, byte[] imageBytes);
 
-    boolean delete(long itemId);
+    void delete(long itemId);
 
-    boolean edit(long itemId, String name, String detail, double price, long sectionId, byte[] imageBytes);
+    void edit(long menuItemId, String name, String detail, double price, long menuSectionId, byte[] imageBytes);
 
-    boolean moveUp(final long itemId);
+    void moveUp(final long itemId);
 
-    boolean moveDown(final long itemId);
+    void moveDown(final long itemId);
 }

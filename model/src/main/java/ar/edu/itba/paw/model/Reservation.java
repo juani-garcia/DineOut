@@ -1,22 +1,58 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Reservation {
-    private final long reservationId;
-    private final int amount;
-    private final LocalDateTime dateTime;
-    private final String comments;
-    private final Restaurant restaurant;
-    private final boolean isConfirmed;
-    private final User owner;
 
-    public Reservation(long reservationId, int amount, LocalDateTime dateTime,
-                          String comments, Restaurant restaurant, User owner, boolean isConfirmed) {
-        this.reservationId = reservationId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_reservation_id_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "reservation_reservation_id_seq", name = "reservation_reservation_id_seq")
+    @Column(name = "reservation_id")
+    private Long id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_mail", referencedColumnName = "username", nullable = false)
+    private User owner;
+
+    @Column(nullable = false)
+    private int amount;
+
+    @Basic
+    @Column(name = "date_time", nullable = false,
+    columnDefinition = "timestamp") // TODO: Try to remove
+    private LocalDateTime dateTime;
+
+    @Column
+    private String comments;
+
+    @Column(name = "is_confirmed", nullable = false)
+    private boolean isConfirmed;
+
+    Reservation() {
+    }
+
+    public Reservation(Restaurant restaurant, User owner, int amount, LocalDateTime dateTime, String comments) {
+        this.restaurant = restaurant;
+        this.owner = owner;
+        this.amount = amount;
+        this.dateTime = dateTime;
+        this.comments = comments;
+        this.isConfirmed = false;
+    }
+
+    @Deprecated
+    /* Only for testing purposes */
+    public Reservation(long id, Restaurant restaurant, User owner, int amount, LocalDateTime dateTime, String comments, boolean isConfirmed) {
+        this.id = id;
         this.amount = amount;
         this.dateTime = dateTime;
         this.owner = owner;
@@ -29,8 +65,8 @@ public class Reservation {
         return restaurant;
     }
 
-    public long getReservationId() {
-        return reservationId;
+    public long getId() {
+        return id;
     }
 
     public long getRestaurantId() {
@@ -72,4 +108,9 @@ public class Reservation {
     public boolean getIsConfirmed() {
         return isConfirmed;
     }
+
+    public void confirm() {
+        isConfirmed = true;
+    }
+
 }

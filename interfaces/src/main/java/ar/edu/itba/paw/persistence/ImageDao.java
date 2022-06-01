@@ -10,8 +10,6 @@ public interface ImageDao {
 
     Optional<Image> getById(final long id);
 
-    boolean edit(final long id, final byte[] source);
-
-    boolean delete(final long id);
+    void delete(final long id);
 
 }

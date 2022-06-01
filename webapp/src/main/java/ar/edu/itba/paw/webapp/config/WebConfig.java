@@ -11,13 +11,16 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,6 +33,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -67,6 +71,8 @@ public class WebConfig {
     private Resource schemaSql8;
     @Value("classpath:sql/schema9.sql")
     private Resource schemaSql9;
+    @Value("classpath:sql/schema10.sql")
+    private Resource schemaSql10;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -76,6 +82,27 @@ public class WebConfig {
         resolver.setSuffix(".jsp");
 
         return resolver;
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPackagesToScan("ar.edu.itba.paw.model");
+        factoryBean.setDataSource(dataSource());
+
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        factoryBean.setJpaVendorAdapter(vendorAdapter);
+
+        final Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+
+        // TODO: Si ponen esto en prod, hay tabla!!!
+        properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("format_sql", env.getProperty("format_sql"));
+
+        factoryBean.setJpaProperties(properties);
+        return factoryBean;
     }
 
     @Bean
@@ -90,6 +117,7 @@ public class WebConfig {
         return ds;
     }
 
+    // TODO: Check if necessary after ORM migration
     @Bean
     public DataSourceInitializer dataSourceInitializer() {
         DataSourceInitializer dsi = new DataSourceInitializer();
@@ -98,18 +126,19 @@ public class WebConfig {
         return dsi;
     }
 
+    // TODO: Check if necessary after ORM migration
     @Bean
     public DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScripts(schemaSql, schemaSql2, schemaSql3,
                 schemaSql4, schemaSql5, schemaSql6, schemaSql7,
-                schemaSql8, schemaSql9);
+                schemaSql8, schemaSql9, schemaSql10);
         return populator;
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
     }
 
     @Bean

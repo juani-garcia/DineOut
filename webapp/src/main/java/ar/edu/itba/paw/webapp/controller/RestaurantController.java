@@ -1,14 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.model.MenuItem;
-import ar.edu.itba.paw.model.MenuSection;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
@@ -40,12 +35,6 @@ public class RestaurantController {
     private MenuItemService menuItemService;
 
     @Autowired
-    private ShiftService shiftService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private SecurityService securityService;
 
     @Autowired
@@ -65,7 +54,7 @@ public class RestaurantController {
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
-        mav.addObject("shifts", shiftService.getByRestaurantId(restaurant.getId()));
+        mav.addObject("shifts", restaurant.getShifts());
         return mav;
     }
 
@@ -106,9 +95,9 @@ public class RestaurantController {
         form.setEmail(restaurant.getMail());
         form.setDetail(restaurant.getDetail());
         form.setZone(restaurant.getZone().getName());
-        form.setCategories(categoryService.getByRestaurantId(restaurant.getId()).
+        form.setCategories(restaurant.getCategories().
                 stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
-        form.setShifts(shiftService.getByRestaurantId(restaurant.getId()).
+        form.setShifts(restaurant.getShifts().
                 stream().mapToLong(Shift::getId).boxed().collect(Collectors.toList()));
 
         return mav;
@@ -128,11 +117,6 @@ public class RestaurantController {
             throw new  IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
-
-        System.out.println(image.toString());
-        System.out.println(image);
-
-
         restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts(), image);
 
         return new ModelAndView("redirect:/restaurant");
@@ -150,8 +134,7 @@ public class RestaurantController {
             return sectionForm(form);
         }
 
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
-        menuSectionService.create(restaurant.getId(), form.getName());
+        menuSectionService.create(form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
 
@@ -213,7 +196,7 @@ public class RestaurantController {
         try {
             image = form.getImage().getBytes();
         } catch (IOException e) {
-            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+            throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
         MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
@@ -232,7 +215,7 @@ public class RestaurantController {
         form.setName(menuItem.getName());
         form.setDetail(menuItem.getDetail());
         form.setPrice(menuItem.getPrice());
-        form.setMenuSectionId(menuItem.getSectionId());
+        form.setMenuSectionId(menuItem.getSection().getId());
         return mav;
     }
 
@@ -281,7 +264,7 @@ public class RestaurantController {
         mav.addObject("restaurant", restaurant);
         mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
-        mav.addObject("shifts", shiftService.getByRestaurantId(resId));
+        mav.addObject("shifts", restaurant.getShifts());
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
         return mav;
@@ -291,13 +274,15 @@ public class RestaurantController {
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
-        long pages = reservationService.getPagesCountForCurrentRestaurant(past);
+        PagedQuery<Reservation> reservationPagedQuery =
+                reservationService.getAllForCurrentRestaurant(page, past);
+        long pages = reservationPagedQuery.getPageCount();
         if (page != 1 && pages < page) return new ModelAndView("redirect:/restaurant/reservations" + "?page=" + pages);
 
         ModelAndView mav = new ModelAndView("restaurant/reservations");
         mav.addObject("past", past);
         mav.addObject("pages", pages);
-        mav.addObject("reservations", reservationService.getAllForCurrentRestaurant(page, past));
+        mav.addObject("reservations", reservationPagedQuery.getContent());
         return mav;
     }
 

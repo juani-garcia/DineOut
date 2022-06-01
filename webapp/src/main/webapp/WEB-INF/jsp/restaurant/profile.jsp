@@ -25,9 +25,9 @@
                         </a>
                     </h1>
                 </div>
-                <c:if test="${restaurant.imageId != null}">
+                <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
-                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
@@ -88,7 +88,7 @@
                     <c:forEach items="${sections}" var="section">
                         <div class="flex_row">
                             <h4 class="groovy bold margin_right_auto"><c:out value="${section.name}"/></h4>
-                            <c:if test="${section.ordering > 1}">
+                            <c:if test="${section.ordering > 0}">
                                 <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
                                 <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
                                     <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
@@ -98,7 +98,7 @@
                                     </button>
                                 </form>
                             </c:if>
-                            <c:if test="${section.ordering < sections.size()}">
+                            <c:if test="${section.ordering < sections.size() - 1}">
                                 <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                                 <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
                                     <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
@@ -150,9 +150,9 @@
                         <c:forEach items="${section.menuItemList}" var="item">
                             <hr/>
                             <div class="card horizontal item_card">
-                                <c:if test="${item.imageId != null}">
+                                <c:if test="${item.image != null}">
                                     <div class="card-image">
-                                        <c:url value="/image/${item.imageId}" var="imagePath"/>
+                                        <c:url value="/image/${item.image.id}" var="imagePath"/>
                                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                                     </div>
                                 </c:if>
@@ -160,7 +160,7 @@
                                     <div class="flex_row">
                                         <h6 class="bold"><c:out value="${item.name}"/></h6>
                                         <p class="margin_left_auto">$ <c:out value="${item.price}"/></p>
-                                        <c:if test="${item.ordering > 1}">
+                                        <c:if test="${item.ordering > 0}">
                                             <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
                                             <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
                                                 <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"
@@ -169,7 +169,7 @@
                                                 </button>
                                             </form>
                                         </c:if>
-                                        <c:if test="${item.ordering < section.menuItemList.size()}">
+                                        <c:if test="${item.ordering < section.menuItemList.size() - 1}">
                                             <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
                                             <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
                                                 <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"

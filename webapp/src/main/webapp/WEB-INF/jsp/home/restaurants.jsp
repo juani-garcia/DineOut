@@ -15,7 +15,7 @@
         <%@include file="../search_bar.jsp" %>
     </div>
     <div class="flex_row">
-        <c:if test="${restaurants.size() == 0}">
+        <c:if test="${restaurants.content.size() == 0}">
             <div class="container">
                 <div class="card card_wrapper padding-15px default_dark">
                     <h1 class="header center default_light_text">
@@ -24,13 +24,13 @@
                 </div>
             </div>
         </c:if>
-        <c:forEach items="${restaurants}" var="restaurant">
+        <c:forEach items="${restaurants.content}" var="restaurant">
 
             <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                <c:if test="${restaurant.imageId != null}">
+                <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
-                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
@@ -41,12 +41,25 @@
                                 value="${restaurant.zone.name}"/></h6>
                     </div>
                     <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
-                    <div class="flex_row">
+                    <c:if test="${restaurant.categories.size() != 0}">
                         <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
                             <c:out value="${restaurant.address}"/></p>
+                    </c:if>
+                    <div class="flex_row">
+                        <c:if test="${restaurant.categories.size() != 0}">
+                            <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.categories"/>:
+                                <c:forEach items="${restaurant.categories}" var="category">
+                                    <spring:message code="${category.message}"/>
+                                </c:forEach>
+                            </p>
+                        </c:if>
+                        <c:if test="${restaurant.categories.size() == 0}">
+                            <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
+                                <c:out value="${restaurant.address}"/></p>
+                        </c:if>
                         <h6 class="medium text_overflow_ellipsis margin_left_auto"><i
                                 class="material-icons default_red_text left">favorite</i><c:out
-                                value="${restaurant.favCount}"/></h6>
+                                value="${restaurant.id}"/></h6>
                     </div>
                 </div>
             </a>
@@ -54,7 +67,7 @@
 
     </div>
 </div>
-<c:if test="${pages > 1}">
+<c:if test="${restaurants.pageCount > 1}">
     <div class="container flex_center" id="paginator">
         <ul class="pagination padding-15px big">
             <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
@@ -156,7 +169,7 @@
         let pageNumber = params.get("page");
         if (pageNumber == null) pageNumber = "1";
         var pageNumberElem = document.getElementById("page_number_of_total");
-        var pages = Math.ceil(<c:out value="${pages}"/>);
+        var pages = Math.ceil(<c:out value="${restaurants.pageCount}"/>);
         pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
 
         pageNumber = parseInt(pageNumber);

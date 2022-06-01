@@ -1,7 +1,9 @@
 CREATE TABLE IF NOT EXISTS account (
                                        id SERIAL PRIMARY KEY,
-                                       username TEXT NOT NULL,
+                                       username TEXT NOT NULL UNIQUE,
                                        password TEXT NOT NULL,
+                                       first_name TEXT NOT NULL DEFAULT '',
+                                       last_name TEXT NOT NULL DEFAULT '',
                                        UNIQUE(username)
 );
 
