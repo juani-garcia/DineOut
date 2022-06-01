@@ -117,11 +117,6 @@ public class RestaurantController {
             throw new  IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
-
-        System.out.println(image.toString());
-        System.out.println(image);
-
-
         restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts(), image);
 
         return new ModelAndView("redirect:/restaurant");
