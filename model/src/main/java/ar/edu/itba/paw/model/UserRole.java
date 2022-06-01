@@ -23,7 +23,7 @@ public class UserRole {
             name = "role_to_authority",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
-    private Set<RoleAuthority> authorities;
+    private Set<RoleAuthority> authorities = new HashSet<>();
 
     UserRole() {
     }

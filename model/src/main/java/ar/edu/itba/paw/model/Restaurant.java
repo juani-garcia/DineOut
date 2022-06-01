@@ -50,14 +50,14 @@ public class Restaurant {
             joinColumns = @JoinColumn(name = "restaurant_id"))
     @Column(name = "opening_hours_id")
     @Enumerated(EnumType.ORDINAL)
-    private Set<Shift> shifts;
+    private Set<Shift> shifts = new HashSet<>();
 
     @ElementCollection(targetClass = Category.class)
     @CollectionTable(name = "restaurant_category",
             joinColumns = @JoinColumn(name = "restaurant_id"))
     @Column(name = "category_id")
     @Enumerated(EnumType.ORDINAL)
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
     
     @OneToMany(mappedBy = "restaurant")
     @OrderColumn(name = "ordering")
