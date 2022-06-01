@@ -82,10 +82,9 @@ public class ReservationHibernateDao implements ReservationDao {
         String baseQuery = "FROM (SELECT * FROM restaurant, reservation WHERE restaurant.id = reservation.restaurant_id) as rr " +
                 "LEFT OUTER JOIN account ON rr.user_mail = account.username " +
                 "WHERE rr.id = :restaurantId " +
-                "AND date_time " + cmp + " now() " +
-                "ORDER BY date_time, rr.name ";
+                "AND date_time " + cmp + " now() ";
 
-        String idsQuery = "SELECT rr.id " + baseQuery + "LIMIT :limit OFFSET :offset";
+        String idsQuery = "SELECT rr.id " + baseQuery + "ORDER BY date_time, rr.name LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("restaurantId", restaurantId);
         query.setParameter("limit", PAGE_SIZE);
