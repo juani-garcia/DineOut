@@ -139,8 +139,7 @@ public class RestaurantController {
             return sectionForm(form);
         }
 
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
-        menuSectionService.create(restaurant.getId(), form.getName());
+        menuSectionService.create(form.getName());
         return new ModelAndView("redirect:/restaurant");
     }
 

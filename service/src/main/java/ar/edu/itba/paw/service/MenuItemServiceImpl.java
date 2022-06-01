@@ -44,6 +44,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuSection.getMenuItemList();
     }
 
+    @Transactional
     @Override
     public MenuItem create(final String name, final String detail,
                            final double price, final long menuSectionId, final byte[] imageBytes) {
@@ -59,6 +60,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         return menuSection.addMenuItem(name, detail, price, image);
     }
 
+    @Transactional
     @Override
     public void delete(final long menuItemId) {
         MenuItem menuItem = validateItem(menuItemId);

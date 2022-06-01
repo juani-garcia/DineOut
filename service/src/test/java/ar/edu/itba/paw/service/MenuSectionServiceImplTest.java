@@ -39,7 +39,7 @@ public class MenuSectionServiceImplTest {
 
         MenuSection menuSection = null;
         try {
-            menuSection = menuSectionService.create(RESTAURANT_ID, MENU_SECTION_NAME);
+            menuSection = menuSectionService.create(MENU_SECTION_NAME);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
@@ -55,7 +55,7 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(RESTAURANT_ID, MENU_SECTION_NAME));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class MenuSectionServiceImplTest {
         when(restaurantService.getById(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(RESTAURANT_ID, MENU_SECTION_NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
     }
 
     @Test
@@ -166,8 +166,9 @@ public class MenuSectionServiceImplTest {
 
         Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).isEmpty());
 
-        MenuSection menuSection = menuSectionService.create(RESTAURANT.getId(), MENU_SECTION_NAME); // This method is already tested so we can use it here to test the getter.
+        MenuSection menuSection = menuSectionService.create(MENU_SECTION_NAME); // This method is already tested so we can use it here to test the getter.
 
         Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).contains(menuSection));
     }
+
 }

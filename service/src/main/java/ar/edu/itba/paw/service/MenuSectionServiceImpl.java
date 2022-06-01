@@ -42,20 +42,24 @@ public class MenuSectionServiceImpl implements MenuSectionService {
         return restaurant.getMenuSectionList();
     }
 
+    @Transactional
     @Override
-    public MenuSection create(final long restaurantId, final String name) {
+    public MenuSection create(final String name) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(IllegalArgumentException::new);
-        if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
+        if (! restaurant.getUser().equals(user))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return restaurant.addMenuSection(name);
     }
 
+    @Transactional
     @Override
     public void delete(final long menuSectionId) {
         MenuSection menuSection = validateSection(menuSectionId);
         menuSectionDao.delete(menuSectionId);
     }
+
+    @Transactional
     @Override
     public void updateName(final long sectionId, final String newName) {
         MenuSection menuSection = validateSection(sectionId);
