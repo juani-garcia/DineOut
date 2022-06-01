@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.MenuSection;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.MenuSectionDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,35 +12,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
+import static ar.edu.itba.paw.service.TestValues.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MenuSectionServiceImplTest {
 
-    private static final long ID = 1;
-    private static final String NAME = "Restaurant";
-    private static final long RESTAURANT_ID = 1;
-    private static final Long ORDERING = 1L;
-
-    private static final long USER_ID = 1;
-    private static final String USER_USERNAME = "user@mail.com";
-    private static final String USER_PASSWORD = "1234567890User";
-    private static final String USER_FIRST_NAME = "John";
-    private static final String USER_LAST_NAME = "Doe";
-    private static final User USER = new User(USER_ID, USER_USERNAME,
-            USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME);
-
-    private static final String RESTAURANT_NAME = "Restaurant";
-    private static final Long RESTAURANT_IMAGE_ID = null;
-    private static final String RESTAURANT_ADDRESS = "Address";
-    private static final String RESTAURANT_MAIL = "restaurant@mail.com";
-    private static final String RESTAURANT_DETAIL = null;
-    private static final Zone RESTAURANT_ZONE = Zone.ACASSUSO;
-    private static final Long RESTAURANT_FAV_COUNT = 0L;
-    private static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID,
-            USER_ID, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
-            RESTAURANT_DETAIL, RESTAURANT_ZONE, RESTAURANT_FAV_COUNT);
 
     @InjectMocks
     private MenuSectionServiceImpl menuSectionService;
@@ -54,28 +29,25 @@ public class MenuSectionServiceImplTest {
     private RestaurantService restaurantService;
     @Mock
     private MenuSectionDao menuSectionDao;
-    @Mock
-    private MenuItemService menuItemService;
 
     @Test
     public void testCreateMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(menuSectionDao.create(anyLong(), anyString())).
-                thenReturn(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING));
-        when(restaurantService.getById(anyLong())).
+        when(restaurantService.getByUserID(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
         MenuSection menuSection = null;
         try {
-            menuSection = menuSectionService.create(RESTAURANT_ID, NAME);
+            menuSection = menuSectionService.create(MENU_SECTION_NAME);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
         }
 
         Assert.assertNotNull(menuSection);
-        Assert.assertEquals(ID, menuSection.getId());
+        Assert.assertEquals(RESTAURANT, menuSection.getRestaurant());
+        Assert.assertTrue(RESTAURANT.getMenuSectionList().contains(menuSection));
     }
 
     @Test
@@ -83,29 +55,28 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(RESTAURANT_ID, NAME));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
     }
+
     @Test
     public void testCannotCreateIfNotOwner() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
-        when(restaurantService.getById(anyLong())).
+                thenReturn(Optional.of(AUX_USER));
+        when(restaurantService.getByUserID(anyLong())).
                 thenReturn(Optional.of(RESTAURANT));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(RESTAURANT_ID, NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
     }
 
     @Test
     public void testUpdateNameMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
+                thenReturn(Optional.of(new MenuSection(MENU_SECTION_NAME, RESTAURANT)));
 
         try {
-            menuSectionService.updateName(ID, NAME);
+            menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
@@ -118,7 +89,7 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.updateName(ID, NAME));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME));
     }
 
     @Test
@@ -128,19 +99,17 @@ public class MenuSectionServiceImplTest {
         when(menuSectionService.getById(anyLong())).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(ID, NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME));
     }
 
     @Test
     public void testCannotUpdateNameIfNotOwner() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
+                thenReturn(Optional.of(AUX_USER));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
+                thenReturn(Optional.of(new MenuSection(MENU_SECTION_NAME, RESTAURANT)));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(ID, NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME));
 
     }
 
@@ -148,13 +117,11 @@ public class MenuSectionServiceImplTest {
     public void testDeleteMenuSection() {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.of(USER));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
+                thenReturn(Optional.of(new MenuSection(MENU_SECTION_NAME, RESTAURANT)));
 
         try {
-            menuSectionService.delete(ID);
+            menuSectionService.delete(MENU_SECTION_ID);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
@@ -183,15 +150,27 @@ public class MenuSectionServiceImplTest {
     @Test
     public void testCannotDeleteIfNotOwner() {
         when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(new User(USER_ID + 1, USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME)));
+                thenReturn(Optional.of(AUX_USER));
         when(menuSectionDao.getById(anyLong())).
-                thenReturn(Optional.of(new MenuSection(ID, NAME, RESTAURANT_ID, ORDERING)));
-        when(restaurantService.getById(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
+                thenReturn(Optional.of(new MenuSection(MENU_SECTION_NAME, RESTAURANT)));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(ID));
-
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.delete(MENU_SECTION_ID));
     }
 
+    @Test
+    public void testGetByRestaurantId() {
+        when(securityService.getCurrentUser()).
+                thenReturn(Optional.of(USER));
+        when(restaurantService.getById(anyLong())).
+                thenReturn(Optional.of(RESTAURANT));
+        when(restaurantService.getByUserID(anyLong())).
+                thenReturn(Optional.of(RESTAURANT));
+
+        Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).isEmpty());
+
+        MenuSection menuSection = menuSectionService.create(MENU_SECTION_NAME); // This method is already tested so we can use it here to test the getter.
+
+        Assert.assertTrue(menuSectionService.getByRestaurantId(RESTAURANT.getId()).contains(menuSection));
+    }
 
 }

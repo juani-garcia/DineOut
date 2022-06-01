@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,13 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     private RestaurantService restaurantService;
 
+    @Transactional
     @Override
     public boolean delete(long restaurantId, long userId) {
         return favoriteDao.delete(restaurantId, userId);
     }
 
+    @Transactional
     @Override
     public boolean create(long restaurantId, long userId) {
         return favoriteDao.create(restaurantId, userId);
@@ -73,12 +76,15 @@ public class FavoriteServiceImpl implements FavoriteService {
         return favoriteDao.countPagesByUserId(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
     }
 
+    @Transactional
     @Override
-    public void set(long resId, long id, boolean set) {
+    public void set(final long resId, final long id, final boolean set) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(IllegalArgumentException::new);
         if (set) {
-            create(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
+            user.getFavorites().add(restaurant);
         } else {
-            delete(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
+            user.getFavorites().remove(restaurant);
         }
     }
 }

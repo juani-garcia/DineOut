@@ -1,17 +1,49 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Entity
+@Table(name = "menu_section")
+        // uniqueConstraints = { @UniqueConstraint(columnNames = {"restaurant_id", "ordering"})})
 public class MenuSection {
 
-    private long id, restaurantId, ordering;
-    private String name;
-    private List<MenuItem> menuItemList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_section_id_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "menu_section_id_seq", name = "menu_section_id_seq")
+    private Long id;
 
-    public MenuSection(long id, String name, long restaurantId, long ordering) {
+    @Column(nullable = false)
+    private String name;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
+
+    @OrderColumn(name = "ordering", nullable = false)
+    private long ordering;
+
+    @OneToMany(mappedBy = "menuSection", cascade = CascadeType.ALL)
+    @OrderColumn(name = "ordering")
+    private List<MenuItem> menuItemList = new ArrayList<>();
+
+    MenuSection() {
+    }
+
+    public MenuSection(String name, Restaurant restaurant) {
+        this.name = name;
+        this.restaurant = restaurant;
+        this.ordering = restaurant.getMenuSectionList().size();
+    }
+
+    @Deprecated
+    /* Only for testing purposes */
+    public MenuSection(long id, String name, Restaurant restaurant, long ordering) {
         this.id = id;
         this.name = name;
-        this.restaurantId = restaurantId;
+        this.restaurant = restaurant;
         this.ordering = ordering;
     }
 
@@ -47,16 +79,35 @@ public class MenuSection {
         this.name = name;
     }
 
-    public long getRestaurantId() {
-        return restaurantId;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantId(long restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public MenuItem addMenuItem(final String name, final String detail, final double price, final Image image) {
+        final MenuItem menuItem = new MenuItem(name, detail, price, this, image);
+        this.menuItemList.add(menuItem);
+        return menuItem;
     }
 
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuSection that = (MenuSection) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

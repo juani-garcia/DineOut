@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.exceptions.ForbiddenActionException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.persistence.MenuSectionDao;
@@ -7,8 +9,11 @@ import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,62 +37,63 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     }
 
     @Override
-    public List<MenuSection> getByRestaurantId(long restaurantId) {
-        List<MenuSection> menuSectionList = menuSectionDao.getByRestaurantId(restaurantId);
-        menuSectionList.forEach((section) -> section.setMenuItemList(menuItemService.getBySectionId(section.getId())));
-        return menuSectionList;
+    public List<MenuSection> getByRestaurantId(final long restaurantId) {
+        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
+        return restaurant.getMenuSectionList();
     }
 
+    @Transactional
     @Override
-    public MenuSection create(final long restaurantId, final String name) {
+    public MenuSection create(final String name) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(IllegalArgumentException::new);
-        if (user.getId() != restaurant.getUserID())
+        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
+        if (! restaurant.getUser().equals(user))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
-        return menuSectionDao.create(restaurantId, name);
+        return restaurant.addMenuSection(name);
     }
 
+    @Transactional
     @Override
-    public boolean delete(final long sectionId) {
-        MenuSection menuSection = validateSection(sectionId);
-        return menuSectionDao.delete(sectionId);
+    public void delete(final long menuSectionId) {
+        MenuSection menuSection = validateSection(menuSectionId);
+        menuSectionDao.delete(menuSectionId);
     }
 
+    @Transactional
     @Override
-    public boolean edit(long sectionId, String name, long restaurantId, long ordering) {
-        return menuSectionDao.edit(sectionId, name, restaurantId, ordering);
+    public void updateName(final long sectionId, final String newName) {
+        MenuSection menuSection = validateSection(sectionId);
+        menuSection.setName(newName);
     }
 
-    @Override
-    public boolean updateName(final long sectionId, final String newName) {
+    private void move(final long sectionId, boolean moveUp) {
         MenuSection menuSection = validateSection(sectionId);
-        return edit(sectionId, newName, menuSection.getRestaurantId(), menuSection.getOrdering());
-    }
+        List<MenuSection> menuSectionList = menuSection.getRestaurant().getMenuSectionList();
+        final int index = menuSectionList.indexOf(menuSection);
 
-    private boolean move(final long sectionId, boolean moveUp) {
-        MenuSection menuSection = validateSection(sectionId);
-        List<MenuSection> menuSections = getByRestaurantId(menuSection.getRestaurantId());
-        if ((moveUp ? menuSection.getOrdering() <= 1 : menuSection.getOrdering() >= menuSections.size())) {
+        if ((moveUp && index == 0) || (!moveUp && index == menuSectionList.size() - 1))
             throw new IllegalArgumentException("Cannot move this section");
-        }
-        return edit(sectionId, menuSection.getName(), menuSection.getRestaurantId(), menuSection.getOrdering() + (moveUp ? -1 : 1));
+
+        Collections.swap(menuSectionList, index, index + (moveUp ? -1 : 1));
     }
 
+    @Transactional
     @Override
-    public boolean moveUp(final long sectionId) {
-        return move(sectionId, true);
+    public void moveUp(final long menuSectionId) {
+        move(menuSectionId, true);
     }
 
+    @Transactional
     @Override
-    public boolean moveDown(long sectionId) {
-        return move(sectionId, false);
+    public void moveDown(final long menuSectionId) {
+        move(menuSectionId, false);
     }
 
     protected MenuSection validateSection(final long sectionId) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         MenuSection menuSection = getById(sectionId).orElseThrow(IllegalArgumentException::new);
-        Restaurant restaurant = restaurantService.getById(menuSection.getRestaurantId()).orElseThrow(IllegalStateException::new);
-        if (user.getId() != restaurant.getUserID())
+        Restaurant restaurant = menuSection.getRestaurant();
+        if (!Objects.equals(user.getId(), restaurant.getUser().getId()))
             throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return menuSection;
     }

@@ -11,16 +11,14 @@ public interface MenuSectionService {
 
     List<MenuSection> getByRestaurantId(long restaurantId);
 
-    MenuSection create(final long restaurantId, String name);
+    MenuSection create(String name);
 
-    boolean delete(long sectionId);
+    void delete(long sectionId);
 
-    boolean edit(long sectionId, String name, long restaurantId, long ordering);
+    void updateName(long sectionId, String newName);
 
-    boolean updateName(long sectionId, String newName);
+    void moveUp(final long sectionId);
 
-    boolean moveUp(final long sectionId);
-
-    boolean moveDown(final long sectionId);
+    void moveDown(final long sectionId);
 
 }

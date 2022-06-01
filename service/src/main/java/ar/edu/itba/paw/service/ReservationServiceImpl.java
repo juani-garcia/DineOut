@@ -1,18 +1,15 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.persistence.ReservationDao;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,17 +25,15 @@ public class ReservationServiceImpl implements ReservationService {
     private EmailService emailService;
 
     @Autowired
-    private ShiftService shiftService;
-
-    @Autowired
     private SecurityService securityService;
 
+    @Transactional
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
 
-        if (!Shift.belongs(shiftService.getByRestaurantId(restaurantId), LocalTime.from(dateTime))) {
+        if (!Shift.belongs(restaurant.getShifts(), LocalTime.from(dateTime))) {
             throw new InvalidTimeException();
         }
 
@@ -53,7 +48,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> getAllForCurrentUser(int page, boolean past) {
+    public PagedQuery<Reservation> getAllForCurrentUser(int page, boolean past) {
         String username = securityService.getCurrentUsername();
         if (username == null) throw new UnauthenticatedUserException();
 
@@ -61,13 +56,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> getAllForCurrentRestaurant(int page, boolean past) {
+    public PagedQuery<Reservation> getAllForCurrentRestaurant(int page, boolean past) {
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
         Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
 
         return reservationDao.getAllByRestaurant(self.getId(), page, past);
     }
 
+    @Transactional
     @Override
     public void delete(long reservationId) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
@@ -94,16 +90,16 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Transactional
     @Override
-    public boolean confirm(long reservationId) {
-
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
+    public void confirm(final long reservationId) {
+        final User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
+        if (!reservation.getRestaurant().getUser().equals(user))
+            throw new ForbiddenActionException();
 
-        if (reservation.getRestaurantId() != restaurant.getId() || reservation.getDateTime().isBefore(LocalDateTime.now())) {
+        if (reservation.getDateTime().isBefore(LocalDateTime.now()))
             throw new InvalidTimeException();
-        }
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
 
@@ -111,22 +107,7 @@ public class ReservationServiceImpl implements ReservationService {
         emailService.sendReservationConfirmed(reservation.getMail(),
                 owner == null? "" : owner.getFirstName(), reservation);
 
-        return reservationDao.confirm(reservation.getReservationId());
+        reservation.confirm();
     }
 
-    @Override
-    public long getPagesCountForCurrentUser(boolean past) {
-        String username = securityService.getCurrentUsername();
-        if (username == null) throw new UnauthenticatedUserException();
-
-        return reservationDao.getPagesCountForCurrentUser(username, past);
-    }
-
-    @Override
-    public long getPagesCountForCurrentRestaurant(boolean past) {
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
-
-        return reservationDao.getPagesCountForCurrentRestaurant(self, past);
-    }
 }

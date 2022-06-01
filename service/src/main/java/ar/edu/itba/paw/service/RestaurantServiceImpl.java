@@ -2,21 +2,16 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private ShiftService shiftService;
 
     @Autowired
     private RestaurantDao restaurantDao;
@@ -41,12 +36,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Restaurant> getAll(int page) {
-        return restaurantDao.getAll(page);
-    }
-
-    @Override
-    public List<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
+    public PagedQuery<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
         Category category = Category.getById(categoryId);
         Zone zone = Zone.getById(zoneId);
         Shift shift = Shift.getById(shiftId);
@@ -64,49 +54,42 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (image != null && image.length > 0) {
             restaurantImage = imageService.create(image);
         }
-        Restaurant restaurant = restaurantDao.create(user.getId(), name, (restaurantImage != null ? restaurantImage.getId() : null), address, mail, detail, zone);
-        for (Long categoryId : categories) {
-            Category category = Category.getById(categoryId);
-            categoryService.add(restaurant.getId(), category);
-        }
-        for (Long shiftId : shifts) {
-            Shift shift = Shift.getById(shiftId);
-            shiftService.add(restaurant.getId(), shift);
-        }
+        Restaurant restaurant = restaurantDao.create(user, name, restaurantImage, address, mail, detail, zone);
+        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
+        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
         return restaurant;
     }
 
+    @Transactional
     @Override
-    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
+    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
-        Long imageId = restaurant.getImageId();
-        if (imageBytes.length > 0) {
-            if (restaurant.getImageId() != null) {
-                imageService.delete(restaurant.getImageId());
+        restaurant.setName(name);
+        restaurant.setAddress(address);
+        restaurant.setMail(mail);
+        restaurant.setDetail(detail);
+        restaurant.setZone(zone);
+        Image image = restaurant.getImage();
+        if (image != null) {
+            if (imageBytes != null && imageBytes.length > 0) {
+                imageService.edit(image.getId(), imageBytes);
+            } else {
+                restaurant.setImage(null);
+                imageService.delete(image.getId());
             }
-            imageId = imageService.create(imageBytes).getId();
+        } else {
+            if (imageBytes != null && imageBytes.length > 0) {
+                restaurant.setImage(imageService.create(imageBytes));
+            }
         }
-        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone, imageId);
+        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
+        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
     }
 
     @Override
     public Optional<Restaurant> getByUserID(long id) {
         return restaurantDao.getByUserId(id);
-    }
-
-    @Override
-    public Long getCount() {
-        return restaurantDao.getCount();
-    }
-
-    @Override
-    public Long getFilteredCount(String name, int categoryId, int shiftId, int zoneId) {
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.getFilteredCount(name, category, shift, zone);
     }
 
     private Restaurant getRecommendedOfLoggedUser() {
@@ -119,14 +102,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         for (
                 Restaurant favRestaurant : restaurantFavoriteList) {
             zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(favRestaurant.getZone(), 0) + 1);
-            for (Category category : categoryService.getByRestaurantId(favRestaurant.getId())) {
+            for (Category category : favRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
         for (
                 Restaurant resRestaurant : restaurantReservedList) {
             zoneIntegerHashMap.put(resRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(resRestaurant.getZone(), 0) + 1);
-            for (Category category : categoryService.getByRestaurantId(resRestaurant.getId())) {
+            for (Category category : resRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
@@ -176,7 +159,9 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
         if (!restaurantReservedList.isEmpty())
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        return restaurantDao.getAll(1).stream().findFirst().orElseThrow(IllegalStateException::new);
+        return restaurantDao.filter(1, null, null, null, null)
+                .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
+        // TODO: @JeroBrave Customize exception
     }
 
     @Override
@@ -186,15 +171,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         } else {
             return getRecommended();
         }
-    }
-
-    @Override
-    public long getFilteredPagesCount(String name, int categoryId, int shiftId, int zoneId) {
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.getFilteredPagesCount(name, category, shift, zone);
     }
 
     @Override

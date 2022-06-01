@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,17 +13,9 @@ public interface RestaurantDao {
 
     Optional<Restaurant> getByUserId(long id);
 
-    List<Restaurant> getAll(int page);
+    PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone);
 
-    List<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone);
-
-    Restaurant create(final long userID, final String name, final Long imageId, final String address, final String mail, final String detail, final Zone zone);
-
-    boolean update(final long restaurantId, final String name, final String address, final String mail, final String detail, final Zone zone, final Long imageId);
-
-    Long getCount();
-
-    Long getFilteredCount(String name, Category category, Shift shift, Zone zone);
+    Restaurant create(final User user, final String name, final Image image, final String address, final String mail, final String detail, final Zone zone);
 
     List<Restaurant> getTopTenByFavorite();
 
@@ -35,8 +24,6 @@ public interface RestaurantDao {
     List<Restaurant> getTopTenByFavoriteOfUser(long userId);
 
     List<Restaurant> getTopTenByReservationsOfUser(String username);
-
-    long getFilteredPagesCount(String name, Category category, Shift shift, Zone zone);
 
     List<Restaurant> getTopTenByZone(Zone key);
 

@@ -1,20 +1,59 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "menu_item")
+        // uniqueConstraints = { @UniqueConstraint(columnNames = {"section_id", "ordering"}) })
 public class MenuItem {
 
-    private String name, detail;
-    private double price;
-    private long sectionId, id, ordering;
-    private Long imageId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_item_id_seq")
+    @SequenceGenerator(allocationSize = 1, sequenceName = "menu_item_id_seq", name = "menu_item_id_seq")
+    private Long id;
 
-    public MenuItem(long id, String name, String detail, double price, long sectionId, long ordering, Long imageId) {
+    @Column(nullable = false)
+    private String name;
+
+    @Column
+    private String detail;
+
+    @Column(nullable = false)
+    private double price;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "section_id", nullable = false)
+    private MenuSection menuSection;
+
+    @Column(nullable = false)
+    private long ordering;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
+    MenuItem() {
+    }
+
+    public MenuItem(String name, String detail, double price, MenuSection menuSection, Image image) {
+        this.name = name;
+        this.detail = detail;
+        this.price = price;
+        this.menuSection = menuSection;
+        this.ordering = menuSection.getMenuItemList().size();
+        this.image = image;
+    }
+
+    @Deprecated
+    /* Only for testing purposes */
+    public MenuItem(long id, String name, String detail, double price, MenuSection section, long ordering, Image image) {
         this.id = id;
         this.name = name;
         this.detail = detail;
         this.price = price;
-        this.sectionId = sectionId;
+        this.menuSection = section;
         this.ordering = ordering;
-        this.imageId = imageId;
+        this.image = image;
     }
 
     public long getOrdering() {
@@ -57,20 +96,20 @@ public class MenuItem {
         this.price = price;
     }
 
-    public long getSectionId() {
-        return sectionId;
+    public MenuSection getSection() {
+        return menuSection;
     }
 
-    public void setSectionId(long sectionId) {
-        this.sectionId = sectionId;
+    public void setSection(MenuSection menuSection) {
+        this.menuSection = menuSection;
     }
 
-    public Long getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageId(Long imageId) {
-        this.imageId = imageId;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     @Override

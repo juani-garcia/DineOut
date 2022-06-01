@@ -5,11 +5,11 @@ CREATE TABLE IF NOT EXISTS account_role (
     );
 
 CREATE TABLE IF NOT EXISTS account_to_role (
-                                               id SERIAL PRIMARY KEY,
                                                user_id INTEGER NOT NULL,
                                                role_id INTEGER NOT NULL,
                                                FOREIGN KEY (user_id) REFERENCES account(id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES account_role(id) ON DELETE CASCADE
+    FOREIGN KEY (role_id) REFERENCES account_role(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role_id)
     );
 
 CREATE TABLE IF NOT EXISTS role_authorities (
@@ -19,11 +19,11 @@ CREATE TABLE IF NOT EXISTS role_authorities (
     );
 
 CREATE TABLE IF NOT EXISTS role_to_authority (
-                                                 id SERIAL PRIMARY KEY,
-                                                 authority_id INTEGER NOT NULL,
-                                                 role_id INTEGER NOT NULL,
-                                                 FOREIGN KEY (authority_id) REFERENCES role_authorities(id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES account_role(id) ON DELETE CASCADE
+    authority_id INTEGER NOT NULL,
+    role_id INTEGER NOT NULL,
+    FOREIGN KEY (authority_id) REFERENCES role_authorities(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES account_role(id) ON DELETE CASCADE,
+    PRIMARY KEY (authority_id, role_id)
     );
 
 INSERT INTO account_role(id, role_name) SELECT 1, 'ADMIN' WHERE NOT EXISTS (SELECT id FROM account_role WHERE role_name='ADMIN') RETURNING id;
@@ -38,11 +38,11 @@ INSERT INTO role_authorities(id, authority_name) SELECT 4, 'canEditMenu' WHERE N
 INSERT INTO role_authorities(id, authority_name) SELECT 5, 'canViewRestaurant' WHERE NOT EXISTS (SELECT id FROM role_authorities WHERE authority_name='canViewRestaurant') RETURNING id;
 INSERT INTO role_authorities(id, authority_name) SELECT 6, 'canEditRestaurantDetails' WHERE NOT EXISTS (SELECT id FROM role_authorities WHERE authority_name='canEditRestaurantDetails') RETURNING id;
 
-INSERT INTO role_to_authority(id, role_id, authority_id) SELECT 1, 2, 1 WHERE NOT EXISTS (SELECT id FROM role_to_authority WHERE role_id=2 AND authority_id=1) RETURNING id; -- Role RESTAURANT canCreateRestaurant
-INSERT INTO role_to_authority(id, role_id, authority_id) SELECT 2, 2, 4 WHERE NOT EXISTS (SELECT id FROM role_to_authority WHERE role_id=2 AND authority_id=4) RETURNING id; -- Role RESTAURANT canEditMenu
-INSERT INTO role_to_authority(id, role_id, authority_id) SELECT 3, 2, 6 WHERE NOT EXISTS (SELECT id FROM role_to_authority WHERE role_id=2 AND authority_id=6) RETURNING id; -- Role RESTAURANT canEditRestaurantDetails
+INSERT INTO role_to_authority(role_id, authority_id) SELECT 2, 1 WHERE NOT EXISTS (SELECT (role_id, authority_id) FROM role_to_authority WHERE role_id=2 AND authority_id=1) RETURNING *; -- Role RESTAURANT canCreateRestaurant
+INSERT INTO role_to_authority(role_id, authority_id) SELECT 2, 4 WHERE NOT EXISTS (SELECT (role_id, authority_id) FROM role_to_authority WHERE role_id=2 AND authority_id=4) RETURNING *; -- Role RESTAURANT canEditMenu
+INSERT INTO role_to_authority(role_id, authority_id) SELECT 2, 6 WHERE NOT EXISTS (SELECT (role_id, authority_id) FROM role_to_authority WHERE role_id=2 AND authority_id=6) RETURNING *; -- Role RESTAURANT canEditRestaurantDetails
 
-INSERT INTO role_to_authority(id, role_id, authority_id) SELECT 4, 3, 3 WHERE NOT EXISTS (SELECT id FROM role_to_authority WHERE role_id=3 AND authority_id=3) RETURNING id; -- Role DINER canReserveTable
+INSERT INTO role_to_authority(role_id, authority_id) SELECT 3, 3 WHERE NOT EXISTS (SELECT (role_id, authority_id) FROM role_to_authority WHERE role_id=3 AND authority_id=3) RETURNING *; -- Role DINER canReserveTable
 
-INSERT INTO role_to_authority(id, role_id, authority_id) SELECT 5, 4, 2 WHERE NOT EXISTS (SELECT id FROM role_to_authority WHERE role_id=4 AND authority_id=2) RETURNING id; -- Role BASIC_USER canEditUserDetails
-INSERT INTO role_to_authority(id, role_id, authority_id) SELECT 6, 4, 5 WHERE NOT EXISTS (SELECT id FROM role_to_authority WHERE role_id=4 AND authority_id=5) RETURNING id; -- Role BASIC_USER canViewRestaurant
+INSERT INTO role_to_authority(role_id, authority_id) SELECT 4, 2 WHERE NOT EXISTS (SELECT (role_id, authority_id) FROM role_to_authority WHERE role_id=4 AND authority_id=2) RETURNING *; -- Role BASIC_USER canEditUserDetails
+INSERT INTO role_to_authority(role_id, authority_id) SELECT 4, 5 WHERE NOT EXISTS (SELECT (role_id, authority_id) FROM role_to_authority WHERE role_id=4 AND authority_id=5) RETURNING *; -- Role BASIC_USER canViewRestaurant

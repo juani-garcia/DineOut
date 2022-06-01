@@ -20,14 +20,14 @@
                         <c:out value="${restaurant.name}"/>
                         <c:url value="/restaurant/edit" var="editUrl"/>
                         <a class="btn-large waves-effect waves-light btn-floating default_red"
-                           href="${editUrl}">
+                           style="margin-left: 20px" href="${editUrl}">
                             <i class="material-icons left">edit</i>
                         </a>
                     </h1>
                 </div>
-                <c:if test="${restaurant.imageId != null}">
+                <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
-                        <c:url value="/image/${restaurant.imageId}" var="imagePath"/>
+                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
@@ -88,7 +88,7 @@
                     <c:forEach items="${sections}" var="section">
                         <div class="flex_row">
                             <h4 class="groovy bold margin_right_auto"><c:out value="${section.name}"/></h4>
-                            <c:if test="${section.ordering > 1}">
+                            <c:if test="${section.ordering > 0}">
                                 <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
                                 <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
                                     <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
@@ -98,7 +98,7 @@
                                     </button>
                                 </form>
                             </c:if>
-                            <c:if test="${section.ordering < sections.size()}">
+                            <c:if test="${section.ordering < sections.size() - 1}">
                                 <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                                 <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
                                     <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
@@ -117,10 +117,10 @@
 
 
                             <a class="btn-large waves-effect waves-light btn-floating default_red modal-trigger"
-                               href="#delete_section_confirm_modal">
+                               href="#delete_section_confirm_modal_${section.id}">
                                 <i class="material-icons left">delete</i>
                             </a>
-                            <div id="delete_section_confirm_modal" class="modal confirm_delete_modal_height">
+                            <div id="delete_section_confirm_modal_${section.id}" class="modal confirm_delete_modal_height">
                                 <div class="modal-content">
                                     <h4 class="center">
                                         <spring:message code="restaurant.detail.delete_section"
@@ -150,9 +150,9 @@
                         <c:forEach items="${section.menuItemList}" var="item">
                             <hr/>
                             <div class="card horizontal item_card">
-                                <c:if test="${item.imageId != null}">
+                                <c:if test="${item.image != null}">
                                     <div class="card-image">
-                                        <c:url value="/image/${item.imageId}" var="imagePath"/>
+                                        <c:url value="/image/${item.image.id}" var="imagePath"/>
                                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                                     </div>
                                 </c:if>
@@ -160,7 +160,7 @@
                                     <div class="flex_row">
                                         <h6 class="bold"><c:out value="${item.name}"/></h6>
                                         <p class="margin_left_auto">$ <c:out value="${item.price}"/></p>
-                                        <c:if test="${item.ordering > 1}">
+                                        <c:if test="${item.ordering > 0}">
                                             <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
                                             <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
                                                 <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"
@@ -169,7 +169,7 @@
                                                 </button>
                                             </form>
                                         </c:if>
-                                        <c:if test="${item.ordering < section.menuItemList.size()}">
+                                        <c:if test="${item.ordering < section.menuItemList.size() - 1}">
                                             <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
                                             <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
                                                 <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"
@@ -186,10 +186,10 @@
                                         </a>
                                         <div class="margin_l_5px">
                                             <a class="btn-small waves-effect waves-light btn-floating default_red modal-trigger"
-                                               href="#delete_item_confirm_modal">
+                                               href="#delete_item_confirm_modal_${item.id}">
                                                 <i class="material-icons left">delete</i>
                                             </a>
-                                            <div id="delete_item_confirm_modal"
+                                            <div id="delete_item_confirm_modal_${item.id}"
                                                  class="modal confirm_delete_modal_height">
                                                 <div class="modal-content">
                                                     <h4 class="center">

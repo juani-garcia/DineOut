@@ -3,7 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
-import ar.edu.itba.paw.model.UserToRole;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,20 +21,18 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleService userRoleService;
-    private final UserToRoleService userToRoleService;
     private final PasswordResetTokenService passwordResetTokenService;
     private final EmailService emailService;
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
-                           UserRoleService userRoleService, UserToRoleService userToRoleService,
+                           UserRoleService userRoleService,
                            PasswordResetTokenService passwordResetTokenService, EmailService emailService) {
 
 
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
-        this.userToRoleService = userToRoleService;
         this.passwordResetTokenService = passwordResetTokenService;
         this.emailService = emailService;
     }
@@ -55,11 +53,10 @@ public class UserServiceImpl implements UserService {
         User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
         if (user == null) return null;
 
-        Optional<UserRole> userRole;
         String role = isRestaurant ? "RESTAURANT" : "DINER";
-        userRole = userRoleService.getByRoleName(role);
-        if (!userRole.isPresent()) throw new IllegalStateException("El rol " + role + " no esta presente en la bbdd");
-        UserToRole userToRole = userToRoleService.create(user.getId(), userRole.get().getId());
+        UserRole userRole = userRoleService.getByRoleName(role)
+                .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
+        user.addRole(userRole);
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
@@ -69,36 +66,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isRestaurant(long userId) {
-        return userRoleService.hasRoleByUserId(userId, "RESTAURANT");
+        return isRole(userId, "RESTAURANT");
     }
 
     @Override
     public boolean isDiner(long userId) {
-        return userRoleService.hasRoleByUserId(userId, "DINER");
+        return isRole(userId, "DINER");
     }
 
+    private boolean isRole(long userId, String role) {
+        User user = userDao.getById(userId).orElseThrow(NotFoundException::new);
+        UserRole userRole = userRoleService.getByRoleName(role).orElseThrow(NotFoundException::new);
+        return user.getRoles().contains(userRole);
+    }
+
+    @Transactional
     @Override
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
-        PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now(), false);
+        PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
 
     }
 
     @Override
-    public Optional<User> getUserByPasswordResetToken(String token) {
+    public User getUserByPasswordResetToken(String token) {
         PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).orElseThrow(IllegalStateException::new);
-        return getById(passwordResetToken.getUserId());
+        return passwordResetToken.getUser();
     }
 
     @Override
+    @Transactional
     public void changePasswordByUserToken(String token, String newPassword) {
-        User user = getUserByPasswordResetToken(token).orElseThrow(IllegalStateException::new);
-        if (userDao.updatePassword(passwordEncoder.encode(newPassword), user.getId())) {
-            passwordResetTokenService.setUsed(token);
-        }
-
+        User user = getUserByPasswordResetToken(token);
+        user.setPassword(passwordEncoder.encode(newPassword));  // TODO: Check if not changed?
+        passwordResetTokenService.setUsed(token);
     }
 
 }
