@@ -2,7 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.persistence.*;
+import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -149,6 +149,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
         return restaurantDao.filter(1, null, null, null, null)
                 .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
+        // TODO: @JeroBrave Customize exception
     }
 
     @Override
