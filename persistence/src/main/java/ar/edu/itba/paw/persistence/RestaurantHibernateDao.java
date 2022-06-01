@@ -52,7 +52,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((BigInteger) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*)\n" + filter.query;

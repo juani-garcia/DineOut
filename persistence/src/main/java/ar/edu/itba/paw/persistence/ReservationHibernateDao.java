@@ -56,7 +56,7 @@ public class ReservationHibernateDao implements ReservationDao {
         query.setParameter("offset", PAGE_SIZE * (page - 1));
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((BigInteger) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*) " + baseQuery;
@@ -91,7 +91,7 @@ public class ReservationHibernateDao implements ReservationDao {
         query.setParameter("offset", PAGE_SIZE * (page - 1));
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((BigInteger) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*) " + baseQuery;
