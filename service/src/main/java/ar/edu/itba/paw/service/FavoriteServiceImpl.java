@@ -78,11 +78,13 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Transactional
     @Override
-    public void set(long resId, long id, boolean set) {
+    public void set(final long resId, final long id, final boolean set) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(IllegalArgumentException::new);
         if (set) {
-            create(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
+            user.getFavorites().add(restaurant);
         } else {
-            delete(resId, securityService.getCurrentUser().orElseThrow(IllegalArgumentException::new).getId());
+            user.getFavorites().remove(restaurant);
         }
     }
 }

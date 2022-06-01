@@ -159,7 +159,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
     @Override
     public List<Restaurant> getTopTenByZone(Zone key) {
         String sql = "SELECT id " +
-                "FROM (SELECT r.id, (SELECT count(*) FROM favorites WHERE restaurant_id = r.id) " +
+                "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +
                 "AS fav_count " +
                 "FROM restaurant r " +
                 "WHERE zone_id = :zone) restaurant_favs " +
@@ -173,13 +173,11 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByCategory(Category key) {
-        String sql = "SELECT id " +
-                "FROM (SELECT r.id, (SELECT count(*) FROM favorites WHERE restaurant_id = r.id) " +
-                "AS fav_count " +
-                "FROM restaurant r " +
-                "WHERE r.id IN (SELECT restaurant_id FROM category WHERE id = :category) restaurant_favs " +
-                "ORDER BY fav_count DESC " +
-                "LIMIT 10";
+        String sql = "SELECT id\n" +
+                "FROM restaurant r JOIN (SELECT restaurant_id, COUNT(*) AS fav_count FROM favorite GROUP BY restaurant_id) fav ON r.id = fav.restaurant_id\n" +
+                "WHERE r.id IN (SELECT restaurant_id FROM restaurant_category WHERE category_id = :category)\n" +
+                "ORDER BY fav_count DESC\n" +
+                "LIMIT 10;";
 
         Map<String, Object> params = new HashMap<>();
         params.put("category", key.getId());
