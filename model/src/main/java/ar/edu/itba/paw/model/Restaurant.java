@@ -21,12 +21,8 @@ public class Restaurant {
     private Image image;
 
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "favorite",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
-//    private Long favCount;
+//    @Formula  // TODO: ask about this.
+//    private BigDecimal favCount;
 
     @Column(name = "name")
     private String name;
