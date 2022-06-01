@@ -71,6 +71,8 @@ public class WebConfig {
     private Resource schemaSql8;
     @Value("classpath:sql/schema9.sql")
     private Resource schemaSql9;
+    @Value("classpath:sql/schema10.sql")
+    private Resource schemaSql10;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -130,7 +132,7 @@ public class WebConfig {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScripts(schemaSql, schemaSql2, schemaSql3,
                 schemaSql4, schemaSql5, schemaSql6, schemaSql7,
-                schemaSql8, schemaSql9);
+                schemaSql8, schemaSql9, schemaSql10);
         return populator;
     }
 
