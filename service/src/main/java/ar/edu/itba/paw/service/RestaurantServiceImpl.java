@@ -60,19 +60,31 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurant;
     }
 
+    @Transactional
     @Override
-    public boolean updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
+    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
-        Long imageId = restaurant.getImageId();
-        if (imageBytes.length > 0) {
-            if (restaurant.getImageId() != null) {
-                imageService.delete(restaurant.getImageId());
+        restaurant.setName(name);
+        restaurant.setAddress(address);
+        restaurant.setMail(mail);
+        restaurant.setDetail(detail);
+        restaurant.setZone(zone);
+        Image image = restaurant.getImage();
+        if (image != null) {
+            if (imageBytes != null && imageBytes.length > 0) {
+                imageService.edit(image.getId(), imageBytes);
+            } else {
+                restaurant.setImage(null);
+                imageService.delete(image.getId());
             }
-            imageId = imageService.create(imageBytes).getId();
+        } else {
+            if (imageBytes != null && imageBytes.length > 0) {
+                restaurant.setImage(imageService.create(imageBytes));
+            }
         }
+        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
         restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
-        return restaurantDao.update(restaurant.getId(), name, address, mail, detail, zone, imageId);
     }
 
     @Override

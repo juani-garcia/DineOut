@@ -113,11 +113,6 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public boolean update(long restaurantId, String name, String address, String mail, String detail, Zone zone, Long imageId) {
-        return false;
-    }
-
-    @Override
     public List<Restaurant> getTopTenByFavorite() {
         String sql = "SELECT id " +
                 "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +

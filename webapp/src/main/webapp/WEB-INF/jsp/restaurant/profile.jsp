@@ -88,7 +88,7 @@
                     <c:forEach items="${sections}" var="section">
                         <div class="flex_row">
                             <h4 class="groovy bold margin_right_auto"><c:out value="${section.name}"/></h4>
-                            <c:if test="${section.ordering > 1}">
+                            <c:if test="${section.ordering > 0}">
                                 <c:url value="/restaurant/section/${section.id}/up" var="upUrl"/>
                                 <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
                                     <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
@@ -98,7 +98,7 @@
                                     </button>
                                 </form>
                             </c:if>
-                            <c:if test="${section.ordering < sections.size()}">
+                            <c:if test="${section.ordering < sections.size() - 1}">
                                 <c:url value="/restaurant/section/${section.id}/down" var="downUrl"/>
                                 <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
                                     <button class="btn-large waves-effect waves-light btn-floating default_dark white-text"
@@ -160,7 +160,7 @@
                                     <div class="flex_row">
                                         <h6 class="bold"><c:out value="${item.name}"/></h6>
                                         <p class="margin_left_auto">$ <c:out value="${item.price}"/></p>
-                                        <c:if test="${item.ordering > 1}">
+                                        <c:if test="${item.ordering > 0}">
                                             <c:url value="/restaurant/item/${item.id}/up" var="upUrl"/>
                                             <form method="post" action="${upUrl}" class="margin_l_5px margin_r_5px">
                                                 <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"
@@ -169,7 +169,7 @@
                                                 </button>
                                             </form>
                                         </c:if>
-                                        <c:if test="${item.ordering < section.menuItemList.size()}">
+                                        <c:if test="${item.ordering < section.menuItemList.size() - 1}">
                                             <c:url value="/restaurant/item/${item.id}/down" var="downUrl"/>
                                             <form method="post" action="${downUrl}" class="margin_l_5px margin_r_5px">
                                                 <button class="btn-small waves-effect waves-light btn-floating default_dark white-text"

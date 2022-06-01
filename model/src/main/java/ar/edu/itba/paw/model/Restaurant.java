@@ -133,10 +133,28 @@ public class Restaurant {
         return menuSectionList;
     }
 
-    public MenuSection addMenuSection(final String name) {
-        final MenuSection menuSection = new MenuSection(name, this);
-        this.menuSectionList.add(menuSection);
-        return menuSection;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public void setShifts(Collection<Shift> shifts) {
@@ -147,6 +165,12 @@ public class Restaurant {
     public void setCategories(final Collection<Category> categories) {
         this.categories.clear();
         this.categories.addAll(categories);
+    }
+
+    public MenuSection addMenuSection(final String name) {
+        final MenuSection menuSection = new MenuSection(name, this);
+        this.menuSectionList.add(menuSection);
+        return menuSection;
     }
 
     @Override
