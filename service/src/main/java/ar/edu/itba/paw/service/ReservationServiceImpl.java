@@ -6,6 +6,7 @@ import ar.edu.itba.paw.persistence.ReservationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,6 +27,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private SecurityService securityService;
 
+    @Transactional
     @Override
     public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
@@ -61,6 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDao.getAllByRestaurant(self.getId(), page, past);
     }
 
+    @Transactional
     @Override
     public void delete(long reservationId) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
@@ -87,6 +90,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Transactional
     @Override
     public void confirm(final long reservationId) {
         final User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);

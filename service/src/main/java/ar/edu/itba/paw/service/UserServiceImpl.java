@@ -80,6 +80,7 @@ public class UserServiceImpl implements UserService {
         return user.getRoles().contains(userRole);
     }
 
+    @Transactional
     @Override
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
