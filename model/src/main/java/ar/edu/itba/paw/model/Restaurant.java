@@ -13,7 +13,6 @@ public class Restaurant {
     private Long id;
 
     @OneToOne(optional = false, fetch = FetchType.LAZY, orphanRemoval = true)  // TODO: cascade = CascadeType.REMOVE?
-    @MapsId("user_id")
     @JoinColumn(name = "user_id")
     private User user;
 
