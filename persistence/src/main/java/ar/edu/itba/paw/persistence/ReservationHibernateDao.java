@@ -22,7 +22,7 @@ public class ReservationHibernateDao implements ReservationDao {
     @PersistenceContext
     private EntityManager em;
 
-    private static final int PAGE_SIZE = 8;
+    private static final int PAGE_SIZE = 5;
 
     @Override
     public Reservation create(final Restaurant restaurant,
@@ -48,7 +48,7 @@ public class ReservationHibernateDao implements ReservationDao {
                 "AND date_time " + cmp + " now() ";
 
         String idsQuery = "SELECT rr.reservation_id " + baseQuery +
-                "ORDER BY rr.date_time, rr.name " +
+                "ORDER BY rr.date_time " + (past ? "DESC" : "ASC") + ", rr.name " +
                 "LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("username", username);
@@ -69,7 +69,7 @@ public class ReservationHibernateDao implements ReservationDao {
             return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Reservation> reservations =
-                em.createQuery("from Reservation as r where r.id IN :ids", Reservation.class);
+                em.createQuery("from Reservation as r where r.id IN :ids order by dateTime " + (past ? "desc" : "asc"), Reservation.class);
         reservations.setParameter("ids", ids);
 
         return new PagedQuery<>(reservations.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
@@ -84,7 +84,9 @@ public class ReservationHibernateDao implements ReservationDao {
                 "WHERE rr.id = :restaurantId " +
                 "AND date_time " + cmp + " now() ";
 
-        String idsQuery = "SELECT rr.reservation_id " + baseQuery + "ORDER BY date_time, rr.name LIMIT :limit OFFSET :offset";
+        String idsQuery = "SELECT rr.reservation_id " +
+                baseQuery +
+                "ORDER BY date_time " + (past ? "DESC" : "ASC") + ", rr.name LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
         query.setParameter("restaurantId", restaurantId);
         query.setParameter("limit", PAGE_SIZE);
@@ -104,7 +106,7 @@ public class ReservationHibernateDao implements ReservationDao {
             return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Reservation> reservations =
-                em.createQuery("from Reservation as r where r.id IN :ids", Reservation.class);
+                em.createQuery("from Reservation as r where r.id IN :ids order by dateTime " + (past ? "desc" : "asc"), Reservation.class);
         reservations.setParameter("ids", ids);
 
         return new PagedQuery<>(reservations.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
