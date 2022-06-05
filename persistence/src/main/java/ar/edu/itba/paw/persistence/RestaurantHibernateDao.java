@@ -14,6 +14,8 @@ import java.util.*;
 public class RestaurantHibernateDao implements RestaurantDao {
 
     private static final int PAGE_SIZE = 8;
+    private static final Comparator<Restaurant> FAVORITES_COMPARATOR =
+            Comparator.comparingLong(Restaurant::getFavCount).reversed();
 
     @PersistenceContext
     private EntityManager em;
@@ -40,8 +42,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
     @Override
     public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
 
-        ParametrizedQuery filter = filterBuilder(page, name, category, shift, zone);
-        String idsQuery = "SELECT id\n" + filter.query + "LIMIT :limit OFFSET :offset";
+        ParametrizedQuery filter = filterBuilder(name, category, shift, zone);
+        String idsQuery = "SELECT id\n" + filter.query + "ORDER BY fav_count DESC LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
 
         for(String key : filter.args.keySet()) {
@@ -66,18 +68,21 @@ public class RestaurantHibernateDao implements RestaurantDao {
         long count = ((BigInteger) query.getResultList().stream().findFirst().orElse(0)).longValue();
 
         if (ids.isEmpty())
-            return new PagedQuery<Restaurant>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
+            return new PagedQuery<>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
         final TypedQuery<Restaurant> restaurants =
                 em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
          restaurants.setParameter("ids", ids);
 
-        return new PagedQuery<>(restaurants.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
+         List<Restaurant> content = restaurants.getResultList();
+         content.sort(FAVORITES_COMPARATOR);
+
+        return new PagedQuery<>(content, (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
     }
 
-    private ParametrizedQuery filterBuilder(int page, String name, Category category, Shift shift, Zone zone) {
+    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone) {
         StringBuilder sql = new StringBuilder();
-        sql.append("FROM restaurant\n");
+        sql.append("FROM (SELECT restaurant.*, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
 
         Map<String, Object> args = new HashMap<>();
@@ -197,7 +202,11 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
         TypedQuery<Restaurant> restaurants = em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
         restaurants.setParameter("ids", ids);
-        return restaurants.getResultList();
+
+        List<Restaurant> content = restaurants.getResultList();
+        content.sort(FAVORITES_COMPARATOR);
+
+        return content;
     }
 
     private static class ParametrizedQuery {
