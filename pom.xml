@@ -13,7 +13,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
-        <org.springframework.security.version>5.2.2.RELEASE</org.springframework.security.version>
         <servlet-api.version>2.5</servlet-api.version>
         <jstl.version>1.2</jstl.version>
         <org.postgresql.version>42.2.5</org.postgresql.version>
@@ -201,7 +200,7 @@
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-taglibs</artifactId>
-                <version>${org.springframework.security.version}</version>
+                <version>${org.springframework.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
