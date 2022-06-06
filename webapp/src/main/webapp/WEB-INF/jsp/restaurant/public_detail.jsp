@@ -40,7 +40,8 @@
                         </c:if>
                         <% } %>
                     </h1>
-                    <h3 class="center bold text_overflow_ellipsis flex_row flex_center"><i class="material-icons default_red_text left">favorite</i><c:out
+                    <h3 class="center bold text_overflow_ellipsis flex_row flex_center"><i
+                            class="material-icons default_red_text left">favorite</i><c:out
                             value="${restaurant.favCount}"/></h3>
                 </div>
                 <c:if test="${restaurant.image != null}">
@@ -78,10 +79,16 @@
                 <div class="card-content same_width_elements">
                     <div class="container">
                         <div class="row center">
-                            <a href="<c:url value ="/reserve/${restaurant.id}"/>"
-                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                                <spring:message code="reservation.reservation.form.submit"/>
-                            </a>
+                            <div class="flex_row">
+                                <a href="<c:url value ="/reserve/${restaurant.id}"/>"
+                                   class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
+                                    <spring:message code="reservation.reservation.form.submit"/>
+                                </a>
+                                <a href="<c:url value ="/restaurant/review/${restaurant.id}"/>"
+                                   class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
+                                    <spring:message code="restaurant.add_review"/>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,6 +105,24 @@
                     </div>
                 </div>
                 <% } %>
+                <c:if test="${reviews.size() != 0}">
+                    <div class="card-content same_width_elements">
+                        <c:forEach items="${reviews}" var="review">
+                            <h1>${review.review}</h1>
+                        </c:forEach>
+                        <c:if test="${reviewPages > 1}">
+                            <div class="container flex_center" id="paginator">
+                                <ul class="pagination padding-15px big">
+                                    <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                                            class="material-icons">chevron_left</i></a></li>
+                                    <li id="page_number_of_total" class="white-text regular"></li>
+                                    <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                                            class="material-icons">chevron_right</i></a></li>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
@@ -144,5 +169,44 @@
     </div>
 </div>
 <%@ include file="../footer.jsp" %>
+<script>
+    // Set up paginator
+    document.addEventListener('DOMContentLoaded', function () {
+        const paginator = document.getElementById("paginator");
+        if (paginator === null) return;
+
+        const params = new URLSearchParams(window.location.search);
+        let pageNumber = params.get("review_page");
+        if (pageNumber == null) pageNumber = "1";
+        var pageNumberElem = document.getElementById("page_number_of_total");
+        var pages = Math.ceil(<c:out value="${reviewPages}"/>);
+        pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
+
+        pageNumber = parseInt(pageNumber);
+
+        var previousPagePaginator = document.getElementById("previous_page");
+        var nextPagePaginator = document.getElementById("next_page");
+        if (pageNumber === 1) {
+            previousPagePaginator.className = "disabled default_dark_text";
+        } else {
+            previousPagePaginator.onclick = function () {
+                pageNumber = pageNumber - 1;
+                params.set("review_page", pageNumber.toString());
+                previousPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
+            }
+        }
+
+
+        if (pageNumber === pages) {
+            nextPagePaginator.className = "disabled default_dark_text";
+        } else {
+            nextPagePaginator.onclick = function () {
+                pageNumber = pageNumber + 1;
+                params.set("review_page", pageNumber.toString());
+                nextPagePaginator.children.item(0).attributes.getNamedItem("href").value = "?" + params;
+            }
+        }
+    });
+</script>
 </body>
 </html>

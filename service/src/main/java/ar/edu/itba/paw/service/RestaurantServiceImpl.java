@@ -20,9 +20,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     private SecurityService securityService;
 
     @Autowired
-    private FavoriteService favoriteService;
-
-    @Autowired
     private ImageService imageService;
 
     @Override
