@@ -57,6 +57,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public PagedQuery<Reservation> getAllForCurrentRestaurant(int page, boolean past) {
+        if (page <= 0) throw new InvalidPageException();
+
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
         Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
 

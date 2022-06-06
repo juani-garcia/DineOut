@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public PagedQuery<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
+        if (page <= 0) throw new InvalidPageException();
+
         Category category = Category.getById(categoryId);
         Zone zone = Zone.getById(zoneId);
         Shift shift = Shift.getById(shiftId);
