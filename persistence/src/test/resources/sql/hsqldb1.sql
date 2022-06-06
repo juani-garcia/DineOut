@@ -10,9 +10,13 @@ CREATE TABLE IF NOT EXISTS account (
 CREATE TABLE IF NOT EXISTS restaurant (
                                           id SERIAL PRIMARY KEY,
                                           name TEXT NOT NULL,
-                                          address TEXT NOT NULL,
+                                          image_id INTEGER,
+
+    address TEXT NOT NULL,
                                           mail TEXT UNIQUE NOT NULL,
-                                          detail TEXT NOT NULL
+                                          zone_id INTEGER DEFAULT null,
+                                          detail TEXT NOT NULL,
+                                          FOREIGN KEY (image_id) REFERENCES image (id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS reservation (
@@ -22,6 +26,7 @@ CREATE TABLE IF NOT EXISTS reservation (
                                            amount INTEGER NOT NULL,
                                            date_time TIMESTAMP NOT NULL,
                                            comments TEXT NOT NULL,
+                                           is_confirmed BOOLEAN NOT NULL DEFAULT false,
                                            PRIMARY KEY (reservation_id),
                                            FOREIGN KEY (restaurant_id) REFERENCES restaurant(id)
 );
@@ -41,7 +46,9 @@ CREATE TABLE IF NOT EXISTS menu_item (
                                          detail TEXT,
                                          price DOUBLE PRECISION NOT NULL,
                                          section_id INTEGER NOT NULL,
+                                         image_id INTEGER DEFAULT null,
                                          ordering INTEGER NOT NULL,
+                                         FOREIGN KEY (image_id) REFERENCES image(id) ON DELETE CASCADE,
                                          FOREIGN KEY (section_id) REFERENCES menu_section (id) ON DELETE CASCADE,
                                          UNIQUE (ordering, section_id)
 );
