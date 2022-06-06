@@ -304,6 +304,10 @@ public class RestaurantController {
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
+
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
+        if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
+
         PagedQuery<Reservation> reservationPagedQuery =
                 reservationService.getAllForCurrentRestaurant(page, past);
         long pages = reservationPagedQuery.getPageCount();
