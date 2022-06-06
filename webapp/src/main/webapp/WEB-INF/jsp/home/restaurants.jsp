@@ -26,7 +26,7 @@
         </c:if>
         <c:forEach items="${restaurants.content}" var="restaurant">
 
-            <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
+            <a href="<c:url value ="/restaurant/${restaurant.id}/view"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
                 <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">

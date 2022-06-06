@@ -67,6 +67,10 @@ public class PasswordResetToken {
         return isUsed;
     }
 
+    public boolean isValid() {
+        return this.getExpiryDate().isAfter(LocalDateTime.now()) && !this.isUsed();
+    }
+
     public void use() {
         isUsed = true;
     }

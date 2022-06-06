@@ -46,7 +46,7 @@ public class UserController {
     @RequestMapping(value = "/restaurant_picker")
     public ModelAndView restaurantPicker(HttpServletRequest request) {
         Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole("DINER"));
-        return new ModelAndView("redirect:/restaurant/view/" + restaurant.getId());
+        return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)

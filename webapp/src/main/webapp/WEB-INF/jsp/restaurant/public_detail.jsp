@@ -17,28 +17,28 @@
                 <div class="card-content same_width_elements">
                     <h1 class="header center bold text_overflow_ellipsis flex_row flex_center">
                         <c:out value="${restaurant.name}"/>
-                        <% if (request.isUserInRole("DINER")) { %>
-                        <c:if test="${isUserFavorite}">
-                            <c:url value="/diner/set_favorite/${restaurant.id}/false" var="setFavorite"/>
-                            <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
-                                <button class="btn-large waves-effect waves-light btn-floating default_red"
-                                        type="submit"
-                                        name="action">
-                                    <i class="material-icons left">favorite</i>
-                                </button>
-                            </form>
-                        </c:if>
-                        <c:if test="${!isUserFavorite}">
-                            <c:url value="/diner/set_favorite/${restaurant.id}/true" var="setFavorite"/>
-                            <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
-                                <button class="btn-large waves-effect waves-light btn-floating default_red"
-                                        type="submit"
-                                        name="action">
-                                    <i class="material-icons left">favorite_border</i>
-                                </button>
-                            </form>
-                        </c:if>
-                        <% } %>
+                        <sec:authorize access="hasRole('DINER')">
+                            <c:if test="${isUserFavorite}">
+                                <c:url value="/diner/favorite/${restaurant.id}/false" var="setFavorite"/>
+                                <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
+                                    <button class="btn-large waves-effect waves-light btn-floating default_red"
+                                            type="submit"
+                                            name="action">
+                                        <i class="material-icons left">favorite</i>
+                                    </button>
+                                </form>
+                            </c:if>
+                            <c:if test="${!isUserFavorite}">
+                                <c:url value="/diner/favorite/${restaurant.id}/true" var="setFavorite"/>
+                                <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
+                                    <button class="btn-large waves-effect waves-light btn-floating default_red"
+                                            type="submit"
+                                            name="action">
+                                        <i class="material-icons left">favorite_border</i>
+                                    </button>
+                                </form>
+                            </c:if>
+                        </sec:authorize>
                     </h1>
                     <h3 class="center bold text_overflow_ellipsis flex_row flex_center"><i
                             class="material-icons default_red_text left">favorite</i><c:out
@@ -75,7 +75,7 @@
                             <c:out value="${shift.end}"/></h6>
                     </c:forEach>
                 </div>
-                <% if (request.isUserInRole("DINER")) { %>
+                <sec:authorize access="hasRole('DINER')">
                 <div class="card-content same_width_elements">
                     <div class="container">
                         <div class="row center">
@@ -84,7 +84,7 @@
                                    class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
                                     <spring:message code="reservation.reservation.form.submit"/>
                                 </a>
-                                <a href="<c:url value ="/restaurant/review/${restaurant.id}"/>"
+                                <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
                                    class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
                                     <spring:message code="restaurant.add_review"/>
                                 </a>
@@ -92,8 +92,8 @@
                         </div>
                     </div>
                 </div>
-                <% } %>
-                <% if (!request.isUserInRole("RESTAURANT") && !request.isUserInRole("DINER")) { %>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
                 <div class="card-content same_width_elements">
                     <div class="container">
                         <div class="row center">
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-                <% } %>
+                </sec:authorize>
                 <c:if test="${reviews.size() != 0}">
                     <div class="card-content same_width_elements">
                         <c:forEach items="${reviews}" var="review">

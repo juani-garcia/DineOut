@@ -53,7 +53,7 @@
                 <hr/>
                 <div class="card-content default_dark_text flex_column">
                     <div class="flex_row">
-                        <a href="<c:url value ="/restaurant/view/${reservation.restaurant.id}"/>"
+                        <a href="<c:url value ="/restaurant/${reservation.restaurant.id}/view"/>"
                            class="grow_on_hover default_dark_text underline">
                             <h5 class="medium"><b><c:out
                                     value="${reservation.restaurant.name}"/>: </b></h5>
