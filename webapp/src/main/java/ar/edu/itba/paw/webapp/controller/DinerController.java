@@ -65,9 +65,9 @@ public class DinerController {
         return mav;
     }
 
-    @RequestMapping(value = "/set_favorite/{resId}/{set}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/favorite/{resId}/{set}", method = {RequestMethod.POST})
     public ModelAndView setFavorite(@PathVariable final long resId, @PathVariable final boolean set) {
         favoriteService.set(resId, securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId(), set);
-        return new ModelAndView("redirect:/restaurant/view/" + resId);
+        return new ModelAndView("redirect:/restaurant/" + resId + "/view");
     }
 }

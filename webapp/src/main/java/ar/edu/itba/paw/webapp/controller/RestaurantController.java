@@ -260,7 +260,7 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
-    @RequestMapping("/view/{resId}")
+    @RequestMapping("/{resId}/view")
     public ModelAndView reservation(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage,
                                     @PathVariable final long resId) {
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
@@ -268,7 +268,7 @@ public class RestaurantController {
         PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, resId);
         long reviewPages = restaurantReviewPagedQuery.getPageCount();
         if (reviewPage != 1 && reviewPages < reviewPage)
-            return new ModelAndView("redirect:/restaurant/view/" + resId + "?page=" + reviewPage);
+            return new ModelAndView("redirect:/restaurant/" + resId + "/view?page=" + reviewPage);
 
 
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
@@ -283,12 +283,12 @@ public class RestaurantController {
         return mav;
     }
 
-    @RequestMapping("/review/{resId}")
+    @RequestMapping("/{resId}/review")
     public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {
         return new ModelAndView("restaurant/add_review");
     }
 
-    @RequestMapping(value = "/review/{resId}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/{resId}/review", method = {RequestMethod.POST})
     public ModelAndView section(@Valid @ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form,
                                 final BindingResult errors,
                                 @PathVariable final long resId) {
@@ -297,7 +297,7 @@ public class RestaurantController {
         }
 
         restaurantReviewService.create(form.getReview(), form.getRating(), resId);
-        return new ModelAndView("redirect:/restaurant/view/" + resId);
+        return new ModelAndView("redirect:/restaurant/" + resId + "/view");
     }
 
     @RequestMapping("/reservations")

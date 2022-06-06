@@ -10,7 +10,7 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-<c:url value="/restaurant/review/${resId}" var="postPath"/>
+<c:url value="/restaurant/${resId}/review" var="postPath"/>
 <form:form id="restaurant_review_form" modelAttribute="restaurantReviewForm" action="${postPath}" method="post">
   <div class="container">
     <div class="section">

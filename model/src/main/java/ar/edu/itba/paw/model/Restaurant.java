@@ -174,28 +174,6 @@ public class Restaurant {
         return menuSection;
     }
 
-    public RestaurantReview addReview(final String review, final long rating, User user) {
-        System.out.println(this.getId());
-        System.out.println(this.getId());
-        System.out.println(this.getId());
-        System.out.println(this.getId());
-        RestaurantReview resrev = new RestaurantReview(review, rating, this, user); // TODO: should we remove this method or keep it for "consistency" (addMenuSection).
-
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AYUDA AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println(resrev.getId());
-        System.out.println(resrev.getId());
-        System.out.println(resrev.getId());
-        System.out.println(resrev.getUser());
-        System.out.println(resrev.getUser());
-        System.out.println(resrev.getUser());
-        System.out.println(resrev.getReview());
-        System.out.println(resrev.getReview());
-        System.out.println(resrev.getReview());
-        System.out.println(resrev.getReview());
-
-        return resrev;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

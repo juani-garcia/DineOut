@@ -31,7 +31,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     @Override
     public boolean hasValidToken(long userId) {
         Optional<PasswordResetToken> optionalPasswordResetToken = getByUserId(userId);
-        return optionalPasswordResetToken.map(passwordResetToken -> passwordResetToken.getExpiryDate().isAfter(LocalDateTime.now()) && !passwordResetToken.isUsed()).orElse(false);
+        return optionalPasswordResetToken.map(PasswordResetToken::isValid).orElse(false);
     }
 
     @Override
