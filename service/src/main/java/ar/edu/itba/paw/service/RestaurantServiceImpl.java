@@ -101,13 +101,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         HashMap<Category, Integer> categoryIntegerHashMap = new HashMap<>();
         for (
                 Restaurant favRestaurant : restaurantFavoriteList) {
-            zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(favRestaurant.getZone(), 0) + 1);
+            zoneIntegerHashMap.putIfAbsent(favRestaurant.getZone(), 1);
+            zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.get(favRestaurant.getZone()) + 1);
             for (Category category : favRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
         for (
                 Restaurant resRestaurant : restaurantReservedList) {
+            zoneIntegerHashMap.putIfAbsent(resRestaurant.getZone(), 1);
             zoneIntegerHashMap.put(resRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(resRestaurant.getZone(), 0) + 1);
             for (Category category : resRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
@@ -117,6 +119,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<Restaurant> randomList = new ArrayList<>();
 
         Map.Entry<Category, Integer> favCategory = categoryIntegerHashMap.entrySet().stream().findFirst().orElse(null);
+
+
         Map.Entry<Zone, Integer> favZone = zoneIntegerHashMap.entrySet().stream().findFirst().orElse(null);
 
         for (Map.Entry<Zone, Integer> zoneIntegerEntry : zoneIntegerHashMap.entrySet()) {
