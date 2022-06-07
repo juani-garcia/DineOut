@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.RestaurantReview;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantReviewDao;
@@ -32,6 +33,8 @@ public class RestaurantReviewServiceImpl implements RestaurantReviewService {
 
     @Override
     public PagedQuery<RestaurantReview> getByRestaurantId(long page, long restaurantId) {
+        if (page < 0) throw new InvalidPageException();
+
         return restaurantReviewDao.getByRestaurantId(page, restaurantId);
     }
 

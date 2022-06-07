@@ -40,9 +40,12 @@
                             </c:if>
                         </sec:authorize>
                     </h1>
-                    <h3 class="center bold text_overflow_ellipsis flex_row flex_center"><i
-                            class="material-icons default_red_text left">favorite</i><c:out
-                            value="${restaurant.favCount}"/></h3>
+                    <c:if test="${restaurant.rating != 0}">
+                        <h3 class="center bold text_overflow_ellipsis flex_row flex_center" id="star_rating">
+                            <%-- generated via JS.--%>
+                        </h3>
+                    </c:if>
+
                 </div>
                 <c:if test="${restaurant.image != null}">
                     <div class="card-image">
@@ -76,34 +79,34 @@
                     </c:forEach>
                 </div>
                 <sec:authorize access="hasRole('DINER')">
-                <div class="card-content same_width_elements">
-                    <div class="container">
-                        <div class="row center">
-                            <div class="flex_row">
-                                <a href="<c:url value ="/reserve/${restaurant.id}"/>"
+                    <div class="card-content same_width_elements">
+                        <div class="container">
+                            <div class="row center">
+                                <div class="flex_row">
+                                    <a href="<c:url value ="/reserve/${restaurant.id}"/>"
+                                       class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
+                                        <spring:message code="reservation.reservation.form.submit"/>
+                                    </a>
+                                    <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
+                                       class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
+                                        <spring:message code="restaurant.add_review"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+                    <div class="card-content same_width_elements">
+                        <div class="container">
+                            <div class="row center">
+                                <a href="<c:url value ="/register"/>"
                                    class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                                    <spring:message code="reservation.reservation.form.submit"/>
-                                </a>
-                                <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
-                                   class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
-                                    <spring:message code="restaurant.add_review"/>
+                                    <spring:message code="reservation.reservation.form.register"/>
                                 </a>
                             </div>
                         </div>
                     </div>
-                </div>
-                </sec:authorize>
-                <sec:authorize access="!isAuthenticated()">
-                <div class="card-content same_width_elements">
-                    <div class="container">
-                        <div class="row center">
-                            <a href="<c:url value ="/register"/>"
-                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
-                                <spring:message code="reservation.reservation.form.register"/>
-                            </a>
-                        </div>
-                    </div>
-                </div>
                 </sec:authorize>
                 <c:if test="${reviews.size() != 0}">
                     <div class="card-content same_width_elements">
@@ -170,6 +173,19 @@
 </div>
 <%@ include file="../footer.jsp" %>
 <script>
+    // Set up rating
+    document.addEventListener('DOMContentLoaded', function () {
+        let starRating = document.getElementById("star_rating");
+        if (starRating === null) return;
+        for (let i = 0; i < <c:out value="${restaurant.rating}"/>; i++) {
+            starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
+        }
+
+        for (let i = 0; i < 5 - <c:out value="${restaurant.rating}"/>; i++) {
+            starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
+        }
+    });
+
     // Set up paginator
     document.addEventListener('DOMContentLoaded', function () {
         const paginator = document.getElementById("paginator");

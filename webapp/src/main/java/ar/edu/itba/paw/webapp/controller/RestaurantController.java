@@ -284,7 +284,7 @@ public class RestaurantController {
     }
 
     @RequestMapping("/{resId}/review")
-    public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {
+    public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {  // resId belongs here to preserve the context for the POST
         return new ModelAndView("restaurant/add_review");
     }
 

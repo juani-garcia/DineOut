@@ -30,6 +30,9 @@ public class Restaurant {
     @Formula(value = "(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = id)")
     private Long favCount;
 
+    @Formula(value = "(SELECT FLOOR(AVG(restaurant_review.rating)) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
+    private Long rating;
+
     @Column(name = "name")
     private String name;
 
@@ -120,6 +123,10 @@ public class Restaurant {
 
     public String getMail() {
         return mail;
+    }
+
+    public Long getRating() {
+        return rating;
     }
 
     public Set<Shift> getShifts() {
