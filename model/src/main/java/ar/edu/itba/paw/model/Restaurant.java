@@ -30,7 +30,7 @@ public class Restaurant {
     @Formula(value = "(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = id)")
     private Long favCount;
 
-    @Formula(value = "(SELECT FLOOR(AVG(restaurant_review.rating)) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
+    @Formula(value = "(SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
     private Long rating;
 
     @Column(name = "name")
