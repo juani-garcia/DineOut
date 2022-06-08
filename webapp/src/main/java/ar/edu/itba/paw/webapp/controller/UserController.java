@@ -61,7 +61,7 @@ public class UserController {
             return registerForm(form);
         }
 
-        userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant());
+        userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant(), request.getRequestURL().toString().replace(request.getServletPath(), ""));
         authenticateUserAndSetSession(request, form.getUsername(), form.getPassword());
 
         return new ModelAndView("redirect:/profile");

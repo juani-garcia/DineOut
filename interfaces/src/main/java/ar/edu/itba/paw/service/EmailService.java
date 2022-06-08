@@ -5,17 +5,17 @@ import ar.edu.itba.paw.model.User;
 
 public interface EmailService {
 
-    void sendAccountCreationMail(String to, String name);
+    void sendAccountCreationMail(String to, String name, String contextPath);
 
-    void sendReservationCreatedUser(String to, String name, Reservation reservation);
+    void sendReservationCreatedUser(String to, String name, Reservation reservation, String contextPath);
 
-    void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user);
+    void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user, String contextPath);
 
-    void sendReservationCancelledUser(String to, String name, Reservation reservation);
+    void sendReservationCancelledUser(String to, String name, Reservation reservation, String contextPath);
 
-    void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user);
+    void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user, String contextPath);
 
-    void sendReservationConfirmed(String to, String name, Reservation reservation);
+    void sendReservationConfirmed(String to, String name, Reservation reservation, String contextPath);
 
-    void sendChangePassword(String to, String name, String token);
+    void sendChangePassword(String to, String name, String token, String contextPath);
 }

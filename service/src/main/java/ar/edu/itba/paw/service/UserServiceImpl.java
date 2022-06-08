@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant) {
+    public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath) {
         User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
         if (user == null) return null;
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         user.addRole(userRole);
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath);
 
         return user;
     }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
+        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath);
 
     }
 

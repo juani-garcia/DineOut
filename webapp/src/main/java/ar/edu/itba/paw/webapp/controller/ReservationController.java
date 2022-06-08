@@ -38,20 +38,20 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/create/{resId}", method = {RequestMethod.POST})
-    public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
+    public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors, HttpServletRequest request) {
 
         if (errors.hasErrors()) {
             return reservation(resId, form);
         }
 
-        reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
+        reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments(), request.getRequestURL().toString().replace(request.getServletPath(), ""));
 
         return new ModelAndView("redirect:/diner/reservations");
     }
 
     @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
     public ModelAndView delete(@PathVariable final long resId, HttpServletRequest request) {
-        reservationService.delete(resId);
+        reservationService.delete(resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         if (request.isUserInRole("DINER")) {
             return new ModelAndView("redirect:/diner/reservations");
         } else {
@@ -60,8 +60,8 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/{resId}/confirm", method = {RequestMethod.POST})
-    public ModelAndView confirm(@PathVariable final long resId) {
-        reservationService.confirm(resId);
+    public ModelAndView confirm(@PathVariable final long resId, HttpServletRequest request) {
+        reservationService.confirm(resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         return new ModelAndView("redirect:/restaurant/reservations");
     }
 
