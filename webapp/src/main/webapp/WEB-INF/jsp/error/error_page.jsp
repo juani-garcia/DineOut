@@ -26,8 +26,7 @@
                 </div>
                 <h5><spring:message code="${hint}"/></h5>
                 <h5><b><spring:message code="error.status"/>:</b> <c:out value="${code}"/></h5>
-                <h5><b><spring:message code="error.uri"/>:</b> <c:out
-                        value="${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}"/>
+                <h5 id="error_uri"><b><spring:message code="error.uri"/>:</b>
                 </h5>
                 <div class="section flex_center flex_row">
                     <button onClick="history.back()"
@@ -48,5 +47,11 @@
 </div>
 
 <%@ include file="../footer.jsp" %>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let errorTag = document.getElementById("error_uri");
+        errorTag.innerHTML = errorTag.innerHTML + " " + window.location.href;
+    });
+</script>
 </body>
 </html>

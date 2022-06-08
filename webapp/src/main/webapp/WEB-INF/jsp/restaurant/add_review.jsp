@@ -41,9 +41,14 @@
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
-                    <div class="row center">
+                    <div class="row center flex_row">
+                        <a id="back-button"
+                           class="btn-large waves-effect waves-red default_red white-text lighten-1 no-text-transform"
+                           href="javascript:{}" onclick="history.back();">
+                            <spring:message code="restaurant.edit.form.back"/>
+                        </a>
                         <button type="submit" name="action"
-                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1 margin_left_auto">
                             <spring:message code="restaurant.add_review"/>
                             <i class="material-icons right">send</i>
                         </button>

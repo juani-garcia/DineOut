@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
@@ -109,7 +109,7 @@ public class UserController {
         }
 
         User user = userService.getByUsername(passwordRecoveryForm.getUsername()).orElseThrow(NotFoundException::new);
-        userService.createPasswordResetTokenForUser(user, request.getScheme() + "://" + request.getHeader("host"));
+        userService.createPasswordResetTokenForUser(user, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         return new ModelAndView("redirect:/");
     }
 
@@ -121,6 +121,7 @@ public class UserController {
             mav.addObject("token", token);
             return mav;
         }
+
         return new ModelAndView("redirect:/login");
     }
 
