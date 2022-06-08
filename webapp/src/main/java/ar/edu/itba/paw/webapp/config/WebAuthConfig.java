@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.webapp.auth.DineOutUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,21 +71,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
                 .antMatchers("/login", "/register").anonymous()
-                .antMatchers("/restaurant/item/**").hasAuthority("canCreateRestaurant")
-                .antMatchers("/restaurant/section/**").hasAuthority("canCreateRestaurant")
-                .antMatchers("/restaurant/register").hasAuthority("canCreateRestaurant")
-                .antMatchers("/restaurant/edit").hasAuthority("canCreateRestaurant")
-                .antMatchers("/restaurant").hasRole("RESTAURANT")
-                .antMatchers("/restaurant/view/**").permitAll()
+                .antMatchers("/restaurant/item/**").hasRole(Role.RESTAURANT.getRoleName())
+                .antMatchers("/restaurant/section/**").hasRole(Role.RESTAURANT.getRoleName())
+                .antMatchers("/restaurant/register").hasRole(Role.RESTAURANT.getRoleName())
+                .antMatchers("/restaurant/edit").hasRole(Role.RESTAURANT.getRoleName())
+                .antMatchers("/restaurant").hasRole(Role.RESTAURANT.getRoleName())
+                .antMatchers("/restaurant/**/view").permitAll()
                 .antMatchers("/restaurant_picker").permitAll()
                 .antMatchers("/forgot_my_password").permitAll()
                 .antMatchers("/reset_password").permitAll()
                 .antMatchers("/change_password").permitAll()
                 .antMatchers("/save_password").permitAll()
-                .antMatchers("/reserve/**").hasAuthority("canReserveTable")
-                .antMatchers("/create/**").hasAuthority("canReserveTable")
-                .antMatchers("/reservation/**/confirm").hasRole("RESTAURANT")
-                .antMatchers("/diner/**").hasRole("DINER")
+                .antMatchers("/reserve/**").hasRole(Role.DINER.getRoleName())
+                .antMatchers("/create/**").hasRole(Role.DINER.getRoleName())
+                .antMatchers("/reservation/**/confirm").hasRole(Role.RESTAURANT.getRoleName())
+                .antMatchers("/diner/**").hasRole(Role.DINER.getRoleName())
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .usernameParameter("username")

@@ -58,4 +58,13 @@ public class TestValues {
     static final Image MENU_ITEM_IMAGE = null;
     static final MenuItem MENU_ITEM = new MenuItem(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION, MENU_ITEM_ORDERING, MENU_ITEM_IMAGE);
 
+
+    static final String RESTAURANT_REVIEW_NAME = "veri gut";
+    static final String RESTAURANT_REVIEW_NAME_2 = "veri BAT";
+    static final long RESTAURANT_REVIEW_RATING = 3;
+    static final long RESTAURANT_REVIEW_RATING_2 = 1;
+    static final long RESTAURANT_REVIEW_ID = 1;
+    static final RestaurantReview RESTAURANT_REVIEW = new RestaurantReview(RESTAURANT_REVIEW_ID, RESTAURANT_REVIEW_NAME, RESTAURANT_REVIEW_RATING, RESTAURANT, USER);
+
+
 }

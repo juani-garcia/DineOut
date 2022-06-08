@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.PasswordResetToken;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
@@ -49,29 +50,29 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant) {
+    public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath) {
         User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
         if (user == null) return null;
 
-        String role = isRestaurant ? "RESTAURANT" : "DINER";
+        String role = isRestaurant ? Role.RESTAURANT.getRoleName() : Role.DINER.getRoleName();
         UserRole userRole = userRoleService.getByRoleName(role)
                 .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
         user.addRole(userRole);
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName());
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath);
 
         return user;
     }
 
     @Override
     public boolean isRestaurant(long userId) {
-        return isRole(userId, "RESTAURANT");
+        return isRole(userId, Role.RESTAURANT.getRoleName());
     }
 
     @Override
     public boolean isDiner(long userId) {
-        return isRole(userId, "DINER");
+        return isRole(userId, Role.DINER.getRoleName());
     }
 
     private boolean isRole(long userId, String role) {
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken());
+        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath);
 
     }
 

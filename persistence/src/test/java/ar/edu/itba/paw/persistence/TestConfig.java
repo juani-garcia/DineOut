@@ -31,12 +31,8 @@ public class TestConfig {
     private Resource hsqldbSql;
     @Value("classpath:sql/hsqldb1.sql")
     private Resource hsqldbSql1;
-    @Value("classpath:sql/hsqldb2.sql")
-    private Resource hsqldbSql2;
     @Value("classpath:sql/hsqldb3.sql")
     private Resource hsqldbSql3;
-    @Value("classpath:sql/hsqldb4.sql")
-    private Resource hsqldbSql4;
     @Value("classpath:sql/hsqldb5.sql")
     private Resource hsqldbSql5;
     @Value("classpath:sql/hsqldb6.sql")
@@ -99,11 +95,9 @@ public class TestConfig {
     public DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
         dbp.addScripts(hsqldbSql,
-                hsqldbSql1, hsqldbSql2, hsqldbSql3,
-                hsqldbSql4,
+                hsqldbSql1, hsqldbSql3,
                 // hsqldbSql5, hsqldbSql6,
-                hsqldbSql7, hsqldbSql8,
-                hsqldbSql9);
+                hsqldbSql7, hsqldbSql8);
         // dbp.addScript(schemaSql);
         return dbp;
     }

@@ -34,7 +34,7 @@ public class PasswordResetToken {
     public PasswordResetToken(String token, User user, LocalDateTime expiryDate) {
         this.token = token;
         this.user = user;
-        this.expiryDate = expiryDate;
+        this.expiryDate = expiryDate.plusMinutes(EXPIRATION);
         this.isUsed = false;
     }
 
@@ -43,7 +43,7 @@ public class PasswordResetToken {
         this.id = id;
         this.token = token;
         // this.userId = userId;
-        this.expiryDate = expiryDate;
+        this.expiryDate = expiryDate.plusMinutes(EXPIRATION);
         this.isUsed = isUsed;
     }
 
@@ -65,6 +65,10 @@ public class PasswordResetToken {
 
     public boolean isUsed() {
         return isUsed;
+    }
+
+    public boolean isValid() {
+        return this.getExpiryDate().isAfter(LocalDateTime.now()) && !this.isUsed();
     }
 
     public void use() {

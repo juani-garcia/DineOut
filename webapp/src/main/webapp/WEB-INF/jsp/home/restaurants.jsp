@@ -26,7 +26,7 @@
         </c:if>
         <c:forEach items="${restaurants.content}" var="restaurant">
 
-            <a href="<c:url value ="/restaurant/view/${restaurant.id}"/>"
+            <a href="<c:url value ="/restaurant/${restaurant.id}/view"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
                 <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
@@ -57,9 +57,19 @@
                             <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
                                 <c:out value="${restaurant.address}"/></p>
                         </c:if>
-                        <h6 class="medium text_overflow_ellipsis margin_left_auto"><i
-                                class="material-icons default_red_text left">favorite</i><c:out
-                                value="${restaurant.id}"/></h6>
+                        <c:if test="${restaurant.rating != null && restaurant.rating != 0}">
+                            <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating margin_tb_0px"
+                                id="${restaurant.rating}">
+                                    <%-- generated via JS.--%>
+                            </h3>
+                            &nbsp;
+                            <h6 class="center default_light_text margin_tb_0px">(<c:out
+                                    value="${restaurant.ratingCount}"/>)</h6>
+                        </c:if>
+                        <c:if test="${!(restaurant.rating != null && restaurant.rating != 0)}">
+                            <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row">
+                            </h3>
+                        </c:if>
                     </div>
                 </div>
             </a>
@@ -81,6 +91,20 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
+    // Set up rating
+    document.addEventListener('DOMContentLoaded', function () {
+        let ratings = document.getElementsByClassName("star_rating");
+        if (ratings.length === 0) return;
+        for (let starRating = ratings.item(0), i = 0; i < ratings.length; i++, starRating = ratings.item(i)) {
+            for (let i = 0; i < starRating.id; i++) {
+                starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
+            }
+            for (let i = 0; i < 5 - starRating.id; i++) {
+                starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
+            }
+        }
+    });
+
     function defaultSelector(queryParam, options_id, select_id, params) {
         const categoryString = params.get(queryParam);
         if (categoryString != null && categoryString !== "") {
@@ -95,6 +119,9 @@
 
     function clearSearchSelection() {
         const params = new URLSearchParams(window.location.search);
+
+        params.set('name', '');
+        document.getElementById('name_filter_input').value = "";
 
         params.set('category', '');
         var categoryOption = document.getElementById('category_select_options').value;
@@ -170,7 +197,7 @@
         if (pageNumber == null) pageNumber = "1";
         var pageNumberElem = document.getElementById("page_number_of_total");
         var pages = Math.ceil(<c:out value="${restaurants.pageCount}"/>);
-        pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
+        pageNumberElem.textContent = "<spring:message code="paginator.text.main"/> " + pageNumber + " <spring:message code="paginator.text.of"/> " + pages;
 
         pageNumber = parseInt(pageNumber);
 

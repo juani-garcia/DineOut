@@ -14,6 +14,8 @@ import java.util.*;
 public class RestaurantHibernateDao implements RestaurantDao {
 
     private static final int PAGE_SIZE = 8;
+    private static final Comparator<Restaurant> RATING_FAVORITES_COMPARATOR =
+            Comparator.comparingLong(Restaurant::getRating).thenComparingLong(Restaurant::getFavCount).reversed();
 
     @PersistenceContext
     private EntityManager em;
@@ -40,25 +42,25 @@ public class RestaurantHibernateDao implements RestaurantDao {
     @Override
     public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
 
-        ParametrizedQuery filter = filterBuilder(page, name, category, shift, zone);
-        String idsQuery = "SELECT id\n" + filter.query + "LIMIT :limit OFFSET :offset";
+        ParametrizedQuery filter = filterBuilder(name, category, shift, zone);
+        String idsQuery = "SELECT id\n" + filter.query + "ORDER BY rating DESC, fav_count DESC LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
 
-        for(String key : filter.args.keySet()) {
+        for (String key : filter.args.keySet()) {
             query.setParameter(key, filter.args.get(key));
         }
         query.setParameter("limit", PAGE_SIZE);
         query.setParameter("offset", PAGE_SIZE * (page - 1));
 
         final List<Long> ids = new ArrayList<>();
-        for(Object o : query.getResultList()) {
+        for (Object o : query.getResultList()) {
             ids.add(((Integer) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*)\n" + filter.query;
         query = em.createNativeQuery(countQuery);
 
-        for(String key : filter.args.keySet()) {
+        for (String key : filter.args.keySet()) {
             query.setParameter(key, filter.args.get(key));
         }
 
@@ -66,23 +68,26 @@ public class RestaurantHibernateDao implements RestaurantDao {
         long count = ((BigInteger) query.getResultList().stream().findFirst().orElse(0)).longValue();
 
         if (ids.isEmpty())
-            return new PagedQuery<Restaurant>(new ArrayList<>(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
+            return new PagedQuery<>(new ArrayList<>(), (long) page, (count + PAGE_SIZE - 1) / PAGE_SIZE);
 
         final TypedQuery<Restaurant> restaurants =
                 em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
-         restaurants.setParameter("ids", ids);
+        restaurants.setParameter("ids", ids);
 
-        return new PagedQuery<>(restaurants.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
+        List<Restaurant> content = restaurants.getResultList();
+        content.sort(RATING_FAVORITES_COMPARATOR);
+
+        return new PagedQuery<>(content, (long) page, (count + PAGE_SIZE - 1) / PAGE_SIZE);
     }
 
-    private ParametrizedQuery filterBuilder(int page, String name, Category category, Shift shift, Zone zone) {
+    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone) {
         StringBuilder sql = new StringBuilder();
-        sql.append("FROM restaurant\n");
+        sql.append("FROM (SELECT restaurant.*, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
 
         Map<String, Object> args = new HashMap<>();
 
-        if (name != null) {
+        if (name != null && !name.equals("")) {
             sql.append("AND LOWER(name) like :name\n");
             args.put("name", '%' + name.toLowerCase() + '%');
         }
@@ -116,7 +121,10 @@ public class RestaurantHibernateDao implements RestaurantDao {
     public List<Restaurant> getTopTenByFavorite() {
         String sql = "SELECT id " +
                 "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +
-                "AS fav_count FROM restaurant r) restaurant_favs ORDER BY restaurant_favs.fav_count DESC " +
+                "AS fav_count, " +
+                "(SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM " +
+                "restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating " +
+                "FROM restaurant r) restaurant_favs ORDER BY restaurant_favs.rating DESC, restaurant_favs.fav_count DESC " +
                 "LIMIT 10";
         return makeJPAQueryFromNative(sql, null);
     }
@@ -160,10 +168,10 @@ public class RestaurantHibernateDao implements RestaurantDao {
     public List<Restaurant> getTopTenByZone(Zone key) {
         String sql = "SELECT id " +
                 "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +
-                "AS fav_count " +
+                "AS fav_count, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating " +
                 "FROM restaurant r " +
                 "WHERE zone_id = :zone) restaurant_favs " +
-                "ORDER BY fav_count DESC " +
+                "ORDER BY rating DESC, fav_count DESC " +
                 "LIMIT 10";
 
         Map<String, Object> params = new HashMap<>();
@@ -173,11 +181,14 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     @Override
     public List<Restaurant> getTopTenByCategory(Category key) {
-        String sql = "SELECT id\n" +
-                "FROM restaurant r JOIN (SELECT restaurant_id, COUNT(*) AS fav_count FROM favorite GROUP BY restaurant_id) fav ON r.id = fav.restaurant_id\n" +
-                "WHERE r.id IN (SELECT restaurant_id FROM restaurant_category WHERE category_id = :category)\n" +
-                "ORDER BY fav_count DESC\n" +
-                "LIMIT 10;";
+        String sql = "SELECT id " +
+                "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +
+                "AS fav_count, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating " +
+                "FROM restaurant r " +
+                "WHERE r.id IN (SELECT restaurant_id FROM restaurant_category WHERE category_id = :category)) restaurant_favs " +
+                "ORDER BY rating DESC, fav_count DESC " +
+                "LIMIT 10";
+
 
         Map<String, Object> params = new HashMap<>();
         params.put("category", key.getId());
@@ -187,9 +198,9 @@ public class RestaurantHibernateDao implements RestaurantDao {
     // String sql should always SELECT desired restaurants ids
     private List<Restaurant> makeJPAQueryFromNative(String sql, Map<String, Object> params) {
         Query query = em.createNativeQuery(sql);
-        if(params != null) params.forEach(query::setParameter);
+        if (params != null) params.forEach(query::setParameter);
         List<Long> ids = new ArrayList<>();
-        for(Object o : query.getResultList()) {
+        for (Object o : query.getResultList()) {
             ids.add(((Integer) o).longValue());
         }
         if (ids.isEmpty())
@@ -197,7 +208,11 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
         TypedQuery<Restaurant> restaurants = em.createQuery("from Restaurant as r where r.id IN :ids", Restaurant.class);
         restaurants.setParameter("ids", ids);
-        return restaurants.getResultList();
+
+        List<Restaurant> content = restaurants.getResultList();
+        content.sort(RATING_FAVORITES_COMPARATOR);
+
+        return content;
     }
 
     private static class ParametrizedQuery {

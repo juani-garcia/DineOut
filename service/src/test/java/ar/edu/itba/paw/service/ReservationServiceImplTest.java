@@ -39,7 +39,7 @@ public class ReservationServiceImplTest {
     public void testInvalidRestaurantId() {
         when(restaurantService.getById(anyLong())).thenReturn(Optional.empty());
 
-        Assert.assertThrows(NotFoundException.class, () -> reservationService.create(RESTAURANT_ID, RESTAURANT_MAIL, RESERVATION_AMOUNT, RESERVATION_DATETIME, RESERVATION_COMMENTS));
+        Assert.assertThrows(NotFoundException.class, () -> reservationService.create(RESTAURANT_ID, RESTAURANT_MAIL, RESERVATION_AMOUNT, RESERVATION_DATETIME, RESERVATION_COMMENTS, null));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ReservationServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(IllegalStateException.class, () -> reservationService.create(RESTAURANT_ID, RESTAURANT_MAIL, RESERVATION_AMOUNT, RESERVATION_DATETIME, RESERVATION_COMMENTS));
+        Assert.assertThrows(IllegalStateException.class, () -> reservationService.create(RESTAURANT_ID, RESTAURANT_MAIL, RESERVATION_AMOUNT, RESERVATION_DATETIME, RESERVATION_COMMENTS, null));
     }
 
     @Test

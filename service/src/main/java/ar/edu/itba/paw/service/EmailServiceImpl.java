@@ -38,27 +38,29 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendAccountCreationMail(String to, String name) {
+    public void sendAccountCreationMail(String to, String name, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "account-creation.html", "subject.account_creation");
     }
 
     @Async
     @Override
-    public void sendReservationCreatedUser(String to, String name, Reservation reservation) {
+    public void sendReservationCreatedUser(String to, String name, Reservation reservation, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("restaurant", reservation.getRestaurant().getName());
         model.put("amount", reservation.getAmount());
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reservation-created-user.html", "subject.reservation_created");
     }
 
     @Async
     @Override
-    public void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user) {
+    public void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", reservation.getRestaurant().getName());
         model.put("date", reservation.getDateString());
@@ -66,49 +68,54 @@ public class EmailServiceImpl implements EmailService {
         model.put("time", reservation.getTimeString());
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getFirstName());
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reservation-created-restaurant.html", "subject.reservation_created");
     }
 
     @Async
     @Override
-    public void sendReservationCancelledUser(String to, String name, Reservation reservation) {
+    public void sendReservationCancelledUser(String to, String name, Reservation reservation, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
         model.put("restaurant", reservation.getRestaurant().getName());
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-user.html", "subject.reservation_cancelled");
     }
 
     @Async
     @Override
-    public void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user) {
+    public void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", reservation.getRestaurant().getName());
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getFirstName());
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-restaurant.html", "subject.reservation_cancelled");
     }
 
     @Async
     @Override
-    public void sendReservationConfirmed(String to, String name, Reservation reservation) {
+    public void sendReservationConfirmed(String to, String name, Reservation reservation, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
         model.put("restaurant", reservation.getRestaurant().getName());
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reservation-confirmed.html", "subject.reservation_confirmed");
     }
 
     @Async
     @Override
-    public void sendChangePassword(String to, String name, String recoveryLink) {
+    public void sendChangePassword(String to, String name, String recoveryLink, String contextPath) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("recovery_link", recoveryLink);
+        model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reset-password.html", "subject.reset_password");
     }
 

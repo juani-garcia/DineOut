@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
@@ -45,8 +46,8 @@ public class UserController {
 
     @RequestMapping(value = "/restaurant_picker")
     public ModelAndView restaurantPicker(HttpServletRequest request) {
-        Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole("DINER"));
-        return new ModelAndView("redirect:/restaurant/view/" + restaurant.getId());
+        Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole(Role.DINER.getRoleName()));
+        return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -61,7 +62,7 @@ public class UserController {
             return registerForm(form);
         }
 
-        userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant());
+        userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant(), request.getRequestURL().toString().replace(request.getServletPath(), ""));
         authenticateUserAndSetSession(request, form.getUsername(), form.getPassword());
 
         return new ModelAndView("redirect:/profile");
@@ -87,9 +88,9 @@ public class UserController {
 
     @RequestMapping("/profile")
     public ModelAndView profile(HttpServletRequest request) {
-        if (request.isUserInRole("RESTAURANT")) {
+        if (request.isUserInRole(Role.RESTAURANT.getRoleName())) {
             return new ModelAndView("redirect:/restaurant");
-        } else if (request.isUserInRole("DINER")) {
+        } else if (request.isUserInRole(Role.DINER.getRoleName())) {
             return new ModelAndView("redirect:/diner/profile");
         }
         throw new BadCredentialsException("Logged user is neither a RESTAURANT or a DINER");
@@ -109,7 +110,7 @@ public class UserController {
         }
 
         User user = userService.getByUsername(passwordRecoveryForm.getUsername()).orElseThrow(NotFoundException::new);
-        userService.createPasswordResetTokenForUser(user, request.getScheme() + "://" + request.getHeader("host"));
+        userService.createPasswordResetTokenForUser(user, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         return new ModelAndView("redirect:/");
     }
 
@@ -121,6 +122,7 @@ public class UserController {
             mav.addObject("token", token);
             return mav;
         }
+
         return new ModelAndView("redirect:/login");
     }
 

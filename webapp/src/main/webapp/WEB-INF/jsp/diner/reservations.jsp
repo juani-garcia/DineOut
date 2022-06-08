@@ -53,7 +53,7 @@
                 <hr/>
                 <div class="card-content default_dark_text flex_column">
                     <div class="flex_row">
-                        <a href="<c:url value ="/restaurant/view/${reservation.restaurant.id}"/>"
+                        <a href="<c:url value ="/restaurant/${reservation.restaurant.id}/view"/>"
                            class="grow_on_hover default_dark_text underline">
                             <h5 class="medium"><b><c:out
                                     value="${reservation.restaurant.name}"/>: </b></h5>
@@ -143,7 +143,7 @@
         if (pageNumber == null) pageNumber = "1";
         var pageNumberElem = document.getElementById("page_number_of_total");
         var pages = Math.ceil(<c:out value="${pages}"/>);
-        pageNumberElem.textContent = "Pagina " + pageNumber + " de " + pages;
+        pageNumberElem.textContent = "<spring:message code="paginator.text.main"/> " + pageNumber + " <spring:message code="paginator.text.of"/> " + pages;
 
         pageNumber = parseInt(pageNumber);
 

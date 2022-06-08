@@ -8,6 +8,7 @@ import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import ar.edu.itba.paw.webapp.form.RestaurantReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ public class RestaurantController {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private RestaurantReviewService restaurantReviewService;
+
     @RequestMapping("")
     public ModelAndView restaurantProfile() {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
@@ -76,7 +80,7 @@ public class RestaurantController {
         try {
             image = form.getImage().getBytes();
         } catch (IOException e) {
-            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+            throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
         restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
 
@@ -114,7 +118,7 @@ public class RestaurantController {
         try {
             image = form.getImage().getBytes();
         } catch (IOException e) {
-            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+            throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
         restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts(), image);
@@ -231,7 +235,7 @@ public class RestaurantController {
         try {
             image = form.getImage().getBytes();
         } catch (IOException e) {
-            throw new  IllegalStateException(); // This should never happen because of @ValidImage.
+            throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
         menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
@@ -256,12 +260,21 @@ public class RestaurantController {
         return new ModelAndView("redirect:/restaurant");
     }
 
-    @RequestMapping("/view/{resId}")
-    public ModelAndView reservation(@PathVariable final long resId) {
+    @RequestMapping("/{resId}/view")
+    public ModelAndView reservation(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage,
+                                    @PathVariable final long resId) {
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
+
+        PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, resId);
+        long reviewPages = restaurantReviewPagedQuery.getPageCount();
+        if (reviewPage != 1 && reviewPages < reviewPage)
+            return new ModelAndView("redirect:/restaurant/" + resId + "/view?page=" + reviewPage);
+
 
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
         mav.addObject("restaurant", restaurant);
+        mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
+        mav.addObject("reviewPages", reviewPages);
         mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", restaurant.getShifts());
@@ -270,10 +283,31 @@ public class RestaurantController {
         return mav;
     }
 
+    @RequestMapping("/{resId}/review")
+    public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {  // resId belongs here to preserve the context for the POST
+        return new ModelAndView("restaurant/add_review");
+    }
+
+    @RequestMapping(value = "/{resId}/review", method = {RequestMethod.POST})
+    public ModelAndView section(@Valid @ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form,
+                                final BindingResult errors,
+                                @PathVariable final long resId) {
+        if (errors.hasErrors()) {
+            return addReview(form, resId);
+        }
+
+        restaurantReviewService.create(form.getReview(), form.getRating(), resId);
+        return new ModelAndView("redirect:/restaurant/" + resId + "/view");
+    }
+
     @RequestMapping("/reservations")
     public ModelAndView reservations(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "past", defaultValue = "false") final boolean past) {
+
+        Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
+        if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
+
         PagedQuery<Reservation> reservationPagedQuery =
                 reservationService.getAllForCurrentRestaurant(page, past);
         long pages = reservationPagedQuery.getPageCount();

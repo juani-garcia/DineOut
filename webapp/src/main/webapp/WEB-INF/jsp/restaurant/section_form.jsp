@@ -11,9 +11,6 @@
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
 
-<h2 class="megabold center white-text"><spring:message code="register.restaurant.form.title" /></h2>
-
-
 <c:url value="/restaurant/section" var="postPath"/>
 <form:form id="section_form" modelAttribute="sectionForm" action="${postPath}" method="post">
     <div class="container">
@@ -33,9 +30,14 @@
                         <h6 class="semibold label-text-size grey-text text-lighten-1"><spring:message
                                 code="form.mandatory"/></h6>
                     </div>
-                    <div class="row center">
+                    <div class="row center flex_row">
+                        <a id="back-button"
+                           class="btn-large waves-effect waves-red default_red white-text lighten-1 no-text-transform"
+                           href="javascript:{}" onclick="history.back();">
+                            <spring:message code="restaurant.edit.form.back"/>
+                        </a>
                         <button type="submit" name="action"
-                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1">
+                                class="btn-large no-text-transform waves-effect waves-red white black-text lighten-1 margin_left_auto">
                             <spring:message code="restaurant.section.form.submit"/>
                             <i class="material-icons right">send</i>
                         </button>

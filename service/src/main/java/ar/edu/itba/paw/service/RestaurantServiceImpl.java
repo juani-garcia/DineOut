@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     private SecurityService securityService;
 
     @Autowired
-    private FavoriteService favoriteService;
-
-    @Autowired
     private ImageService imageService;
 
     @Override
@@ -37,6 +35,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public PagedQuery<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
+        if (page <= 0) throw new InvalidPageException();
+
         Category category = Category.getById(categoryId);
         Zone zone = Zone.getById(zoneId);
         Shift shift = Shift.getById(shiftId);
@@ -101,13 +101,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         HashMap<Category, Integer> categoryIntegerHashMap = new HashMap<>();
         for (
                 Restaurant favRestaurant : restaurantFavoriteList) {
-            zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(favRestaurant.getZone(), 0) + 1);
+            zoneIntegerHashMap.putIfAbsent(favRestaurant.getZone(), 1);
+            zoneIntegerHashMap.put(favRestaurant.getZone(), zoneIntegerHashMap.get(favRestaurant.getZone()) + 1);
             for (Category category : favRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
             }
         }
         for (
                 Restaurant resRestaurant : restaurantReservedList) {
+            zoneIntegerHashMap.putIfAbsent(resRestaurant.getZone(), 1);
             zoneIntegerHashMap.put(resRestaurant.getZone(), zoneIntegerHashMap.getOrDefault(resRestaurant.getZone(), 0) + 1);
             for (Category category : resRestaurant.getCategories()) {
                 categoryIntegerHashMap.put(category, categoryIntegerHashMap.getOrDefault(category, 0) + 1);
@@ -117,6 +119,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<Restaurant> randomList = new ArrayList<>();
 
         Map.Entry<Category, Integer> favCategory = categoryIntegerHashMap.entrySet().stream().findFirst().orElse(null);
+
+
         Map.Entry<Zone, Integer> favZone = zoneIntegerHashMap.entrySet().stream().findFirst().orElse(null);
 
         for (Map.Entry<Zone, Integer> zoneIntegerEntry : zoneIntegerHashMap.entrySet()) {
@@ -130,10 +134,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             }
         }
 
-        if (favZone != null) {
+        if (favZone != null && favZone.getKey() != null) {
             randomList.addAll(restaurantDao.getTopTenByZone(favZone.getKey()));
         }
-        if (favCategory != null) {
+        if (favCategory != null && favCategory.getKey() != null) {
             randomList.addAll(restaurantDao.getTopTenByCategory(favCategory.getKey()));
         }
 

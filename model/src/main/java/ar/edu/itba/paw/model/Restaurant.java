@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -16,13 +18,23 @@ public class Restaurant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Long getFavCount() {
+        return favCount;
+    }
+
     @OneToOne
     @JoinColumn(name = "image_id")
     private Image image;
 
 
-//    @Formula  // TODO: ask about this.
-//    private BigDecimal favCount;
+    @Formula(value = "(SELECT COUNT(*) FROM favorite WHERE favorite.restaurant_id = id)")
+    private Long favCount;
+
+    @Formula(value = "(SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
+    private Long rating;
+
+    @Formula(value = "(SELECT COUNT(restaurant_review.rating) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
+    private Long ratingCount;
 
     @Column(name = "name")
     private String name;
@@ -100,6 +112,10 @@ public class Restaurant {
         return address;
     }
 
+    public Long getRatingCount() {
+        return ratingCount;
+    }
+
     public String getDetail() {
         return detail;
     }
@@ -114,6 +130,10 @@ public class Restaurant {
 
     public String getMail() {
         return mail;
+    }
+
+    public Long getRating() {
+        return rating;
     }
 
     public Set<Shift> getShifts() {

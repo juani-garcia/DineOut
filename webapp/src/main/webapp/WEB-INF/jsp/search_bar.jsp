@@ -65,10 +65,10 @@
                     </div>
                 </form>
                 <div class="flex_center margin_b_5px">
-                    <a onclick="clearSearchSelection()"
-                       class="grow_on_hover default_dark_text thin underline black-text flex_center">
+                    <button onclick="clearSearchSelection()"
+                       class="btn-small grow_on_hover default_dark_text thin black-text flex_center no-text-transform no_border transparent underline">
                         <spring:message code="search_bar.clear_filters"/>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.service.*;
@@ -38,21 +39,21 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/create/{resId}", method = {RequestMethod.POST})
-    public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors) {
+    public ModelAndView create(@PathVariable final long resId, @Valid @ModelAttribute("reservationForm") final ReservationForm form, final BindingResult errors, HttpServletRequest request) {
 
         if (errors.hasErrors()) {
             return reservation(resId, form);
         }
 
-        reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments());
+        reservationService.create(resId, securityService.getCurrentUsername(), form.getAmount(), form.getLocalDateTime(), form.getComments(), request.getRequestURL().toString().replace(request.getServletPath(), ""));
 
         return new ModelAndView("redirect:/diner/reservations");
     }
 
     @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
     public ModelAndView delete(@PathVariable final long resId, HttpServletRequest request) {
-        reservationService.delete(resId);
-        if (request.isUserInRole("DINER")) {
+        reservationService.delete(resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
+        if (request.isUserInRole(Role.DINER.getRoleName())) {
             return new ModelAndView("redirect:/diner/reservations");
         } else {
             return new ModelAndView("redirect:/restaurant/reservations");
@@ -60,8 +61,8 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/{resId}/confirm", method = {RequestMethod.POST})
-    public ModelAndView confirm(@PathVariable final long resId) {
-        reservationService.confirm(resId);
+    public ModelAndView confirm(@PathVariable final long resId, HttpServletRequest request) {
+        reservationService.confirm(resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         return new ModelAndView("redirect:/restaurant/reservations");
     }
 

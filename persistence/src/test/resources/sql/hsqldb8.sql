@@ -7,7 +7,3 @@ CREATE TABLE IF NOT EXISTS password_reset_token (
     FOREIGN KEY (user_id) REFERENCES account(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
-
-ALTER TABLE reservation
-ADD COLUMN is_confirmed BOOLEAN NOT NULL
-DEFAULT false

@@ -29,7 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments) {
+    public Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments, String contextPath) {
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
 
@@ -41,8 +41,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
 
-        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation);
-        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user);
+        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation, contextPath);
+        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user, contextPath);
 
         return reservation;
     }
@@ -57,6 +57,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public PagedQuery<Reservation> getAllForCurrentRestaurant(int page, boolean past) {
+        if (page <= 0) throw new InvalidPageException();
+
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
         Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
 
@@ -65,7 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public void delete(long reservationId) {
+    public void delete(long reservationId, String contextPath) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
         Optional<Restaurant> restaurant = restaurantService.getByUserID(user.getId());
@@ -82,9 +84,9 @@ public class ReservationServiceImpl implements ReservationService {
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
 
         emailService.sendReservationCancelledUser(
-                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation);
+                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation, contextPath);
         emailService.sendReservationCancelledRestaurant(
-                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner);
+                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner, contextPath);
 
         reservationDao.delete(reservationId);
 
@@ -92,7 +94,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public void confirm(final long reservationId) {
+    public void confirm(final long reservationId, String contextPath) {
         final User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Reservation reservation = reservationDao.getReservation(reservationId).orElseThrow(NotFoundException::new);
         if (!reservation.getRestaurant().getUser().equals(user))
@@ -105,7 +107,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         User owner = reservation.getOwner();
         emailService.sendReservationConfirmed(reservation.getMail(),
-                owner == null? "" : owner.getFirstName(), reservation);
+                owner == null? "" : owner.getFirstName(), reservation, contextPath);
 
         reservation.confirm();
     }
