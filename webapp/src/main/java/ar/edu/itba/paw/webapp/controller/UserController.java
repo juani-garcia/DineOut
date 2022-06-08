@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.service.RestaurantService;
@@ -45,7 +46,7 @@ public class UserController {
 
     @RequestMapping(value = "/restaurant_picker")
     public ModelAndView restaurantPicker(HttpServletRequest request) {
-        Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole("DINER"));
+        Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole(Role.DINER.getRoleName()));
         return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view");
     }
 
@@ -87,9 +88,9 @@ public class UserController {
 
     @RequestMapping("/profile")
     public ModelAndView profile(HttpServletRequest request) {
-        if (request.isUserInRole("RESTAURANT")) {
+        if (request.isUserInRole(Role.RESTAURANT.getRoleName())) {
             return new ModelAndView("redirect:/restaurant");
-        } else if (request.isUserInRole("DINER")) {
+        } else if (request.isUserInRole(Role.DINER.getRoleName())) {
             return new ModelAndView("redirect:/diner/profile");
         }
         throw new BadCredentialsException("Logged user is neither a RESTAURANT or a DINER");

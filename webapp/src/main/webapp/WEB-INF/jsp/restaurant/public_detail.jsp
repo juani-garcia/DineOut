@@ -18,7 +18,7 @@
                     <div class="card-content same_width_elements">
                         <h1 class="header center bold text_overflow_ellipsis flex_row flex_center">
                             <c:out value="${restaurant.name}"/>
-                            <sec:authorize access="hasRole('DINER')">
+                            <sec:authorize access="hasRole('${DINER}')">
                                 <c:if test="${isUserFavorite}">
                                     <c:url value="/diner/favorite/${restaurant.id}/false" var="setFavorite"/>
                                     <form method="post" action="${setFavorite}" class="cero_height margin_left_20px">
@@ -79,7 +79,7 @@
                                 <c:out value="${shift.end}"/></h6>
                         </c:forEach>
                     </div>
-                    <sec:authorize access="hasRole('DINER')">
+                    <sec:authorize access="hasRole('${DINER}')">
                         <div class="card-content same_width_elements">
                             <div class="container">
                                 <div class="row center">

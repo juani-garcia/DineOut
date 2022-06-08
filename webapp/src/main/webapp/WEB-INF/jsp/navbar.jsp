@@ -23,7 +23,7 @@
                         <spring:message code="navbar.greeting" arguments="${user.firstName}"/>
                     </div>
                 </li>
-                <sec:authorize access="hasRole('DINER')">
+                <sec:authorize access="hasRole('${DINER}')">
                     <li>
                         <a href="<c:url value="/diner/reservations"/>"
                            class="btn-small no-text-transform waves-effect waves-red white black-text bold">
@@ -55,7 +55,7 @@
                         </a>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasRole('RESTAURANT')">
+                <sec:authorize access="hasRole('${RESTAURANT}')">
                     <li>
                         <a href="<c:url value="/restaurant/reservations"/>"
                            class="btn-small no-text-transform waves-effect waves-red white black-text bold">

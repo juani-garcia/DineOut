@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.PasswordResetToken;
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
         User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
         if (user == null) return null;
 
-        String role = isRestaurant ? "RESTAURANT" : "DINER";
+        String role = isRestaurant ? Role.RESTAURANT.getRoleName() : Role.DINER.getRoleName();
         UserRole userRole = userRoleService.getByRoleName(role)
                 .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
         user.addRole(userRole);
@@ -66,12 +67,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isRestaurant(long userId) {
-        return isRole(userId, "RESTAURANT");
+        return isRole(userId, Role.RESTAURANT.getRoleName());
     }
 
     @Override
     public boolean isDiner(long userId) {
-        return isRole(userId, "DINER");
+        return isRole(userId, Role.DINER.getRoleName());
     }
 
     private boolean isRole(long userId, String role) {

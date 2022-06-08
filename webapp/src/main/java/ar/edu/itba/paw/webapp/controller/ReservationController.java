@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.Shift;
 import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.service.*;
@@ -52,7 +53,7 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/{resId}/delete", method = {RequestMethod.POST})
     public ModelAndView delete(@PathVariable final long resId, HttpServletRequest request) {
         reservationService.delete(resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
-        if (request.isUserInRole("DINER")) {
+        if (request.isUserInRole(Role.DINER.getRoleName())) {
             return new ModelAndView("redirect:/diner/reservations");
         } else {
             return new ModelAndView("redirect:/restaurant/reservations");
