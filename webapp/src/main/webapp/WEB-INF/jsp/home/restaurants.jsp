@@ -58,10 +58,13 @@
                                 <c:out value="${restaurant.address}"/></p>
                         </c:if>
                         <c:if test="${restaurant.rating != null && restaurant.rating != 0}">
-                            <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating"
+                            <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating margin_tb_0px"
                                 id="${restaurant.rating}">
                                     <%-- generated via JS.--%>
                             </h3>
+                            &nbsp;
+                            <h6 class="center default_light_text margin_tb_0px">(<c:out
+                                    value="${restaurant.ratingCount}"/>)</h6>
                         </c:if>
                         <c:if test="${!(restaurant.rating != null && restaurant.rating != 0)}">
                             <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row">
@@ -93,25 +96,13 @@
         let ratings = document.getElementsByClassName("star_rating");
         if (ratings.length === 0) return;
         for (let starRating = ratings.item(0), i = 0; i < ratings.length; i++, starRating = ratings.item(i)) {
-            for (let i = 0; i < starRating.id ; i++) {
+            for (let i = 0; i < starRating.id; i++) {
                 starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
             }
-            for (let i = 0; i < 5 - starRating.id ; i++) {
+            for (let i = 0; i < 5 - starRating.id; i++) {
                 starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
             }
         }
-<%--        <c:forEach items="${restaurants.content}" var="restaurant">--%>
-<%--        let starRating${restaurant.user.username} = document.getElementById("star_rating_${restaurant.id}");--%>
-<%--        if (starRating${restaurant.user.username} != null) {--%>
-<%--            for (let i = 0; i < <c:out value="${restaurant.rating}"/>; i++) {--%>
-<%--                starRating${restaurant.user.username}.innerHTML = starRating${restaurant.user.username}.innerHTML + '<i class="material-icons default_red_text">star</i>';--%>
-<%--            }--%>
-
-<%--            for (let i = 0; i < 5 - <c:out value="${restaurant.rating}"/>; i++) {--%>
-<%--                starRating${restaurant.user.username}.innerHTML = starRating${restaurant.user.username}.innerHTML + '<i class="material-icons default_light_text">star</i>';--%>
-<%--            }--%>
-<%--        }--%>
-<%--        </c:forEach>--%>
     });
 
     function defaultSelector(queryParam, options_id, select_id, params) {

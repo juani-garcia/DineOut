@@ -168,7 +168,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
     public List<Restaurant> getTopTenByZone(Zone key) {
         String sql = "SELECT id " +
                 "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +
-                "AS fav_count, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating" +
+                "AS fav_count, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating " +
                 "FROM restaurant r " +
                 "WHERE zone_id = :zone) restaurant_favs " +
                 "ORDER BY rating DESC, fav_count DESC " +
@@ -183,7 +183,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
     public List<Restaurant> getTopTenByCategory(Category key) {
         String sql = "SELECT id " +
                 "FROM (SELECT r.id, (SELECT count(*) FROM favorite WHERE restaurant_id = r.id) " +
-                "AS fav_count, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating" +
+                "AS fav_count, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = r.id) AS rating " +
                 "FROM restaurant r " +
                 "WHERE r.id IN (SELECT restaurant_id FROM restaurant_category WHERE category_id = :category)) restaurant_favs " +
                 "ORDER BY rating DESC, fav_count DESC " +

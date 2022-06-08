@@ -147,6 +147,10 @@ footer.page-footer {
     color: #F54242 !important;
 }
 
+.three_rem {
+    font-size: 3rem !important;
+  }
+
 .default_light {
     background-color: #E6E6E6 !important;
 }
@@ -563,6 +567,16 @@ button {
 
 .margin_left_auto {
     margin-left: auto !important;
+}
+
+.margin_tb_0px {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.margin_tb_auto {
+    margin-bottom: auto;
+    margin-top: auto;
 }
 
 .margin_right_auto {

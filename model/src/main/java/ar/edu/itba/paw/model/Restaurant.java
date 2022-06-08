@@ -33,6 +33,9 @@ public class Restaurant {
     @Formula(value = "(SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
     private Long rating;
 
+    @Formula(value = "(SELECT COUNT(restaurant_review.rating) FROM restaurant_review WHERE restaurant_review.restaurant_id = id)")
+    private Long ratingCount;
+
     @Column(name = "name")
     private String name;
 
@@ -107,6 +110,10 @@ public class Restaurant {
 
     public String getAddress() {
         return address;
+    }
+
+    public Long getRatingCount() {
+        return ratingCount;
     }
 
     public String getDetail() {

@@ -134,10 +134,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             }
         }
 
-        if (favZone != null) {
+        if (favZone != null && favZone.getKey() != null) {
             randomList.addAll(restaurantDao.getTopTenByZone(favZone.getKey()));
         }
-        if (favCategory != null) {
+        if (favCategory != null && favCategory.getKey() != null) {
             randomList.addAll(restaurantDao.getTopTenByCategory(favCategory.getKey()));
         }
 
