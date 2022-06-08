@@ -120,6 +120,9 @@
     function clearSearchSelection() {
         const params = new URLSearchParams(window.location.search);
 
+        params.set('name', '');
+        document.getElementById('name_filter_input').value = "";
+
         params.set('category', '');
         var categoryOption = document.getElementById('category_select_options').value;
         var categoryOptions = document.getElementById('category_select_options').querySelectorAll('option');
