@@ -11,9 +11,6 @@
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
 
-<h2 class="megabold center white-text"><spring:message code="register.restaurant.form.title" /></h2>
-
-
 <c:url value="/restaurant/item/${item.id}/edit" var="postPath"/>
 <form:form id="item_form" modelAttribute="itemForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
