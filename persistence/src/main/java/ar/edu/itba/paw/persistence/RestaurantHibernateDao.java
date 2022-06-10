@@ -90,7 +90,11 @@ public class RestaurantHibernateDao implements RestaurantDao {
         if (name != null && !name.equals("")) {
             sql.append("AND ");
             if(byItem) {
-                sql.append("id IN (SELECT restaurant_id FROM menu_section WHERE id IN (SELECT section_id FROM menu_item WHERE LOWER(name) LIKE :name))\n");
+                sql.append("id IN (\n");
+                sql.append("(SELECT restaurant_id FROM menu_section WHERE menu_section.id IN (SELECT section_id FROM menu_item WHERE Lower(name) LIKE :name))\n");
+                sql.append("UNION\n");
+                sql.append("(SELECT restaurant_id FROM menu_section WHERE LOWER(menu_section.name) LIKE :name)\n");
+                sql.append(")\n");
             } else {
                 sql.append("LOWER(name) like :name\n");
             }
