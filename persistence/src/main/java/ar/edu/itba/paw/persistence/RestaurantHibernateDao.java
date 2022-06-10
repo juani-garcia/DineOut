@@ -40,9 +40,9 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
+    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, Category category, Shift shift, Zone zone) {
 
-        ParametrizedQuery filter = filterBuilder(name, category, shift, zone);
+        ParametrizedQuery filter = filterBuilder(name, byItem, category, shift, zone);
         String idsQuery = "SELECT id\n" + filter.query + "ORDER BY rating DESC, fav_count DESC LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
 
@@ -80,15 +80,21 @@ public class RestaurantHibernateDao implements RestaurantDao {
         return new PagedQuery<>(content, (long) page, (count + PAGE_SIZE - 1) / PAGE_SIZE);
     }
 
-    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone) {
+    private ParametrizedQuery filterBuilder(String name, boolean byItem, Category category, Shift shift, Zone zone) {
         StringBuilder sql = new StringBuilder();
-        sql.append("FROM (SELECT restaurant.*, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
+        sql.append("FROM (SELECT restaurant.id, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
 
         Map<String, Object> args = new HashMap<>();
 
         if (name != null && !name.equals("")) {
-            sql.append("AND LOWER(name) like :name\n");
+            sql.append("AND ");
+            if(byItem) {
+                sql.append("id IN (SELECT restaurant_id FROM menu_section WHERE id IN (SELECT section_id FROM menu_item WHERE LOWER(name) LIKE :name))\n");
+            } else {
+                sql.append("LOWER(name) like :name\n");
+            }
+
             args.put("name", '%' + name.toLowerCase() + '%');
         }
 

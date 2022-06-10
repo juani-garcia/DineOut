@@ -13,7 +13,7 @@ public interface RestaurantService {
 
     Optional<Restaurant> getByMail(String mail);
 
-    PagedQuery<Restaurant> filter(int page, String name, int category, int shift, int zone);
+    PagedQuery<Restaurant> filter(int page, String name, boolean byItem, int category, int shift, int zone);
 
     Restaurant create(final String name, final byte[] image, final String address, final String mail, final String detail, final Zone zone, final List<Long> categories, final List<Long> shifts);
 
