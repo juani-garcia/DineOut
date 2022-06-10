@@ -17,6 +17,13 @@
                             <input name="name" type="text" id="name_filter_input"
                                    placeholder="Atuel, Citadino, BudaGreen, ..."/>
                         </label>
+                        <div class="switch" id="by_item_switch">
+                            <label>
+                                <spring:message code="search_bar.item_name" />
+                                <input type="checkbox" name="byItem" id="by_item_checkbox">
+                                <span class="lever"></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="card-content same_width_elements_with_overflow">
                         <label id="category_select">
