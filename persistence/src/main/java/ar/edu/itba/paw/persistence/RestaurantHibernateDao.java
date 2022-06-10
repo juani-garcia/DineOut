@@ -82,7 +82,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
     private ParametrizedQuery filterBuilder(String name, boolean byItem, Category category, Shift shift, Zone zone) {
         StringBuilder sql = new StringBuilder();
-        sql.append("FROM (SELECT restaurant.id, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
+        sql.append("FROM (SELECT restaurant.*, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
 
         Map<String, Object> args = new HashMap<>();
