@@ -1,27 +1,13 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Favorite;
-import ar.edu.itba.paw.model.Restaurant;
-
-import java.util.List;
+import ar.edu.itba.paw.model.PagedQuery;
 
 public interface FavoriteService {
 
-    boolean delete(long restaurantId, long userId);
-
-    boolean create(long restaurantId, long userId);
-
     boolean isFavoriteOfLoggedUser(long resId);
 
-    Long getFavCount(long restaurantId);
-
-    List<Restaurant> getRestaurantList(int page);
-
-    List<Favorite> getAllOfLoggedUser(int page);
-
-    long getFavoriteCount();
-
-    long getFavoritePageCount();
+    PagedQuery<Favorite> getAllOfLoggedUser(int page);
 
     void set(long resId, long id, boolean set);
 }

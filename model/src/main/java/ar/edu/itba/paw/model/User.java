@@ -36,13 +36,6 @@ public class User implements Serializable {
     )
     private Set<UserRole> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "favorite",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "restaurant_id"))
-    private Set<Restaurant> favorites = new HashSet<>();
-
     protected User() {
     }
 
@@ -93,18 +86,6 @@ public class User implements Serializable {
 
     public void addRole(UserRole userRole) {
         this.roles.add(userRole);
-    }
-
-    public void addFavorite(Restaurant restaurant) {
-        this.favorites.add(restaurant);
-    }
-
-    public Collection<Restaurant> getFavorites() {
-        return favorites;
-    }
-
-    public void removeFavorite(Restaurant restaurant) {
-        this.favorites.remove(restaurant);
     }
 
     @Override
