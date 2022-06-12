@@ -38,16 +38,16 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendAccountCreationMail(String to, String name, String contextPath) {
+    public void sendAccountCreationMail(String to, String name, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "account-creation.html", "subject.account_creation");
+        sendMessageUsingThymeleafTemplate(to, model, "account-creation.html", "subject.account_creation", locale);
     }
 
     @Async
     @Override
-    public void sendReservationCreatedUser(String to, String name, Reservation reservation, String contextPath) {
+    public void sendReservationCreatedUser(String to, String name, Reservation reservation, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("restaurant", reservation.getRestaurant().getName());
@@ -55,12 +55,12 @@ public class EmailServiceImpl implements EmailService {
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "reservation-created-user.html", "subject.reservation_created");
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-created-user.html", "subject.reservation_created", locale);
     }
 
     @Async
     @Override
-    public void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user, String contextPath) {
+    public void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", reservation.getRestaurant().getName());
         model.put("date", reservation.getDateString());
@@ -69,24 +69,24 @@ public class EmailServiceImpl implements EmailService {
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getFirstName());
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "reservation-created-restaurant.html", "subject.reservation_created");
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-created-restaurant.html", "subject.reservation_created", locale);
     }
 
     @Async
     @Override
-    public void sendReservationCancelledUser(String to, String name, Reservation reservation, String contextPath) {
+    public void sendReservationCancelledUser(String to, String name, Reservation reservation, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
         model.put("restaurant", reservation.getRestaurant().getName());
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-user.html", "subject.reservation_cancelled");
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-user.html", "subject.reservation_cancelled", locale);
     }
 
     @Async
     @Override
-    public void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user, String contextPath) {
+    public void sendReservationCancelledRestaurant(String to, String name, Reservation reservation, User user, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", reservation.getRestaurant().getName());
         model.put("date", reservation.getDateString());
@@ -94,34 +94,32 @@ public class EmailServiceImpl implements EmailService {
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getFirstName());
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-restaurant.html", "subject.reservation_cancelled");
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-cancelled-restaurant.html", "subject.reservation_cancelled", locale);
     }
 
     @Async
     @Override
-    public void sendReservationConfirmed(String to, String name, Reservation reservation, String contextPath) {
+    public void sendReservationConfirmed(String to, String name, Reservation reservation, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("date", reservation.getDateString());
         model.put("time", reservation.getTimeString());
         model.put("restaurant", reservation.getRestaurant().getName());
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "reservation-confirmed.html", "subject.reservation_confirmed");
+        sendMessageUsingThymeleafTemplate(to, model, "reservation-confirmed.html", "subject.reservation_confirmed", locale);
     }
 
     @Async
     @Override
-    public void sendChangePassword(String to, String name, String recoveryLink, String contextPath) {
+    public void sendChangePassword(String to, String name, String recoveryLink, String contextPath, Locale locale) {
         Map<String, Object> model = new HashMap<>();
         model.put("recipient", name);
         model.put("recovery_link", recoveryLink);
         model.put("dine_out", contextPath);
-        sendMessageUsingThymeleafTemplate(to, model, "reset-password.html", "subject.reset_password");
+        sendMessageUsingThymeleafTemplate(to, model, "reset-password.html", "subject.reset_password", locale);
     }
 
-    private void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template, String subjectMessage) {
-
-        Locale locale = LocaleContextHolder.getLocale();
+    private void sendMessageUsingThymeleafTemplate(String to, Map<String, Object> templateModel, String template, String subjectMessage, Locale locale) {
         Context thymeleafContext = new Context(locale);
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);

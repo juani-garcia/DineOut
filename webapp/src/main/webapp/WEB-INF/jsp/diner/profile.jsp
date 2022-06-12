@@ -14,7 +14,7 @@
     <div class="section flex_center width_100">
         <div class="card menu_card">
             <h1 class="megabold flex_center groovy">
-                Perfil
+                <spring:message code="diner.profile.title" />
             </h1>
 
             <h4 class="bold flex_center"> <spring:message code="home.form.username"/></h4>
