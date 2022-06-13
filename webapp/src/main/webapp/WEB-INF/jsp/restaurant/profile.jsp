@@ -28,7 +28,7 @@
                 <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
                         <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
-                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                        <img data-enlargeable src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
                 <div class="card-content same_width_elements">
@@ -153,7 +153,7 @@
                                 <c:if test="${item.image != null}">
                                     <div class="card-image">
                                         <c:url value="/image/${item.image.id}" var="imagePath"/>
-                                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                                        <img data-enlargeable src="${imagePath}" class="scale_down rounded" alt=""/>
                                     </div>
                                 </c:if>
                                 <div class="card-content">
