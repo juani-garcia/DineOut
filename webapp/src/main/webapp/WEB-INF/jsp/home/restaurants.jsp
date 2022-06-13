@@ -89,6 +89,7 @@
     </div>
 </c:if>
 
+
 <%@ include file="../footer.jsp" %>
 <script>
     // Set up rating
