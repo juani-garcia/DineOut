@@ -18,7 +18,7 @@
 
 <div class="container">
     <div class="flex_row">
-        <c:if test="${restaurants.size() == 0}">
+        <c:if test="${favorites.size() == 0}">
             <div class="container">
                 <div class="card card_wrapper padding-15px default_dark">
                     <h2 class="header center default_light_text">
@@ -34,36 +34,36 @@
                 </div>
             </div>
         </c:if>
-        <c:forEach items="${restaurants}" var="restaurant">
+        <c:forEach items="${favorites}" var="favorite">
 
-            <a href="<c:url value ="/restaurant/${restaurant.id}/view"/>"
+            <a href="<c:url value ="/restaurant/${favorite.restaurant.id}/view"/>"
                class="card horizontal card_wrapper grow_on_hover restaurant_card">
-                <c:if test="${restaurant.image != null}">
+                <c:if test="${favorite.restaurant.image != null}">
                     <div class="card-image flex_center">
-                        <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
+                        <c:url value="/image/${favorite.restaurant.image.id}" var="imagePath"/>
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
                 <div class="card-content default_dark_text">
                     <div class="flex_row">
-                        <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>
+                        <h6 class="medium text_overflow_ellipsis"><c:out value="${favorite.restaurant.name}"/></h6>
                         <h6 class="medium text_overflow_ellipsis margin_left_auto">&#128205;<c:out
-                                value="${restaurant.zone.name}"/></h6>
+                                value="${favorite.restaurant.zone.name}"/></h6>
                     </div>
-                    <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
+                    <p class="regular text_overflow_ellipsis"><c:out value="${favorite.restaurant.detail}"/></p>
                     <div class="flex_row">
                         <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
-                            <c:out value="${restaurant.address}"/></p>
-                        <c:if test="${restaurant.rating != null && restaurant.rating != 0}">
+                            <c:out value="${favorite.restaurant.address}"/></p>
+                        <c:if test="${favorite.restaurant.rating != null && favorite.restaurant.rating != 0}">
                             <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating margin_tb_0px"
-                                id="${restaurant.rating}">
+                                id="${favorite.restaurant.rating}">
                                     <%-- generated via JS.--%>
                             </h3>
                             &nbsp;
                             <h6 class="center default_light_text margin_tb_0px">(<c:out
-                                    value="${restaurant.ratingCount}"/>)</h6>
+                                    value="${favorite.restaurant.ratingCount}"/>)</h6>
                         </c:if>
-                        <c:if test="${!(restaurant.rating != null && restaurant.rating != 0)}">
+                        <c:if test="${!(favorite.restaurant.rating != null && favorite.restaurant.rating != 0)}">
                             <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row">
                             </h3>
                         </c:if>

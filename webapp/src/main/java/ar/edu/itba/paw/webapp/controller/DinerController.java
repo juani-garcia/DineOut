@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.model.Favorite;
 import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
-import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.service.FavoriteService;
 import ar.edu.itba.paw.service.ReservationService;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/diner")
@@ -54,13 +52,13 @@ public class DinerController {
 
     @RequestMapping("/favorites")
     public ModelAndView favorites(@RequestParam(name = "page", defaultValue = "1") final int page) {
-        long pages = favoriteService.getFavoritePageCount();
+        PagedQuery<Favorite> favoritePagedQuery = favoriteService.getAllOfLoggedUser(page);
+        long pages = favoritePagedQuery.getPageCount();
         if (page != 1 && pages < page) return new ModelAndView("redirect:/diner/favorites" + "?page=" + pages);
         // This is because if a user has X favorites in page N and he un favorites them all, and goes back with <-
         // a "no favorites" sign would be shown, although he has favorites in pages N-i (1 <= i < N).
-        List<Restaurant> restaurantList = favoriteService.getRestaurantList(page);
         ModelAndView mav = new ModelAndView("diner/favorites");
-        mav.addObject("restaurants", restaurantList);
+        mav.addObject("favorites", favoritePagedQuery.getContent());
         mav.addObject("pages", pages);
         return mav;
     }
