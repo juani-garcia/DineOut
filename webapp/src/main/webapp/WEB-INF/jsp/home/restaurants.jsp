@@ -166,6 +166,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         const params = new URLSearchParams(window.location.search);
 
+        let byItem = params.get("byItem");
+        if (byItem === "on" || byItem === "true") {
+            let itemSwitch = document.getElementById("by_item_switch");
+            itemSwitch.children.item(0).children.item(1).click()
+        }
+
         var categoryElems = document.getElementById("category_select").querySelectorAll('select');
         var categoryInstances = M.FormSelect.init(categoryElems);
         defaultSelector("category", "category_select_options", "category_select", params)

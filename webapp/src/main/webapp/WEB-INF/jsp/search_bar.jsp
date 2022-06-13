@@ -12,18 +12,18 @@
                       class="card horizontal card_wrapper white-text align_center same_width_elements_with_overflow no_border no_bottom_margin"
                       id="search_form">
                     <div class="card-content same_width_elements_with_overflow">
-                        <label>
-                            <spring:message code="search_bar.restaurant_name"/>:
-                            <input name="name" type="text" id="name_filter_input"
-                                   placeholder="Atuel, Citadino, BudaGreen, ..."/>
-                        </label>
                         <div class="switch" id="by_item_switch">
                             <label>
-                                <spring:message code="search_bar.item_name" />
+                                <spring:message code="search_bar.restaurant_name"/>
                                 <input type="checkbox" name="byItem" id="by_item_checkbox">
                                 <span class="lever"></span>
+                                <spring:message code="search_bar.item_name"/>
                             </label>
                         </div>
+                        <label>
+                            <input name="name" type="text" id="name_filter_input"
+                                   placeholder="<spring:message code="search_bar.look_for"/>:"/>
+                        </label>
                     </div>
                     <div class="card-content same_width_elements_with_overflow">
                         <label id="category_select">
@@ -73,7 +73,7 @@
                 </form>
                 <div class="flex_center margin_b_5px">
                     <button onclick="clearSearchSelection()"
-                       class="btn-small grow_on_hover default_dark_text thin black-text flex_center no-text-transform no_border transparent underline">
+                            class="btn-small grow_on_hover default_dark_text thin black-text flex_center no-text-transform no_border transparent underline">
                         <spring:message code="search_bar.clear_filters"/>
                     </button>
                 </div>

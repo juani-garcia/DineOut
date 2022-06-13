@@ -47,7 +47,7 @@ public class HomeController {
         PagedQuery<Restaurant> restaurants = restaurantService.filter(page, name, byItem, category, shift, zone);
         if (page != 1 && restaurants.getPageCount() < page)
             return new ModelAndView("redirect:/restaurants" + "?page=" + restaurants.getPageCount() +
-                    "&name=" + name + "&category=" + category + "&zone=" + zone + "&shift=" + shift);
+                    "&name=" + name + "&category=" + category + "&zone=" + zone + "&shift=" + shift + "&byItem=" + byItem);
 
         final ModelAndView mav = new ModelAndView("home/restaurants");
         mav.addObject("categories", Category.values());
