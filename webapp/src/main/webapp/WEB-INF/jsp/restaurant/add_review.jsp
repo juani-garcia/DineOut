@@ -17,7 +17,7 @@
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
                     <div class="row">
-                        <h5 class="white bold"><spring:message code="restaurant.add_review"/></h5>
+                        <h5 class="white bold"><spring:message code="restaurant.add_review_for" arguments="${restaurant.name}"/></h5>
                     </div>
                     <div class="row">
                         <form:label path="review" cssClass="semibold label-text-size"><spring:message

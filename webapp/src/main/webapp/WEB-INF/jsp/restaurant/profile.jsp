@@ -24,6 +24,12 @@
                             <i class="material-icons left">edit</i>
                         </a>
                     </h1>
+
+                    <c:if test="${restaurant.rating != 0}">
+                        <h3 class="center bold text_overflow_ellipsis flex_row flex_center" id="star_rating">
+                                <%-- generated via JS.--%>
+                        </h3>
+                    </c:if>
                 </div>
                 <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
@@ -57,6 +63,39 @@
                     </c:forEach>
                 </div>
             </div>
+            <c:if test="${reviews.size() != 0}">
+                <div class="card card_wrapper default_dark white-text same_width_elements">
+
+                    <div class="card-content same_width_elements">
+                        <h5><spring:message code="restaurant.add_review.reviews"/>:</h5>
+                    </div>
+                    <div class="card-content same_width_elements">
+                        <c:forEach items="${reviews}" var="review">
+                            <h5 class="semibold"><c:out value="${review.user.firstName}"/></h5>
+                            <div class="flex_row">
+                                <h6 class="text_overflow_ellipsis width_75">
+                                    <c:out value="${review.review}"/>
+                                </h6>
+                                <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating margin_tb_auto"
+                                    id="${review.rating}">
+                                        <%-- generated via JS.--%>
+                                </h3>
+                            </div>
+                        </c:forEach>
+                        <c:if test="${reviewPages > 1}">
+                            <div class="container flex_center" id="paginator">
+                                <ul class="pagination padding-15px big">
+                                    <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                                            class="material-icons">chevron_left</i></a></li>
+                                    <li id="page_number_of_total" class="white-text regular"></li>
+                                    <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                                            class="material-icons">chevron_right</i></a></li>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -231,6 +270,33 @@
 <script>
     $(document).ready(function () {
         $('.modal').modal();
+    });
+
+    // Set up rating
+    document.addEventListener('DOMContentLoaded', function () {
+        let ratings = document.getElementsByClassName("star_rating");
+        if (ratings.length === 0) return;
+        for (let starRating = ratings.item(0), i = 0; i < ratings.length; i++, starRating = ratings.item(i)) {
+            for (let i = 0; i < starRating.id; i++) {
+                starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
+            }
+            for (let i = 0; i < 5 - starRating.id; i++) {
+                starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
+            }
+        }
+    });
+
+    // Set up rating
+    document.addEventListener('DOMContentLoaded', function () {
+        let starRating = document.getElementById("star_rating");
+        if (starRating === null) return;
+        for (let i = 0; i < <c:out value="${restaurant.rating}"/>; i++) {
+            starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
+        }
+
+        for (let i = 0; i < 5 - <c:out value="${restaurant.rating}"/>; i++) {
+            starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
+        }
     });
 </script>
 </body>

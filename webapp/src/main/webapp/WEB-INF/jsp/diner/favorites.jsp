@@ -20,7 +20,7 @@
     <div class="flex_row">
         <c:if test="${favorites.size() == 0}">
             <div class="container">
-                <div class="card card_wrapper padding-15px default_dark">
+                <div class="card card_wrapper padding-15px white">
                     <h2 class="header center default_light_text">
                         <spring:message code="diner.favorites.none_found"/>
                         <div class="center default_light_text underline margins_tb_30px">

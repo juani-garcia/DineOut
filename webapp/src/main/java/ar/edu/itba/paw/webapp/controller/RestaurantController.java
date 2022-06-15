@@ -48,7 +48,7 @@ public class RestaurantController {
     private RestaurantReviewService restaurantReviewService;
 
     @RequestMapping("")
-    public ModelAndView restaurantProfile() {
+    public ModelAndView restaurantProfile(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage) {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
         Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
@@ -58,6 +58,15 @@ public class RestaurantController {
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
+
+        PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, restaurant.getId());
+        long reviewPages = restaurantReviewPagedQuery.getPageCount();
+        if (reviewPage != 1 && reviewPages < reviewPage)
+            return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view?page=" + reviewPage);
+
+
+        mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
+        mav.addObject("reviewPages", reviewPages);
         mav.addObject("shifts", restaurant.getShifts());
         return mav;
     }
@@ -263,6 +272,11 @@ public class RestaurantController {
     @RequestMapping("/{resId}/view")
     public ModelAndView reservation(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage,
                                     @PathVariable final long resId) {
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        if (restaurant.getUser().equals(securityService.getCurrentUser().orElse(null))) {
+            return new ModelAndView("redirect:/restaurant");
+        }
+
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
 
         PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, resId);
@@ -271,10 +285,9 @@ public class RestaurantController {
             return new ModelAndView("redirect:/restaurant/" + resId + "/view?page=" + reviewPage);
 
 
-        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-        mav.addObject("restaurant", restaurant);
         mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
         mav.addObject("reviewPages", reviewPages);
+        mav.addObject("restaurant", restaurant);
         mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", restaurant.getShifts());
@@ -285,7 +298,9 @@ public class RestaurantController {
 
     @RequestMapping("/{resId}/review")
     public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {  // resId belongs here to preserve the context for the POST
-        return new ModelAndView("restaurant/add_review");
+        ModelAndView mav = new ModelAndView("restaurant/add_review");
+        mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(NotFoundException::new));
+        return mav;
     }
 
     @RequestMapping(value = "/{resId}/review", method = {RequestMethod.POST})
