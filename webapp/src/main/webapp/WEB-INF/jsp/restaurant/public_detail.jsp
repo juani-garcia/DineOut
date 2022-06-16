@@ -88,10 +88,12 @@
                                            class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
                                             <spring:message code="reservation.reservation.form.submit"/>
                                         </a>
-                                        <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
-                                           class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
-                                            <spring:message code="restaurant.add_review"/>
-                                        </a>
+                                        <c:if test="${!hasReviewed}">
+                                            <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
+                                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
+                                                <spring:message code="restaurant.add_review"/>
+                                            </a>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>

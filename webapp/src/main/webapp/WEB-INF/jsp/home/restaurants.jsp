@@ -34,7 +34,7 @@
                         <img src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
-                <div class="card-content default_dark_text">
+                <div class="card-content default_dark_text flex_column">
                     <div class="flex_row">
                         <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>
                         <h6 class="medium text_overflow_ellipsis margin_left_auto">&#128205;<c:out
@@ -42,29 +42,40 @@
                     </div>
                     <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
                     <c:if test="${restaurant.categories.size() != 0}">
-                        <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
+                        <p class="light text_overflow_ellipsis width_70"><spring:message
+                                code="home.restaurants.address"/>:
                             <c:out value="${restaurant.address}"/></p>
                     </c:if>
-                    <div class="flex_row">
+                    <div class="flex_row margin_t_auto">
                         <c:if test="${restaurant.categories.size() != 0}">
-                            <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.categories"/>:
-                                <c:forEach items="${restaurant.categories}" var="category">
-                                    <spring:message code="${category.message}"/>
-                                </c:forEach>
-                            </p>
+                            <div class="flex_column width_70">
+                                <p class="light text_overflow_ellipsis"><spring:message
+                                        code="home.restaurants.categories"/>:</p>
+                                <div class="flex_row_only scrollable_row width_100 z_index_9999">
+                                    <c:forEach items="${restaurant.categories}" var="category">
+                                        <h6 class="card margins_lr_5px padding_4px grow_on_hover shadowed_small z_index_9999"
+                                            onclick="searchForCategory(${category.id})">
+                                            <spring:message code="${category.message}"/>
+                                        </h6>
+                                    </c:forEach>
+                                </div>
+                            </div>
                         </c:if>
                         <c:if test="${restaurant.categories.size() == 0}">
-                            <p class="light text_overflow_ellipsis"><spring:message code="home.restaurants.address"/>:
+                            <p class="light text_overflow_ellipsis margin_t_auto"><spring:message
+                                    code="home.restaurants.address"/>:
                                 <c:out value="${restaurant.address}"/></p>
                         </c:if>
                         <c:if test="${restaurant.rating != null && restaurant.rating != 0}">
-                            <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating margin_tb_0px"
-                                id="${restaurant.rating}">
-                                    <%-- generated via JS.--%>
-                            </h3>
-                            &nbsp;
-                            <h6 class="center default_light_text margin_tb_0px">(<c:out
-                                    value="${restaurant.ratingCount}"/>)</h6>
+                            <div class="margin_left_auto width_25 flex_row margin_t_auto">
+                                <h3 class="medium text_overflow_ellipsis flex_row star_rating margin_tb_0px"
+                                    id="${restaurant.rating}">
+                                        <%-- generated via JS.--%>
+                                </h3>
+                                &nbsp;
+                                <h6 class="center default_light_text margin_tb_0px">(<c:out
+                                        value="${restaurant.ratingCount}"/>)</h6>
+                            </div>
                         </c:if>
                         <c:if test="${!(restaurant.rating != null && restaurant.rating != 0)}">
                             <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row">
@@ -92,6 +103,11 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
+    function searchForCategory(catId) {
+        let catSearch = '<c:url value ="/restaurants?category="/>';
+        window.location.href = catSearch + catId;
+    }
+
     // Set up rating
     document.addEventListener('DOMContentLoaded', function () {
         let ratings = document.getElementsByClassName("star_rating");

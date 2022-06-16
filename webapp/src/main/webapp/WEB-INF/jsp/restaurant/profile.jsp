@@ -19,8 +19,8 @@
                     <h1 class="header center bold text_overflow_ellipsis flex_row flex_center">
                         <c:out value="${restaurant.name}"/>
                         <c:url value="/restaurant/edit" var="editUrl"/>
-                        <a class="btn-large waves-effect waves-light btn-floating default_red"
-                           style="margin-left: 20px" href="${editUrl}">
+                        <a class="btn-large waves-effect waves-light btn-floating default_red margin_l_20px"
+                           href="${editUrl}">
                             <i class="material-icons left">edit</i>
                         </a>
                     </h1>

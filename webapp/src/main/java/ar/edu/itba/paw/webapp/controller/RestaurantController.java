@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
-import ar.edu.itba.paw.model.exceptions.NotFoundException;
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
@@ -16,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -273,7 +272,8 @@ public class RestaurantController {
     public ModelAndView reservation(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage,
                                     @PathVariable final long resId) {
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-        if (restaurant.getUser().equals(securityService.getCurrentUser().orElse(null))) {
+        User user = securityService.getCurrentUser().orElse(null);
+        if (restaurant.getUser().equals(user)) {
             return new ModelAndView("redirect:/restaurant");
         }
 
@@ -284,7 +284,7 @@ public class RestaurantController {
         if (reviewPage != 1 && reviewPages < reviewPage)
             return new ModelAndView("redirect:/restaurant/" + resId + "/view?page=" + reviewPage);
 
-
+        mav.addObject("hasReviewed", user != null && restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId()));
         mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
         mav.addObject("reviewPages", reviewPages);
         mav.addObject("restaurant", restaurant);
@@ -298,20 +298,32 @@ public class RestaurantController {
 
     @RequestMapping("/{resId}/review")
     public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {  // resId belongs here to preserve the context for the POST
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        if (restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId())) {
+            throw new RepeatedReviewException();
+        }
         ModelAndView mav = new ModelAndView("restaurant/add_review");
-        mav.addObject("restaurant", restaurantService.getById(resId).orElseThrow(NotFoundException::new));
+        mav.addObject("restaurant", restaurant);
         return mav;
     }
 
     @RequestMapping(value = "/{resId}/review", method = {RequestMethod.POST})
     public ModelAndView section(@Valid @ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form,
                                 final BindingResult errors,
-                                @PathVariable final long resId) {
+                                @PathVariable final long resId,
+                                final HttpServletRequest request) {
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        if (restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId())) {
+            throw new RepeatedReviewException();
+        }
+
         if (errors.hasErrors()) {
             return addReview(form, resId);
         }
 
-        restaurantReviewService.create(form.getReview(), form.getRating(), resId);
+        restaurantReviewService.create(form.getReview(), form.getRating(), resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         return new ModelAndView("redirect:/restaurant/" + resId + "/view");
     }
 

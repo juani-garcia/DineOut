@@ -65,6 +65,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public User edit(User user, String firstName, String lastName, String contextPath) {
+        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return null;
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, LocaleContextHolder.getLocale());
+
+        return user;
+    }
+
+    @Override
     public boolean isRestaurant(long userId) {
         return isRole(userId, Role.RESTAURANT.getRoleName());
     }

@@ -69,4 +69,13 @@ public class RestaurantReviewHibernateDao implements RestaurantReviewDao {
         return restaurantReview;
     }
 
+    @Override
+    public boolean hasReviewedRestaurant(Long userId, Long restaurantId) {
+        String isQuery = "SELECT COUNT(*)\n" + "FROM restaurant_review WHERE restaurant_id = :restaurantId AND user_id = :userId";
+        Query query = em.createNativeQuery(isQuery);
+        query.setParameter("restaurantId", restaurantId);
+        query.setParameter("userId", userId);
+        return ((BigInteger) query.getResultList().stream().findFirst().orElse(0)).longValue() > 0;
+    }
+
 }

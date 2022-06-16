@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,10 @@ public class RestaurantReviewServiceImpl implements RestaurantReviewService {
     @Autowired
     private RestaurantReviewDao restaurantReviewDao;
 
+    @Autowired
+    private EmailService emailService;
+
+
     @Override
     public Optional<RestaurantReview> getById(long reviewId) {
         return restaurantReviewDao.getById(reviewId);
@@ -40,13 +45,18 @@ public class RestaurantReviewServiceImpl implements RestaurantReviewService {
 
     @Transactional
     @Override
-    public RestaurantReview create(String review, long rating, long restaurantId) {
+    public RestaurantReview create(String review, long rating, long restaurantId, String contextPath) {
         if (rating>5) rating = 5;
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getById(restaurantId).orElseThrow(NotFoundException::new);
         if (restaurant.getUser().equals(user))
             throw new IllegalArgumentException("Cannot review a restaurant if you are a restaurant");
-        return restaurantReviewDao.create(review, rating, user, restaurant);
+        RestaurantReview restaurantReview = restaurantReviewDao.create(review, rating, user, restaurant);
+        if (restaurantReview == null) return null;
+
+        emailService.sendReviewToRestaurant(restaurant.getMail(), restaurant.getName(), review, rating, user, contextPath, LocaleContextHolder.getLocale());
+
+        return restaurantReview;
     }
 
     @Override
@@ -65,6 +75,11 @@ public class RestaurantReviewServiceImpl implements RestaurantReviewService {
         restaurantReview.setRating(rating);
 
         return restaurantReview;
+    }
+
+    @Override
+    public boolean hasReviewedRestaurant(Long userId, Long restaurantId) {
+        return restaurantReviewDao.hasReviewedRestaurant(userId, restaurantId);
     }
 
     private RestaurantReview validateReview(final long reviewId) {

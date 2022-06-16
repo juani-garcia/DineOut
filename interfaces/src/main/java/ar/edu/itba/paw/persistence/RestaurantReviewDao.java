@@ -15,4 +15,6 @@ public interface RestaurantReviewDao {
     PagedQuery<RestaurantReview> getByRestaurantId(long page, long restaurantId);
 
     RestaurantReview create(String review, long rating, User user, Restaurant restaurant);
+
+    boolean hasReviewedRestaurant(Long userId, Long restaurantId);
 }

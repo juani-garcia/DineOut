@@ -13,8 +13,13 @@
 <div class="container flex_center padding-15px">
     <div class="section flex_center width_100">
         <div class="card menu_card">
-            <h1 class="megabold flex_center groovy">
+            <h1 class="header center megabold text_overflow_ellipsis flex_row flex_center groovy">
                 <spring:message code="diner.profile.title" />
+                <c:url value="/diner/edit" var="editUrl"/>
+                <a class="btn-large waves-effect waves-light btn-floating default_red margin_l_20px"
+                   href="${editUrl}">
+                    <i class="material-icons left white-text">edit</i>
+                </a>
             </h1>
 
             <h4 class="bold flex_center"> <spring:message code="home.form.username"/></h4>

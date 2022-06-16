@@ -149,7 +149,7 @@ footer.page-footer {
 
 .three_rem {
     font-size: 3rem !important;
-  }
+}
 
 .default_light {
     background-color: #E6E6E6 !important;
@@ -367,6 +367,21 @@ h1 {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.shadowed_small {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.scrollable_row {
+    overflow-x: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollable_row::-webkit-scrollbar {
+    display: none;
+}
+
 /* Label override */
 .label-text-size {
     font-size: 1.2rem;
@@ -474,6 +489,11 @@ h1 {
     justify-content: center;
 }
 
+.flex_row_only {
+    display: flex;
+    flex-direction: row;
+}
+
 .flex_column {
     display: flex;
     flex-direction: column;
@@ -492,10 +512,6 @@ h1 {
     min-width: 500px;
     min-height: 200px;
     background-color: white;
-}
-
-.width_100 {
-    width: 100%;
 }
 
 .restaurant_card > .card-image + .card-content {
@@ -579,13 +595,17 @@ button {
     margin-top: auto;
 }
 
+.margin_t_auto {
+    margin-top: auto !important;
+}
+
 .margin_right_auto {
     margin-right: auto;
 }
 
 .margins_lr_10px {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 .margins_tb_10px {
@@ -603,10 +623,13 @@ button {
     margin-bottom: 30px;
 }
 
+.padding_4px {
+    padding: 4px;
+}
 
 .margins_lr_5px {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
 }
 
 .margin_l_5px {
@@ -673,9 +696,6 @@ button {
     margin-bottom: 5px;
 }
 
-.width_75 {
-    width: 75% !important;
-}
 
 nav {
     -webkit-box-shadow: none !important;
@@ -689,4 +709,32 @@ nav {
 
 .no_bottom_margin {
     margin-bottom: 0px !important;
+}
+
+.width_20 {
+    width: 20% !important;
+}
+
+.width_25 {
+    width: 25% !important;
+}
+
+.width_65 {
+    width: 65% !important;
+}
+
+.width_70 {
+    width: 70% !important;
+}
+
+.width_75 {
+    width: 75% !important;
+}
+
+.width_100 {
+    width: 100%;
+}
+
+.z_index_9999 {
+    z-index: 9999;
 }

@@ -9,6 +9,8 @@ public interface EmailService {
 
     void sendAccountCreationMail(String to, String name, String contextPath, Locale locale);
 
+    void sendAccountModification(String to, String name, String contextPath, Locale locale);
+
     void sendReservationCreatedUser(String to, String name, Reservation reservation, String contextPath, Locale locale);
 
     void sendReservationCreatedRestaurant(String to, String name, Reservation reservation, User user, String contextPath, Locale locale);
@@ -20,4 +22,6 @@ public interface EmailService {
     void sendReservationConfirmed(String to, String name, Reservation reservation, String contextPath, Locale locale);
 
     void sendChangePassword(String to, String name, String token, String contextPath, Locale locale);
+
+    void sendReviewToRestaurant(String to, String name, String review, long rating, User user, String contextPath, Locale locale);
 }
