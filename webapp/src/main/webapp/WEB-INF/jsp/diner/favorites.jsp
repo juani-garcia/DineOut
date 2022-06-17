@@ -63,8 +63,7 @@
                                         code="home.restaurants.categories"/>:</p>
                                 <div class="flex_row_only scrollable_row width_100 z_index_9999">
                                     <c:forEach items="${favorite.restaurant.categories}" var="category">
-                                        <h6 class="card margins_lr_5px padding_4px grow_on_hover shadowed_small z_index_9999"
-                                            onclick="searchForCategory(${category.id})">
+                                        <h6 class="card margins_lr_5px padding_4px shadowed_small z_index_9999">
                                             <spring:message code="${category.message}"/>
                                         </h6>
                                     </c:forEach>

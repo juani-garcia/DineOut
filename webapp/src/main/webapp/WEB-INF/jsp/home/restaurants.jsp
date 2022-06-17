@@ -53,8 +53,7 @@
                                         code="home.restaurants.categories"/>:</p>
                                 <div class="flex_row_only scrollable_row width_100 z_index_9999">
                                     <c:forEach items="${restaurant.categories}" var="category">
-                                        <h6 class="card margins_lr_5px padding_4px grow_on_hover shadowed_small z_index_9999"
-                                            onclick="searchForCategory(${category.id})">
+                                        <h6 class="card margins_lr_5px padding_4px shadowed_small z_index_9999">
                                             <spring:message code="${category.message}"/>
                                         </h6>
                                     </c:forEach>
@@ -103,11 +102,6 @@
 
 <%@ include file="../footer.jsp" %>
 <script>
-    function searchForCategory(catId) {
-        let catSearch = '<c:url value ="/restaurants?category="/>';
-        window.location.href = catSearch + catId;
-    }
-
     // Set up rating
     document.addEventListener('DOMContentLoaded', function () {
         let ratings = document.getElementsByClassName("star_rating");
