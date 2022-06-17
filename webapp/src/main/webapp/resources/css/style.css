@@ -375,6 +375,10 @@ h1 {
     box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.2), 0 3px 10px 0 rgba(255, 255, 255, 0.19);
 }
 
+.no_bottom_padding {
+    padding-bottom: 0 !important;
+}
+
 .scrollable_row {
     overflow-x: auto;
     -ms-overflow-style: none;  /* IE and Edge */

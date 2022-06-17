@@ -67,7 +67,7 @@
                         <div class="flex_row_only scrollable_row width_100 z_index_9999 flex_center">
                             <c:forEach items="${restaurant.categories}" var="category">
                                 <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
-                                        href="<c:url value ="/restaurants?category="/>${category.id}">
+                                   href="<c:url value ="/restaurants?category="/>${category.id}">
                                     <spring:message code="${category.message}"/>
                                 </a>
                             </c:forEach>
@@ -125,11 +125,12 @@
                 <c:if test="${reviews.size() != 0}">
                     <div class="card card_wrapper default_dark white-text same_width_elements">
 
-                        <div class="card-content same_width_elements">
+                        <div class="card-content same_width_elements no_bottom_padding">
                             <h5><spring:message code="restaurant.add_review.reviews"/>:</h5>
                         </div>
                         <div class="card-content same_width_elements">
                             <c:forEach items="${reviews}" var="review">
+                                <hr>
                                 <h5 class="semibold"><c:out value="${review.user.firstName}"/></h5>
                                 <div class="flex_row">
                                     <h6 class="text_overflow_ellipsis width_75">
