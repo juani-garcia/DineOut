@@ -13,13 +13,23 @@
 <script src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script src="<c:url value="/resources/js/materialize.js"/>"></script>
 <script src="<c:url value="/resources/js/init.js"/>"></script>
+
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initAutocomplete&libraries=places&v=weekly"
+        defer
+></script>
+
+<script src="<c:url value="/resources/js/map_generation.js"/>"></script>
+
+
 <script>
     // Retrieved from: https://stackoverflow.com/questions/18156824/restricting-an-input-box-to-only-numbers-0-9#18156861
     if (document.getElementById('numberonly') !== null) {
-        document.getElementById('numberonly').addEventListener('keydown', function(e) {
-            var key   = e.keyCode ? e.keyCode : e.which;
-            if (!( [8, 9, 13, 27, 46, 110].indexOf(key) !== -1 ||  // Remove 190 -> "."
-                (key === 65 && ( e.ctrlKey || e.metaKey  ) ) ||
+        document.getElementById('numberonly').addEventListener('keydown', function (e) {
+            var key = e.keyCode ? e.keyCode : e.which;
+            if (!([8, 9, 13, 27, 46, 110].indexOf(key) !== -1 ||  // Remove 190 -> "."
+                (key === 65 && (e.ctrlKey || e.metaKey)) ||
                 (key >= 35 && key <= 40) ||
                 (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
                 (key >= 96 && key <= 105)
@@ -27,10 +37,10 @@
         });
     }
     if (document.getElementById('decimalnumberonly') !== null) {
-        document.getElementById('decimalnumberonly').addEventListener('keydown', function(e) {
-            var key   = e.keyCode ? e.keyCode : e.which;
-            if (!( [8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||  // Allow 190 -> "."
-                (key === 65 && ( e.ctrlKey || e.metaKey  ) ) ||
+        document.getElementById('decimalnumberonly').addEventListener('keydown', function (e) {
+            var key = e.keyCode ? e.keyCode : e.which;
+            if (!([8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||  // Allow 190 -> "."
+                (key === 65 && (e.ctrlKey || e.metaKey)) ||
                 (key >= 35 && key <= 40) ||
                 (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
                 (key >= 96 && key <= 105)
@@ -40,7 +50,7 @@
 
     // Handle image enlargement
     // Retrived from: https://stackoverflow.com/questions/18545077/image-fullscreen-on-click
-    $('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
+    $('img[data-enlargeable]').addClass('img-enlargeable').click(function () {
         var src = $(this).attr('src');
         var modal;
 
@@ -48,6 +58,7 @@
             modal.remove();
             $('body').off('keyup.modal-close');
         }
+
         modal = $('<div>').css({
             background: 'RGBA(0,0,0,.5) url(' + src + ') no-repeat center',
             backgroundSize: 'contain',
@@ -58,11 +69,11 @@
             top: '0',
             left: '0',
             cursor: 'zoom-out'
-        }).click(function() {
+        }).click(function () {
             removeModal();
         }).appendTo('body');
         //handling ESC
-        $('body').on('keyup.modal-close', function(e) {
+        $('body').on('keyup.modal-close', function (e) {
             if (e.key === 'Escape') {
                 removeModal();
             }

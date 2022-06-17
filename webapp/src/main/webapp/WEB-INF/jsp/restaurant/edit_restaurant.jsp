@@ -11,17 +11,16 @@
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
 
-<h2 class="megabold center white-text"><spring:message code="register.restaurant.edit.form.title"/></h2>
-
 
 <c:url value="/restaurant/edit" var="postPath"/>
-<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post" enctype="multipart/form-data">
+<form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post"
+           enctype="multipart/form-data">
     <div class="container">
         <div class="section">
             <div class="row rounded shadowed white">
                 <div class="col s6 offset-s3">
                     <div class="row">
-                        <h5 class="white bold"><spring:message code="register.restaurant.form.header"/></h5>
+                        <h5 class="white bold"><spring:message code="register.restaurant.edit.form.title"/></h5>
                     </div>
                     <div class="row">
                         <form:label path="name" cssClass="semibold label-text-size"><spring:message
@@ -32,18 +31,26 @@
                     <div class="row">
                         <form:label path="address" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.address"/>*</form:label>
-                        <form:input path="address" type="text"/>
+                        <form:input path="address" type="text" id="pac-input"/>
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
-                    <div class="row input-field" id="zone_select_options">
-                        <form:label path="zone" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.zone"/></form:label>
-                        <form:select path="zone">
-                            <c:forEach items="${zones}" var="zone">
-                                <form:option value="${zone.name}"><c:out value="${zone.name}"/></form:option>
-                            </c:forEach>
-                        </form:select>
+                    <div class="container flex_column">
+                        <div id="map" style="height: 400px"></div>
+                    </div>
+                    <div class="row input-field">
+                        <form:label path="zone" cssClass="semibold label-text-size display_hidden"/>
+                        <form:input type="text" path="zone" id="zone_input" cssClass="display_hidden"/>
                         <form:errors path="zone" element="p" cssClass="isa_error"/>
+                    </div>
+                    <div class="row input-field display_hidden">
+                        <form:label path="lat" cssClass="semibold label-text-size"/>
+                        <form:input type="number" path="lat" step="0.000001" min="-90" max="90" id="lat_input"/>
+                        <form:errors path="lat" element="p" cssClass="isa_error"/>
+                    </div>
+                    <div class="row input-field display_hidden">
+                        <form:label path="lng" cssClass="semibold label-text-size"/>
+                        <form:input type="number" path="lng" step="0.000001" min="-180" max="180" id="lng_input"/>
+                        <form:errors path="lng" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row">
                         <form:label path="email" cssClass="semibold label-text-size"><spring:message
@@ -69,7 +76,8 @@
                         </form:label>
                         <form:select multiple="true" path="categories">
                             <c:forEach items="${categories}" var="category">
-                                <form:option value="${category.id}"><spring:message code="${category.message}"/></form:option>
+                                <form:option value="${category.id}"><spring:message
+                                        code="${category.message}"/></form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="categories" cssClass="isa_error" element="p"/>
@@ -110,8 +118,8 @@
 <%@ include file="../footer.jsp" %>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var zoneElems = document.getElementById('zone_select_options').querySelectorAll('select');
-        var zoneInstances = M.FormSelect.init(zoneElems);
+        // var zoneElems = document.getElementById('zone_select_options').querySelectorAll('select');
+        // var zoneInstances = M.FormSelect.init(zoneElems);
 
         var categoryElems = document.getElementById('category_select_options').querySelectorAll('select');
         var categoryInstances = M.FormSelect.init(categoryElems);

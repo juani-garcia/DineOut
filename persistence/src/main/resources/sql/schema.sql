@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS restaurant (
     name TEXT NOT NULL,
     address TEXT NOT NULL,
     mail TEXT UNIQUE NOT NULL,
+    lat FLOAT,
+    lng FLOAT,
     detail TEXT NOT NULL
 );
 
