@@ -63,9 +63,11 @@
                     <div class="card-content same_width_elements">
                         <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
                     </div>
-                    <div class="card-content same_width_elements">
-                        <div id="map" style="height: 400px"></div>
-                    </div>
+                    <c:if test="${restaurant.lat != null}">
+                        <div class="card-content same_width_elements">
+                            <div id="map" style="height: 400px"></div>
+                        </div>
+                    </c:if>
                     <div class="card-content same_width_elements flex_center">
                         <h5 class="center text_overflow_ellipsis">
                             <spring:message code="restaurant.public_detail.time"/>:
