@@ -115,6 +115,11 @@
     </div>
 </form:form>
 
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initAutocomplete&libraries=places&v=weekly"
+        defer
+></script>
 <%@ include file="../footer.jsp" %>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

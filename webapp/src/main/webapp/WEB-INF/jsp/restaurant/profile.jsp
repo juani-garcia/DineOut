@@ -46,6 +46,9 @@
                 <div class="card-content same_width_elements">
                     <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
                 </div>
+                <div class="card-content same_width_elements">
+                    <div id="map" style="height: 400px"></div>
+                </div>
                 <div class="card-content same_width_elements flex_center">
                     <h5 class="center text_overflow_ellipsis">
                         <spring:message code="restaurant.public_detail.time"/>:
@@ -267,10 +270,49 @@
 
 
 <%@ include file="../footer.jsp" %>
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initMap&v=weekly"
+        defer
+></script>
 <script>
     $(document).ready(function () {
         $('.modal').modal();
     });
+
+    function initMap() {
+        if (document.getElementById('map') == null) return;
+
+        let lat = <c:out value="${restaurant.lat}"/>;
+        let lng = <c:out value="${restaurant.lng}"/>;
+        if (document.getElementById('map') == null || lat === null) return;
+        const myLatLng = {lat: lat, lng: lng};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 14
+        });
+
+
+        var bounds = new google.maps.LatLngBounds();
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+        });
+
+        const infowindow = new google.maps.InfoWindow({
+            content: "<p class=\"black-text\">" + "<c:out value="${restaurant.address}"/>" + "</p>",
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', initMap);
+
 
     // Set up rating
     document.addEventListener('DOMContentLoaded', function () {

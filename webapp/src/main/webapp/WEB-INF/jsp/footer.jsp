@@ -14,12 +14,6 @@
 <script src="<c:url value="/resources/js/materialize.js"/>"></script>
 <script src="<c:url value="/resources/js/init.js"/>"></script>
 
-<!-- Google maps api places -->
-<script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initAutocomplete&libraries=places&v=weekly"
-        defer
-></script>
-
 <script src="<c:url value="/resources/js/map_generation.js"/>"></script>
 
 

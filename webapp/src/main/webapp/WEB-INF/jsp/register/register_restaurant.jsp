@@ -107,6 +107,11 @@
     </div>
 </form:form>
 
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initAutocomplete&libraries=places&v=weekly"
+        defer
+></script>
 <%@ include file="../footer.jsp" %>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -116,29 +121,6 @@
         <%--</c:forEach>--%>
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems);
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        let lat = "<c:out value="${restaurantForm.lat}"/>";
-        let lng = "<c:out value="${restaurantForm.lng}"/>";
-        if (document.getElementById('map') == null || lat == "") return;
-        const myLatLng = { lat: parseFloat(lat), lng: parseFloat(lng) };
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: myLatLng,
-            zoom: 14
-        });
-
-        let marker = new google.maps.Marker({
-            position: myLatLng
-        });
-        let searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
-        marker.bindTo('map', searchBox, 'map');
-        google.maps.event.addListener(marker, 'map_changed', function () {
-            if (!this.getMap()) {
-                this.unbindAll();
-            }
-        });
-
     });
 </script>
 </body>
