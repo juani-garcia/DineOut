@@ -65,7 +65,7 @@
                     </div>
                     <c:if test="${restaurant.lat != null}">
                         <div class="card-content same_width_elements">
-                            <div id="map" style="height: 400px"></div>
+                            <div id="map" class="rounded height_400px"></div>
                         </div>
                     </c:if>
                     <div class="card-content same_width_elements flex_center">
@@ -205,10 +205,10 @@
     function initMap() {
         if (document.getElementById('map') == null) return;
 
-        let lat = <c:out value="${restaurant.lat}"/>;
-        let lng = <c:out value="${restaurant.lng}"/>;
-        if (document.getElementById('map') == null || lat === null) return;
-        const myLatLng = {lat: lat, lng: lng};
+        let lat = "<c:out value="${restaurant.lat}"/>";
+        let lng = "<c:out value="${restaurant.lng}"/>";
+        if (document.getElementById('map') == null || lat === null || lat == "") return;
+        const myLatLng = {lat: parseFloat(lat), lng: parseFloat(lng)};
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: myLatLng,

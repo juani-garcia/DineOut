@@ -35,7 +35,7 @@
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
                     <div class="container flex_column">
-                        <div id="map" style="height: 400px"></div>
+                        <div id="map" class="rounded height_400px"></div>
                     </div>
                     <div class="row input-field">
                         <form:label path="zone" cssClass="semibold label-text-size display_hidden"/>
