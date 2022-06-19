@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -82,7 +83,12 @@ public class UserController {
     }
 
     @RequestMapping("/login")
-    public ModelAndView login() {
+    public ModelAndView login(HttpServletRequest request) {
+        final HttpSession session = request.getSession();
+        final String referer = request.getHeader("Referer");
+        if (session != null && referer != null && !referer.contains("login")) {
+            session.setAttribute("login_referer", referer);
+        }
         return new ModelAndView("home/login");
     }
 
