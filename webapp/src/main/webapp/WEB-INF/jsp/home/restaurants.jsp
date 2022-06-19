@@ -35,18 +35,18 @@
                     </div>
                 </c:if>
                 <div class="card-content default_dark_text flex_column">
-                    <div class="flex_row">
+                    <div class="flex_row width_100">
                         <h6 class="medium text_overflow_ellipsis"><c:out value="${restaurant.name}"/></h6>
                         <h6 class="medium text_overflow_ellipsis margin_left_auto">&#128205;<c:out
                                 value="${restaurant.zone.name}"/></h6>
                     </div>
-                    <p class="regular text_overflow_ellipsis"><c:out value="${restaurant.detail}"/></p>
+                    <p class="regular text_overflow_ellipsis width_100"><c:out value="${restaurant.detail}"/></p>
                     <c:if test="${restaurant.categories.size() != 0}">
                         <p class="light text_overflow_ellipsis width_70"><spring:message
                                 code="home.restaurants.address"/>:
                             <c:out value="${restaurant.address}"/></p>
                     </c:if>
-                    <div class="flex_row margin_t_auto">
+                    <div class="flex_row margin_t_auto width_100">
                         <c:if test="${restaurant.categories.size() != 0}">
                             <div class="flex_column width_70">
                                 <p class="light text_overflow_ellipsis"><spring:message

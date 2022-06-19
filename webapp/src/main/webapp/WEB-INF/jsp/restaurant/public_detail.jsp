@@ -64,7 +64,7 @@
                         <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
                     </div>
                     <div class="card-content same_width_elements flex_center">
-                        <div class="flex_row_only scrollable_row width_100 z_index_9999 flex_center">
+                        <div class="flex_row_only scrollable_row width_100 z_index_9999">
                             <c:forEach items="${restaurant.categories}" var="category">
                                 <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
                                    href="<c:url value ="/restaurants?category="/>${category.id}">
