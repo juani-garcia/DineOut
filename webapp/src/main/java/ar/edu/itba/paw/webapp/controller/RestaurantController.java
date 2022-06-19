@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exceptions.*;
+import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
+import ar.edu.itba.paw.model.exceptions.RepeatedReviewException;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
@@ -90,7 +93,7 @@ public class RestaurantController {
         } catch (IOException e) {
             throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
-        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getLat(), form.getLng(), form.getCategories(), form.getShifts());
 
         return new ModelAndView("redirect:/restaurant");
     }
@@ -106,6 +109,8 @@ public class RestaurantController {
         form.setAddress(restaurant.getAddress());
         form.setEmail(restaurant.getMail());
         form.setDetail(restaurant.getDetail());
+        form.setLat(restaurant.getLat());
+        form.setLng(restaurant.getLng());
         form.setZone(restaurant.getZone().getName());
         form.setCategories(restaurant.getCategories().
                 stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
@@ -129,7 +134,7 @@ public class RestaurantController {
             throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
-        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts(), image);
+        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getLat(), form.getLng(), form.getCategories(), form.getShifts(), image);
 
         return new ModelAndView("redirect:/restaurant");
     }

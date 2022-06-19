@@ -63,6 +63,11 @@
                     <div class="card-content same_width_elements">
                         <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
                     </div>
+                    <c:if test="${restaurant.lat != null}">
+                        <div class="card-content same_width_elements">
+                            <div id="map" class="rounded height_400px"></div>
+                        </div>
+                    </c:if>
                     <div class="card-content same_width_elements flex_center">
                         <div class="flex_row_only scrollable_row width_100 z_index_9999">
                             <c:forEach items="${restaurant.categories}" var="category">
@@ -201,8 +206,47 @@
         </div>
     </div>
 </div>
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initMap&v=weekly"
+        defer
+></script>
 <%@ include file="../footer.jsp" %>
 <script>
+    function initMap() {
+        if (document.getElementById('map') == null) return;
+
+        let lat = "<c:out value="${restaurant.lat}"/>";
+        let lng = "<c:out value="${restaurant.lng}"/>";
+        if (document.getElementById('map') == null || lat === null || lat == "") return;
+        const myLatLng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 14
+        });
+
+
+        var bounds = new google.maps.LatLngBounds();
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+        });
+
+        const infowindow = new google.maps.InfoWindow({
+            content: "<p class=\"black-text\">" + "<c:out value="${restaurant.address}"/>" + "</p>",
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', initMap);
+
+
     // Set up rating
     document.addEventListener('DOMContentLoaded', function () {
         let ratings = document.getElementsByClassName("star_rating");

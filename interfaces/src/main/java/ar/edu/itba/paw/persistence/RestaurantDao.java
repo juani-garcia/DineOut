@@ -15,7 +15,7 @@ public interface RestaurantDao {
 
     PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone);
 
-    Restaurant create(final User user, final String name, final Image image, final String address, final String mail, final String detail, final Zone zone);
+    Restaurant create(final User user, final String name, final Image image, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng);
 
     List<Restaurant> getTopTenByFavorite();
 

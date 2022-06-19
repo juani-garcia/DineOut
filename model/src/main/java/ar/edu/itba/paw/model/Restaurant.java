@@ -39,6 +39,12 @@ public class Restaurant {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "lat")
+    private Float lat;
+
+    @Column(name = "lng")
+    private Float lng;
+
     @Column(name = "mail")
     private String mail;
 
@@ -73,7 +79,7 @@ public class Restaurant {
     protected Restaurant() {
     }
 
-    public Restaurant(User user, String name, Image image, String address, String mail, String detail, Zone zone) {
+    public Restaurant(User user, String name, Image image, String address, String mail, String detail, Zone zone, Float lat, Float lng) {
         this.name = name;
         this.user = user;
         this.image = image;
@@ -81,11 +87,13 @@ public class Restaurant {
         this.detail = detail;
         this.mail = mail;
         this.zone = zone;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     @Deprecated
     /* Only for testing purposes */
-    public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone) {
+    public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Float lat, Float lng) {
         this.id = id;
         this.user = user;
         this.name = name;
@@ -94,6 +102,8 @@ public class Restaurant {
         this.detail = detail;
         this.mail = mail;
         this.zone = zone;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public long getId() {
@@ -150,6 +160,22 @@ public class Restaurant {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Float getLat() {
+        return lat;
+    }
+
+    public void setLat(Float lat) {
+        this.lat = lat;
+    }
+
+    public Float getLng() {
+        return lng;
+    }
+
+    public void setLng(Float lng) {
+        this.lng = lng;
     }
 
     public void setMail(String mail) {

@@ -10,10 +10,6 @@
 </head>
 <body class="default_light">
 <%@ include file="../navbar.jsp" %>
-
-<h2 class="megabold center white-text"><spring:message code="register.restaurant.form.title"/></h2>
-
-
 <c:url value="/restaurant/register" var="postPath"/>
 <form:form id="restaurant_form" modelAttribute="restaurantForm" action="${postPath}" method="post" enctype="multipart/form-data">
     <div class="container">
@@ -38,19 +34,26 @@
                     <div class="row">
                         <form:label path="address" cssClass="semibold label-text-size"><spring:message
                                 code="register.restaurant.form.address"/>*</form:label>
-                        <form:input path="address" type="text"/>
+                        <form:input path="address" type="text" id="pac-input"/>
                         <form:errors path="address" cssClass="isa_error" element="p"/>
                     </div>
+                    <div class="container flex_column">
+                        <div id="map" class="rounded height_400px"></div>
+                    </div>
                     <div class="row input-field">
-                        <form:label path="zone" cssClass="semibold label-text-size"><spring:message
-                                code="register.restaurant.form.zone"/></form:label>
-                        <form:select path="zone">
-                            <form:option value=""><spring:message code="register.restaurant.zones"/></form:option>
-                            <c:forEach items="${zones}" var="zone">
-                                <form:option value="${zone.name}"><c:out value="${zone.name}"/></form:option>
-                            </c:forEach>
-                        </form:select>
+                        <form:label path="zone" cssClass="semibold label-text-size display_hidden"/>
+                        <form:input type="text" path="zone" id="zone_input" cssClass="display_hidden"/>
                         <form:errors path="zone" element="p" cssClass="isa_error"/>
+                    </div>
+                    <div class="row input-field display_hidden">
+                        <form:label path="lat" cssClass="semibold label-text-size"/>
+                        <form:input type="number" path="lat" step="0.000001" min="-90" max="90" id="lat_input"/>
+                        <form:errors path="lat" element="p" cssClass="isa_error"/>
+                    </div>
+                    <div class="row input-field display_hidden">
+                        <form:label path="lng" cssClass="semibold label-text-size"/>
+                        <form:input type="number" path="lng" step="0.000001" min="-180" max="180" id="lng_input"/>
+                        <form:errors path="lng" element="p" cssClass="isa_error"/>
                     </div>
                     <div class="row">
                         <form:label path="email" cssClass="semibold label-text-size"><spring:message
@@ -66,7 +69,7 @@
                     </div>
                     <div class="row">
                         <form:label path="categories" cssClass="semibold label-text-size">
-                            <spring:message code="register.restaurant.form.categories"/>
+                            <spring:message code="register.restaurant.form.categories"/>*
                         </form:label>
                         <form:select multiple="true" path="categories">
                             <c:forEach items="${categories}" var="category">
@@ -78,7 +81,7 @@
                     </div>
                     <div class="row">
                         <form:label path="shifts" cssClass="semibold label-text-size">
-                            <spring:message code="register.restaurant.form.shifts"/>
+                            <spring:message code="register.restaurant.form.shifts"/>*
                         </form:label>
                         <form:select multiple="true" path="shifts">
                             <c:forEach items="${shifts}" var="shift">
@@ -104,15 +107,20 @@
     </div>
 </form:form>
 
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initAutocomplete&libraries=places&v=weekly"
+        defer
+></script>
 <%@ include file="../footer.jsp" %>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var options = [];
-        <c:forEach items="${zones}" var="zone">
-        options.push("${zone.name}");
-        </c:forEach>
+        <%--var options = [];--%>
+        <%--<c:forEach items="${shifts}" var="shift">--%>
+        <%--options.push("${shift.name}");--%>
+        <%--</c:forEach>--%>
         var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems, options);
+        var instances = M.FormSelect.init(elems);
     });
 </script>
 </body>

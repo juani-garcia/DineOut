@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS restaurant (
     address TEXT NOT NULL,
                                           mail TEXT UNIQUE NOT NULL,
                                           zone_id INTEGER DEFAULT null,
+                                          lat FLOAT,
+                                          lng FLOAT,
                                           detail TEXT NOT NULL,
                                           FOREIGN KEY (image_id) REFERENCES image (id) ON DELETE SET NULL
 );
