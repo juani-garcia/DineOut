@@ -40,13 +40,14 @@ public class HomeController {
     public ModelAndView webapp(
             @RequestParam(name = "page", defaultValue = "1") final int page,
             @RequestParam(name = "name", defaultValue = "") final String name,
+            @RequestParam(name = "byItem", defaultValue = "false") final boolean byItem,
             @RequestParam(name = "category", defaultValue = "-1") final int category,
             @RequestParam(name = "zone", defaultValue = "-1") final int zone,
             @RequestParam(name = "shift", defaultValue = "-1") final int shift) {
-        PagedQuery<Restaurant> restaurants = restaurantService.filter(page, name, category, shift, zone);
+        PagedQuery<Restaurant> restaurants = restaurantService.filter(page, name, byItem, category, shift, zone);
         if (page != 1 && restaurants.getPageCount() < page)
             return new ModelAndView("redirect:/restaurants" + "?page=" + restaurants.getPageCount() +
-                    "&name=" + name + "&category=" + category + "&zone=" + zone + "&shift=" + shift);
+                    "&name=" + name + "&category=" + category + "&zone=" + zone + "&shift=" + shift + "&byItem=" + byItem);
 
         final ModelAndView mav = new ModelAndView("home/restaurants");
         mav.addObject("categories", Category.values());
