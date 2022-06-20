@@ -17,7 +17,7 @@
     <div class="flex_row">
         <c:if test="${restaurants.content.size() == 0}">
             <div class="container">
-                <div class="card card_wrapper padding-15px default_dark">
+                <div class="card card_wrapper padding-15px white">
                     <h1 class="header center default_light_text">
                         <spring:message code="home.restaurants.none_found"/>
                     </h1>
@@ -51,7 +51,7 @@
                             <div class="flex_column width_70">
                                 <p class="light text_overflow_ellipsis"><spring:message
                                         code="home.restaurants.categories"/>:</p>
-                                <div class="flex_row_only scrollable_row width_100 z_index_9999">
+                                <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap">
                                     <c:forEach items="${restaurant.categories}" var="category">
                                         <h6 class="card margins_lr_5px padding_4px shadowed_small z_index_9999">
                                             <spring:message code="${category.message}"/>

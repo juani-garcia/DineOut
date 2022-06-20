@@ -708,6 +708,9 @@ button {
     margin-bottom: 5px;
 }
 
+.white_space_nowrap {
+    white-space: nowrap;
+}
 
 nav {
     -webkit-box-shadow: none !important;
