@@ -29,6 +29,7 @@ public class UserRole {
     }
 
     @Deprecated
+    /* Only for testing purposes */
     public UserRole(long id, String roleName, Collection<RoleAuthority> authorities) {
         this.id = id;
         this.roleName = roleName;

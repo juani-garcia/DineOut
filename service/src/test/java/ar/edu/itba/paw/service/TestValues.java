@@ -3,6 +3,8 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestValues {
 
@@ -36,7 +38,9 @@ public class TestValues {
     static final Zone RESTAURANT_ZONE = Zone.ACASSUSO;
     static final Long RESTAURANT_FAV_COUNT = 0L;
     static final Float RESTAURANT_LAT = 0f, RESTAURANT_LNG = 0f;
-    static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID, USER, RESTAURANT_NAME, RESTAURANT_IMAGE_ID, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
+    static final List<Long> RESTAURANT_CATEGORIES = new ArrayList<>();
+    static final List<Long> RESTAURANT_SHIFTS = new ArrayList<>();
+    static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID, USER, RESTAURANT_NAME, RESTAURANT_ADDRESS, RESTAURANT_MAIL,
             RESTAURANT_DETAIL, RESTAURANT_ZONE, RESTAURANT_LAT, RESTAURANT_LNG);
 
     static final int RESERVATION_AMOUNT = 1;

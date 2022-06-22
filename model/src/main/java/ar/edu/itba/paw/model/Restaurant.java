@@ -93,11 +93,10 @@ public class Restaurant {
 
     @Deprecated
     /* Only for testing purposes */
-    public Restaurant(long id, User user, String name, Long imageId, String address, String mail, String detail, Zone zone, Float lat, Float lng) {
+    public Restaurant(long id, User user, String name, String address, String mail, String detail, Zone zone, Float lat, Float lng) {
         this.id = id;
         this.user = user;
         this.name = name;
-        // this.imageId = imageId;
         this.address = address;
         this.detail = detail;
         this.mail = mail;
