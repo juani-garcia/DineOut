@@ -10,9 +10,11 @@ public interface RestaurantReviewService {
 
     PagedQuery<RestaurantReview> getByRestaurantId(long page, long restaurantId);
 
-    RestaurantReview create(String review, long rating, long restaurantId);
+    RestaurantReview create(String review, long rating, long restaurantId, String contextPath);
 
     void delete(long reviewId);
 
     RestaurantReview edit(long reviewId, String review, long rating);
+
+    boolean hasReviewedRestaurant(Long userId, Long restaurantId);
 }

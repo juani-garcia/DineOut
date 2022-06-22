@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
+import ar.edu.itba.paw.model.exceptions.RepeatedReviewException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.service.*;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -48,7 +50,7 @@ public class RestaurantController {
     private RestaurantReviewService restaurantReviewService;
 
     @RequestMapping("")
-    public ModelAndView restaurantProfile() {
+    public ModelAndView restaurantProfile(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage) {
         final ModelAndView mav = new ModelAndView("restaurant/profile");
 
         Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
@@ -58,6 +60,15 @@ public class RestaurantController {
 
         List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
         mav.addObject("sections", menuSectionList);
+
+        PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, restaurant.getId());
+        long reviewPages = restaurantReviewPagedQuery.getPageCount();
+        if (reviewPage != 1 && reviewPages < reviewPage)
+            return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view?page=" + reviewPage);
+
+
+        mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
+        mav.addObject("reviewPages", reviewPages);
         mav.addObject("shifts", restaurant.getShifts());
         return mav;
     }
@@ -82,7 +93,7 @@ public class RestaurantController {
         } catch (IOException e) {
             throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
-        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts());
+        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getLat(), form.getLng(), form.getCategories(), form.getShifts());
 
         return new ModelAndView("redirect:/restaurant");
     }
@@ -98,6 +109,8 @@ public class RestaurantController {
         form.setAddress(restaurant.getAddress());
         form.setEmail(restaurant.getMail());
         form.setDetail(restaurant.getDetail());
+        form.setLat(restaurant.getLat());
+        form.setLng(restaurant.getLng());
         form.setZone(restaurant.getZone().getName());
         form.setCategories(restaurant.getCategories().
                 stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
@@ -121,7 +134,7 @@ public class RestaurantController {
             throw new IllegalStateException(); // This should never happen because of @ValidImage.
         }
 
-        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getCategories(), form.getShifts(), image);
+        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getLat(), form.getLng(), form.getCategories(), form.getShifts(), image);
 
         return new ModelAndView("redirect:/restaurant");
     }
@@ -263,6 +276,12 @@ public class RestaurantController {
     @RequestMapping("/{resId}/view")
     public ModelAndView reservation(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage,
                                     @PathVariable final long resId) {
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        User user = securityService.getCurrentUser().orElse(null);
+        if (restaurant.getUser().equals(user)) {
+            return new ModelAndView("redirect:/restaurant");
+        }
+
         final ModelAndView mav = new ModelAndView("restaurant/public_detail");
 
         PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, resId);
@@ -270,11 +289,10 @@ public class RestaurantController {
         if (reviewPage != 1 && reviewPages < reviewPage)
             return new ModelAndView("redirect:/restaurant/" + resId + "/view?page=" + reviewPage);
 
-
-        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-        mav.addObject("restaurant", restaurant);
+        mav.addObject("hasReviewed", user != null && restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId()));
         mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
         mav.addObject("reviewPages", reviewPages);
+        mav.addObject("restaurant", restaurant);
         mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
         mav.addObject("formSuccess", false);
         mav.addObject("shifts", restaurant.getShifts());
@@ -285,18 +303,32 @@ public class RestaurantController {
 
     @RequestMapping("/{resId}/review")
     public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {  // resId belongs here to preserve the context for the POST
-        return new ModelAndView("restaurant/add_review");
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        if (restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId())) {
+            throw new RepeatedReviewException();
+        }
+        ModelAndView mav = new ModelAndView("restaurant/add_review");
+        mav.addObject("restaurant", restaurant);
+        return mav;
     }
 
     @RequestMapping(value = "/{resId}/review", method = {RequestMethod.POST})
     public ModelAndView section(@Valid @ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form,
                                 final BindingResult errors,
-                                @PathVariable final long resId) {
+                                @PathVariable final long resId,
+                                final HttpServletRequest request) {
+        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        if (restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId())) {
+            throw new RepeatedReviewException();
+        }
+
         if (errors.hasErrors()) {
             return addReview(form, resId);
         }
 
-        restaurantReviewService.create(form.getReview(), form.getRating(), resId);
+        restaurantReviewService.create(form.getReview(), form.getRating(), resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
         return new ModelAndView("redirect:/restaurant/" + resId + "/view");
     }
 

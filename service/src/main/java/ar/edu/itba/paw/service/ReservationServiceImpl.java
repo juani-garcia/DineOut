@@ -4,12 +4,14 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -39,10 +41,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation = reservationDao.create(restaurant, user, amount, dateTime, comments);
 
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
+        User restaurantUser = restaurant.getUser();
 
-        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation, contextPath);
-        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user, contextPath);
+        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation, contextPath, user.getLocale());
+        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user, contextPath,
+                restaurantUser != null? restaurantUser.getLocale() : null);
 
         return reservation;
     }
@@ -81,12 +84,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ForbiddenActionException();
         }
 
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-
         emailService.sendReservationCancelledUser(
-                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation, contextPath);
+                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation, contextPath,
+                owner == null? null : owner.getLocale());
+
+        User restaurantUser = reservation.getRestaurant().getUser();
         emailService.sendReservationCancelledRestaurant(
-                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner, contextPath);
+                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner, contextPath,
+                restaurantUser == null? null : restaurantUser.getLocale());
 
         reservationDao.delete(reservationId);
 
@@ -103,11 +108,10 @@ public class ReservationServiceImpl implements ReservationService {
         if (reservation.getDateTime().isBefore(LocalDateTime.now()))
             throw new InvalidTimeException();
 
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-
         User owner = reservation.getOwner();
         emailService.sendReservationConfirmed(reservation.getMail(),
-                owner == null? "" : owner.getFirstName(), reservation, contextPath);
+                owner == null? "" : owner.getFirstName(), reservation, contextPath,
+                owner == null? null : owner.getLocale());
 
         reservation.confirm();
     }

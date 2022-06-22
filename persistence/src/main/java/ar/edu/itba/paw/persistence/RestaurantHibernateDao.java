@@ -40,9 +40,9 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
+    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, Category category, Shift shift, Zone zone) {
 
-        ParametrizedQuery filter = filterBuilder(name, category, shift, zone);
+        ParametrizedQuery filter = filterBuilder(name, byItem, category, shift, zone);
         String idsQuery = "SELECT id\n" + filter.query + "ORDER BY rating DESC, fav_count DESC LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
 
@@ -80,7 +80,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
         return new PagedQuery<>(content, (long) page, (count + PAGE_SIZE - 1) / PAGE_SIZE);
     }
 
-    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone) {
+    private ParametrizedQuery filterBuilder(String name, boolean byItem, Category category, Shift shift, Zone zone) {
         StringBuilder sql = new StringBuilder();
         sql.append("FROM (SELECT restaurant.*, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
@@ -88,7 +88,17 @@ public class RestaurantHibernateDao implements RestaurantDao {
         Map<String, Object> args = new HashMap<>();
 
         if (name != null && !name.equals("")) {
-            sql.append("AND LOWER(name) like :name\n");
+            sql.append("AND ");
+            if(byItem) {
+                sql.append("id IN (\n");
+                sql.append("(SELECT restaurant_id FROM menu_section WHERE menu_section.id IN (SELECT section_id FROM menu_item WHERE Lower(name) LIKE :name))\n");
+                sql.append("UNION\n");
+                sql.append("(SELECT restaurant_id FROM menu_section WHERE LOWER(menu_section.name) LIKE :name)\n");
+                sql.append(")\n");
+            } else {
+                sql.append("LOWER(name) like :name\n");
+            }
+
             args.put("name", '%' + name.toLowerCase() + '%');
         }
 
@@ -111,8 +121,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public Restaurant create(User user, String name, Image image, String address, String mail, String detail, Zone zone) {
-        Restaurant restaurant = new Restaurant(user, name, image, address, mail, detail, zone);
+    public Restaurant create(User user, String name, Image image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng) {
+        Restaurant restaurant = new Restaurant(user, name, image, address, mail, detail, zone, lat, lng);
         em.persist(restaurant);
         return restaurant;
     }

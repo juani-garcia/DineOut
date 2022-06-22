@@ -1,22 +1,15 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.Favorite;
-
-import java.util.List;
+import ar.edu.itba.paw.model.*;
 
 public interface FavoriteDao {
 
-    boolean delete(long restaurantId, long userId);
+    Favorite create(User user, Restaurant restaurant);
 
-    boolean create(long restaurantId, long userId);
-
-    Long getFavCount(long restaurantId);
+    void delete(User user, Restaurant restaurant);
 
     boolean isFavorite(long restaurantId, long userId);
 
-    List<Favorite> getAllByUserId(long id, int page);
+    PagedQuery<Favorite> getAllByUserId(long userId, int page);
 
-    long countByUserId(long id);
-
-    long countPagesByUserId(long id);
 }

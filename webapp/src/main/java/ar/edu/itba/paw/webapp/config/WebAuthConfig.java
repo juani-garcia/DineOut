@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +45,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         String hierarchy = "ROLE_ADMIN > ROLE_RESTAURANT \n ROLE_ADMIN > ROLE_DINER \n ROLE_DINER > ROLE_BASIC_USER \n ROLE_RESTAURANT > ROLE_BASIC_USER";
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler success() {
+        return new RefererRedirectionAuthenticationSuccessHandler("/");
     }
 
     @Bean
@@ -90,9 +96,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", false)
                 .failureUrl("/login?error=true")
                 .loginPage("/login")
+                .successHandler(success())
                 .and().rememberMe()
                 .rememberMeParameter("remember-me")
                 .userDetailsService(userDetailsService)

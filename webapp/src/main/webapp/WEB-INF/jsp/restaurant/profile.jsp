@@ -19,16 +19,22 @@
                     <h1 class="header center bold text_overflow_ellipsis flex_row flex_center">
                         <c:out value="${restaurant.name}"/>
                         <c:url value="/restaurant/edit" var="editUrl"/>
-                        <a class="btn-large waves-effect waves-light btn-floating default_red"
-                           style="margin-left: 20px" href="${editUrl}">
+                        <a class="btn-large waves-effect waves-light btn-floating default_red margin_l_20px"
+                           href="${editUrl}">
                             <i class="material-icons left">edit</i>
                         </a>
                     </h1>
+
+                    <c:if test="${restaurant.rating != 0}">
+                        <h3 class="center bold text_overflow_ellipsis flex_row flex_center" id="star_rating">
+                                <%-- generated via JS.--%>
+                        </h3>
+                    </c:if>
                 </div>
                 <c:if test="${restaurant.image != null}">
                     <div class="card-image flex_center">
                         <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
-                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                        <img data-enlargeable src="${imagePath}" class="scale_down rounded" alt=""/>
                     </div>
                 </c:if>
                 <div class="card-content same_width_elements">
@@ -39,6 +45,33 @@
                 </div>
                 <div class="card-content same_width_elements">
                     <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
+                </div>
+                <c:if test="${restaurant.lat != null}">
+                    <div class="card-content same_width_elements">
+                        <div id="map" class="rounded height_400px"></div>
+                    </div>
+                </c:if>
+                <div class="card-content same_width_elements flex_center">
+                    <c:if test="${restaurant.categories != null && restaurant.categories.size() <= 4}">
+                        <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap flex_center">
+                            <c:forEach items="${restaurant.categories}" var="category">
+                                <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
+                                   href="<c:url value ="/restaurants?category="/>${category.id}">
+                                    <spring:message code="${category.message}"/>
+                                </a>
+                            </c:forEach>
+                        </div>
+                    </c:if>
+                    <c:if test="${restaurant.categories != null && restaurant.categories.size() > 5}">
+                        <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap ">
+                            <c:forEach items="${restaurant.categories}" var="category">
+                                <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
+                                   href="<c:url value ="/restaurants?category="/>${category.id}">
+                                    <spring:message code="${category.message}"/>
+                                </a>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
                 <div class="card-content same_width_elements flex_center">
                     <h5 class="center text_overflow_ellipsis">
@@ -57,6 +90,40 @@
                     </c:forEach>
                 </div>
             </div>
+            <c:if test="${reviews.size() != 0}">
+                <div class="card card_wrapper default_dark white-text same_width_elements">
+
+                    <div class="card-content same_width_elements no_bottom_padding">
+                        <h5><spring:message code="restaurant.add_review.reviews"/>:</h5>
+                    </div>
+                    <div class="card-content same_width_elements">
+                        <c:forEach items="${reviews}" var="review">
+                            <hr>
+                            <h5 class="semibold"><c:out value="${review.user.firstName}"/></h5>
+                            <div class="flex_row">
+                                <h6 class="text_overflow_ellipsis width_75">
+                                    <c:out value="${review.review}"/>
+                                </h6>
+                                <h3 class="medium text_overflow_ellipsis margin_left_auto flex_row star_rating margin_tb_auto"
+                                    id="${review.rating}">
+                                        <%-- generated via JS.--%>
+                                </h3>
+                            </div>
+                        </c:forEach>
+                        <c:if test="${reviewPages > 1}">
+                            <div class="container flex_center" id="paginator">
+                                <ul class="pagination padding-15px big">
+                                    <li class="grow_on_hover2 white-text" id="previous_page"><a href="#!"><i
+                                            class="material-icons">chevron_left</i></a></li>
+                                    <li id="page_number_of_total" class="white-text regular"></li>
+                                    <li class="grow_on_hover2 white-text" id="next_page"><a href="#!"><i
+                                            class="material-icons">chevron_right</i></a></li>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -153,7 +220,7 @@
                                 <c:if test="${item.image != null}">
                                     <div class="card-image">
                                         <c:url value="/image/${item.image.id}" var="imagePath"/>
-                                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                                        <img data-enlargeable src="${imagePath}" class="scale_down rounded" alt=""/>
                                     </div>
                                 </c:if>
                                 <div class="card-content">
@@ -228,9 +295,75 @@
 
 
 <%@ include file="../footer.jsp" %>
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initMap&v=weekly"
+        defer
+></script>
 <script>
     $(document).ready(function () {
         $('.modal').modal();
+    });
+
+    function initMap() {
+        if (document.getElementById('map') == null) return;
+
+        let lat = "<c:out value="${restaurant.lat}"/>";
+        let lng = "<c:out value="${restaurant.lng}"/>";
+        if (document.getElementById('map') == null || lat === null || lat == "") return;
+        const myLatLng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 14
+        });
+
+
+        var bounds = new google.maps.LatLngBounds();
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+        });
+
+        const infowindow = new google.maps.InfoWindow({
+            content: "<p class=\"black-text\">" + "<c:out value="${restaurant.address}"/>" + "</p>",
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', initMap);
+
+
+    // Set up rating
+    document.addEventListener('DOMContentLoaded', function () {
+        let ratings = document.getElementsByClassName("star_rating");
+        if (ratings.length === 0) return;
+        for (let starRating = ratings.item(0), i = 0; i < ratings.length; i++, starRating = ratings.item(i)) {
+            for (let i = 0; i < starRating.id; i++) {
+                starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
+            }
+            for (let i = 0; i < 5 - starRating.id; i++) {
+                starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
+            }
+        }
+    });
+
+    // Set up rating
+    document.addEventListener('DOMContentLoaded', function () {
+        let starRating = document.getElementById("star_rating");
+        if (starRating === null) return;
+        for (let i = 0; i < <c:out value="${restaurant.rating}"/>; i++) {
+            starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_red_text">star</i>';
+        }
+
+        for (let i = 0; i < 5 - <c:out value="${restaurant.rating}"/>; i++) {
+            starRating.innerHTML = starRating.innerHTML + '<i class="material-icons default_light_text">star</i>';
+        }
     });
 </script>
 </body>

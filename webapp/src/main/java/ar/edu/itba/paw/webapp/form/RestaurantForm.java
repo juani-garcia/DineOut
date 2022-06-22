@@ -3,8 +3,10 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
 import ar.edu.itba.paw.webapp.validations.FileSize;
 import ar.edu.itba.paw.webapp.validations.FileType;
+import ar.edu.itba.paw.webapp.validations.ValidZone;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -17,7 +19,7 @@ public class RestaurantForm {
     @NotNull
     private String name;
 
-    @FileSize(mb = 10)
+    @FileSize(mb = 1)
     @FileType(types = {"image/png", "image/jpeg"})
     private MultipartFile image;
 
@@ -36,7 +38,16 @@ public class RestaurantForm {
     private String detail;
 
     @NotNull
+    @ValidZone
     private String zone;
+
+    @NotNull
+    @Range(min = -90, max = 90)
+    private Float lat;
+
+    @NotNull
+    @Range(min = -180, max = 180)
+    private Float lng;
 
     @NotNull
     private List<Long> categories;
@@ -109,4 +120,19 @@ public class RestaurantForm {
         this.shifts = shifts;
     }
 
+    public Float getLat() {
+        return lat;
+    }
+
+    public void setLat(Float lat) {
+        this.lat = lat;
+    }
+
+    public Float getLng() {
+        return lng;
+    }
+
+    public void setLng(Float lng) {
+        this.lng = lng;
+    }
 }

@@ -21,6 +21,13 @@ public class ErrorControllerAdvice {
         return new ModelAndView("forward:/404");
     }
 
+    @ExceptionHandler(RepeatedReviewException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "You are trying to add a second review to a restaurant")
+    public ModelAndView repeatedReview(RepeatedReviewException ex) {
+        LOGGER.warn(ex.getMessage());
+        return new ModelAndView("forward:/400");
+    }
+
     @ExceptionHandler(InvalidPageException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid page number")
     public ModelAndView invalidPage(InvalidPageException ex) {

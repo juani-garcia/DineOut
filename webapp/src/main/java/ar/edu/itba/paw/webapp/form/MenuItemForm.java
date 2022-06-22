@@ -26,7 +26,7 @@ public class MenuItemForm {
     @NotNull
     private long menuSectionId;
 
-    @FileSize(mb = 10)
+    @FileSize(mb = 1)
     @FileType(types = {"image/png", "image/jpeg"})
     private MultipartFile image;
 

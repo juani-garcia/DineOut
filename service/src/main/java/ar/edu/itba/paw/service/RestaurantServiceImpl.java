@@ -34,19 +34,19 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, int categoryId, int shiftId, int zoneId) {
+    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, int categoryId, int shiftId, int zoneId) {
         if (page <= 0) throw new InvalidPageException();
 
         Category category = Category.getById(categoryId);
         Zone zone = Zone.getById(zoneId);
         Shift shift = Shift.getById(shiftId);
 
-        return restaurantDao.filter(page, name, category, shift, zone);
+        return restaurantDao.filter(page, name, byItem, category, shift, zone);
     }
 
     @Transactional
     @Override
-    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final List<Long> categories, final List<Long> shifts) {
+    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         if (getByUserID(user.getId()).isPresent())
             throw new IllegalStateException();
@@ -54,7 +54,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (image != null && image.length > 0) {
             restaurantImage = imageService.create(image);
         }
-        Restaurant restaurant = restaurantDao.create(user, name, restaurantImage, address, mail, detail, zone);
+        Restaurant restaurant = restaurantDao.create(user, name, restaurantImage, address, mail, detail, zone, lat, lng);
         restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
         restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
         return restaurant;
@@ -62,7 +62,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Transactional
     @Override
-    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
+    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         restaurant.setName(name);
@@ -70,6 +70,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setMail(mail);
         restaurant.setDetail(detail);
         restaurant.setZone(zone);
+        restaurant.setLat(lat);
+        restaurant.setLng(lng);
         Image image = restaurant.getImage();
         if (image != null) {
             if (imageBytes != null && imageBytes.length > 0) {
@@ -163,7 +165,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
         if (!restaurantReservedList.isEmpty())
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        return restaurantDao.filter(1, null, null, null, null)
+        return restaurantDao.filter(1, null, false, null, null, null)
                 .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
         // TODO: @JeroBrave Customize exception
     }

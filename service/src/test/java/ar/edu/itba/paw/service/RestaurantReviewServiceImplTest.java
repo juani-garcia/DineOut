@@ -27,6 +27,8 @@ public class RestaurantReviewServiceImplTest {
     private RestaurantService restaurantService;
     @Mock
     private RestaurantReviewDao restaurantReviewDao;
+    @Mock
+    private EmailService emailService;
 
     @Test
     public void testCreateRestaurantReview() {
@@ -38,7 +40,7 @@ public class RestaurantReviewServiceImplTest {
 
         RestaurantReview restaurantReview = null;
         try {
-            restaurantReview = restaurantReviewService.create(RESTAURANT_REVIEW_NAME, RESTAURANT_REVIEW_RATING, RESTAURANT_ID);
+            restaurantReview = restaurantReviewService.create(RESTAURANT_REVIEW_NAME, RESTAURANT_REVIEW_RATING, RESTAURANT_ID, null);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create restaurantReview: " + e.getMessage());
@@ -46,6 +48,7 @@ public class RestaurantReviewServiceImplTest {
 
         Assert.assertNotNull(restaurantReview);
         Assert.assertEquals(RESTAURANT, restaurantReview.getRestaurant());
+
     }
 
     @Test

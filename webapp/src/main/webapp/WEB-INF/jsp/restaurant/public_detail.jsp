@@ -51,7 +51,7 @@
                     <c:if test="${restaurant.image != null}">
                         <div class="card-image">
                             <c:url value="/image/${restaurant.image.id}" var="imagePath"/>
-                            <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                            <img data-enlargeable src="${imagePath}" class="scale_down rounded" alt=""/>
                         </div>
                     </c:if>
                     <div class="card-content same_width_elements">
@@ -62,6 +62,33 @@
                     </div>
                     <div class="card-content same_width_elements">
                         <h5 class="center text_overflow_ellipsis">&#128205;<c:out value="${restaurant.address}"/></h5>
+                    </div>
+                    <c:if test="${restaurant.lat != null}">
+                        <div class="card-content same_width_elements">
+                            <div id="map" class="rounded height_400px"></div>
+                        </div>
+                    </c:if>
+                    <div class="card-content same_width_elements flex_center">
+                        <c:if test="${restaurant.categories != null && restaurant.categories.size() <= 4}">
+                            <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap flex_center">
+                                <c:forEach items="${restaurant.categories}" var="category">
+                                    <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
+                                       href="<c:url value ="/restaurants?category="/>${category.id}">
+                                        <spring:message code="${category.message}"/>
+                                    </a>
+                                </c:forEach>
+                            </div>
+                        </c:if>
+                        <c:if test="${restaurant.categories != null && restaurant.categories.size() > 5}">
+                            <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap ">
+                                <c:forEach items="${restaurant.categories}" var="category">
+                                    <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
+                                       href="<c:url value ="/restaurants?category="/>${category.id}">
+                                        <spring:message code="${category.message}"/>
+                                    </a>
+                                </c:forEach>
+                            </div>
+                        </c:if>
                     </div>
                     <div class="card-content same_width_elements flex_center">
                         <h5 class="center text_overflow_ellipsis">
@@ -88,10 +115,12 @@
                                            class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded">
                                             <spring:message code="reservation.reservation.form.submit"/>
                                         </a>
-                                        <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
-                                           class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
-                                            <spring:message code="restaurant.add_review"/>
-                                        </a>
+                                        <c:if test="${!hasReviewed}">
+                                            <a href="<c:url value ="/restaurant/${restaurant.id}/review"/>"
+                                               class="btn-large waves-effect waves-red white black-text lighten-1 center no-text-transform semibold rounded margin_l_20px">
+                                                <spring:message code="restaurant.add_review"/>
+                                            </a>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -113,11 +142,12 @@
                 <c:if test="${reviews.size() != 0}">
                     <div class="card card_wrapper default_dark white-text same_width_elements">
 
-                        <div class="card-content same_width_elements">
+                        <div class="card-content same_width_elements no_bottom_padding">
                             <h5><spring:message code="restaurant.add_review.reviews"/>:</h5>
                         </div>
                         <div class="card-content same_width_elements">
                             <c:forEach items="${reviews}" var="review">
+                                <hr>
                                 <h5 class="semibold"><c:out value="${review.user.firstName}"/></h5>
                                 <div class="flex_row">
                                     <h6 class="text_overflow_ellipsis width_75">
@@ -170,7 +200,7 @@
                                 <c:if test="${item.image != null}">
                                     <div class="card-image">
                                         <c:url value="/image/${item.image.id}" var="imagePath"/>
-                                        <img src="${imagePath}" class="scale_down rounded" alt=""/>
+                                        <img data-enlargeable src="${imagePath}" class="scale_down rounded" alt=""/>
                                     </div>
                                 </c:if>
                                 <div class="card-content">
@@ -188,8 +218,47 @@
         </div>
     </div>
 </div>
+<!-- Google maps api places -->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCNikN--hCj1MYvbCWEch4cTIh3JeicLQ&callback=initMap&v=weekly"
+        defer
+></script>
 <%@ include file="../footer.jsp" %>
 <script>
+    function initMap() {
+        if (document.getElementById('map') == null) return;
+
+        let lat = "<c:out value="${restaurant.lat}"/>";
+        let lng = "<c:out value="${restaurant.lng}"/>";
+        if (document.getElementById('map') == null || lat === null || lat == "") return;
+        const myLatLng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 14
+        });
+
+
+        var bounds = new google.maps.LatLngBounds();
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+        });
+
+        const infowindow = new google.maps.InfoWindow({
+            content: "<p class=\"black-text\">" + "<c:out value="${restaurant.address}"/>" + "</p>",
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', initMap);
+
+
     // Set up rating
     document.addEventListener('DOMContentLoaded', function () {
         let ratings = document.getElementsByClassName("star_rating");
@@ -203,6 +272,12 @@
             }
         }
     });
+
+    // Set up cat cards
+    function searchForCategory(catId) {
+        let catSearch = '<c:url value ="/restaurants?category="/>';
+        window.location.href = catSearch + catId;
+    }
 
     // Set up rating
     document.addEventListener('DOMContentLoaded', function () {

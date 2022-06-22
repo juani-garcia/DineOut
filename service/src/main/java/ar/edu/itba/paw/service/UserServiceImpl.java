@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath) {
-        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
+        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName, LocaleContextHolder.getLocale());
         if (user == null) return null;
 
         String role = isRestaurant ? Role.RESTAURANT.getRoleName() : Role.DINER.getRoleName();
@@ -59,8 +59,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
         user.addRole(userRole);
 
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath);
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
+
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public User edit(User user, String firstName, String lastName, String contextPath) {
+        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return null;
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
         return user;
     }
@@ -86,8 +98,9 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(User user, String contextPath) {
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        emailService.sendChangePassword(user.getUsername(), user.getFirstName(), contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath);
+        emailService.sendChangePassword(
+                user.getUsername(), user.getFirstName(),
+                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath, user.getLocale());
 
     }
 
