@@ -543,6 +543,10 @@ h1 {
     max-width: 40% !important;
 }
 
+.webkit_fill_white {
+    -webkit-text-fill-color: white !important;
+}
+
 .item_card {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;

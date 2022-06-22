@@ -18,7 +18,7 @@
                 <c:url value="/diner/edit" var="editUrl"/>
                 <a class="btn-large waves-effect waves-light btn-floating default_red margin_l_20px"
                    href="${editUrl}">
-                    <i class="material-icons left white-text">edit</i>
+                    <i class="material-icons left white-text webkit_fill_white">edit</i>
                 </a>
             </h1>
 

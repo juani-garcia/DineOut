@@ -48,17 +48,32 @@
                     </c:if>
                     <div class="flex_row margin_t_auto width_100">
                         <c:if test="${restaurant.categories.size() != 0}">
-                            <div class="flex_column width_70">
-                                <p class="light text_overflow_ellipsis"><spring:message
-                                        code="home.restaurants.categories"/>:</p>
-                                <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap">
-                                    <c:forEach items="${restaurant.categories}" var="category">
-                                        <h6 class="card margins_lr_5px padding_4px shadowed_small z_index_9999">
-                                            <spring:message code="${category.message}"/>
-                                        </h6>
-                                    </c:forEach>
+                            <c:if test="${restaurant.rating != null && restaurant.rating != 0}">
+                                <div class="flex_column width_70">
+                                    <p class="light text_overflow_ellipsis"><spring:message
+                                            code="home.restaurants.categories"/>:</p>
+                                    <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap">
+                                        <c:forEach items="${restaurant.categories}" var="category">
+                                            <h6 class="card margins_lr_5px padding_4px shadowed_small z_index_9999">
+                                                <spring:message code="${category.message}"/>
+                                            </h6>
+                                        </c:forEach>
+                                    </div>
                                 </div>
-                            </div>
+                            </c:if>
+                            <c:if test="${restaurant.rating == null || restaurant.rating == 0}">
+                                <div class="flex_column width_100">
+                                    <p class="light text_overflow_ellipsis"><spring:message
+                                            code="home.restaurants.categories"/>:</p>
+                                    <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap">
+                                        <c:forEach items="${restaurant.categories}" var="category">
+                                            <h6 class="card margins_lr_5px padding_4px shadowed_small z_index_9999">
+                                                <spring:message code="${category.message}"/>
+                                            </h6>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                            </c:if>
                         </c:if>
                         <c:if test="${restaurant.categories.size() == 0}">
                             <p class="light text_overflow_ellipsis margin_t_auto"><spring:message
