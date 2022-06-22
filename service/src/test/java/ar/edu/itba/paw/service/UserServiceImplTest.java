@@ -46,8 +46,8 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreateUser() {
-        when(userDao.create(anyString(), any(), anyString(), anyString())).
-                thenReturn(new User(USERNAME, PASSWORD, FIRST_NAME, LAST_NAME));
+        when(userDao.create(anyString(), any(), anyString(), anyString(), any())).
+                thenReturn(TestValues.USER);
         when(userRoleService.getByRoleName(anyString())).
                 thenReturn(Optional.of(new UserRole(1, Role.DINER.toString(), new ArrayList<>())));
 
@@ -64,7 +64,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testChangePasswordByUserToken() {
-        when(userDao.create(anyString(), any(), anyString(), anyString())).
+        when(userDao.create(anyString(), any(), anyString(), anyString(), any())).
                 thenReturn(new User(ID, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME));
         when(userRoleService.getByRoleName(anyString())).
                 thenReturn(Optional.of(new UserRole(1, Role.DINER.toString(), new ArrayList<>())));
