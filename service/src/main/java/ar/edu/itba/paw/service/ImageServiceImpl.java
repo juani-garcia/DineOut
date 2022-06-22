@@ -51,6 +51,7 @@ public class ImageServiceImpl implements ImageService {
         imageDao.delete(id);
     }
 
+    // From: https://stackoverflow.com/questions/1228381/scale-an-image-which-is-stored-as-a-byte-in-java
     private byte[] scale(byte[] fileData, int width, int height) {
         ByteArrayInputStream in = new ByteArrayInputStream(fileData);
         try {
