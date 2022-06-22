@@ -88,12 +88,4 @@ public class UserHibernateDaoTest {
         assertEquals(1, TestHelper.getRows(em, TestValues.USER_TABLE));
     }
 
-//    @Test
-//    public void testCreateUserExistingUsername() {
-//        TestHelper.createUser(em, TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME);
-//
-//        assertThrows(Exception.class, () -> userHibernateDao.create(TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME));
-//        assertEquals(1, TestHelper.getRows(em, TestValues.USER_TABLE));
-//    }
-
 }
