@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
         user.addRole(userRole);
 
-        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath);
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
         return user;
     }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
-        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath);
+        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
         return user;
     }
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         emailService.sendChangePassword(
                 user.getUsername(), user.getFirstName(),
-                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath);
+                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath, user.getLocale());
 
     }
 

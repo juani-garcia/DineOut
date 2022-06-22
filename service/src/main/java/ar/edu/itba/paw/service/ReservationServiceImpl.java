@@ -41,10 +41,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation = reservationDao.create(restaurant, user, amount, dateTime, comments);
 
-        Locale locale = LocaleContextHolder.getLocale();
+        User restaurantUser = restaurant.getUser();
 
-        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation, contextPath, locale);
-        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user, contextPath, locale);
+        emailService.sendReservationCreatedUser(user.getUsername(), user.getFirstName(), reservation, contextPath, user.getLocale());
+        emailService.sendReservationCreatedRestaurant(restaurant.getMail(), restaurant.getName(), reservation, user, contextPath,
+                restaurantUser != null? restaurantUser.getLocale() : null);
 
         return reservation;
     }
@@ -83,12 +84,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ForbiddenActionException();
         }
 
-        Locale locale = LocaleContextHolder.getLocale();
-
         emailService.sendReservationCancelledUser(
-                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation, contextPath, locale);
+                reservation.getMail(), owner == null? "" : owner.getFirstName(), reservation, contextPath,
+                owner == null? null : owner.getLocale());
+
+        User restaurantUser = reservation.getRestaurant().getUser();
         emailService.sendReservationCancelledRestaurant(
-                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner, contextPath, locale);
+                reservation.getRestaurant().getMail(), reservation.getRestaurant().getName(), reservation, owner, contextPath,
+                restaurantUser == null? null : restaurantUser.getLocale());
 
         reservationDao.delete(reservationId);
 
@@ -107,7 +110,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         User owner = reservation.getOwner();
         emailService.sendReservationConfirmed(reservation.getMail(),
-                owner == null? "" : owner.getFirstName(), reservation, contextPath, LocaleContextHolder.getLocale());
+                owner == null? "" : owner.getFirstName(), reservation, contextPath,
+                owner == null? null : owner.getLocale());
 
         reservation.confirm();
     }
