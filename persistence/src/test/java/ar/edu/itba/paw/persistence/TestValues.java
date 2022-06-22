@@ -4,6 +4,8 @@ import ar.edu.itba.paw.model.Image;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Zone;
 
+import java.util.Locale;
+
 public class TestValues {
 
     private TestValues() {
@@ -33,5 +35,6 @@ public class TestValues {
     static final String USER_PASSWORD = "1234567890User";
     static final String USER_NEW_PASSWORD = "User1234567890";
     static final String USER_TABLE = "account";
-    static final User USER = new User(USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME);
+    static final Locale USER_LOCALE = Locale.US;
+    static final User USER = new User(USER_USERNAME, USER_PASSWORD, USER_FIRST_NAME, USER_LAST_NAME, USER_LOCALE);
 }

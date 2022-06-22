@@ -13,6 +13,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -54,7 +55,9 @@ public class RestaurantReviewServiceImpl implements RestaurantReviewService {
         RestaurantReview restaurantReview = restaurantReviewDao.create(review, rating, user, restaurant);
         if (restaurantReview == null) return null;
 
-        emailService.sendReviewToRestaurant(restaurant.getMail(), restaurant.getName(), review, rating, user, contextPath, LocaleContextHolder.getLocale());
+        User restaurantUser = restaurant.getUser();
+        emailService.sendReviewToRestaurant(restaurant.getMail(), restaurant.getName(), review,
+                rating, user, contextPath, restaurantUser == null? null : restaurantUser.getLocale());
 
         return restaurantReview;
     }

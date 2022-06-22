@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Locale;
 import java.util.Optional;
 
 @Repository
@@ -26,8 +27,8 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
-    public User create(String username, String password, String firstName, String lastName) {
-        final User user = new User(username, password, firstName, lastName);
+    public User create(String username, String password, String firstName, String lastName, Locale locale) {
+        final User user = new User(username, password, firstName, lastName, locale);
         em.persist(user);
         return user;
     }

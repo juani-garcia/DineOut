@@ -33,7 +33,8 @@ public class UserHibernateDaoTest {
 
     @Test
     public void testFindByIdUserExists() {
-        User user = TestHelper.createUser(em, TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME);
+        User user = TestHelper.createUser(em, TestValues.USER_USERNAME, TestValues.USER_PASSWORD,
+                TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME, TestValues.USER_LOCALE);
 
         Optional<User> maybeUser = userHibernateDao.getById(user.getId());
 
@@ -54,7 +55,8 @@ public class UserHibernateDaoTest {
 
     @Test
     public void testFindByUsernameUserExists() {
-        TestHelper.createUser(em, TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME);
+        TestHelper.createUser(em, TestValues.USER_USERNAME, TestValues.USER_PASSWORD,
+                TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME, TestValues.USER_LOCALE);
 
         Optional<User> maybeOptionalUser = userHibernateDao.getByUsername(TestValues.USER_USERNAME);
 
@@ -77,7 +79,8 @@ public class UserHibernateDaoTest {
     public void testCreateUser() {
         assertEquals(0, TestHelper.getRows(em, TestValues.USER_TABLE));
 
-        User user = userHibernateDao.create(TestValues.USER_USERNAME, TestValues.USER_PASSWORD, TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME);
+        User user = userHibernateDao.create(TestValues.USER_USERNAME, TestValues.USER_PASSWORD,
+                TestValues.USER_FIRST_NAME, TestValues.USER_LAST_NAME, TestValues.USER_LOCALE);
 
         assertNotNull(user);
         assertTrue(user.getId() > 0L);
