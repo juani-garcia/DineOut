@@ -14,10 +14,9 @@
                     <div class="card-content same_width_elements_with_overflow">
                         <div class="switch" id="by_item_switch">
                             <label>
-                                <spring:message code="search_bar.restaurant_name"/>
+                                <spring:message code="search_bar.look_for_item"/>
                                 <input type="checkbox" name="byItem" id="by_item_checkbox">
                                 <span class="lever"></span>
-                                <spring:message code="search_bar.item_name"/>
                             </label>
                         </div>
                         <label>
