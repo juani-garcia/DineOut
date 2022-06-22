@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Zone;
 
+import java.util.Locale;
+
 public class TestValues {
 
     private TestValues() {
@@ -27,4 +29,5 @@ public class TestValues {
     static final String USER_PASSWORD = "1234567890User";
     static final String USER_NEW_PASSWORD = "User1234567890";
     static final String USER_TABLE = "account";
+    static final Locale USER_LOCALE = Locale.US;
 }
