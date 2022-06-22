@@ -134,6 +134,10 @@ public class UserController {
 
     @RequestMapping(value = "/save_password", method = RequestMethod.POST)
     public ModelAndView savePassword(@Valid @ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm, final BindingResult errors) {
+        if (securityService.getCurrentUser().isPresent()) {
+            return new ModelAndView("redirect:/profile");
+        }
+
         if (errors.hasErrors()) {
             return changePassword(newPasswordForm.getToken(), newPasswordForm);
         }
