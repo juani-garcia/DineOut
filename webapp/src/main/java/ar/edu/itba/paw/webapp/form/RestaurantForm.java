@@ -19,7 +19,7 @@ public class RestaurantForm {
     @NotNull
     private String name;
 
-    @FileSize(mb = 10)
+    @FileSize(mb = 1)
     @FileType(types = {"image/png", "image/jpeg"})
     private MultipartFile image;
 
