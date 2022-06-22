@@ -72,6 +72,7 @@ public class ImageServiceImpl implements ImageService {
             return buffer.toByteArray();
         } catch (IOException e) {
             // TODO: Throw appropriate error
+            return null;
         }
     }
 
