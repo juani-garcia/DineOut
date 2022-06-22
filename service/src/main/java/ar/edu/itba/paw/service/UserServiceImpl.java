@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath) {
-        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
+        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName, LocaleContextHolder.getLocale());
         if (user == null) return null;
 
         String role = isRestaurant ? Role.RESTAURANT.getRoleName() : Role.DINER.getRoleName();
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
         user.addRole(userRole);
 
-        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath, LocaleContextHolder.getLocale());
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath);
 
         return user;
     }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
-        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, LocaleContextHolder.getLocale());
+        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath);
 
         return user;
     }
@@ -100,8 +100,7 @@ public class UserServiceImpl implements UserService {
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         emailService.sendChangePassword(
                 user.getUsername(), user.getFirstName(),
-                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath,
-                LocaleContextHolder.getLocale());
+                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath);
 
     }
 

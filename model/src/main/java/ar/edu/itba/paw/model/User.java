@@ -2,10 +2,7 @@ package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "account")
@@ -28,6 +25,9 @@ public class User implements Serializable {
     @Column(nullable = false, name = "last_name")
     private String lastName;
 
+    @Column(nullable = false, name = "locale")
+    private Locale locale;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "account_to_role",
@@ -39,11 +39,12 @@ public class User implements Serializable {
     protected User() {
     }
 
-    public User(final String username, final String password, final String firstName, final String lastName) {
+    public User(final String username, final String password, final String firstName, final String lastName, final Locale locale) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.locale = locale;
     }
 
     @Deprecated
@@ -80,6 +81,10 @@ public class User implements Serializable {
         return roles;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -90,6 +95,10 @@ public class User implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public void addRole(UserRole userRole) {
