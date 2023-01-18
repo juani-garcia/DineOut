@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -72,11 +73,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+        // TODO: Check all endpoints
         http.sessionManagement()
                 .invalidSessionUrl("/")
                 .and().authorizeRequests()
                 .antMatchers("/", "/restaurants").permitAll()
-                .antMatchers("/login", "/register").anonymous()
+                .antMatchers("/login").anonymous() // TODO
+                .antMatchers(HttpMethod.POST, "/restaurants").anonymous()
                 .antMatchers("/restaurant/item/**").hasRole(Role.RESTAURANT.getRoleName())
                 .antMatchers("/restaurant/section/**").hasRole(Role.RESTAURANT.getRoleName())
                 .antMatchers("/restaurant/register").hasRole(Role.RESTAURANT.getRoleName())
