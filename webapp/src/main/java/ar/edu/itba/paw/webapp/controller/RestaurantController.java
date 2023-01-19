@@ -4,12 +4,15 @@ import ar.edu.itba.paw.model.Restaurant;
 import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
+import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.print.attribute.standard.Media;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,17 +53,23 @@ public class RestaurantController {
 //    }
 
     @POST
-    public Response createRestaurant(@QueryParam("name") final String name,
-                                     // @QueryParam("image") final byte[] image,
-                                     @QueryParam("address") final String address,
-                                     @QueryParam("mail") final String mail,
-                                     @QueryParam("detail") final String detail,
-                                     @QueryParam("zone") final Zone zone,
-                                     @QueryParam("lat") final Float lat,
-                                     @QueryParam("lng") final Float lng,
-                                     @QueryParam("categories") final List<Long> categories,
-                                     @QueryParam("shifts") final List<Long> shifts) {
-        Restaurant newRestaurant = rs.create(name, null, address, mail, detail, zone, lat, lng, categories, shifts);
+    public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
+        byte[] image;
+        try {
+            image = restaurantForm.getImage().getBytes();
+        } catch (IOException e) {
+            throw new IllegalStateException(); // This should never happen because of @ValidImage.
+        }
+        Restaurant newRestaurant = rs.create(restaurantForm.getName(),
+                image,
+                restaurantForm.getAddress(),
+                restaurantForm.getEmail(),
+                restaurantForm.getDetail(),
+                Zone.getByName(restaurantForm.getZone()),
+                restaurantForm.getLat(),
+                restaurantForm.getLng(),
+                restaurantForm.getCategories(),
+                restaurantForm.getShifts());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newRestaurant.getId())).build();
         return Response.created(location).build();
     }
