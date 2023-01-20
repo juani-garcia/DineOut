@@ -39,7 +39,8 @@ public class RestaurantController {
 //    @GET
 //    @Produces(value = {MediaType.APPLICATION_JSON, })
 //    public Response listRestaurants(@QueryParam("page") @DefaultValue("1") final int page) {
-//        final List<RestaurantDTO> restaurantList = rs.getAll(page).stream().map(RestaurantDTO::fromRestaurant).collect(Collectors.toList());
+//        final List<RestaurantDTO> restaurantList = rs.getAll(page)
+//        .stream().map(RestaurantDTO::fromRestaurant).collect(Collectors.toList());
 //
 //        if (restaurantList.isEmpty()) {
 //            return Response.noContent().build();
