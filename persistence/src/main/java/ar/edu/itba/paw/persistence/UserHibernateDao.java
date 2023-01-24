@@ -24,7 +24,7 @@ public class UserHibernateDao implements UserDao {
 
     @Override
     public PagedQuery<User> getUsers(final int page) {
-        String baseQuery = "FROM account";
+        String baseQuery = "FROM account ";
         String idQuery = "SELECT id " + baseQuery + "LIMIT :limit OFFSET :offset";
         String countQuery = "SELECT COUNT(*) " + baseQuery;
         Query query = em.createNativeQuery(idQuery);
