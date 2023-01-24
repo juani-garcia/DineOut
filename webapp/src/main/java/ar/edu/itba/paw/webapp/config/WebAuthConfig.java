@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
@@ -73,47 +74,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        // TODO: Check all endpoints
         http.sessionManagement()
-                .invalidSessionUrl("/")
-                .and().authorizeRequests()
-//                .antMatchers("/", "/restaurants").permitAll()
-//                .antMatchers("/login").anonymous() // TODO
-//                .antMatchers(HttpMethod.POST, "/restaurants").anonymous()
-//                .antMatchers("/restaurant/item/**").hasRole(Role.RESTAURANT.getRoleName())
-//                .antMatchers("/restaurant/section/**").hasRole(Role.RESTAURANT.getRoleName())
-//                .antMatchers("/restaurant/register").hasRole(Role.RESTAURANT.getRoleName())
-//                .antMatchers("/restaurant/edit").hasRole(Role.RESTAURANT.getRoleName())
-//                .antMatchers("/restaurant").hasRole(Role.RESTAURANT.getRoleName())
-//                .antMatchers("/restaurant/**/view").permitAll()
-//                .antMatchers("/restaurant_picker").permitAll()
-//                .antMatchers("/forgot_my_password").permitAll()
-//                .antMatchers("/reset_password").permitAll()
-//                .antMatchers("/change_password").permitAll()
-//                .antMatchers("/save_password").permitAll()
-//                .antMatchers("/reserve/**").hasRole(Role.DINER.getRoleName())
-//                .antMatchers("/create/**").hasRole(Role.DINER.getRoleName())
-//                .antMatchers("/reservation/**/confirm").hasRole(Role.RESTAURANT.getRoleName())
-//                .antMatchers("/diner/**").hasRole(Role.DINER.getRoleName())
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().headers().cacheControl().disable()
+            .and().authorizeRequests()
                 .anyRequest().permitAll()
-                .and().formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .failureUrl("/login?error=true")
-                .loginPage("/login")
-                .successHandler(success())
-                .and().rememberMe()
-                .rememberMeParameter("remember-me")
-                .userDetailsService(userDetailsService)
-                .key(env.getProperty("webauthconfig.rememberme.key"))
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .and().exceptionHandling()
+            .and().exceptionHandling()
                 .accessDeniedPage("/403")
-                .and().csrf().disable();
+            .and().csrf().disable();
     }
+
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
