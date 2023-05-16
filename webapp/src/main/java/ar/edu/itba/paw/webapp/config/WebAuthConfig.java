@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.webapp.auth.DineOutUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -81,7 +83,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
             .and().exceptionHandling()
                 .accessDeniedPage("/403")
-            .and().csrf().disable();
+            .and().addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable();
     }
 
 
