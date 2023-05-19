@@ -144,6 +144,7 @@ public class JwtFilter extends OncePerRequestFilter {
         private final UserDetailsService userDetailsService;
         private final HttpServletResponse response;
         private final HttpServletRequest request;
+        private final JWTUtils jwtUtils;
 
         public ContextProvider(UserService userService, AuthenticationManager authenticationManager,
                                UserDetailsService userDetailsService, HttpServletRequest request,
@@ -153,6 +154,7 @@ public class JwtFilter extends OncePerRequestFilter {
             this.userDetailsService = userDetailsService;
             this.request = request;
             this.response = response;
+            this.jwtUtils = jwtUtils;
         }
     }
 
