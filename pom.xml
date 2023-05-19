@@ -41,6 +41,7 @@
         <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
         <org.hibernate.validator.version>5.1.3.Final</org.hibernate.validator.version>
         <jersey.version>3.0-SNAPSHOT</jersey.version>
+        <io.jsonwebtoken.jjwt.version>0.9.1</io.jsonwebtoken.jjwt.version>
     </properties>
 
 
@@ -280,6 +281,11 @@
                         <artifactId>jboss-logging</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${io.jsonwebtoken.jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
