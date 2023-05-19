@@ -38,6 +38,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DineOutUserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -83,7 +86,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
             .and().exceptionHandling()
                 .accessDeniedPage("/403")
-            .and().addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable();
     }
 
