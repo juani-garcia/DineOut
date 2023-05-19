@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,12 +30,18 @@ import java.util.Optional;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private final JWTUtils jwtUtils;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserDetailsService userDetailsService;
+    public JwtFilter(UserService us, UserDetailsService uds, AuthenticationManager am, JWTUtils jwtu) {
+        this.userService = us;
+        this.authenticationManager = am;
+        this.userDetailsService = uds;
+        this.jwtUtils = jwtu;
+    }
 
     private static final String REFRESH_CUSTOM_HEADER = "X-Refresh-Token",
                                 SEPARATOR = " ";
@@ -54,50 +62,15 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             LOGGER.debug("Getting AuthorizationMethod of value {}", parts[0]);
             method = AuthorizationMethod.valueOf(parts[0].toUpperCase());
-            provider = new ContextProvider(userService, authenticationManager, userDetailsService);
+            provider = new
+                    ContextProvider(userService, authenticationManager, userDetailsService, request, response);
         } catch (IllegalArgumentException e) {
             LOGGER.error("Authorization error. Unsupported method {}", parts[0]);
             method = AuthorizationMethod.UNSUPPORTED;
         }
 
-        if(userService == null || authenticationManager == null || userDetailsService == null) {
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("******************************************************************************************");
-            LOGGER.debug("Autowired components are null");
-        } else {
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            LOGGER.debug("Autowired components are NOTnot null");
-        }
-
         LOGGER.debug("Authorizing with token {}", parts[1]);
-        if(method.authorize(parts[1], response, provider)) {
+        if(method.authorize(parts[1], provider)) {
             chain.doFilter(request, response);
         }
     }
@@ -106,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         BASIC {
             @Override
-            boolean authorize(String token, HttpServletResponse response, ContextProvider provider) {
+            boolean authorize(String token, ContextProvider context) {
                 boolean error = false;
                 String decoded = new String(Base64.getDecoder().decode(token));
                 LOGGER.debug("Decoded credentials: {}", decoded);
@@ -120,8 +93,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(credentials[0], credentials[1]);
 
-                Optional<User> optionalUser = provider.userService.getByUsername(credentials[0]);
-                Authentication authenticate = provider.authenticationManager.authenticate(authentication);
+                Optional<User> optionalUser = context.userService.getByUsername(credentials[0]);
+                Authentication authenticate = context.authenticationManager.authenticate(authentication);
                 UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
 
                 if (!optionalUser.isPresent()) {
@@ -131,50 +104,55 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 User user = optionalUser.get();
 
-                response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + user.getUsername());
-                response.setHeader("X-Refresh", "Bearer " + user.getPassword());
+                context.response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + context.jwtUtils.getToken(user));
+                context.response.setHeader(REFRESH_CUSTOM_HEADER, "Bearer " + context.jwtUtils.getToken(user));
 
-                // authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                // SecurityContextHolder.getContext().setAuthentication(authentication);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
                 return !error;
             }
         },
         DIGEST {
             @Override
-            boolean authorize(String token, HttpServletResponse response, ContextProvider provider) {
+            boolean authorize(String token, ContextProvider context) {
                 return false;
             }
         },
         BEARER {
             @Override
-            boolean authorize(String token, HttpServletResponse response, ContextProvider provider) {
+            boolean authorize(String token, ContextProvider provider) {
                 return false;
             }
         },
         UNSUPPORTED {
             @Override
-            boolean authorize(String token, HttpServletResponse response, ContextProvider provider) {
-                response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
+            boolean authorize(String token, ContextProvider provider) {
+                provider.response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
                 return false;
             }
-        };
 
+        };
         private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationMethod.class);
 
-        abstract boolean authorize(String token, HttpServletResponse response, ContextProvider provider);
+        abstract boolean authorize(String token, ContextProvider context);
 
     }
 
     private static class ContextProvider {
-        private UserService userService;
-        private AuthenticationManager authenticationManager;
-        private UserDetailsService userDetailsService;
+        private final UserService userService;
+        private final AuthenticationManager authenticationManager;
+        private final UserDetailsService userDetailsService;
+        private final HttpServletResponse response;
+        private final HttpServletRequest request;
 
         public ContextProvider(UserService userService, AuthenticationManager authenticationManager,
-                               UserDetailsService userDetailsService) {
+                               UserDetailsService userDetailsService, HttpServletRequest request,
+                               HttpServletResponse response, JWTUtils jwtUtils) {
             this.userService = userService;
             this.authenticationManager = authenticationManager;
             this.userDetailsService = userDetailsService;
+            this.request = request;
+            this.response = response;
         }
     }
 
