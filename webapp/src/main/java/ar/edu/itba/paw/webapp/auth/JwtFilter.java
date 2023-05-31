@@ -63,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
             LOGGER.debug("Getting AuthorizationMethod of value {}", parts[0]);
             method = AuthorizationMethod.valueOf(parts[0].toUpperCase());
             provider = new
-                    ContextProvider(userService, authenticationManager, userDetailsService, request, response);
+                    ContextProvider(userService, authenticationManager, userDetailsService, request, response, jwtUtils);
         } catch (IllegalArgumentException e) {
             LOGGER.error("Authorization error. Unsupported method {}", parts[0]);
             method = AuthorizationMethod.UNSUPPORTED;
