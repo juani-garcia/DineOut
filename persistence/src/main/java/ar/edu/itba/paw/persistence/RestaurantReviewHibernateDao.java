@@ -41,7 +41,7 @@ public class RestaurantReviewHibernateDao implements RestaurantReviewDao {
 
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((Number) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*)\n" + "FROM restaurant_review WHERE restaurant_id = :restaurantId";
