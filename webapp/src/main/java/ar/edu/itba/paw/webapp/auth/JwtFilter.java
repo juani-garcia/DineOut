@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -33,10 +35,10 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final JWTUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public JwtFilter(UserService us, UserDetailsService uds, AuthenticationManager am, JWTUtils jwtu) {
+    public JwtFilter(UserService us, UserDetailsService uds, AuthenticationManager am, JwtUtils jwtu) {
         this.userService = us;
         this.authenticationManager = am;
         this.userDetailsService = uds;
@@ -75,8 +77,16 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    private enum AuthorizationMethod {
+    private static boolean setErrorStatus(HttpServletResponse response, int code) {
+        response.setStatus(code);
+        return false;
+    }
 
+    private static boolean unauthorized(HttpServletResponse response) {
+        return setErrorStatus(response, Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
+    private enum AuthorizationMethod {
         BASIC {
             @Override
             boolean authorize(String token, ContextProvider context) {
@@ -87,7 +97,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 if(credentials.length < 2) {
                     LOGGER.error("Bad credentials. No colon found. Credentials should be user:pass");
-                    return false;
+                    return unauthorized(context.response);
                 }
 
                 UsernamePasswordAuthenticationToken authentication =
@@ -99,36 +109,61 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 if (!optionalUser.isPresent()) {
                     LOGGER.error("Username {} not found", userDetails.getUsername());
-                    return false;
+                    return unauthorized(context.response);
                 }
 
                 User user = optionalUser.get();
 
-                context.response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + context.jwtUtils.getToken(user));
-                context.response.setHeader(REFRESH_CUSTOM_HEADER, "Bearer " + context.jwtUtils.getToken(user));
+                context.response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer "+context.jwtUtils.getToken(user));
+                context.response.setHeader(REFRESH_CUSTOM_HEADER, "Bearer "+context.jwtUtils.getRefreshToken(user));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 return !error;
             }
         },
-        DIGEST {
-            @Override
-            boolean authorize(String token, ContextProvider context) {
-                return false;
-            }
-        },
         BEARER {
             @Override
-            boolean authorize(String token, ContextProvider provider) {
-                return false;
+            boolean authorize(String token, ContextProvider context) {
+                if(!context.jwtUtils.isValidToken(token)) {
+                    return unauthorized(context.response);
+                }
+
+                String username = context.jwtUtils.getUsername(token);
+                LOGGER.debug("Trying to authorize user {}", username);
+                UserDetails userDetails;
+
+                try {
+                    userDetails = context.userDetailsService.loadUserByUsername(username);
+                } catch(UsernameNotFoundException e) {
+                    return unauthorized(context.response);
+                }
+
+                if(context.jwtUtils.isRefreshToken(token)) {
+                    Optional<User> maybeUser = context.userService.getByUsername(userDetails.getUsername());
+
+                    if(!maybeUser.isPresent()) {
+                        return unauthorized(context.response); // Note: should not happen this far
+                    }
+
+                    context.response.setHeader(
+                            HttpHeaders.AUTHORIZATION, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
+                    );
+                }
+
+                // TODO: Check granted authorities
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities()
+                );
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return true;
             }
         },
         UNSUPPORTED {
             @Override
-            boolean authorize(String token, ContextProvider provider) {
-                provider.response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode());
-                return false;
+            boolean authorize(String token, ContextProvider context) {
+                return unauthorized(context.response);
             }
 
         };
@@ -144,11 +179,11 @@ public class JwtFilter extends OncePerRequestFilter {
         private final UserDetailsService userDetailsService;
         private final HttpServletResponse response;
         private final HttpServletRequest request;
-        private final JWTUtils jwtUtils;
+        private final JwtUtils jwtUtils;
 
         public ContextProvider(UserService userService, AuthenticationManager authenticationManager,
                                UserDetailsService userDetailsService, HttpServletRequest request,
-                               HttpServletResponse response, JWTUtils jwtUtils) {
+                               HttpServletResponse response, JwtUtils jwtUtils) {
             this.userService = userService;
             this.authenticationManager = authenticationManager;
             this.userDetailsService = userDetailsService;
