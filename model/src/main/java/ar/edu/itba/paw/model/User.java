@@ -28,7 +28,8 @@ public class User implements Serializable {
     @Column(nullable = false, name = "locale")
     private Locale locale;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    // TODO: check EAGER fetch type
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "account_to_role",
             joinColumns = @JoinColumn(name = "user_id"),
