@@ -5,6 +5,7 @@ export const FooterComponent = styled.footer`
   display: flex;
   padding-top: 20px;
   margin-top: auto;
+  max-height: 50px;
 `
 
 export const FooterContainer = styled.div`
@@ -12,13 +13,13 @@ export const FooterContainer = styled.div`
   max-width: 1480px;
   padding: 10px 0;
   margin: 0 auto;
-  max-height: 50px;
+  min-height: 50px;
 `
 
 export const FooterText = styled.div`
-  color: #FFFFFF;
-  transition: all 0.2s ease-in-out;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
+  font-weight: normal;
 `
 
 export const CompanyName = styled.text`

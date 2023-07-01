@@ -2,5 +2,19 @@
   "Footer": {
     "project": "A project of ",
     "company": "Graphene"
+  },
+  "MainContent": {
+    "header": {
+      "title": "Search, book, and enjoy!",
+      "catchphrase": "The solution to dining out"
+    },
+    "info": {
+      "title": "Who are we?",
+      "description": "DineOut is a place to see a selection of restaurants, analyze their menu, see available times, and book!"
+    },
+    "picker": {
+      "question": "Don't know what to eat?",
+      "answer": "Let us pick a restaurant just for you"
+    }
   }
 }
