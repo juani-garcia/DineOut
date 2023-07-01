@@ -1,12 +1,23 @@
-body {
-    margin: 0;
-    font-family: -apple-system, Montserrat, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+html {
+    font-size: 15px;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.87);
+    font-family: Montserrat, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-size: 15px;
     line-height: 1.5;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 code {

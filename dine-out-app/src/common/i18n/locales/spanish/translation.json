@@ -2,5 +2,19 @@
   "Footer": {
     "project": "Un proyecto de ",
     "company": "Graphene"
+  },
+  "MainContent": {
+    "header": {
+      "title": "¡Buscá, reservá y disfrutá!",
+      "catchphrase": "La solución a tus comidas afuera"
+    },
+    "info": {
+      "title": "¿Quiénes somos?",
+      "description": "DineOut es tu lugar para ver una selección de restaurantes, analizar su menú, ver horarios disponibles, ¡Y reservar!"
+    },
+    "picker": {
+      "question": "¿No sabés qué comer?",
+      "answer": "Dejanos elegir un restaurante para vos"
+    }
   }
 }
