@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.webapp.auth.DineOutUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,12 +16,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import java.util.concurrent.TimeUnit;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @EnableWebSecurity
@@ -33,6 +33,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DineOutUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -73,44 +76,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                .invalidSessionUrl("/")
-                .and().authorizeRequests()
-                .antMatchers("/", "/restaurants").permitAll()
-                .antMatchers("/login", "/register").anonymous()
-                .antMatchers("/restaurant/item/**").hasRole(Role.RESTAURANT.getRoleName())
-                .antMatchers("/restaurant/section/**").hasRole(Role.RESTAURANT.getRoleName())
-                .antMatchers("/restaurant/register").hasRole(Role.RESTAURANT.getRoleName())
-                .antMatchers("/restaurant/edit").hasRole(Role.RESTAURANT.getRoleName())
-                .antMatchers("/restaurant").hasRole(Role.RESTAURANT.getRoleName())
-                .antMatchers("/restaurant/**/view").permitAll()
-                .antMatchers("/restaurant_picker").permitAll()
-                .antMatchers("/forgot_my_password").permitAll()
-                .antMatchers("/reset_password").permitAll()
-                .antMatchers("/change_password").permitAll()
-                .antMatchers("/save_password").permitAll()
-                .antMatchers("/reserve/**").hasRole(Role.DINER.getRoleName())
-                .antMatchers("/create/**").hasRole(Role.DINER.getRoleName())
-                .antMatchers("/reservation/**/confirm").hasRole(Role.RESTAURANT.getRoleName())
-                .antMatchers("/diner/**").hasRole(Role.DINER.getRoleName())
-                .anyRequest().authenticated()
-                .and().formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .failureUrl("/login?error=true")
-                .loginPage("/login")
-                .successHandler(success())
-                .and().rememberMe()
-                .rememberMeParameter("remember-me")
-                .userDetailsService(userDetailsService)
-                .key(env.getProperty("webauthconfig.rememberme.key"))
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .and().exceptionHandling()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().headers().cacheControl().disable()
+            .and().authorizeRequests()
+                .anyRequest().permitAll()
+            .and().exceptionHandling()
                 .accessDeniedPage("/403")
-                .and().csrf().disable();
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable();
     }
+
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
