@@ -1,10 +1,14 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
+
+    PagedQuery<User> getUsers(final int page);
 
     Optional<User> getById(final long id);
 

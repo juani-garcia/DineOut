@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.Role;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +35,14 @@ public class UserServiceImpl implements UserService {
         this.userRoleService = userRoleService;
         this.passwordResetTokenService = passwordResetTokenService;
         this.emailService = emailService;
+    }
+
+    @Override
+    public PagedQuery<User> getUsers(final int page) {
+        if (page <= 0)
+            throw new InvalidPageException();
+
+        return userDao.getUsers(page);
     }
 
     @Override
