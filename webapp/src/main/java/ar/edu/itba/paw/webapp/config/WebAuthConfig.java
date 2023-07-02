@@ -1,13 +1,12 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.webapp.auth.DineOutUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,8 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import java.util.concurrent.TimeUnit;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @EnableWebSecurity
@@ -35,6 +33,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DineOutUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -81,7 +82,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
             .and().exceptionHandling()
                 .accessDeniedPage("/403")
-            .and().csrf().disable();
+            .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable();
     }
 
 
