@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +18,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
 
 @Path("restaurants")
 @Component
 public class RestaurantController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantController.class);
 
     @Autowired
     private final RestaurantService rs;
