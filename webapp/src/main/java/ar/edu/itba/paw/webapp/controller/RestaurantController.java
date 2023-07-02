@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
@@ -18,6 +18,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 
 @Path("restaurants")
@@ -35,6 +37,49 @@ public class RestaurantController {
     @Autowired
     public RestaurantController(final RestaurantService rs) {
         this.rs = rs;
+    }
+
+    // GET /restaurant
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response readRestaurants(
+            @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
+            @QueryParam("match") final String match,
+            @QueryParam("category") final Category category,
+            @QueryParam("zone") final Zone zone,
+            @QueryParam("shift") final Shift shift
+    ) {
+        // TODO: Check validation of params (min for page, enums in range)
+
+        // TODO: Refactor filter to always search by item
+        // TODO: Refactor filter to use enums instead of their ids
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, true, category.getId(), shift.getId(), zone.getId());
+
+        if (restaurantPagedQuery.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        final List<RestaurantDTO> restaurantDTOList = restaurantPagedQuery.getContent().
+                stream().map(r -> RestaurantDTO.fromRestaurant(uriInfo, r)).collect(Collectors.toList());
+
+        // TODO: Check if getRequestUriBuilder() is not preferable
+        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder().replacePath("restaurants");
+        if (match != null && ! match.isEmpty())
+            uriBuilder = uriBuilder.queryParam("match", match);
+        if (category != null)
+            uriBuilder = uriBuilder.queryParam("category", category);
+        if (zone != null)
+            uriBuilder = uriBuilder.queryParam("zone", zone);
+        if (shift != null)
+            uriBuilder = uriBuilder.queryParam("shift", shift);
+        Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
+        baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", 1).build(), "first");
+        baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPageCount()).build(), "last");
+        if (restaurantPagedQuery.getPage() > 1)
+            baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPage()-1).build(), "prev");
+        if (restaurantPagedQuery.getPage() < restaurantPagedQuery.getPageCount())
+            baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPage()+1).build(), "next");
+        return baseResponse.build();
     }
 
 // TODO: Clean up example
