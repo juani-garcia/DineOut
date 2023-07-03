@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 public class RestaurantDTO {
-    private URI image;
     private Long favCount;
     private Long rating;
     private Long ratingCount;
@@ -26,12 +25,22 @@ public class RestaurantDTO {
 
     private URI self;
     private URI owner;
+    private URI image;
     // TODO: Consider id, Zone, Shifts, Categories, MenuSection
 
     public static RestaurantDTO fromRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
         final RestaurantDTO dto = new RestaurantDTO();
 
+        dto.favCount = restaurant.getFavCount();
+        dto.rating = restaurant.getRating();
+        dto.ratingCount = restaurant.getRatingCount();
         dto.name = restaurant.getName();
+        dto.lat = restaurant.getLat();
+        dto.lng = restaurant.getLng();
+        dto.mail = restaurant.getMail();
+        dto.address = restaurant.getAddress();
+        dto.detail = restaurant.getDetail();
+
         final UriBuilder restaurantUriBuilder = uriInfo.getAbsolutePathBuilder()
                 .replacePath("restaurants").path(String.valueOf(restaurant.getId()));
         dto.self = restaurantUriBuilder.build();
