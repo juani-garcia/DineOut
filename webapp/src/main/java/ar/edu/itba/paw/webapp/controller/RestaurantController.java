@@ -82,12 +82,16 @@ public class RestaurantController {
     }
 
     @POST
+    @Consumes({MediaType.APPLICATION_JSON})
     public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
-        byte[] image;
-        try {
-            image = restaurantForm.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
+        LOGGER.debug("{}", restaurantForm);
+        byte[] image = null;
+        if (restaurantForm.getImage() != null) {
+            try { // TODO: Check if we could migrate this to form with custom mapper
+                image = restaurantForm.getImage().getBytes();
+            } catch (IOException e) {
+                throw new IllegalStateException(); // This should never happen because of @ValidImage.
+            }
         }
         Restaurant newRestaurant = rs.create(restaurantForm.getName(),
                 image,
