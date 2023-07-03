@@ -34,14 +34,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, int categoryId, int shiftId, int zoneId) {
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
         if (page <= 0) throw new InvalidPageException();
-
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.filter(page, name, byItem, category, shift, zone);
+        return restaurantDao.filter(page, name, true, category, shift, zone);
     }
 
     @Transactional
