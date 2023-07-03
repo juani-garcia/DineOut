@@ -50,7 +50,7 @@ public class RestaurantController {
 
         // TODO: Refactor filter to always search by item
         // TODO: Refactor filter to use enums instead of their ids
-        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, true, (int)category.getId(), (int)shift.getId(), (int)zone.getId());
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone);
 
         if (restaurantPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();
