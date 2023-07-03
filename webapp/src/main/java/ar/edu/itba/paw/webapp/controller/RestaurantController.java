@@ -4,23 +4,20 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
 
 @Path("restaurants")
 @Component
@@ -29,7 +26,7 @@ public class RestaurantController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantController.class);
 
     @Autowired
-    private final RestaurantService rs;
+    private RestaurantService rs;
 
     @Context
     private UriInfo uriInfo;
@@ -53,7 +50,7 @@ public class RestaurantController {
 
         // TODO: Refactor filter to always search by item
         // TODO: Refactor filter to use enums instead of their ids
-        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, true, category.getId(), shift.getId(), zone.getId());
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, true, (int)category.getId(), (int)shift.getId(), (int)zone.getId());
 
         if (restaurantPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();

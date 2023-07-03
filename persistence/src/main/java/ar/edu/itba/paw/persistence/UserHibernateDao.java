@@ -32,7 +32,7 @@ public class UserHibernateDao implements UserDao {
         query.setParameter("offset", PAGE_SIZE * (page-1));
         final List<Long> ids = new ArrayList<>();
         for(Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((Number) o).longValue());
         }
 
         query = em.createNativeQuery(countQuery);
