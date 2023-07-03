@@ -52,6 +52,7 @@ public class RestaurantDTO {
         dto.owner = usersUriBuilder
                 .path(String.valueOf(restaurant.getUser().getId())).build();
         // TODO: Complete
+        // TODO: Check if we move the link creation to their respective DTO class
 
         return dto;
     }
