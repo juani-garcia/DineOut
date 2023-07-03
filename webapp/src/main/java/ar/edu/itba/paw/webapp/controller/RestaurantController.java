@@ -46,6 +46,8 @@ public class RestaurantController {
             @QueryParam("zone") final Zone zone,
             @QueryParam("shift") final Shift shift
     ) {
+        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}",
+                page, match, category, zone, shift);
         // TODO: Check validation of params (min for page, enums in range)
 
         // TODO: Refactor filter to always search by item
@@ -78,26 +80,6 @@ public class RestaurantController {
             baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPage()+1).build(), "next");
         return baseResponse.build();
     }
-
-// TODO: Clean up example
-
-//    // GET /restaurants
-//    @GET
-//    @Produces(value = {MediaType.APPLICATION_JSON, })
-//    public Response listRestaurants(@QueryParam("page") @DefaultValue("1") final int page) {
-//        final List<RestaurantDTO> restaurantList = rs.getAll(page)
-//        .stream().map(RestaurantDTO::fromRestaurant).collect(Collectors.toList());
-//
-//        if (restaurantList.isEmpty()) {
-//            return Response.noContent().build();
-//        }
-//        return Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantList){})
-//                // TODO: complete these
-//                .link("", "prev")
-//                .link("", "next")
-//                .link("", "first")
-//                .link("", "last").build();
-//    }
 
     @POST
     public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
