@@ -109,6 +109,7 @@ public class RestaurantController {
 
     // GET /restaurants/{id}
     @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{id}")
     public Response getRestaurant(@PathParam("id") final long restaurantID) {
         Optional<RestaurantDTO> maybeRestaurant = rs.getById(restaurantID).map(r -> RestaurantDTO.fromRestaurant(uriInfo, r));
@@ -118,12 +119,29 @@ public class RestaurantController {
          return Response.ok(maybeRestaurant.get()).build();
     }
 
-//    @DELETE
-//    @Path("/{id}")
-//    @Produces(value = {MediaType.APPLICATION_JSON, })
-//    public Response deleteById(@PathParam("id") final long id) {
-//        rs.deleteById(id);
-//        return Response.noContent().build();
-//    }
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    public Response updateRestaurant(@PathParam("id") final long restaurantId, @Valid final RestaurantForm restaurantForm) {
+        byte[] image = null;
+        if (restaurantForm.getImage() != null) {
+            try {
+                image = restaurantForm.getImage().getBytes();
+            } catch (IOException e) {
+                throw new IllegalStateException(); // This should never happen because of @ValidImage.
+            }
+        }
+        rs.updateCurrentRestaurant(restaurantForm.getName(),
+                restaurantForm.getAddress(),
+                restaurantForm.getEmail(),
+                restaurantForm.getDetail(),
+                Zone.getByName(restaurantForm.getZone()),
+                restaurantForm.getLat(),
+                restaurantForm.getLng(),
+                restaurantForm.getCategories(),
+                restaurantForm.getShifts(),
+                image);
+        return Response.ok().build();
+    }
 
 }
