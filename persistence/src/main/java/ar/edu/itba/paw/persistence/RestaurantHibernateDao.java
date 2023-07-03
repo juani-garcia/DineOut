@@ -54,7 +54,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
         final List<Long> ids = new ArrayList<>();
         for (Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((Number) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*)\n" + filter.query;
@@ -211,7 +211,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
         if (params != null) params.forEach(query::setParameter);
         List<Long> ids = new ArrayList<>();
         for (Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((Number) o).longValue());
         }
         if (ids.isEmpty())
             return new ArrayList<>();
