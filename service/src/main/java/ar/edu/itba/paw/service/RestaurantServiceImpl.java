@@ -42,7 +42,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional
     @Override
     public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts) {
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new); // TODO: Catch this exception with a bad request or similar
         if (getByUserID(user.getId()).isPresent())
             throw new IllegalStateException();
         Image restaurantImage = null;
