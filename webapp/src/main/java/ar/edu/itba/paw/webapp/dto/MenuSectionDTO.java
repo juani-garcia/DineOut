@@ -22,7 +22,7 @@ public class MenuSectionDTO {
         UriBuilder restaurantUriBuilder = uriInfo.getAbsolutePathBuilder().replacePath("restaurants").path(String.valueOf(menuSection.getRestaurant().getId()));
         dto.restaurant = restaurantUriBuilder.clone().build();
         dto.ordering = menuSection.getOrdering();
-        dto.self = restaurantUriBuilder.clone().path("menu-sections").path(String.valueOf(menuSection.getId()).build();
+        dto.self = restaurantUriBuilder.clone().path("menu-sections").path(String.valueOf(menuSection.getId())).build();
         // TODO: menuItemList
 
         return dto;
