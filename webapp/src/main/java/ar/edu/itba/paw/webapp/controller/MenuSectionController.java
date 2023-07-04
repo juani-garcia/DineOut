@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
+<<<<<<< HEAD
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,17 @@ import java.awt.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+=======
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.Min;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.util.List;
+>>>>>>> e4cd7104 (Implement basic get menu-sections endpoint)
 import java.util.stream.Collectors;
 
 @Path("restaurants/{id}/menu-sections")
