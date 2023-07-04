@@ -38,7 +38,7 @@ public class RestaurantController {
 
     // GET /restaurant
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON}) // TODO: Check Multipart form for image upload
     public Response readRestaurants(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
             @QueryParam("match") final String match,
