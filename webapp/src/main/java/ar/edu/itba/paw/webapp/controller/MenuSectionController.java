@@ -60,4 +60,13 @@ public class MenuSectionController {
         return Response.ok(maybeMenuSection.get()).build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    public Response deleteMenuSection(
+            @PathParam("id") final long menuSectionId
+    ) {
+        mss.delete(menuSectionId);
+        return Response.noContent().build();
+    }
+
 }
