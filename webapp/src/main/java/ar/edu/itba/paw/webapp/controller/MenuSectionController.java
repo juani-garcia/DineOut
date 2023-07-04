@@ -13,6 +13,7 @@ import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("restaurants/{id}/menu-sections")
@@ -44,6 +45,19 @@ public class MenuSectionController {
                 .map(ms -> MenuSectionDTO.fromMenuSection(uriInfo, ms)).collect(Collectors.toList());
 
         return Response.ok(new GenericEntity<List<MenuSectionDTO>>(menuSectionDTOList){}).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response readMenuSection(
+            @PathParam("id") final long menuSectionId
+    ) {
+        Optional<MenuSectionDTO> maybeMenuSection = mss.getById(menuSectionId).map(ms -> MenuSectionDTO.fromMenuSection(uriInfo, ms));
+        if (! maybeMenuSection.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(maybeMenuSection.get()).build();
     }
 
 }
