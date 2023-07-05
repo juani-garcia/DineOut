@@ -23,20 +23,18 @@ import java.util.stream.Collectors;
 @Component
 public class UserController {
 
-    @Autowired
     private SecurityService securityService;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    protected AuthenticationManager authenticationManager;
-
-    @Autowired
-    private RestaurantService restaurantService;
 
     @Context
     private UriInfo uriInfo;
+
+    @Autowired
+    public UserController(SecurityService securityService,
+                          UserService userService) {
+        this.securityService = securityService;
+        this.userService = userService;
+    }
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED, })
@@ -60,14 +58,6 @@ public class UserController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(maybeUser.get()).build();
-    }
-
-    @DELETE
-    @Path("/{id}")
-    @Produces(value = {MediaType.APPLICATION_JSON, })
-    public Response deleteUserByID(@PathParam("id") final long userID) {
-        // TODO: Check if we implement method
-        return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
     }
 
 }
