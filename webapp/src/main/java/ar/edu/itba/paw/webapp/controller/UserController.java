@@ -38,26 +38,6 @@ public class UserController {
     @Context
     private UriInfo uriInfo;
 
-    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON, })
-    public Response readUsers(@QueryParam("page") @DefaultValue("1") final int page) {
-        PagedQuery<User> userPagedQuery = userService.getUsers(page);
-        final List<UserDTO> userList = userPagedQuery.getContent()
-                .stream().map(u -> UserDTO.fromUser(uriInfo, u))
-                .collect(Collectors.toList());
-
-        if (userList.isEmpty()) {
-            return Response.noContent().build();
-        }
-        return Response.ok(new GenericEntity<List<UserDTO>>(userList){})
-                // TODO: Cleanup
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page-1).build(), "prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page+1).build(), "next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 1).build(), "first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 999).build(), "last")
-                .build();
-    }
-
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED, })
     public Response createUser(@Valid final UserForm userForm) {
