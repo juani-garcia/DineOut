@@ -5,15 +5,15 @@ export const FooterComponent = styled.footer`
   display: flex;
   padding-top: 20px;
   margin-top: auto;
-  max-height: 50px;
 `
 
 export const FooterContainer = styled.div`
   width: 90%;
+  overflow: hidden;
   max-width: 1480px;
   padding: 10px 0;
   margin: 0 auto;
-  min-height: 50px;
+  min-height: 30px;
 `
 
 export const FooterText = styled.div`
