@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.InvalidPasswordRecoveryTokenException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,15 +73,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User edit(User user, String firstName, String lastName, String contextPath) {
-        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return null;
+    public Optional<User> edit(User user, String firstName, String lastName, String contextPath) {
+        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return Optional.empty();
 
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
         emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
-        return user;
+        return Optional.of(user);
     }
 
     @Override
@@ -102,7 +102,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void createPasswordResetTokenForUser(User user, String contextPath) {
+    public void createPasswordResetTokenByUsername(String username, String contextPath) {
+        final User user = getByUsername(username).orElseThrow(NotFoundException::new);
+
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         emailService.sendChangePassword(
@@ -113,7 +115,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByPasswordResetToken(String token) {
-        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).orElseThrow(IllegalStateException::new);
+        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).
+                orElseThrow(InvalidPasswordRecoveryTokenException::new);
         return passwordResetToken.getUser();
     }
 
