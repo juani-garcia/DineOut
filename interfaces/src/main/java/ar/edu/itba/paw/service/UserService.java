@@ -21,7 +21,7 @@ public interface UserService {
 
     boolean isDiner(long userId);
 
-    void createPasswordResetTokenForUser(User user, String contextPath);
+    void createPasswordResetTokenByUsername(String username, String contextPath);
 
     User getUserByPasswordResetToken(String token);
 
