@@ -20,11 +20,11 @@ export const useMethod = () => {
     const refreshToken = getRefreshToken()
     const token = getToken()
 
+    if (request.needsAuth === true && refreshToken == null && token == null && request.basic == null) {
+      // TODO: Handle redirect to login.
+    }
+
     if (request.needsAuth === true) {
-      if (refreshToken == null && token == null && request.basic == null) {
-        // TODO: Handle redirect to login.
-      }
-    } else {
       request.headers = {
         Authorization: (request.basic != null)
           ? `Basic ${request.basic}`
@@ -42,13 +42,16 @@ export const useMethod = () => {
       // TODO: Update headers.
     ).catch(async e => {
       if (e.response?.status === HttpStatusCode.Unauthorized) {
-        if (request.basic != null) return e.response
+        if (request.basic != null) return e.response // Failed login
+
         if (token != null) setToken(null)
         else if (refreshToken != null) setRefreshToken(null)
+
         if (request.headers != null) delete request.headers.Authorization
 
-        return await requestMethod(request) // TODO: Check if return is valid.
+        return await requestMethod(request)
       }
+      return e.response
     })
 
     setIsLoading(false)
