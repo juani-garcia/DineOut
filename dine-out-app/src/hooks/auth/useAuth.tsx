@@ -7,7 +7,7 @@ export const AuthContext = createContext<AuthContextType>(null!)
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function AuthProvider ({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)// TODO: What would be the default value?
+  const [user, setUser] = useState<User | null>(null)
 
   const getToken = (): string | null => {
     return localStorage.getItem('token') // TODO: Check if valid to store token in localStorage
@@ -30,6 +30,7 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
     setToken(null)
     setUser(null)
   }
+
   return <AuthContext.Provider value={{
     user,
     setUser,
