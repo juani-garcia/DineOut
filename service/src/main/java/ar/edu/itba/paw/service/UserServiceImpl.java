@@ -73,15 +73,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User edit(User user, String firstName, String lastName, String contextPath) {
-        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return null;
+    public Optional<User> edit(User user, String firstName, String lastName, String contextPath) {
+        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return Optional.empty();
 
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
         emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
-        return user;
+        return Optional.of(user);
     }
 
     @Override

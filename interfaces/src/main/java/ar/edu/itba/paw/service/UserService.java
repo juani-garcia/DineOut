@@ -15,7 +15,7 @@ public interface UserService {
     Optional<User> getByUsername(final String username);
 
     User create(final String username, final String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath);
-    User edit(final User user, final String firstName, final String lastName, String contextPath);
+    Optional<User> edit(final User user, final String firstName, final String lastName, String contextPath);
 
     boolean isRestaurant(long userId);
 
