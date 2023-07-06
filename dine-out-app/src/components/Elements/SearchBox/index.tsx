@@ -1,8 +1,8 @@
 import React from 'react'
-import { SearchBoxContainer } from './styles'
+import { WhiteBoxContainer } from '../utils/styles'
 
 function SearchBox (): JSX.Element {
-  return <SearchBoxContainer>Soy una re search box</SearchBoxContainer>
+  return <WhiteBoxContainer>Soy una re search box</WhiteBoxContainer>
 }
 
 export default SearchBox

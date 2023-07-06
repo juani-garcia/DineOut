@@ -12,7 +12,8 @@ const theme = {
   defaultDark: '#242B2A',
   defaultWhite: '#ffffff',
   boldWeight: '700',
-  lightWeight: '300'
+  lightWeight: '300',
+  black: '#000000'
 }
 
 export default theme

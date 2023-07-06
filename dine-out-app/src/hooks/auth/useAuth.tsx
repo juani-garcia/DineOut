@@ -1,6 +1,7 @@
 import React, { createContext, type ReactNode, useContext, useState } from 'react'
 import type User from '../../types/models/User'
 import type AuthContextType from '../../types/AuthContextType'
+import jwtDecode from 'jwt-decode'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const AuthContext = createContext<AuthContextType>(null!)
@@ -10,7 +11,7 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
   const getToken = (): string | null => {
-    return localStorage.getItem('token') // TODO: Check if valid to store token in localStorage
+    return localStorage.getItem('token')
   }
 
   const getRefreshToken = (): string | null => {
@@ -18,11 +19,20 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
   }
 
   const setToken = (token: string | null): void => {
-    // TODO
+    if (token != null) {
+      localStorage.setItem('token', token)
+      setUser(jwtDecode(token.split(' ')[1]))
+    } else {
+      localStorage.removeItem('token')
+    }
   }
 
   const setRefreshToken = (token: string | null): void => {
-    // TODO
+    if (token != null) {
+      localStorage.setItem('refreshToken', token)
+    } else {
+      localStorage.removeItem('refreshToken')
+    }
   }
 
   const logout = (): void => {

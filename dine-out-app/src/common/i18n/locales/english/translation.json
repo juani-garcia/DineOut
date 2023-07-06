@@ -1,4 +1,6 @@
 {
+  "register": "Register!",
+  "login": "Log In",
   "Footer": {
     "project": "A project of ",
     "company": "Graphene"
@@ -16,5 +18,12 @@
       "question": "Don't know what to eat?",
       "answer": "Let us pick a restaurant just for you"
     }
+  },
+  "Login": {
+    "email": "Email:",
+    "password": "Password:",
+    "rememberMe": "Remember me",
+    "noAccount": "Want an account?",
+    "restorePassword": "Forgot my password"
   }
 }

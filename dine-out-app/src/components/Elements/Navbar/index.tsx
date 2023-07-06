@@ -1,28 +1,37 @@
 import React from 'react'
-import { Logo, Navigation, NavigationContainer, NavTitle, PlaceHolder } from './styles'
-import { useLogin } from '../../../hooks/auth/useLogin'
+import {
+  ListItem,
+  LoginButton,
+  Logo,
+  Navigation,
+  NavigationContainer,
+  NavRight,
+  NavTitle,
+  RegisterButton
+} from './styles'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 function Navbar (): JSX.Element {
-  const { isLoading, login } = useLogin()
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleLogin = async () => {
-    console.log('me parece que me voy a escribir muchas veces')
-    await login('test@test.com', 'testtest').then(() => {
-      console.log('termine')
-    })
-  }
+  const { t } = useTranslation()
 
   return (
         <Navigation>
             <NavigationContainer>
-                <NavTitle id="logo-container" href="#">Dine Out
+                <NavTitle id="logo-container" href="#" as={Link} to="/">Dine Out
                     <Logo src="https://images.emojiterra.com/google/android-pie/512px/1f35c.png"/>
                 </NavTitle>
-                <PlaceHolder>
-                    {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                    <button onClick={handleLogin}>FIumba</button>
-                </PlaceHolder>
-                <p>{isLoading ? 'fiumba' : 'fiumbant'}</p>
+                <NavRight>
+                    {/*    TODO: if logged in show "Hello {user}!" */}
+                    <ListItem>
+                        <RegisterButton>{t('register')}</RegisterButton>
+                    </ListItem>
+                    <ListItem>
+                        <LoginButton as={Link} to="/login">
+                            {t('login')}
+                        </LoginButton>
+                    </ListItem>
+                </NavRight>
             </NavigationContainer>
         </Navigation>
   )

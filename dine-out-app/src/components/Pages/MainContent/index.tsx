@@ -1,14 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Catchphrase, MainTitle, MyContainer, WhoAreWeContainer, WhoAreWeText, WhoAreWeTitle } from './styles'
+import { Catchphrase, WhoAreWeContainer, WhoAreWeText, WhoAreWeTitle } from './styles'
 import { useTranslation } from 'react-i18next'
 import SearchBox from '../../Elements/SearchBox'
+import { MyContainer, Title } from '../../Elements/utils/styles'
 
 function MainContent (): JSX.Element {
   const { t } = useTranslation()
   return (
         <MyContainer>
-            <MainTitle>{t('MainContent.header.title')}</MainTitle>
+            <Title>{t('MainContent.header.title')}</Title>
             <Catchphrase>{t('MainContent.header.catchphrase')}</Catchphrase>
 
             <SearchBox></SearchBox>

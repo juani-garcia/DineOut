@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { BoxContainer } from '../../utils/styles'
+import { BoxContainer } from '../../Elements/utils/styles'
 
 export const Catchphrase = styled.h5`
   font-weight: 700;
@@ -8,23 +8,6 @@ export const Catchphrase = styled.h5`
   font-size: 1.64rem;
   line-height: 110%;
   margin: 1.0933333333rem 0 0.656rem 0;
-`
-
-export const MainTitle = styled.h1`
-  font-weight: 700;
-  color: #FFFFFF !important;
-  text-align: center;
-  font-size: 4.2rem;
-  margin: 2.8rem 0 2.8rem 0;
-  line-height: 110%;
-`
-
-export const MyContainer = styled.div`
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  max-width: 1480px;
-  width: 100%;
 `
 
 export const WhoAreWeContainer = styled(BoxContainer)`

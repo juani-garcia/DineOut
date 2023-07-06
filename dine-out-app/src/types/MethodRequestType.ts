@@ -4,6 +4,5 @@ export default interface MethodRequestType {
   method: string
   headers?: Record<string, string>
   data?: object
-  needsAuth?: boolean
   params?: Record<string, string>
 }

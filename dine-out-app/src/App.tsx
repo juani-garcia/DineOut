@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MainContent from './components/Pages/MainContent'
 import Restaurants from './components/Pages/Restaurants'
 import { AuthProvider } from './hooks/auth/useAuth'
+import Login from './components/Pages/Login'
 
 function App (): JSX.Element {
   return (
@@ -21,7 +22,9 @@ function App (): JSX.Element {
                         >
                             <Route index element={<MainContent/>}/>
                             <Route path="restaurants"
-                                   element={<Restaurants/>}/> {/* TODO: Check if routes file is neccesary */}
+                                   element={<Restaurants/>}/>
+                            <Route path="login"
+                                   element={<Login/>}/>
                         </Route>
                     </Routes>
                 </BrowserRouter>

@@ -20,15 +20,20 @@ export const useMethod = () => {
     const refreshToken = getRefreshToken()
     const token = getToken()
 
-    if (request.needsAuth === true && refreshToken == null && token == null && request.basic == null) {
-      // TODO: Handle redirect to login.
-    }
-
-    if (request.needsAuth === true) {
+    if (request.basic != null) {
       request.headers = {
-        Authorization: (request.basic != null)
-          ? `Basic ${request.basic}`
-          : (token != null) ? `${token}` : (refreshToken != null) ? `${refreshToken}` : ''
+        Authorization: `Basic ${request.basic}`,
+        ...request.headers
+      }
+    } else if (token != null) {
+      request.headers = {
+        ...request.headers,
+        Authorization: `${token}`
+      }
+    } else if (refreshToken != null) {
+      request.headers = {
+        ...request.headers,
+        Authorization: `${refreshToken}`
       }
     }
 
@@ -38,19 +43,22 @@ export const useMethod = () => {
       headers: request.headers,
       data: request.data,
       params: request.params
-    }).then(
-      // TODO: Update headers.
+    }).then(response => {
+      setToken(response.headers.authorization)
+      setRefreshToken(response.headers['X-Refresh-Token'])
+    }
     ).catch(async e => {
-      if (e.response?.status === HttpStatusCode.Unauthorized) {
-        if (request.basic != null) return e.response // Failed login
+      if (e.response?.status === HttpStatusCode.Unauthorized && request.basic == null) {
+        if (token == null && refreshToken == null) return e.response // TODO: Logout, setIsloading false and redirect to login
 
         if (token != null) setToken(null)
-        else if (refreshToken != null) setRefreshToken(null)
+        else if (refreshToken != null) return e.response // TODO: Logout, setIsloading false and redirect to login
 
         if (request.headers != null) delete request.headers.Authorization
 
         return await requestMethod(request)
       }
+      setIsLoading(false) // Failed credentials for login or other HTTP status code.
       return e.response
     })
 
