@@ -34,6 +34,6 @@ export const Logo = styled.img`
   height: 2.1rem
 `
 
-export const PlaceHolder = styled.p`
+export const PlaceHolder = styled.div`
   float: right;
 `
