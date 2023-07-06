@@ -9,5 +9,4 @@ export default interface AuthContextType {
   setToken: (token: string | null) => void
   getRefreshToken: () => string | null
   setRefreshToken: (token: string | null) => void
-
 }
