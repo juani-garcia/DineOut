@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
+import ar.edu.itba.paw.webapp.form.NewPasswordForm;
+import ar.edu.itba.paw.webapp.form.PasswordRecoveryForm;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,22 +19,19 @@ import java.util.Optional;
 @Path("users")
 @Component
 public class UserController {
-    private UserService userService;
-    private SecurityService securityService;
+    private final UserService userService;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(UserService userService,
-                          SecurityService securityService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.securityService = securityService;
     }
 
     @GET
     @Path("/{id}")
-    @PreAuthorize("@securityManager.validateAuthById(authentication, #userID)")
+    @PreAuthorize("@securityManager.validateAccessById(authentication, #userID)")
     public Response readUser(@PathParam("id") final long userID) {
         Optional<UserDTO> maybeUser = userService.getById(userID).map(u -> UserDTO.fromUser(uriInfo, u));
         if (! maybeUser.isPresent()) {
@@ -58,25 +54,21 @@ public class UserController {
         return Response.created(location).build();
     }
 
+    @POST
+    @Path("/password-recovery-token")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createPasswordRecoveryToken(@Valid PasswordRecoveryForm passwordRecoveryForm) {
+        userService.createPasswordResetTokenByUsername(passwordRecoveryForm.getUsername(), uriInfo.getPath());
+        return Response.ok().build();
+    }
+
     @PUT
-    @Path("/{id}")
-    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED, })
-    public Response editUser(@Valid final UserForm userForm) {
-        final Optional<User> current = securityService.getCurrentUser();
-
-        if(!current.isPresent())
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-
-        final Optional<User> edited = userService.edit(
-                current.get(),
-                userForm.getFirstName(),
-                userForm.getLastName(),
-                uriInfo.getPath());
-
-        if(!edited.isPresent())
-            return Response.status(Response.Status.FORBIDDEN).build();
-
-        return Response.noContent().build();
+    @Path("/password-recovery-token/{token}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editPasswordByToken(@Valid NewPasswordForm newPasswordForm,
+                                        @PathParam("token") String token) {
+        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
+        return Response.ok().build();
     }
 
 }
