@@ -18,12 +18,11 @@ public class SecurityManager {
         this.userService = userService;
     }
 
-    public boolean validateAuthById(Authentication auth, long id) {
+    public boolean validateAccessById(Authentication auth, long id) {
         if(!auth.isAuthenticated())
             return false;
 
         return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
-
     }
 
 }
