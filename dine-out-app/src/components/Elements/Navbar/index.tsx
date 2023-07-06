@@ -1,11 +1,13 @@
 import React from 'react'
 import { Logo, Navigation, NavigationContainer, NavTitle, PlaceHolder } from './styles'
-import AuthService from '../../../services/AuthService'
+import { useLogin } from '../../../hooks/auth/useLogin'
 
 function Navbar (): JSX.Element {
+  const { isLoading, login } = useLogin()
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleLogin = async () => {
-    await AuthService.login('test@test.com', 'testtest').then(() => {
+    console.log('me parece que me voy a escribir muchas veces')
+    await login('test@test.com', 'testtest').then(() => {
       console.log('termine')
     })
   }
@@ -20,6 +22,7 @@ function Navbar (): JSX.Element {
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                     <button onClick={handleLogin}>FIumba</button>
                 </PlaceHolder>
+                <p>{isLoading ? 'fiumba' : 'fiumbant'}</p>
             </NavigationContainer>
         </Navigation>
   )
