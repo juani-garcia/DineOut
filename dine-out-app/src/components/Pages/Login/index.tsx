@@ -31,13 +31,13 @@ function Login (): JSX.Element {
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                     <FormControl component="form" onSubmit={handleSubmit(onLogin)}>
                         <TextField
-                            label="Username"
+                            label={t('Login.email')}
                             fullWidth
                             margin="normal"
                             {...control.register('username')}
                         />
                         <TextField
-                            label="Password"
+                            label={t('Login.password')}
                             type="password"
                             fullWidth
                             margin="normal"
@@ -45,10 +45,10 @@ function Login (): JSX.Element {
                         />
                         <FormControlLabel
                             control={<Checkbox {...control.register('rememberMe')} />}
-                            label="Remember me"
+                            label={t('Login.rememberMe')}
                         />
                         <Button type="submit" variant="contained" color="primary">
-                            Submit
+                            {t('login')}
                         </Button>
                     </FormControl>
                 </LoginForm>
