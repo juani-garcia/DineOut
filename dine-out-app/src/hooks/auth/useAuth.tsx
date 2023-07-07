@@ -1,6 +1,6 @@
 import React, { createContext, type ReactNode, useContext, useState } from 'react'
-import type User from '../../types/models/User'
-import type AuthContextType from '../../types/AuthContextType'
+import type User from '@/types/models/User'
+import type AuthContextType from '@/types/AuthContextType'
 import jwtDecode from 'jwt-decode'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

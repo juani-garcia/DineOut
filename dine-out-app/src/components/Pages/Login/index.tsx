@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LoginForm } from './styles'
 import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useLogin } from '../../../hooks/auth/useLogin'
+import { useLogin } from '@/hooks/auth/useLogin'
 
 function Login (): JSX.Element {
   const { t } = useTranslation()

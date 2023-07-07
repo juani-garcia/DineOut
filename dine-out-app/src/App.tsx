@@ -1,12 +1,12 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
-import theme from './theme'
-import Home from './components/MainLayout'
+import theme from '@/theme'
+import Home from '@/components/MainLayout'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import MainContent from './components/Pages/MainContent'
-import Restaurants from './components/Pages/Restaurants'
-import { AuthProvider } from './hooks/auth/useAuth'
-import Login from './components/Pages/Login'
+import MainContent from '@/components/Pages/MainContent'
+import Restaurants from '@/components/Pages/Restaurants'
+import { AuthProvider } from '@/hooks/auth/useAuth'
+import Login from '@/components/Pages/Login'
 
 function App (): JSX.Element {
   return (

@@ -11,7 +11,7 @@ import {
 } from './styles'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../../hooks/auth/useAuth'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
@@ -36,7 +36,7 @@ function Navbar (): JSX.Element {
                         </ListItem>
                     </NavRight>
                   : <NavRight>
-                        <ListItem>Boeeenas ${user.sub}</ListItem>
+                        <ListItem>Boeeenas {user.sub}</ListItem>
                     </NavRight>}
 
             </NavigationContainer>

@@ -2,8 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Catchphrase, WhoAreWeContainer, WhoAreWeText, WhoAreWeTitle } from './styles'
 import { useTranslation } from 'react-i18next'
-import SearchBox from '../../Elements/SearchBox'
-import { MyContainer, Title } from '../../Elements/utils/styles'
+import SearchBox from '@/components/Elements/SearchBox'
+import { MyContainer, Title } from '@/components/Elements/utils/styles'
 
 function MainContent (): JSX.Element {
   const { t } = useTranslation()
