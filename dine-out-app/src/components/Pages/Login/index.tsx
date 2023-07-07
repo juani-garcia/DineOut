@@ -29,12 +29,18 @@ function Login (): JSX.Element {
             <WhiteBoxContainer>
                 <LoginForm>
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                    <FormControl component="form" onSubmit={handleSubmit(onLogin)}>
+                    <FormControl component="form" onSubmit={handleSubmit(onLogin)}
+                                 sx={{
+                                   '& .MuiButton-root': {
+                                     width: '40%'
+                                   }
+                                 }}>
                         <TextField
                             label={t('Login.email')}
                             fullWidth
                             margin="normal"
                             {...control.register('username')}
+                            variant="standard"
                         />
                         <TextField
                             label={t('Login.password')}
@@ -42,9 +48,10 @@ function Login (): JSX.Element {
                             fullWidth
                             margin="normal"
                             {...control.register('password')}
+                            variant="standard"
                         />
                         <FormControlLabel
-                            control={<Checkbox {...control.register('rememberMe')} />}
+                            control={<Checkbox color="secondary" {...control.register('rememberMe')} />}
                             label={t('Login.rememberMe')}
                         />
                         <Button type="submit" variant="contained" color="primary">

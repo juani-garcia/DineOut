@@ -4,7 +4,7 @@ html {
     color: rgba(0, 0, 0, 0.87);
     font-family: Montserrat, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif !important;
     line-height: 1.5;
     box-sizing: border-box;
 }
