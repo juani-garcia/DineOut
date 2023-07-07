@@ -30,7 +30,7 @@ export const NavTitle = styled.a`
 `
 
 export const Logo = styled.img`
-  padding-left: 0.5rem;
+  padding-left: 0.5719rem;
   height: 2.1rem
 `
 
