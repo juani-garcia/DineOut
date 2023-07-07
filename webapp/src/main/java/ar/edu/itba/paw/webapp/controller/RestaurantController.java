@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.Utils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.slf4j.Logger;
@@ -61,24 +62,9 @@ public class RestaurantController {
         final List<RestaurantDTO> restaurantDTOList = restaurantPagedQuery.getContent().
                 stream().map(r -> RestaurantDTO.fromRestaurant(uriInfo, r)).collect(Collectors.toList());
 
-        // TODO: Check if getRequestUriBuilder() is not preferable
-        UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder().replacePath("restaurants");
-        if (match != null && ! match.isEmpty())
-            uriBuilder = uriBuilder.queryParam("match", match);
-        if (category != null)
-            uriBuilder = uriBuilder.queryParam("category", category);
-        if (zone != null)
-            uriBuilder = uriBuilder.queryParam("zone", zone);
-        if (shift != null)
-            uriBuilder = uriBuilder.queryParam("shift", shift);
+        UriBuilder uriBuilder = uriInfo.getRequestUriBuilder().replacePath("restaurants");
         Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
-        baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", 1).build(), "first");
-        baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPageCount()).build(), "last");
-        if (restaurantPagedQuery.getPage() > 1)
-            baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPage()-1).build(), "prev");
-        if (restaurantPagedQuery.getPage() < restaurantPagedQuery.getPageCount())
-            baseResponse = baseResponse.link(uriBuilder.clone().queryParam("page", restaurantPagedQuery.getPage()+1).build(), "next");
-        return baseResponse.build();
+        return Utils.buildFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse);
     }
 
     @POST
