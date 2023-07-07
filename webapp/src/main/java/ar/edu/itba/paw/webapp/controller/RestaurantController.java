@@ -64,7 +64,7 @@ public class RestaurantController {
 
         UriBuilder uriBuilder = uriInfo.getRequestUriBuilder().replacePath("restaurants");
         Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
-        return Utils.buildFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse);
+        return Utils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
     }
 
     @POST
