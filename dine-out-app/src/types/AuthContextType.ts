@@ -4,7 +4,7 @@ import { type Dispatch, type SetStateAction } from 'react'
 export default interface AuthContextType {
   user: User | null
   setUser: Dispatch<SetStateAction<User | null>>
-  logout: (callback: VoidFunction) => void
+  logout: () => void
   getToken: () => string | null
   setToken: (token: string | null) => void
   getRefreshToken: () => string | null

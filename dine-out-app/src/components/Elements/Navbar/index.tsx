@@ -3,6 +3,7 @@ import {
   ListItem,
   LoginButton,
   Logo,
+  LogoutButton,
   Navigation,
   NavigationContainer,
   NavRight,
@@ -15,7 +16,7 @@ import { useAuth } from '@/hooks/auth/useAuth'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   return (
         <Navigation>
@@ -37,6 +38,9 @@ function Navbar (): JSX.Element {
                     </NavRight>
                   : <NavRight>
                         <ListItem>Boeeenas {user.sub}</ListItem>
+                        <ListItem><LogoutButton onClick={() => {
+                          logout()
+                        }}>Chau chau</LogoutButton></ListItem>
                     </NavRight>}
 
             </NavigationContainer>

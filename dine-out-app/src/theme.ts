@@ -14,6 +14,7 @@ export const styledTheme = {
   defaultWhite: '#ffffff',
   boldWeight: '700',
   lightWeight: '300',
+  defaultRed: '#F54242',
   black: '#000000'
 }
 
