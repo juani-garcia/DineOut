@@ -8,6 +8,7 @@ import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -69,6 +70,7 @@ public class RestaurantController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.isRestaurantOwnerWithoutRestaurant(authentication)")
     public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
         LOGGER.debug("{}", restaurantForm);
         byte[] image = null;
@@ -108,6 +110,7 @@ public class RestaurantController {
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateRestaurant(@PathParam("id") final long restaurantId, @Valid final RestaurantForm restaurantForm) {
         byte[] image = null;
         if (restaurantForm.getImage() != null) {
