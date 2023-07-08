@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.print.attribute.standard.Media;
@@ -55,6 +56,7 @@ public class MenuSectionController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response createMenuSection(
             @Valid final MenuSectionForm menuSectionForm
     ) {
@@ -79,6 +81,7 @@ public class MenuSectionController {
     @PUT
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateMenuSection(
             @PathParam("id") final long menuSectionId,
             @Valid final MenuSectionForm menuSectionForm
@@ -89,6 +92,7 @@ public class MenuSectionController {
 
     @DELETE
     @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response deleteMenuSection(
             @PathParam("id") final long menuSectionId
     ) {
