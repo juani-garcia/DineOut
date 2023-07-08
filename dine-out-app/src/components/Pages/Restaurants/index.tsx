@@ -1,8 +1,14 @@
 import React from 'react'
+import RestaurantCard from '@/components/Elements/RestaurantCard'
+import { MyContainer } from '@/components/Elements/utils/styles'
+import SearchBox from '@/components/Elements/SearchBox'
 
 function Restaurants (): JSX.Element {
   return (
-        <h1>Boca!</h1>
+        <MyContainer>
+            <SearchBox/>
+            <RestaurantCard/>
+        </MyContainer>
   )
 }
 

@@ -14,7 +14,7 @@ function App (): JSX.Element {
         <StyledThemeProvider theme={styledTheme}>
             <MuiThemeProvider theme={muiTheme}>
                 <AuthProvider>
-                    <BrowserRouter> { /* TODO: Check basename? */}
+                    <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
                         <Routes>
                             <Route
                                 path='/'

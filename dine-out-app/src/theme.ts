@@ -41,6 +41,18 @@ export const muiTheme = createTheme({
           alignItems: 'center'
         }
       }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          transition: 'all 0.2s ease-in-out',
+          background: 'transparent',
+          backgroundColor: 'transparent',
+          '&:hover': {
+            transform: 'scale(1.4)'
+          }
+        }
+      }
     }
   },
   typography: {

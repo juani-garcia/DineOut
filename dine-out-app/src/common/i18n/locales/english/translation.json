@@ -25,5 +25,16 @@
     "rememberMe": "Remember me",
     "noAccount": "Want an account?",
     "restorePassword": "Forgot my password"
+  },
+  "SearchBox": {
+    "search": "Search",
+    "category": "Category",
+    "where": "Where?",
+    "when": "When?",
+    "cleanFilters": "Clean filters",
+    "anyCategory": "Any category",
+    "anyTime": "Any time!",
+    "anyWhere": "Wherever!",
+    "searchBy": "Search for"
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
-import { MyContainer, Title, WhiteBoxContainer } from '../../Elements/utils/styles'
+import { MyContainer, Title } from '../../Elements/utils/styles'
 import { useTranslation } from 'react-i18next'
-import { LoginForm } from './styles'
+import { LoginForm, LoginWhiteBoxContainer } from './styles'
 import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
@@ -26,7 +26,7 @@ function Login (): JSX.Element {
   return (
         <MyContainer>
             <Title>{t('login')}</Title>
-            <WhiteBoxContainer>
+            <LoginWhiteBoxContainer>
                 <LoginForm>
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                     <FormControl component="form" onSubmit={handleSubmit(onLogin)}
@@ -59,7 +59,7 @@ function Login (): JSX.Element {
                         </Button>
                     </FormControl>
                 </LoginForm>
-            </WhiteBoxContainer>
+            </LoginWhiteBoxContainer>
         </MyContainer>
   )
 }
