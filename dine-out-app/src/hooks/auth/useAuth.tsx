@@ -8,7 +8,11 @@ export const AuthContext = createContext<AuthContextType>(null!)
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function AuthProvider ({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(() => {
+    const userInfo = getToken()?.split(' ')[1] // TODO: Check if works.
+    if (userInfo == null) return null
+    return jwtDecode(userInfo)
+  })
 
   const getToken = (): string | null => {
     return localStorage.getItem('token')
