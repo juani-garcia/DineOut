@@ -4,6 +4,7 @@ import { Catchphrase, WhoAreWeContainer, WhoAreWeText, WhoAreWeTitle } from './s
 import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/Elements/SearchBox'
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
+import ParallaxRecommend from '@/components/Elements/ParallaxRecommend'
 
 function MainContent (): JSX.Element {
   const { t } = useTranslation()
@@ -18,6 +19,10 @@ function MainContent (): JSX.Element {
                 <WhoAreWeTitle>{t('MainContent.info.title')}</WhoAreWeTitle>
                 <WhoAreWeText>{t('MainContent.info.description')}</WhoAreWeText>
             </WhoAreWeContainer>
+
+            <MyContainer>
+                <ParallaxRecommend/>
+            </MyContainer>
 
             <Link to="/restaurants">
                 <h1>Restaurants</h1>
