@@ -7,7 +7,7 @@ export const Catchphrase = styled.h5`
   text-align: center;
   font-size: 1.64rem;
   line-height: 110%;
-  margin: 1.0933333333rem 0 0.656rem 0;
+  margin: 0 0 0.656rem 0;
 `
 
 export const WhoAreWeContainer = styled(BoxContainer)`
