@@ -15,6 +15,7 @@ export const WhoAreWeContainer = styled(BoxContainer)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 25px;
   padding-top: 25px;
   padding-bottom: 25px;
   width: 90%;
