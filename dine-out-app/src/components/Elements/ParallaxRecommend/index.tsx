@@ -9,7 +9,7 @@ function ParallaxRecommend (): JSX.Element {
 
       const scrollPosition = window.pageYOffset
 
-      parallaxImg.style.transform = `translate3d(-50%, ${scrollPosition * 0.3}px, 0)`
+      parallaxImg.style.transform = `translate3d(-50%, ${(scrollPosition * 0.3) + 33}px, 0)`
     }
 
     window.addEventListener('scroll', handleScroll)
