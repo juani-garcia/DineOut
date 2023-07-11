@@ -46,9 +46,6 @@ public class RestaurantDTO {
         dto.self = restaurantUriBuilder.build();
         final UriBuilder usersUriBuilder = uriInfo.getAbsolutePathBuilder()
                 .replacePath("users");
-        // TODO: Remove this example
-        // dto.user = usersUriBuilder.clone()
-        // .queryParam("assignedTo", String.valueOf(restaurant.getId())).build();
         dto.owner = usersUriBuilder
                 .path(String.valueOf(restaurant.getUser().getId())).build();
         // TODO: Complete
