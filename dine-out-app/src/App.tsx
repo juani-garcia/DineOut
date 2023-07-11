@@ -7,6 +7,7 @@ import MainContent from '@/components/Pages/MainContent'
 import Restaurants from '@/components/Pages/Restaurants'
 import { AuthProvider } from '@/hooks/auth/useAuth'
 import Login from '@/components/Pages/Login'
+import Register from '@/components/Pages/Register'
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
 
 function App (): JSX.Element {
@@ -25,6 +26,8 @@ function App (): JSX.Element {
                                 <Route index element={<MainContent/>}/>
                                 <Route path="restaurants"
                                        element={<Restaurants/>}/>
+                                <Route path="register"
+                                       element={<Register/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
                             </Route>

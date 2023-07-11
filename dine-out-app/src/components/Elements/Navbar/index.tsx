@@ -28,7 +28,9 @@ function Navbar (): JSX.Element {
                 {user == null
                   ? <NavRight>
                         <ListItem>
-                            <RegisterButton>{t('register')}</RegisterButton>
+                            <RegisterButton as={Link} to="/register">
+                                          {t('register')}
+                            </RegisterButton>
                         </ListItem>
                         <ListItem>
                             <LoginButton as={Link} to="/login">

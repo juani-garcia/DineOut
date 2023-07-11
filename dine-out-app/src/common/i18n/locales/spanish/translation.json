@@ -1,6 +1,8 @@
 {
   "register": "¡Registrate!",
   "login": "Iniciar sesión",
+  "email": "Correo electrónico:",
+  "password": "Contraseña:",
   "Footer": {
     "project": "Un proyecto de ",
     "company": "Graphene"
@@ -20,11 +22,16 @@
     }
   },
   "Login": {
-    "email": "Correo electrónico:",
-    "password": "Contraseña:",
-    "rememberMe": "Recuérdame",
     "noAccount": "¿No tenés una cuenta?",
     "restorePassword": "Recuperar mi contraseña"
+  },
+  "Register": {
+    "confirmPassword": "Repita su contraseña:",
+    "header": "Complete los detalles siguientes:",
+    "firstName": "Nombre:",
+    "lastName": "Apellido:",
+    "isRestaurant": "Usaré esta cuenta para un restaurante.",
+    "redirectionToLogin": "¿Ya tienes cuenta?"
   },
   "SearchBox": {
     "search": "Buscar",

@@ -1,5 +1,5 @@
 import React from 'react'
-import { MyContainer, Title } from '../../Elements/utils/styles'
+import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import { useTranslation } from 'react-i18next'
 import { LoginForm, LoginWhiteBoxContainer } from './styles'
 import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material'
@@ -36,23 +36,19 @@ function Login (): JSX.Element {
                                    }
                                  }}>
                         <TextField
-                            label={t('Login.email')}
+                            label={t('email')}
                             fullWidth
                             margin="normal"
                             {...control.register('username')}
                             variant="standard"
                         />
                         <TextField
-                            label={t('Login.password')}
+                            label={t('password')}
                             type="password"
                             fullWidth
                             margin="normal"
                             {...control.register('password')}
                             variant="standard"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox color="secondary" {...control.register('rememberMe')} />}
-                            label={t('Login.rememberMe')}
                         />
                         <Button type="submit" variant="contained" color="primary">
                             {t('login')}
