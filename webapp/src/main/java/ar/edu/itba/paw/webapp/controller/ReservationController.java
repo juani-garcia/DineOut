@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -74,7 +75,7 @@ public class ReservationController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    // PreAuthorize(is Diner)
+    @Secured("ROLE_DINER")
     public Response createReservation(
             @Valid final ReservationForm reservationForm
     ) {
