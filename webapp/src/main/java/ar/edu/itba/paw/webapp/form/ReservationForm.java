@@ -17,6 +17,8 @@ import java.time.LocalTime;
 )
 public class ReservationForm {
 
+    private Long restaurantId;
+
     @Size(max = 150)
     private String comments;
 
@@ -31,6 +33,14 @@ public class ReservationForm {
     @NotNull
     @TimeFormat(format = "HH:mm")
     private String time;
+
+    public Long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
 
     public String getDate() {
         return date;
