@@ -35,14 +35,14 @@ public class SecurityManager {
         if (!maybeUser.isPresent())
             return false;
         User user = maybeUser.get();
-        if (!userService.isRestaurant(user.getId()))
+        if (!userService.isRestaurant(user.getId())) // TODO: Check if we can use RoleService with @Secured (https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410600704)
             return false;
         return !restaurantService.getOfLoggedUser().isPresent();
     }
 
     public boolean isRestaurantOwnerOfId(Authentication auth, final long id) {
         return restaurantService.getById(id)
-                .filter(r -> r.getUser().getUsername().equals(auth.getName()))
+                .filter(r -> r.getUser().getUsername().equals(auth.getName())) // TODO: Check if NPE is possible (https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410599200)
                 .isPresent();
     }
 

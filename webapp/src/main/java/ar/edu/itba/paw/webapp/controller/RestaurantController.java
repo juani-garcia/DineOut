@@ -77,6 +77,7 @@ public class RestaurantController {
                 image = restaurantForm.getImage().getBytes();
             } catch (IOException e) {
                 throw new IllegalStateException(); // This should never happen because of @ValidImage.
+                // TODO: Check https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410597884
             }
         }
         Restaurant newRestaurant = rs.create(restaurantForm.getName(),
