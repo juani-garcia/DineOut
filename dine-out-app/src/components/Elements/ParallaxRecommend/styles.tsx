@@ -33,7 +33,7 @@ export const ParallaxImageContainer = styled.div`
 `
 
 export const ParallaxImage = styled.img`
-  transform: translate3d(-50%, 33px, 0);
+  transform: translate3d(-50%, 0, 0);
   position: absolute;
   left: 50%;
   bottom: 0;

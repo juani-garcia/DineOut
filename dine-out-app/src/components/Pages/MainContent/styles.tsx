@@ -19,6 +19,7 @@ export const WhoAreWeContainer = styled(BoxContainer)`
   padding-top: 25px;
   padding-bottom: 25px;
   width: 90%;
+  text-align: center;
   color: ${(props) => props.theme.defaultWhite};
 `
 

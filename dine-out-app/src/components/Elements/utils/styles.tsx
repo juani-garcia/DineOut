@@ -13,8 +13,17 @@ export const MyContainer = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
   max-width: 1480px;
-  width: 100%;
+  width: 90%;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 993px) {
+    width: 90%;
+  }
 `
 
 export const BoxContainer = styled.div`

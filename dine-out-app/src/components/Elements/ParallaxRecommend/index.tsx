@@ -24,18 +24,29 @@ function ParallaxRecommend (): JSX.Element {
 
       const imgHeight = parallaxImg.offsetHeight
       const parallaxDist = imgHeight - containerHeight
+      console.log(parallaxDist)
 
       const parallax = document.getElementById('parallax')
       if (parallax == null) return
 
+      // const bottom = parallax.offsetTop + containerHeight
       const top = parallax.offsetTop
       const scrollTop = document.documentElement.scrollTop
       const windowHeight = window.innerHeight
       const windowBottom = scrollTop + windowHeight
       const percentScrolled = (windowBottom - top) / (containerHeight + windowHeight)
-      const scrollDistance = (parallaxDist * percentScrolled) - 160
+      const scrollDistance = (parallaxDist * percentScrolled)
 
-      parallaxImg.style.transform = `translate3d(-50%, ${scrollDistance}px, 0)`
+      console.log(top)
+      console.log(scrollTop)
+      console.log(windowHeight)
+      console.log('----------------------')
+
+      if (top < scrollTop + windowHeight) {
+        parallaxImg.style.transform = `translate3d(-50%, ${scrollDistance}px, 0)`
+      } else {
+        parallaxImg.style.transform = ''
+      }
     }
 
     window.addEventListener('scroll', handleScroll)

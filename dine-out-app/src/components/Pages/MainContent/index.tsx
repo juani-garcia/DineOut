@@ -20,9 +20,7 @@ function MainContent (): JSX.Element {
                 <WhoAreWeText>{t('MainContent.info.description')}</WhoAreWeText>
             </WhoAreWeContainer>
 
-            <MyContainer>
-                <ParallaxRecommend/>
-            </MyContainer>
+            <ParallaxRecommend/>
 
             <Link to="/restaurants">
                 <h1>Restaurants</h1>
