@@ -52,7 +52,6 @@ public class RestaurantController {
                 page, match, category, zone, shift);
         // TODO: Check validation of params (min for page, enums in range)
 
-        // TODO: Refactor filter to always search by item
         // TODO: Refactor filter to use enums instead of their ids
         final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone);
 
