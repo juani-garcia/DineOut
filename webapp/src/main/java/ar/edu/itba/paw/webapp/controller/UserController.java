@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @POST
-    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED, })
+    @Consumes(value = {MediaType.APPLICATION_JSON, })
     public Response createUser(@Valid final UserForm userForm) {
         final User newUser = userService.create(
                 userForm.getUsername(),
