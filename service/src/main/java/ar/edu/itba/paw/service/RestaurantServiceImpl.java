@@ -34,20 +34,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, int categoryId, int shiftId, int zoneId) {
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
         if (page <= 0) throw new InvalidPageException();
-
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.filter(page, name, byItem, category, shift, zone);
+        return restaurantDao.filter(page, name, true, category, shift, zone); // TODO: Refactor filter to always search by item
     }
 
     @Transactional
     @Override
     public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts) {
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new); // TODO: Catch this exception with a bad request or similar
         if (getByUserID(user.getId()).isPresent())
             throw new IllegalStateException();
         Image restaurantImage = null;

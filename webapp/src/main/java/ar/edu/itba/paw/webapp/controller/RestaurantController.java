@@ -1,29 +1,34 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.Utils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Path("restaurants")
 @Component
 public class RestaurantController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantController.class);
+
     @Autowired
-    private final RestaurantService rs;
+    private RestaurantService rs;
 
     @Context
     private UriInfo uriInfo;
@@ -33,33 +38,47 @@ public class RestaurantController {
         this.rs = rs;
     }
 
-// TODO: Clean up example
+    // GET /restaurant
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response readRestaurants(
+            @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
+            @QueryParam("match") final String match,
+            @QueryParam("category") final Category category,
+            @QueryParam("zone") final Zone zone,
+            @QueryParam("shift") final Shift shift
+    ) {
+        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}",
+                page, match, category, zone, shift);
+        // TODO: Check validation of params (min for page, enums in range)
 
-//    // GET /restaurants
-//    @GET
-//    @Produces(value = {MediaType.APPLICATION_JSON, })
-//    public Response listRestaurants(@QueryParam("page") @DefaultValue("1") final int page) {
-//        final List<RestaurantDTO> restaurantList = rs.getAll(page)
-//        .stream().map(RestaurantDTO::fromRestaurant).collect(Collectors.toList());
-//
-//        if (restaurantList.isEmpty()) {
-//            return Response.noContent().build();
-//        }
-//        return Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantList){})
-//                // TODO: complete these
-//                .link("", "prev")
-//                .link("", "next")
-//                .link("", "first")
-//                .link("", "last").build();
-//    }
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone);
+
+        if (restaurantPagedQuery.getContent().isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        final List<RestaurantDTO> restaurantDTOList = restaurantPagedQuery.getContent().
+                stream().map(r -> RestaurantDTO.fromRestaurant(uriInfo, r)).collect(Collectors.toList());
+
+        UriBuilder uriBuilder = uriInfo.getRequestUriBuilder().replacePath("restaurants");
+        Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
+        return Utils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
+    }
 
     @POST
+    @Consumes({MediaType.APPLICATION_JSON}) // TODO: Check Multipart form for image upload
+    @PreAuthorize("@securityManager.isRestaurantOwnerWithoutRestaurant(authentication)")
     public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
-        byte[] image;
-        try {
-            image = restaurantForm.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
+        LOGGER.debug("{}", restaurantForm);
+        byte[] image = null;
+        if (restaurantForm.getImage() != null) {
+            try { // TODO: Check if we could migrate this to form with custom mapper
+                image = restaurantForm.getImage().getBytes();
+            } catch (IOException e) {
+                throw new IllegalStateException(); // This should never happen because of @ValidImage.
+                // TODO: Check https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410597884
+            }
         }
         Restaurant newRestaurant = rs.create(restaurantForm.getName(),
                 image,
@@ -77,6 +96,7 @@ public class RestaurantController {
 
     // GET /restaurants/{id}
     @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{id}")
     public Response getRestaurant(@PathParam("id") final long restaurantID) {
         Optional<RestaurantDTO> maybeRestaurant = rs.getById(restaurantID).map(r -> RestaurantDTO.fromRestaurant(uriInfo, r));
@@ -86,12 +106,30 @@ public class RestaurantController {
          return Response.ok(maybeRestaurant.get()).build();
     }
 
-//    @DELETE
-//    @Path("/{id}")
-//    @Produces(value = {MediaType.APPLICATION_JSON, })
-//    public Response deleteById(@PathParam("id") final long id) {
-//        rs.deleteById(id);
-//        return Response.noContent().build();
-//    }
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateRestaurant(@PathParam("id") final long restaurantId, @Valid final RestaurantForm restaurantForm) {
+        byte[] image = null;
+        if (restaurantForm.getImage() != null) {
+            try {
+                image = restaurantForm.getImage().getBytes();
+            } catch (IOException e) {
+                throw new IllegalStateException(); // This should never happen because of @ValidImage.
+            }
+        }
+        rs.updateCurrentRestaurant(restaurantForm.getName(),
+                restaurantForm.getAddress(),
+                restaurantForm.getEmail(),
+                restaurantForm.getDetail(),
+                Zone.getByName(restaurantForm.getZone()),
+                restaurantForm.getLat(),
+                restaurantForm.getLng(),
+                restaurantForm.getCategories(),
+                restaurantForm.getShifts(),
+                image);
+        return Response.ok().build();
+    }
 
 }

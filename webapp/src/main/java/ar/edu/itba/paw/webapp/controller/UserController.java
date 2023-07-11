@@ -31,7 +31,7 @@ public class UserController {
 
     @GET
     @Path("/{id}")
-    @PreAuthorize("@securityManager.validateAccessById(authentication, #userID)")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userID)")
     public Response readUser(@PathParam("id") final long userID) {
         Optional<UserDTO> maybeUser = userService.getById(userID).map(u -> UserDTO.fromUser(uriInfo, u));
         if (! maybeUser.isPresent()) {
