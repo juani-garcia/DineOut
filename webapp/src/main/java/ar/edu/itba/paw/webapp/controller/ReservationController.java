@@ -80,7 +80,7 @@ public class ReservationController {
             @Valid final ReservationForm reservationForm
     ) {
         rs.create(
-                reservationForm.getRestaurantId(), // TODO: Add field of restaurant id
+                reservationForm.getRestaurantId(),
                 ss.getCurrentUsername(),
                 reservationForm.getAmount(),
                 reservationForm.getLocalDateTime(),

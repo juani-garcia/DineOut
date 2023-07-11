@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.validations.DateFormat;
 import ar.edu.itba.paw.webapp.validations.FutureDateTime;
 import ar.edu.itba.paw.webapp.validations.TimeFormat;
+import ar.edu.itba.paw.webapp.validations.ValidRestaurantId;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.time.LocalTime;
 )
 public class ReservationForm {
 
+    @ValidRestaurantId
     private Long restaurantId;
 
     @Size(max = 150)
