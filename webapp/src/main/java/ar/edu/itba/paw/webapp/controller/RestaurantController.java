@@ -40,7 +40,7 @@ public class RestaurantController {
 
     // GET /restaurant
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON}) // TODO: Check Multipart form for image upload
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response readRestaurants(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
             @QueryParam("match") final String match,
@@ -69,7 +69,7 @@ public class RestaurantController {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON}) // TODO: Check Multipart form for image upload
     @PreAuthorize("@securityManager.isRestaurantOwnerWithoutRestaurant(authentication)")
     public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
         LOGGER.debug("{}", restaurantForm);
