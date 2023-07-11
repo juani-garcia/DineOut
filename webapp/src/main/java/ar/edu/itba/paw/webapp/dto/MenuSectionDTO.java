@@ -6,6 +6,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MenuSectionDTO {
 
@@ -22,8 +23,12 @@ public class MenuSectionDTO {
         UriBuilder restaurantUriBuilder = uriInfo.getAbsolutePathBuilder().replacePath("restaurants").path(String.valueOf(menuSection.getRestaurant().getId()));
         dto.restaurant = restaurantUriBuilder.clone().build();
         dto.ordering = menuSection.getOrdering();
-        dto.self = restaurantUriBuilder.clone().path("menu-sections").path(String.valueOf(menuSection.getId())).build();
-        // TODO: menuItemList
+        UriBuilder menuSectionUriBuilder = restaurantUriBuilder.clone().path("menu-sections").path(String.valueOf(menuSection.getId()));
+        dto.self = menuSectionUriBuilder.clone().build();
+        UriBuilder menuItemUriBuilder = menuSectionUriBuilder.clone().path("menu-items");
+        dto.menuItemList = menuSection.getMenuItemList().stream()
+                .map(mi -> menuItemUriBuilder.clone().path(String.valueOf(mi.getId())).build())
+                .collect(Collectors.toList());
 
         return dto;
     }
