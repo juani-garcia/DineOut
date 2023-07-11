@@ -14,6 +14,7 @@ import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PatchMapping;
 
@@ -45,7 +46,8 @@ public class ReservationController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    // TODO: Add authorization validation for byUser and forRestaurant params
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId) or @securityManager.isUserOfId(authentication, #restaurantId)")
+    // TODO: Check what happens when parameters are null (auth function receives long, controller receives Long)
     public Response readReservations(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
             @QueryParam("byUser") final Long userId,
