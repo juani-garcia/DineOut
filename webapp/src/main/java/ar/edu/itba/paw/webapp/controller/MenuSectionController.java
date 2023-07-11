@@ -67,7 +67,7 @@ public class MenuSectionController {
     public Response readMenuSections() {
         LOGGER.debug("Retrieving menu sections for restaurant with id: {}", restaurantId);
 
-        List<MenuSection> menuSectionList = mss.getByRestaurantId(restaurantId);
+        List<MenuSection> menuSectionList = mss.getByRestaurantId(restaurantId); // TODO: Discuss if this should be a PagedQuery
         if (menuSectionList.isEmpty()) {
             return Response.noContent().build();
         }
