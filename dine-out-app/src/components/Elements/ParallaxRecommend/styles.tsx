@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { GroovyText, WhiteBoxContainer } from '@/components/Elements/utils/styles'
 
 export const ParallaxContainer = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -44,4 +45,36 @@ export const ParallaxImage = styled.img`
   box-sizing: inherit;
   line-height: 0;
   color: rgba(255, 255, 255, .9);
+`
+
+export const ParallaxCardRecommend = styled(WhiteBoxContainer)`
+  margin-top: auto;
+  min-width: 600px;
+  z-index: 1;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  user-select: none;
+  padding: 15px;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`
+
+export const GroovyRecommend = styled(GroovyText)`
+  font-weight: 700;
+  width: 100%;
+  text-align: center;
+  font-size: 1.64rem;
+  line-height: 110%;
+  margin: 1.0933333333rem 0 0.656rem 0;
+  box-sizing: inherit;
+  cursor: pointer;
 `

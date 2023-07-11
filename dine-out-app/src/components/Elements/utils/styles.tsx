@@ -65,3 +65,19 @@ export const Button = styled.button`
     transform: scale(1.1);
   }
 `
+
+export const GroovyText = styled.text`
+  background: -webkit-linear-gradient(45deg, ${(props) => props.theme.groovy[0]} 0%, ${(props) => props.theme.groovy[1]} 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: ${(props) => props.theme.defaultDark} !important;
+  display: block;
+`
+
+export const ChooseP = styled.p`
+  color: ${(props) => props.theme.defaultDark};
+  text-align: center;
+  line-height: 2rem;
+  box-sizing: inherit;
+  cursor: pointer;
+`

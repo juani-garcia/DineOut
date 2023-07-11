@@ -43,5 +43,9 @@
     "anyTime": "¡Todo el dia!",
     "anyWhere": "¡Donde sea!",
     "searchBy": "Buscar por"
+  },
+  "Parallax": {
+    "dontKnow": "¿No sabés qué comer?",
+    "choose": "Dejanos elegir un restaurante para vos"
   }
 }

@@ -43,5 +43,9 @@
     "anyTime": "Any time!",
     "anyWhere": "Wherever!",
     "searchBy": "Search for"
+  },
+  "Parallax": {
+    "dontKnow": "Dont know where to eat?",
+    "choose": "Let us choose a restaurant for you"
   }
 }
