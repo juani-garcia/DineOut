@@ -79,15 +79,16 @@ public class ReservationController {
     public Response createReservation(
             @Valid final ReservationForm reservationForm
     ) {
-        rs.create(
+        Reservation reservation = rs.create(
                 reservationForm.getRestaurantId(),
                 ss.getCurrentUsername(),
                 reservationForm.getAmount(),
                 reservationForm.getLocalDateTime(),
                 reservationForm.getComments(),
-                uriInfo.getRequestURL().toString().replace(request.getServletPath(), "")
+                uriInfo.getBaseUri().getPath() // TODO: Check if this replaces: uriInfo.getRequestURL().toString().replace(request.getServletPath(), "")
         );
-
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(reservation.getId())).build();
+        return Response.created(location).build();
     }
 
 
