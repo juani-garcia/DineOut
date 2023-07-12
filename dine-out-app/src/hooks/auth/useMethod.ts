@@ -44,15 +44,18 @@ export const useMethod = () => {
       data: request.data,
       params: request.params
     }).then(response => {
-      setToken(response.headers.authorization)
-      setRefreshToken(response.headers['X-Refresh-Token'])
+      if (response.headers.authorization != null) setToken(response.headers.authorization)
+      if (response.headers['X-Refresh-Token'] != null) setRefreshToken(response.headers['X-Refresh-Token'])
+
+      setIsLoading(false)
+      return response
     }
     ).catch(async e => {
       if (e.response?.status === HttpStatusCode.Unauthorized && request.basic == null) {
         if (token == null && refreshToken == null) return e.response // TODO: Logout, setIsloading false and redirect to login
 
         if (token != null) setToken(null)
-        else if (refreshToken != null) return e.response // TODO: Logout, setIsloading false and redirect to login
+        else if (refreshToken != null) setRefreshToken(null) // TODO: Logout, setIsloading false and redirect to login
 
         if (request.headers != null) delete request.headers.Authorization
 
@@ -60,9 +63,10 @@ export const useMethod = () => {
       }
       setIsLoading(false) // Failed credentials for login or other HTTP status code.
       return e.response
+    }).finally(() => {
+      setIsLoading(false)
     })
 
-    setIsLoading(false)
     return response
   }
 
