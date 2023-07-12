@@ -2,7 +2,7 @@ import React from 'react'
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import { useTranslation } from 'react-i18next'
 import { LoginForm, LoginWhiteBoxContainer } from './styles'
-import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material'
+import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
 
@@ -32,7 +32,8 @@ function Login (): JSX.Element {
                     <FormControl component="form" onSubmit={handleSubmit(onLogin)}
                                  sx={{
                                    '& .MuiButton-root': {
-                                     width: '40%'
+                                     width: '40%',
+                                     marginTop: '25px'
                                    }
                                  }}>
                         <TextField

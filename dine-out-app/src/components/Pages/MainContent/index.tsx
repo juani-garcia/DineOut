@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Catchphrase, WhoAreWeContainer, WhoAreWeText, WhoAreWeTitle } from './styles'
 import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/Elements/SearchBox'
@@ -21,10 +20,6 @@ function MainContent (): JSX.Element {
             </WhoAreWeContainer>
 
             <ParallaxRecommend/>
-
-            <Link to="/restaurants">
-                <h1>Restaurants</h1>
-            </Link>
         </MyContainer>
   )
 }

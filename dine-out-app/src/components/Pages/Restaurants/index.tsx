@@ -5,7 +5,8 @@ import SearchBox from '@/components/Elements/SearchBox'
 import { useRestaurants } from '@/hooks/Restaurants/useRestaurants'
 import type Restaurant from '@/types/models/Restaurant'
 import { useSearchParams } from 'react-router-dom'
-import { Pagination } from '@mui/material'
+import { CircularProgress, Pagination } from '@mui/material'
+import { NoRestaurantsContainer, NoRestaurantsText } from '@/components/Pages/Restaurants/styles'
 
 function Restaurants (): JSX.Element {
   const { isLoading, restaurants } = useRestaurants()
@@ -15,7 +16,11 @@ function Restaurants (): JSX.Element {
 
   useEffect(() => {
     restaurants(queryParams).then((response) => {
-      if (response.status !== 200) return // TODO: Handle error
+      if (response.status !== 200) {
+        setRestaurantList([])
+        return
+      } // TODO: Handle error
+
       setTotalPages(Number(response.headers['x-total-pages']))
       const existingParams = new URLSearchParams(queryParams.toString())
 
@@ -41,32 +46,43 @@ function Restaurants (): JSX.Element {
             <SearchBox/>
             {isLoading
               ? (
-                    <div>Loading..</div>
+                    <CircularProgress color="secondary" size="100px"/>
                 )
               : (
                   restaurantList.length === 0
                     ? (
-                            <>Todo un tema</>)
+                            <NoRestaurantsContainer>
+                                <NoRestaurantsText>
+                                    No encontramos ningún restaurante
+                                </NoRestaurantsText>
+                            </NoRestaurantsContainer>
+                      )
                     : (
-                        restaurantList.map((restaurant: Restaurant) => (
-                                <RestaurantCard key={restaurant.self} name={restaurant.detail}/>
-                        ))
+                            <>
+                                {
+                                    restaurantList.map((restaurant: Restaurant) => (
+                                        <RestaurantCard key={restaurant.self} name={restaurant.detail}/>
+                                    ))
+                                }
+                                <Pagination
+                                    count={totalPages}
+                                    page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
+                                    onChange={handlePageChange}
+                                    size="large"
+                                    showFirstButton
+                                    showLastButton
+                                    siblingCount={3}
+                                    boundaryCount={3}
+                                    sx={{
+                                      '& .MuiPaginationItem-root': {
+                                        color: '#FFFFFF'
+                                      }
+                                    }}
+                                />
+                            </>
                       )
                 )
             }
-            <Pagination
-                count={totalPages}
-                page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
-                onChange={handlePageChange}
-                size="large"
-                showFirstButton
-                showLastButton
-                sx={{
-                  '& .MuiPaginationItem-root': {
-                    color: '#FFFFFF'
-                  }
-                }}
-            />
         </MyContainer>
   )
 }

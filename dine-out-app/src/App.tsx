@@ -33,6 +33,12 @@ function App (): JSX.Element {
                                        element={<Register/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
+                                <Route
+                                    path="*"
+                                    element={
+                                        <>Vamo que vamo</>
+                                    }
+                                />
                             </Route>
                         </Routes>
                     </BrowserRouter>

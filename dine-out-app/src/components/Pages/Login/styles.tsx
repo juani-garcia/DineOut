@@ -7,8 +7,11 @@ export const LoginForm = styled.div`
   flex-direction: column;
   width: 50%;
   margin-left: 25%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  
 `
 
 export const LoginWhiteBoxContainer = styled(WhiteBoxContainer)`
-  width: 90%
+  width: 60%
 `
