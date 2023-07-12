@@ -28,7 +28,10 @@ import javax.ws.rs.core.Response;
 
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true
+)
 @Configuration
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
