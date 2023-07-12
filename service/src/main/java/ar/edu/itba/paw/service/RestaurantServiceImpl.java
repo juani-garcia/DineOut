@@ -36,7 +36,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
         if (page <= 0) throw new InvalidPageException();
-        return restaurantDao.filter(page, name, true, category, shift, zone);
+        return restaurantDao.filter(page, name, true, category, shift, zone); // TODO: Refactor filter to always search by item
     }
 
     @Transactional

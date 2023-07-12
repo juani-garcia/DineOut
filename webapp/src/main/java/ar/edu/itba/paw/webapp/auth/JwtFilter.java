@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -96,7 +97,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String[] credentials = decoded.split(":", 2);
 
                 if(credentials.length < 2) {
-                    LOGGER.error("Bad credentials. No colon found. Credentials should be user:pass");
+                    LOGGER.debug("Bad credentials. No colon found. Credentials should be user:pass");
                     return unauthorized(context.response);
                 }
 
@@ -104,10 +105,17 @@ public class JwtFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(credentials[0], credentials[1]);
 
                 Optional<User> optionalUser = context.userService.getByUsername(credentials[0]);
-                Authentication authenticate = context.authenticationManager.authenticate(authentication);
+
+                Authentication authenticate;
+                try {
+                    authenticate = context.authenticationManager.authenticate(authentication);
+                } catch(BadCredentialsException e) {
+                    return unauthorized(context.response);
+                }
+
                 UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
 
-                if (!optionalUser.isPresent()) { // TODO: Check password
+                if (!optionalUser.isPresent()) {
                     LOGGER.error("Username {} not found", userDetails.getUsername());
                     return unauthorized(context.response);
                 }

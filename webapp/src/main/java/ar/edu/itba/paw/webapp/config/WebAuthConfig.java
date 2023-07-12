@@ -12,6 +12,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,8 +30,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.ws.rs.core.Response;
+
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true
+)
 @Configuration
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
@@ -87,7 +94,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().authorizeRequests()
                 .anyRequest().permitAll()
             .and().exceptionHandling()
-                .accessDeniedPage("/403")
+                .accessDeniedHandler((request, response, ex) -> response.setStatus(Response.Status.FORBIDDEN.getStatusCode()))
+                .authenticationEntryPoint((request, response, ex) -> response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode()))
             .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors()
             .and().csrf().disable();

@@ -1,18 +1,18 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import ar.edu.itba.paw.model.*;
-import org.hibernate.annotations.Formula;
+import ar.edu.itba.paw.model.Category;
+import ar.edu.itba.paw.model.Restaurant;
+import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.Zone;
 
-import javax.persistence.*;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class RestaurantDTO {
+    private Long id;
     private Long favCount;
     private Long rating;
     private Long ratingCount;
@@ -26,11 +26,15 @@ public class RestaurantDTO {
     private URI self;
     private URI owner;
     private URI image;
-    // TODO: Consider id, Zone, Shifts, Categories, MenuSection
+    private Zone zone;
+    private Set<Shift> shifts;
+    private Set<Category> categories;
+    private URI menuSections;
 
     public static RestaurantDTO fromRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
         final RestaurantDTO dto = new RestaurantDTO();
 
+        dto.id = restaurant.getId();
         dto.favCount = restaurant.getFavCount();
         dto.rating = restaurant.getRating();
         dto.ratingCount = restaurant.getRatingCount();
@@ -46,24 +50,25 @@ public class RestaurantDTO {
         dto.self = restaurantUriBuilder.build();
         final UriBuilder usersUriBuilder = uriInfo.getAbsolutePathBuilder()
                 .replacePath("users");
-        // TODO: Remove this example
-        // dto.user = usersUriBuilder.clone()
-        // .queryParam("assignedTo", String.valueOf(restaurant.getId())).build();
         dto.owner = usersUriBuilder
                 .path(String.valueOf(restaurant.getUser().getId())).build();
-        // TODO: Complete
+        // TODO: dto.image = (depends on endpoint design)
+        dto.zone = restaurant.getZone();
+        dto.shifts = restaurant.getShifts();
+        dto.categories = restaurant.getCategories();
+        dto.menuSections = restaurantUriBuilder.path("menu-sections").build();
+
         // TODO: Check if we move the link creation to their respective DTO class
 
         return dto;
     }
 
-
-    public URI getImage() {
-        return image;
+    public Long getId() {
+        return id;
     }
 
-    public void setImage(URI image) {
-        this.image = image;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getFavCount() {
@@ -150,7 +155,47 @@ public class RestaurantDTO {
         return owner;
     }
 
-    public void setOwner(URI user) {
-        this.owner = user;
+    public void setOwner(URI owner) {
+        this.owner = owner;
+    }
+
+    public URI getImage() {
+        return image;
+    }
+
+    public void setImage(URI image) {
+        this.image = image;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
+    }
+
+    public Set<Shift> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(Set<Shift> shifts) {
+        this.shifts = shifts;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public URI getMenuSections() {
+        return menuSections;
+    }
+
+    public void setMenuSections(URI menuSections) {
+        this.menuSections = menuSections;
     }
 }
