@@ -12,6 +12,7 @@ export const styledTheme = {
   backgroundBottom: '#daae51',
   defaultDark: '#242B2A',
   defaultWhite: '#ffffff',
+  defaultLight: '#9e9e9e',
   boldWeight: '700',
   lightWeight: '300',
   defaultRed: '#F54242',
