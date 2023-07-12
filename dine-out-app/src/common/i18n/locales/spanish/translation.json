@@ -1,0 +1,51 @@
+{
+  "register": "¡Registrate!",
+  "login": "Iniciar sesión",
+  "email": "Correo electrónico:",
+  "password": "Contraseña:",
+  "Footer": {
+    "project": "Un proyecto de ",
+    "company": "Graphene"
+  },
+  "MainContent": {
+    "header": {
+      "title": "¡Buscá, reservá y disfrutá!",
+      "catchphrase": "La solución a tus comidas afuera"
+    },
+    "info": {
+      "title": "¿Quiénes somos?",
+      "description": "DineOut es tu lugar para ver una selección de restaurantes, analizar su menú, ver horarios disponibles, ¡Y reservar!"
+    },
+    "picker": {
+      "question": "¿No sabés qué comer?",
+      "answer": "Dejanos elegir un restaurante para vos"
+    }
+  },
+  "Login": {
+    "noAccount": "¿No tenés una cuenta?",
+    "restorePassword": "Recuperar mi contraseña"
+  },
+  "Register": {
+    "confirmPassword": "Repita su contraseña:",
+    "header": "Complete los detalles siguientes:",
+    "firstName": "Nombre:",
+    "lastName": "Apellido:",
+    "isRestaurant": "Usaré esta cuenta para un restaurante.",
+    "redirectionToLogin": "¿Ya tienes cuenta?"
+  },
+  "SearchBox": {
+    "search": "Buscar",
+    "category": "Categoria",
+    "where": "¿Cuándo?:",
+    "when": "¿Dónde?:",
+    "cleanFilters": "Limpiar filtros",
+    "anyCategory": "Cualquier categoria",
+    "anyTime": "¡Todo el dia!",
+    "anyWhere": "¡Donde sea!",
+    "searchBy": "Buscar por"
+  },
+  "Parallax": {
+    "dontKnow": "¿No sabés qué comer?",
+    "choose": "Dejanos elegir un restaurante para vos"
+  }
+}

@@ -107,7 +107,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 Authentication authenticate = context.authenticationManager.authenticate(authentication);
                 UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
 
-                if (!optionalUser.isPresent()) {
+                if (!optionalUser.isPresent()) { // TODO: Check password
                     LOGGER.error("Username {} not found", userDetails.getUsername());
                     return unauthorized(context.response);
                 }

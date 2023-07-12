@@ -1,0 +1,51 @@
+{
+  "register": "Register!",
+  "login": "Log In",
+  "email": "Email:",
+  "password": "Password:",
+  "Footer": {
+    "project": "A project of ",
+    "company": "Graphene"
+  },
+  "MainContent": {
+    "header": {
+      "title": "Search, book, and enjoy!",
+      "catchphrase": "The solution to dining out"
+    },
+    "info": {
+      "title": "Who are we?",
+      "description": "DineOut is a place to see a selection of restaurants, analyze their menu, see available times, and book!"
+    },
+    "picker": {
+      "question": "Don't know what to eat?",
+      "answer": "Let us pick a restaurant just for you"
+    }
+  },
+  "Login": {
+    "noAccount": "Want an account?",
+    "restorePassword": "Forgot my password"
+  },
+  "Register": {
+    "confirmPassword": "Confirm password:",
+    "header": "Complete the following details:",
+    "firstName": "First name:",
+    "lastName": "Last name:",
+    "isRestaurant": "I will use this account as a restaurant",
+    "redirectionToLogin": "Already have an account?"
+  },
+  "SearchBox": {
+    "search": "Search",
+    "category": "Category",
+    "where": "Where?",
+    "when": "When?",
+    "cleanFilters": "Clean filters",
+    "anyCategory": "Any category",
+    "anyTime": "Any time!",
+    "anyWhere": "Wherever!",
+    "searchBy": "Search for"
+  },
+  "Parallax": {
+    "dontKnow": "Dont know where to eat?",
+    "choose": "Let us choose a restaurant for you"
+  }
+}

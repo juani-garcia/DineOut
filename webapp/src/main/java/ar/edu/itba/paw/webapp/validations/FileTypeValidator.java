@@ -16,8 +16,7 @@ public class FileTypeValidator implements ConstraintValidator<FileType, Multipar
 
     @Override
     public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-        if (file == null) return false;
-        if (file.isEmpty()) return true;
+        if (file == null || file.isEmpty()) return true;
         String fileType = file.getContentType();
         for (String type : types) {
             if (type.equals(fileType)) return true;

@@ -1,14 +1,18 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.*;
+import org.hibernate.annotations.Formula;
 
+import javax.persistence.*;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class RestaurantDTO {
-
-    private Image image;
     private Long favCount;
     private Long rating;
     private Long ratingCount;
@@ -20,13 +24,23 @@ public class RestaurantDTO {
     private String detail;
 
     private URI self;
-    private URI user;
-    // TODO: Consider Zone, Shifts, Categories, MenuSection
+    private URI owner;
+    private URI image;
+    // TODO: Consider id, Zone, Shifts, Categories, MenuSection
 
     public static RestaurantDTO fromRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
         final RestaurantDTO dto = new RestaurantDTO();
 
+        dto.favCount = restaurant.getFavCount();
+        dto.rating = restaurant.getRating();
+        dto.ratingCount = restaurant.getRatingCount();
         dto.name = restaurant.getName();
+        dto.lat = restaurant.getLat();
+        dto.lng = restaurant.getLng();
+        dto.mail = restaurant.getMail();
+        dto.address = restaurant.getAddress();
+        dto.detail = restaurant.getDetail();
+
         final UriBuilder restaurantUriBuilder = uriInfo.getAbsolutePathBuilder()
                 .replacePath("restaurants").path(String.valueOf(restaurant.getId()));
         dto.self = restaurantUriBuilder.build();
@@ -35,19 +49,20 @@ public class RestaurantDTO {
         // TODO: Remove this example
         // dto.user = usersUriBuilder.clone()
         // .queryParam("assignedTo", String.valueOf(restaurant.getId())).build();
-        dto.user = usersUriBuilder
+        dto.owner = usersUriBuilder
                 .path(String.valueOf(restaurant.getUser().getId())).build();
         // TODO: Complete
+        // TODO: Check if we move the link creation to their respective DTO class
 
         return dto;
     }
 
 
-    public Image getImage() {
+    public URI getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(URI image) {
         this.image = image;
     }
 
@@ -131,11 +146,11 @@ public class RestaurantDTO {
         this.self = self;
     }
 
-    public URI getUser() {
-        return user;
+    public URI getOwner() {
+        return owner;
     }
 
-    public void setUser(URI user) {
-        this.user = user;
+    public void setOwner(URI user) {
+        this.owner = user;
     }
 }
