@@ -7,6 +7,9 @@ import javax.validation.constraints.Size;
 
 public class RestaurantReviewForm {
 
+    // TODO: Add valid restaurant id
+    private long restaurantId;
+
     @NotNull
     @Range(min = 1, max = 5)
     private Integer rating;
@@ -14,6 +17,14 @@ public class RestaurantReviewForm {
     @NotNull
     @Size(max = 250)
     private String review;
+
+    public long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
 
     public Integer getRating() {
         return rating;

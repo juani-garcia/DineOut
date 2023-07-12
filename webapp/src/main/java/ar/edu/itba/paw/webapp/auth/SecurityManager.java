@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.model.RestaurantReview;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
@@ -15,17 +17,19 @@ public class SecurityManager {
 
     private final UserService userService;
     private final RestaurantService restaurantService;
+    private final RestaurantReviewService restaurantReviewService;
     private final ReservationService reservationService;
 
     @Autowired
-    public SecurityManager(UserService userService, RestaurantService restaurantService, ReservationService reservationService) {
+    public SecurityManager(UserService userService, RestaurantService restaurantService, ReservationService reservationService, RestaurantReviewService restaurantReviewService) {
         this.userService = userService;
         this.restaurantService = restaurantService;
         this.reservationService = reservationService;
+        this.restaurantReviewService = restaurantReviewService;
     }
 
     public boolean isUserOfId(Authentication auth, long id) {
-        if(!auth.isAuthenticated())
+        if (!auth.isAuthenticated())
             return false;
 
         return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
@@ -46,6 +50,12 @@ public class SecurityManager {
     public boolean isRestaurantOwnerOfId(Authentication auth, final long id) {
         return restaurantService.getById(id)
                 .filter(r -> r.getUser().getUsername().equals(auth.getName())) // TODO: Check if NPE is possible (https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410599200)
+                .isPresent();
+    }
+
+    public boolean isReviewOwner(Authentication auth, final long reviewId) {
+        return restaurantReviewService.getById(reviewId)
+                .filter(rr -> rr.getUser().getUsername().equals(auth.getName()))
                 .isPresent();
     }
 
