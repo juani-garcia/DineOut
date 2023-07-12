@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.model.RestaurantReview;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.service.RestaurantReviewService;
+import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,18 @@ public class SecurityManager {
     private final UserService userService;
     private final RestaurantService restaurantService;
     private final RestaurantReviewService restaurantReviewService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public SecurityManager(UserService userService, RestaurantService restaurantService, RestaurantReviewService restaurantReviewService) {
+    public SecurityManager(UserService userService, RestaurantService restaurantService, ReservationService reservationService, RestaurantReviewService restaurantReviewService) {
         this.userService = userService;
         this.restaurantService = restaurantService;
+        this.reservationService = reservationService;
         this.restaurantReviewService = restaurantReviewService;
     }
 
     public boolean isUserOfId(Authentication auth, long id) {
-        if(!auth.isAuthenticated())
+        if (!auth.isAuthenticated())
             return false;
 
         return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
@@ -53,6 +56,18 @@ public class SecurityManager {
     public boolean isReviewOwner(Authentication auth, final long reviewId) {
         return restaurantReviewService.getById(reviewId)
                 .filter(rr -> rr.getUser().getUsername().equals(auth.getName()))
+                .isPresent();
+    }
+
+    public boolean isReservationRestaurant(Authentication auth, final long reservationId) {
+        return reservationService.getById(reservationId)
+                .filter(r -> r.getOwner().getUsername().equals(auth.getName()))
+                .isPresent();
+    }
+
+    public boolean isReservationOwner(Authentication auth, final long reservationId) {
+        return reservationService.getById(reservationId)
+                .filter(r -> r.getOwner().getUsername().equals(auth.getName()))
                 .isPresent();
     }
 
