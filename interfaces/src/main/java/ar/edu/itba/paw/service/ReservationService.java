@@ -4,10 +4,13 @@ import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface ReservationService {
 
     Reservation create(long restaurantId, String userMail, int amount, LocalDateTime dateTime, String comments, String contextPath);
+
+    Optional<Reservation> getById(final long id);
 
     PagedQuery<Reservation> getAllForCurrentUser(int page, boolean past);
 

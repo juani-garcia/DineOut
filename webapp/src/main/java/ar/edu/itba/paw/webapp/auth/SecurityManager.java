@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ public class SecurityManager {
 
     private final UserService userService;
     private final RestaurantService restaurantService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public SecurityManager(UserService userService, RestaurantService restaurantService) {
+    public SecurityManager(UserService userService, RestaurantService restaurantService, ReservationService reservationService) {
         this.userService = userService;
         this.restaurantService = restaurantService;
+        this.reservationService = reservationService;
     }
 
     public boolean isUserOfId(Authentication auth, long id) {
@@ -43,6 +46,18 @@ public class SecurityManager {
     public boolean isRestaurantOwnerOfId(Authentication auth, final long id) {
         return restaurantService.getById(id)
                 .filter(r -> r.getUser().getUsername().equals(auth.getName())) // TODO: Check if NPE is possible (https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410599200)
+                .isPresent();
+    }
+
+    public boolean isReservationRestaurant(Authentication auth, final long reservationId) {
+        return reservationService.getById(reservationId)
+                .filter(r -> r.getOwner().getUsername().equals(auth.getName()))
+                .isPresent();
+    }
+
+    public boolean isReservationOwner(Authentication auth, final long reservationId) {
+        return reservationService.getById(reservationId)
+                .filter(r -> r.getOwner().getUsername().equals(auth.getName()))
                 .isPresent();
     }
 

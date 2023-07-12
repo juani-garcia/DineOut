@@ -51,6 +51,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public Optional<Reservation> getById(final long id) {
+        return reservationDao.getReservation(id);
+    }
+
+    @Override
     public PagedQuery<Reservation> getAllForCurrentUser(int page, boolean past) {
         String username = securityService.getCurrentUsername();
         if (username == null) throw new UnauthenticatedUserException();

@@ -10,6 +10,7 @@ import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.webapp.Utils;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
+import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,19 +95,24 @@ public class ReservationController {
 
     @PatchMapping
     @Path("/{id}")
+    @PreAuthorize("@securityManager.isReservationRestaurant(authentication, #reservationId)")
     public Response updateRestaurantConfirmation(
-            @PathParam("id") final long reservationId
+            @PathParam("id") final long reservationId,
+            @Valid ReservationConfirmationForm reservationConfirmationForm
     ) {
-
+        // TODO: Should we support unconfirmation?
+        rs.confirm(reservationId, uriInfo.getBaseUri().getPath());
+        return Response.ok().build();
     }
 
     @DELETE
     @Path("/{id}")
+    @PreAuthorize("@securityManager.isReservationOwner(authentication, #reservationId) or @securityManager.isReservationRestaurant(authentication, #reservationId)")
     public Response deleteReservation(
             @PathParam("id") final long reservationId
     ) {
         // TODO: Check contextPath
-        rs.delete(reservationId, "");
+        rs.delete(reservationId, uriInfo.getBaseUri().getPath());
         return Response.noContent().build();
     }
 
