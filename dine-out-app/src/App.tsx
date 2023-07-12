@@ -36,6 +36,12 @@ function App (): JSX.Element {
                                         element={<RegisterRestaurant/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
+                                <Route
+                                    path="*"
+                                    element={
+                                        <>Vamo que vamo</>
+                                    }
+                                />
                             </Route>
                         </Routes>
                     </BrowserRouter>
