@@ -1,21 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { SearchBoxContainer, SearchBoxForm } from '@/components/Elements/SearchBox/styles'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 function SearchBox (): JSX.Element {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, setValue } = useForm()
   const { t } = useTranslation()
   const [queryParams, setQueryParams] = useSearchParams()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const onSubmit = (data: any): void => {
     setQueryParams(data)
-    console.log(data)
-    console.log(queryParams)
+
+    if (location.pathname === '/') {
+      const queryParamsString = new URLSearchParams(data).toString()
+      navigate('/restaurants?' + queryParamsString)
+    }
   }
+
+  useEffect(() => {
+    setValue('match', queryParams.get('match') ?? '')
+    setValue('category', queryParams.get('category') ?? '')
+    setValue('zone', queryParams.get('zone') ?? '')
+    setValue('shift', queryParams.get('shift') ?? '')
+  }, [queryParams, setValue])
 
   return (
         <SearchBoxContainer>
@@ -25,8 +37,8 @@ function SearchBox (): JSX.Element {
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="categoryLabel">{t('SearchBox.category')}</InputLabel>
                     <Select {...register('category')}
-                            defaultValue=""
                             labelId="categoryLabel"
+                            defaultValue={queryParams.get('category') ?? ''}
                             id="categorySelect"
                             autoWidth
                             fullWidth={true}
@@ -41,8 +53,8 @@ function SearchBox (): JSX.Element {
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="whereLabel">{t('SearchBox.where')}</InputLabel>
                     <Select {...register('zone')}
-                            defaultValue=""
                             labelId="whereLabel"
+                            defaultValue={queryParams.get('zone') ?? ''}
                             id="whereSelect"
                             autoWidth
                             fullWidth={true}
@@ -58,8 +70,8 @@ function SearchBox (): JSX.Element {
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="whenLabel">{t('SearchBox.when')}</InputLabel>
                     <Select {...register('shift')}
-                            defaultValue=""
                             labelId="whenLabel"
+                            defaultValue={queryParams.get('shift') ?? ''}
                             id="whenSelect"
                             autoWidth
                             fullWidth={true}
