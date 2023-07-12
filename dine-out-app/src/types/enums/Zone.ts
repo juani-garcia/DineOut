@@ -1,225 +1,428 @@
-export const Zone = {
-  VEINTEDEJUNIO: "Zone.veintedejunio",
-  NUEVEDEABRIL: "Zone.nuevedeabril",
-  ACASSUSO: "Zone.acassuso",
-  ADROGUE: "Zone.adrogue",
-  AGRONOMIA: "Zone.agronomia",
-  ALDOBONZI: "Zone.aldobonzi",
-  ALMAGRO: "Zone.almagro",
-  AREADEPROMOCIONELTRIANGULO: "Zone.areadepromocioneltriangulo",
-  AVELLANEDA: "Zone.avellaneda",
-  BALVANERA: "Zone.balvanera",
-  BANFIELD: "Zone.banfield",
-  BARRACAS: "Zone.barracas",
-  BECCAR: "Zone.beccar",
-  BELGRANO: "Zone.belgrano",
-  BELLAVISTA: "Zone.bellavista",
-  BENAVIDEZ: "Zone.benavidez",
-  BERAZATEGUI: "Zone.berazategui",
-  BERAZATEGUIOESTE: "Zone.berazateguioeste",
-  BERNAL: "Zone.bernal",
-  BERNALOESTE: "Zone.bernaloeste",
-  BILLINGHURST: "Zone.billinghurst",
-  BOEDO: "Zone.boedo",
-  BOSQUES: "Zone.bosques",
-  BOULOGNE: "Zone.boulogne",
-  BURZACO: "Zone.burzaco",
-  CABALLITO: "Zone.caballito",
-  CAMPODEMAYO: "Zone.campodemayo",
-  CANNINGE: "Zone.canninge",
-  CANNINGEE: "Zone.canningee",
-  CARAPACHAY: "Zone.carapachay",
-  CARLOSSPEGAZZINI: "Zone.carlosspegazzini",
-  CASEROS: "Zone.caseros",
-  CASTELAR: "Zone.castelar",
-  CHACARITA: "Zone.chacarita",
-  CHURRUCA: "Zone.churruca",
-  CIUDADEVITA: "Zone.ciudadevita",
-  CIUDADJARDINLOMASDELPALOMAR: "Zone.ciudadjardinlomasdelpalomar",
-  CIUDADELA: "Zone.ciudadela",
-  CLAYPOLE: "Zone.claypole",
-  COGHLAN: "Zone.coghlan",
-  COLEGIALES: "Zone.colegiales",
-  CONSTITUCION: "Zone.constitucion",
-  CRUCECITA: "Zone.crucecita",
-  CUARTELV: "Zone.cuartelv",
-  DELVISO: "Zone.delviso",
-  DIQUELUJAN: "Zone.diquelujan",
-  DOCKSUD: "Zone.docksud",
-  DONBOSCO: "Zone.donbosco",
-  DONORIONE: "Zone.donorione",
-  DONTORCUATO: "Zone.dontorcuato",
-  ELJAGUEL: "Zone.eljaguel",
-  ELLIBERTADOR: "Zone.ellibertador",
-  ELPALOMAR: "Zone.elpalomar",
-  ELPATO: "Zone.elpato",
-  ELTALAR: "Zone.eltalar",
-  ESTEBANECHEVERRIA: "Zone.estebanecheverria",
-  EZPELETA: "Zone.ezpeleta",
-  EZPELETAOESTE: "Zone.ezpeletaoeste",
-  FLORENCIOVARELA: "Zone.florenciovarela",
-  FLORES: "Zone.flores",
-  FLORESTA: "Zone.floresta",
-  FLORIDA: "Zone.florida",
-  FLORIDAOESTE: "Zone.floridaoeste",
-  FRANCISCOALVAREZ: "Zone.franciscoalvarez",
-  GENERALPACHECO: "Zone.generalpacheco",
-  GERLIA: "Zone.gerlia",
-  GERLIL: "Zone.gerlil",
-  GLEW: "Zone.glew",
-  GOBERNADORCOSTA: "Zone.gobernadorcosta",
-  GONZALEZCATAN: "Zone.gonzalezcatan",
-  GRANDBOURG: "Zone.grandbourg",
-  GREGORIODELAFERRERE: "Zone.gregoriodelaferrere",
-  GUILLERMOHUDSON: "Zone.guillermohudson",
-  HAEDO: "Zone.haedo",
-  HURLINGHAM: "Zone.hurlingham",
-  INGENIEROADOLFOSOURDEAUX: "Zone.ingenieroadolfosourdeaux",
-  INGENIEROALLAN: "Zone.ingenieroallan",
-  INGENIEROBUDGE: "Zone.ingenierobudge",
-  ISIDROCASANOVA: "Zone.isidrocasanova",
-  ITUZAINGO: "Zone.ituzaingo",
-  JOSECPAZ: "Zone.josecpaz",
-  JOSEINGENIEROS: "Zone.joseingenieros",
-  JOSELEONSUAREZ: "Zone.joseleonsuarez",
-  JOSEMARIAEZEIZA: "Zone.josemariaezeiza",
-  JOSEMARMOL: "Zone.josemarmol",
-  JUANMARIAGUTIERREZ: "Zone.juanmariagutierrez",
-  LABOCA: "Zone.laboca",
-  LACAPILLA: "Zone.lacapilla",
-  LALUCILA: "Zone.lalucila",
-  LAPATERNAL: "Zone.lapaternal",
-  LAREJA: "Zone.lareja",
-  LATABLADA: "Zone.latablada",
-  LAUNION: "Zone.launion",
-  LANUS: "Zone.lanus",
-  LANUSOESTE: "Zone.lanusoeste",
-  LIBERTAD: "Zone.libertad",
-  LINIERS: "Zone.liniers",
-  LLAVALLOL: "Zone.llavallol",
-  LOMAHERMOSA3: "Zone.lomahermosa3",
-  LOMAHERMOSASM: "Zone.lomahermosasm",
-  LOMAHERMOSA: "Zone.lomahermosa",
-  LOMASDEZAMORA: "Zone.lomasdezamora",
-  LOMASDELMIRADOR: "Zone.lomasdelmirador",
-  LONGCHAMPS: "Zone.longchamps",
-  LOSPOLVORINES: "Zone.lospolvorines",
-  LUISGUILLON: "Zone.luisguillon",
-  MALVINASARGENTINAS: "Zone.malvinasargentinas",
-  MARIANOACOSTA: "Zone.marianoacosta",
-  MARTINCORONADO: "Zone.martincoronado",
-  MARTINEZ: "Zone.martinez",
-  MATADEROS: "Zone.mataderos",
-  MERLO: "Zone.merlo",
-  MINISTRORIVADAVIA: "Zone.ministrorivadavia",
-  MONSERRAT: "Zone.monserrat",
-  MONTECASTRO: "Zone.montecastro",
-  MONTECHINGOLO: "Zone.montechingolo",
-  MONTEGRANDE: "Zone.montegrande",
-  MORENO: "Zone.moreno",
-  MORON: "Zone.moron",
-  MUNRO: "Zone.munro",
-  MUNIZ: "Zone.muniz",
-  NUEVAPOMPEYA: "Zone.nuevapompeya",
-  NUNEZ: "Zone.nunez",
-  OLIVOS: "Zone.olivos",
-  ONCEDESEPTIEMBRE: "Zone.oncedeseptiembre",
-  PABLONOGUES: "Zone.pablonogues",
-  PABLOPODESTA: "Zone.pablopodesta",
-  PALERMO: "Zone.palermo",
-  PARQUEAVELLANEDA: "Zone.parqueavellaneda",
-  PARQUECHACABUCO: "Zone.parquechacabuco",
-  PARQUECHAS: "Zone.parquechas",
-  PARQUEPATRICIOS: "Zone.parquepatricios",
-  PARQUESANMARTIN: "Zone.parquesanmartin",
-  PASODELREY: "Zone.pasodelrey",
-  PEREYRA: "Zone.pereyra",
-  PINEYRO: "Zone.pineyro",
-  PLATANOS: "Zone.platanos",
-  PONTEVEDRA: "Zone.pontevedra",
-  PUERTOMADERO: "Zone.puertomadero",
-  QUILMES: "Zone.quilmes",
-  QUILMESOESTE: "Zone.quilmesoeste",
-  RAFAELCALZADA: "Zone.rafaelcalzada",
-  RAFAELCASTILLO: "Zone.rafaelcastillo",
-  RAMOSMEJIA: "Zone.ramosmejia",
-  RANELAGH: "Zone.ranelagh",
-  RECOLETA: "Zone.recoleta",
-  REMEDIOSDEESCALADA3: "Zone.remediosdeescalada3",
-  REMEDIOSDEESCALADAL: "Zone.remediosdeescaladal",
-  RETIRO: "Zone.retiro",
-  RICARDOROJAS: "Zone.ricardorojas",
-  RINCONDEMILBERG: "Zone.rincondemilberg",
-  SAAVEDRA: "Zone.saavedra",
-  SAENZPENA: "Zone.saenzpena",
-  SANANDRES: "Zone.sanandres",
-  SANANTONIODEPADUA: "Zone.sanantoniodepadua",
-  SANCRISTOBAL: "Zone.sancristobal",
-  SANFERNANDO: "Zone.sanfernando",
-  SANFRANCISCOSOLANOQ: "Zone.sanfranciscosolanoq",
-  SANFRANCISCOSOLANOAB: "Zone.sanfranciscosolanoab",
-  SANISIDRO: "Zone.sanisidro",
-  SANJOSE: "Zone.sanjose",
-  SANJUSTO: "Zone.sanjusto",
-  SANMARTIN: "Zone.sanmartin",
-  SANMIGUEL: "Zone.sanmiguel",
-  SANNICOLAS: "Zone.sannicolas",
-  SANTELMO: "Zone.santelmo",
-  SANTAROSA: "Zone.santarosa",
-  SANTOSLUGARES: "Zone.santoslugares",
-  SARANDI: "Zone.sarandi",
-  SOURIGUES: "Zone.sourigues",
-  TAPIALES: "Zone.tapiales",
-  TEMPERLEY: "Zone.temperley",
-  TIGRE: "Zone.tigre",
-  TORTUGUITASM: "Zone.tortuguitasm",
-  TORTUGUITASJ: "Zone.tortuguitasj",
-  TRISTANSUAREZ: "Zone.tristansuarez",
-  TRONCOSDELTALAR: "Zone.troncosdeltalar",
-  TRUJUI: "Zone.trujui",
-  TURDERA: "Zone.turdera",
-  UDAONDO: "Zone.udaondo",
-  VALENTINALSINA: "Zone.valentinalsina",
-  VELEZSARSFIELD: "Zone.velezsarsfield",
-  VERSALLES: "Zone.versalles",
-  VICENTELOPEZ: "Zone.vicentelopez",
-  VICTORIA: "Zone.victoria",
-  VILLAADELINAVL: "Zone.villaadelinavl",
-  VILLAADELINASI: "Zone.villaadelinasi",
-  VILLABALLESTER: "Zone.villaballester",
-  VILLABOSCH: "Zone.villabosch",
-  VILLABROWN: "Zone.villabrown",
-  VILLACENTENARIO: "Zone.villacentenario",
-  VILLACRESPO: "Zone.villacrespo",
-  VILLADEMAYO: "Zone.villademayo",
-  VILLADELPARQUE: "Zone.villadelparque",
-  VILLADEVOTO: "Zone.villadevoto",
-  VILLADOMINICO: "Zone.villadominico",
-  VILLAESPANA: "Zone.villaespana",
-  VILLAFIORITO: "Zone.villafiorito",
-  VILLAGENERALMITRE: "Zone.villageneralmitre",
-  VILLALAFLORIDA: "Zone.villalaflorida",
-  VILLALUGANO: "Zone.villalugano",
-  VILLALURO: "Zone.villaluro",
-  VILLALUZURIAGA: "Zone.villaluzuriaga",
-  VILLALYNCH: "Zone.villalynch",
-  VILLAMADERO: "Zone.villamadero",
-  VILLAMAIPU: "Zone.villamaipu",
-  VILLAMARTELLI: "Zone.villamartelli",
-  VILLAORTUZAR: "Zone.villaortuzar",
-  VILLAPUEYRREDON: "Zone.villapueyrredon",
-  VILLARAFFO: "Zone.villaraffo",
-  VILLAREAL: "Zone.villareal",
-  VILLARIACHUELO: "Zone.villariachuelo",
-  VILLASANLUIS: "Zone.villasanluis",
-  VILLASANTARITA: "Zone.villasantarita",
-  VILLASARMIENTO: "Zone.villasarmiento",
-  VILLASOLDATI: "Zone.villasoldati",
-  VILLATESEI: "Zone.villatesei",
-  VILLAURQUIZA: "Zone.villaurquiza",
-  VILLAVATTEONE: "Zone.villavatteone",
-  VIRREYDELPINO: "Zone.virreydelpino",
-  VIRREYES: "Zone.virreyes",
-  WILDE: "Zone.wilde",
-  WILLIAMCMORRIS: "Zone.williamcmorris",
-};
+export class Zone {
+  static readonly VEINTEDEJUNIO = new Zone(
+    "VEINTEDEJUNIO",
+    "Zone.veintedejunio"
+  );
+  static readonly NUEVEDEABRIL = new Zone("NUEVEDEABRIL", "Zone.nuevedeabril");
+  static readonly ACASSUSO = new Zone("ACASSUSO", "Zone.acassuso");
+  static readonly ADROGUE = new Zone("ADROGUE", "Zone.adrogue");
+  static readonly AGRONOMIA = new Zone("AGRONOMIA", "Zone.agronomia");
+  static readonly ALDOBONZI = new Zone("ALDOBONZI", "Zone.aldobonzi");
+  static readonly ALMAGRO = new Zone("ALMAGRO", "Zone.almagro");
+  static readonly AREADEPROMOCIONELTRIANGULO = new Zone(
+    "",
+    "Zone.areadepromocioneltriangulo"
+  );
+  static readonly AVELLANEDA = new Zone("AVELLANEDA", "Zone.avellaneda");
+  static readonly BALVANERA = new Zone("BALVANERA", "Zone.balvanera");
+  static readonly BANFIELD = new Zone("BANFIELD", "Zone.banfield");
+  static readonly BARRACAS = new Zone("BARRACAS", "Zone.barracas");
+  static readonly BECCAR = new Zone("BECCAR", "Zone.beccar");
+  static readonly BELGRANO = new Zone("BELGRANO", "Zone.belgrano");
+  static readonly BELLAVISTA = new Zone("BELLAVISTA", "Zone.bellavista");
+  static readonly BENAVIDEZ = new Zone("BENAVIDEZ", "Zone.benavidez");
+  static readonly BERAZATEGUI = new Zone("BERAZATEGUI", "Zone.berazategui");
+  static readonly BERAZATEGUIOESTE = new Zone(
+    "BERAZATEGUIOESTE",
+    "Zone.berazateguioeste"
+  );
+  static readonly BERNAL = new Zone("BERNAL", "Zone.bernal");
+  static readonly BERNALOESTE = new Zone("BERNALOESTE", "Zone.bernaloeste");
+  static readonly BILLINGHURST = new Zone("BILLINGHURST", "Zone.billinghurst");
+  static readonly BOEDO = new Zone("BOEDO", "Zone.boedo");
+  static readonly BOSQUES = new Zone("BOSQUES", "Zone.bosques");
+  static readonly BOULOGNE = new Zone("BOULOGNE", "Zone.boulogne");
+  static readonly BURZACO = new Zone("BURZACO", "Zone.burzaco");
+  static readonly CABALLITO = new Zone("CABALLITO", "Zone.caballito");
+  static readonly CAMPODEMAYO = new Zone("CAMPODEMAYO", "Zone.campodemayo");
+  static readonly CANNINGE = new Zone("CANNINGE", "Zone.canninge");
+  static readonly CANNINGEE = new Zone("CANNINGEE", "Zone.canningee");
+  static readonly CARAPACHAY = new Zone("CARAPACHAY", "Zone.carapachay");
+  static readonly CARLOSSPEGAZZINI = new Zone(
+    "CARLOSSPEGAZZINI",
+    "Zone.carlosspegazzini"
+  );
+  static readonly CASEROS = new Zone("CASEROS", "Zone.caseros");
+  static readonly CASTELAR = new Zone("CASTELAR", "Zone.castelar");
+  static readonly CHACARITA = new Zone("CHACARITA", "Zone.chacarita");
+  static readonly CHURRUCA = new Zone("CHURRUCA", "Zone.churruca");
+  static readonly CIUDADEVITA = new Zone("CIUDADEVITA", "Zone.ciudadevita");
+  static readonly CIUDADJARDINLOMASDELPALOMAR = new Zone(
+    "",
+    "Zone.ciudadjardinlomasdelpalomar"
+  );
+  static readonly CIUDADELA = new Zone("CIUDADELA", "Zone.ciudadela");
+  static readonly CLAYPOLE = new Zone("CLAYPOLE", "Zone.claypole");
+  static readonly COGHLAN = new Zone("COGHLAN", "Zone.coghlan");
+  static readonly COLEGIALES = new Zone("COLEGIALES", "Zone.colegiales");
+  static readonly CONSTITUCION = new Zone("CONSTITUCION", "Zone.constitucion");
+  static readonly CRUCECITA = new Zone("CRUCECITA", "Zone.crucecita");
+  static readonly CUARTELV = new Zone("CUARTELV", "Zone.cuartelv");
+  static readonly DELVISO = new Zone("DELVISO", "Zone.delviso");
+  static readonly DIQUELUJAN = new Zone("DIQUELUJAN", "Zone.diquelujan");
+  static readonly DOCKSUD = new Zone("DOCKSUD", "Zone.docksud");
+  static readonly DONBOSCO = new Zone("DONBOSCO", "Zone.donbosco");
+  static readonly DONORIONE = new Zone("DONORIONE", "Zone.donorione");
+  static readonly DONTORCUATO = new Zone("DONTORCUATO", "Zone.dontorcuato");
+  static readonly ELJAGUEL = new Zone("ELJAGUEL", "Zone.eljaguel");
+  static readonly ELLIBERTADOR = new Zone("ELLIBERTADOR", "Zone.ellibertador");
+  static readonly ELPALOMAR = new Zone("ELPALOMAR", "Zone.elpalomar");
+  static readonly ELPATO = new Zone("ELPATO", "Zone.elpato");
+  static readonly ELTALAR = new Zone("ELTALAR", "Zone.eltalar");
+  static readonly ESTEBANECHEVERRIA = new Zone(
+    "ESTEBANECHEVERRIA",
+    "Zone.estebanecheverria"
+  );
+  static readonly EZPELETA = new Zone("EZPELETA", "Zone.ezpeleta");
+  static readonly EZPELETAOESTE = new Zone(
+    "EZPELETAOESTE",
+    "Zone.ezpeletaoeste"
+  );
+  static readonly FLORENCIOVARELA = new Zone(
+    "FLORENCIOVARELA",
+    "Zone.florenciovarela"
+  );
+  static readonly FLORES = new Zone("FLORES", "Zone.flores");
+  static readonly FLORESTA = new Zone("FLORESTA", "Zone.floresta");
+  static readonly FLORIDA = new Zone("FLORIDA", "Zone.florida");
+  static readonly FLORIDAOESTE = new Zone("FLORIDAOESTE", "Zone.floridaoeste");
+  static readonly FRANCISCOALVAREZ = new Zone(
+    "FRANCISCOALVAREZ",
+    "Zone.franciscoalvarez"
+  );
+  static readonly GENERALPACHECO = new Zone(
+    "GENERALPACHECO",
+    "Zone.generalpacheco"
+  );
+  static readonly GERLIA = new Zone("GERLIA", "Zone.gerlia");
+  static readonly GERLIL = new Zone("GERLIL", "Zone.gerlil");
+  static readonly GLEW = new Zone("GLEW", "Zone.glew");
+  static readonly GOBERNADORCOSTA = new Zone(
+    "GOBERNADORCOSTA",
+    "Zone.gobernadorcosta"
+  );
+  static readonly GONZALEZCATAN = new Zone(
+    "GONZALEZCATAN",
+    "Zone.gonzalezcatan"
+  );
+  static readonly GRANDBOURG = new Zone("GRANDBOURG", "Zone.grandbourg");
+  static readonly GREGORIODELAFERRERE = new Zone(
+    "",
+    "Zone.gregoriodelaferrere"
+  );
+  static readonly GUILLERMOHUDSON = new Zone(
+    "GUILLERMOHUDSON",
+    "Zone.guillermohudson"
+  );
+  static readonly HAEDO = new Zone("HAEDO", "Zone.haedo");
+  static readonly HURLINGHAM = new Zone("HURLINGHAM", "Zone.hurlingham");
+  static readonly INGENIEROADOLFOSOURDEAUX = new Zone(
+    "",
+    "Zone.ingenieroadolfosourdeaux"
+  );
+  static readonly INGENIEROALLAN = new Zone(
+    "INGENIEROALLAN",
+    "Zone.ingenieroallan"
+  );
+  static readonly INGENIEROBUDGE = new Zone(
+    "INGENIEROBUDGE",
+    "Zone.ingenierobudge"
+  );
+  static readonly ISIDROCASANOVA = new Zone(
+    "ISIDROCASANOVA",
+    "Zone.isidrocasanova"
+  );
+  static readonly ITUZAINGO = new Zone("ITUZAINGO", "Zone.ituzaingo");
+  static readonly JOSECPAZ = new Zone("JOSECPAZ", "Zone.josecpaz");
+  static readonly JOSEINGENIEROS = new Zone(
+    "JOSEINGENIEROS",
+    "Zone.joseingenieros"
+  );
+  static readonly JOSELEONSUAREZ = new Zone(
+    "JOSELEONSUAREZ",
+    "Zone.joseleonsuarez"
+  );
+  static readonly JOSEMARIAEZEIZA = new Zone(
+    "JOSEMARIAEZEIZA",
+    "Zone.josemariaezeiza"
+  );
+  static readonly JOSEMARMOL = new Zone("JOSEMARMOL", "Zone.josemarmol");
+  static readonly JUANMARIAGUTIERREZ = new Zone(
+    "JUANMARIAGUTIERREZ",
+    "Zone.juanmariagutierrez"
+  );
+  static readonly LABOCA = new Zone("LABOCA", "Zone.laboca");
+  static readonly LACAPILLA = new Zone("LACAPILLA", "Zone.lacapilla");
+  static readonly LALUCILA = new Zone("LALUCILA", "Zone.lalucila");
+  static readonly LAPATERNAL = new Zone("LAPATERNAL", "Zone.lapaternal");
+  static readonly LAREJA = new Zone("LAREJA", "Zone.lareja");
+  static readonly LATABLADA = new Zone("LATABLADA", "Zone.latablada");
+  static readonly LAUNION = new Zone("LAUNION", "Zone.launion");
+  static readonly LANUS = new Zone("LANUS", "Zone.lanus");
+  static readonly LANUSOESTE = new Zone("LANUSOESTE", "Zone.lanusoeste");
+  static readonly LIBERTAD = new Zone("LIBERTAD", "Zone.libertad");
+  static readonly LINIERS = new Zone("LINIERS", "Zone.liniers");
+  static readonly LLAVALLOL = new Zone("LLAVALLOL", "Zone.llavallol");
+  static readonly LOMAHERMOSA3 = new Zone("", "Zone.lomahermosa3");
+  static readonly LOMAHERMOSASM = new Zone(
+    "LOMAHERMOSASM",
+    "Zone.lomahermosasm"
+  );
+  static readonly LOMAHERMOSA = new Zone("LOMAHERMOSA", "Zone.lomahermosa");
+  static readonly LOMASDEZAMORA = new Zone(
+    "LOMASDEZAMORA",
+    "Zone.lomasdezamora"
+  );
+  static readonly LOMASDELMIRADOR = new Zone(
+    "LOMASDELMIRADOR",
+    "Zone.lomasdelmirador"
+  );
+  static readonly LONGCHAMPS = new Zone("LONGCHAMPS", "Zone.longchamps");
+  static readonly LOSPOLVORINES = new Zone(
+    "LOSPOLVORINES",
+    "Zone.lospolvorines"
+  );
+  static readonly LUISGUILLON = new Zone("LUISGUILLON", "Zone.luisguillon");
+  static readonly MALVINASARGENTINAS = new Zone(
+    "MALVINASARGENTINAS",
+    "Zone.malvinasargentinas"
+  );
+  static readonly MARIANOACOSTA = new Zone(
+    "MARIANOACOSTA",
+    "Zone.marianoacosta"
+  );
+  static readonly MARTINCORONADO = new Zone(
+    "MARTINCORONADO",
+    "Zone.martincoronado"
+  );
+  static readonly MARTINEZ = new Zone("MARTINEZ", "Zone.martinez");
+  static readonly MATADEROS = new Zone("MATADEROS", "Zone.mataderos");
+  static readonly MERLO = new Zone("MERLO", "Zone.merlo");
+  static readonly MINISTRORIVADAVIA = new Zone(
+    "MINISTRORIVADAVIA",
+    "Zone.ministrorivadavia"
+  );
+  static readonly MONSERRAT = new Zone("MONSERRAT", "Zone.monserrat");
+  static readonly MONTECASTRO = new Zone("MONTECASTRO", "Zone.montecastro");
+  static readonly MONTECHINGOLO = new Zone(
+    "MONTECHINGOLO",
+    "Zone.montechingolo"
+  );
+  static readonly MONTEGRANDE = new Zone("MONTEGRANDE", "Zone.montegrande");
+  static readonly MORENO = new Zone("MORENO", "Zone.moreno");
+  static readonly MORON = new Zone("MORON", "Zone.moron");
+  static readonly MUNRO = new Zone("MUNRO", "Zone.munro");
+  static readonly MUNIZ = new Zone("MUNIZ", "Zone.muniz");
+  static readonly NUEVAPOMPEYA = new Zone("NUEVAPOMPEYA", "Zone.nuevapompeya");
+  static readonly NUNEZ = new Zone("NUNEZ", "Zone.nunez");
+  static readonly OLIVOS = new Zone("OLIVOS", "Zone.olivos");
+  static readonly ONCEDESEPTIEMBRE = new Zone(
+    "ONCEDESEPTIEMBRE",
+    "Zone.oncedeseptiembre"
+  );
+  static readonly PABLONOGUES = new Zone("PABLONOGUES", "Zone.pablonogues");
+  static readonly PABLOPODESTA = new Zone("PABLOPODESTA", "Zone.pablopodesta");
+  static readonly PALERMO = new Zone("PALERMO", "Zone.palermo");
+  static readonly PARQUEAVELLANEDA = new Zone(
+    "PARQUEAVELLANEDA",
+    "Zone.parqueavellaneda"
+  );
+  static readonly PARQUECHACABUCO = new Zone(
+    "PARQUECHACABUCO",
+    "Zone.parquechacabuco"
+  );
+  static readonly PARQUECHAS = new Zone("PARQUECHAS", "Zone.parquechas");
+  static readonly PARQUEPATRICIOS = new Zone(
+    "PARQUEPATRICIOS",
+    "Zone.parquepatricios"
+  );
+  static readonly PARQUESANMARTIN = new Zone(
+    "PARQUESANMARTIN",
+    "Zone.parquesanmartin"
+  );
+  static readonly PASODELREY = new Zone("PASODELREY", "Zone.pasodelrey");
+  static readonly PEREYRA = new Zone("PEREYRA", "Zone.pereyra");
+  static readonly PINEYRO = new Zone("PINEYRO", "Zone.pineyro");
+  static readonly PLATANOS = new Zone("PLATANOS", "Zone.platanos");
+  static readonly PONTEVEDRA = new Zone("PONTEVEDRA", "Zone.pontevedra");
+  static readonly PUERTOMADERO = new Zone("PUERTOMADERO", "Zone.puertomadero");
+  static readonly QUILMES = new Zone("QUILMES", "Zone.quilmes");
+  static readonly QUILMESOESTE = new Zone("QUILMESOESTE", "Zone.quilmesoeste");
+  static readonly RAFAELCALZADA = new Zone(
+    "RAFAELCALZADA",
+    "Zone.rafaelcalzada"
+  );
+  static readonly RAFAELCASTILLO = new Zone(
+    "RAFAELCASTILLO",
+    "Zone.rafaelcastillo"
+  );
+  static readonly RAMOSMEJIA = new Zone("RAMOSMEJIA", "Zone.ramosmejia");
+  static readonly RANELAGH = new Zone("RANELAGH", "Zone.ranelagh");
+  static readonly RECOLETA = new Zone("RECOLETA", "Zone.recoleta");
+  static readonly REMEDIOSDEESCALADA3 = new Zone(
+    "",
+    "Zone.remediosdeescalada3"
+  );
+  static readonly REMEDIOSDEESCALADAL = new Zone(
+    "",
+    "Zone.remediosdeescaladal"
+  );
+  static readonly RETIRO = new Zone("RETIRO", "Zone.retiro");
+  static readonly RICARDOROJAS = new Zone("RICARDOROJAS", "Zone.ricardorojas");
+  static readonly RINCONDEMILBERG = new Zone(
+    "RINCONDEMILBERG",
+    "Zone.rincondemilberg"
+  );
+  static readonly SAAVEDRA = new Zone("SAAVEDRA", "Zone.saavedra");
+  static readonly SAENZPENA = new Zone("SAENZPENA", "Zone.saenzpena");
+  static readonly SANANDRES = new Zone("SANANDRES", "Zone.sanandres");
+  static readonly SANANTONIODEPADUA = new Zone(
+    "SANANTONIODEPADUA",
+    "Zone.sanantoniodepadua"
+  );
+  static readonly SANCRISTOBAL = new Zone("SANCRISTOBAL", "Zone.sancristobal");
+  static readonly SANFERNANDO = new Zone("SANFERNANDO", "Zone.sanfernando");
+  static readonly SANFRANCISCOSOLANOQ = new Zone(
+    "",
+    "Zone.sanfranciscosolanoq"
+  );
+  static readonly SANFRANCISCOSOLANOAB = new Zone(
+    "",
+    "Zone.sanfranciscosolanoab"
+  );
+  static readonly SANISIDRO = new Zone("SANISIDRO", "Zone.sanisidro");
+  static readonly SANJOSE = new Zone("SANJOSE", "Zone.sanjose");
+  static readonly SANJUSTO = new Zone("SANJUSTO", "Zone.sanjusto");
+  static readonly SANMARTIN = new Zone("SANMARTIN", "Zone.sanmartin");
+  static readonly SANMIGUEL = new Zone("SANMIGUEL", "Zone.sanmiguel");
+  static readonly SANNICOLAS = new Zone("SANNICOLAS", "Zone.sannicolas");
+  static readonly SANTELMO = new Zone("SANTELMO", "Zone.santelmo");
+  static readonly SANTAROSA = new Zone("SANTAROSA", "Zone.santarosa");
+  static readonly SANTOSLUGARES = new Zone(
+    "SANTOSLUGARES",
+    "Zone.santoslugares"
+  );
+  static readonly SARANDI = new Zone("SARANDI", "Zone.sarandi");
+  static readonly SOURIGUES = new Zone("SOURIGUES", "Zone.sourigues");
+  static readonly TAPIALES = new Zone("TAPIALES", "Zone.tapiales");
+  static readonly TEMPERLEY = new Zone("TEMPERLEY", "Zone.temperley");
+  static readonly TIGRE = new Zone("TIGRE", "Zone.tigre");
+  static readonly TORTUGUITASM = new Zone("TORTUGUITASM", "Zone.tortuguitasm");
+  static readonly TORTUGUITASJ = new Zone("TORTUGUITASJ", "Zone.tortuguitasj");
+  static readonly TRISTANSUAREZ = new Zone(
+    "TRISTANSUAREZ",
+    "Zone.tristansuarez"
+  );
+  static readonly TRONCOSDELTALAR = new Zone(
+    "TRONCOSDELTALAR",
+    "Zone.troncosdeltalar"
+  );
+  static readonly TRUJUI = new Zone("TRUJUI", "Zone.trujui");
+  static readonly TURDERA = new Zone("TURDERA", "Zone.turdera");
+  static readonly UDAONDO = new Zone("UDAONDO", "Zone.udaondo");
+  static readonly VALENTINALSINA = new Zone(
+    "VALENTINALSINA",
+    "Zone.valentinalsina"
+  );
+  static readonly VELEZSARSFIELD = new Zone(
+    "VELEZSARSFIELD",
+    "Zone.velezsarsfield"
+  );
+  static readonly VERSALLES = new Zone("VERSALLES", "Zone.versalles");
+  static readonly VICENTELOPEZ = new Zone("VICENTELOPEZ", "Zone.vicentelopez");
+  static readonly VICTORIA = new Zone("VICTORIA", "Zone.victoria");
+  static readonly VILLAADELINAVL = new Zone(
+    "VILLAADELINAVL",
+    "Zone.villaadelinavl"
+  );
+  static readonly VILLAADELINASI = new Zone(
+    "VILLAADELINASI",
+    "Zone.villaadelinasi"
+  );
+  static readonly VILLABALLESTER = new Zone(
+    "VILLABALLESTER",
+    "Zone.villaballester"
+  );
+  static readonly VILLABOSCH = new Zone("VILLABOSCH", "Zone.villabosch");
+  static readonly VILLABROWN = new Zone("VILLABROWN", "Zone.villabrown");
+  static readonly VILLACENTENARIO = new Zone(
+    "VILLACENTENARIO",
+    "Zone.villacentenario"
+  );
+  static readonly VILLACRESPO = new Zone("VILLACRESPO", "Zone.villacrespo");
+  static readonly VILLADEMAYO = new Zone("VILLADEMAYO", "Zone.villademayo");
+  static readonly VILLADELPARQUE = new Zone(
+    "VILLADELPARQUE",
+    "Zone.villadelparque"
+  );
+  static readonly VILLADEVOTO = new Zone("VILLADEVOTO", "Zone.villadevoto");
+  static readonly VILLADOMINICO = new Zone(
+    "VILLADOMINICO",
+    "Zone.villadominico"
+  );
+  static readonly VILLAESPANA = new Zone("VILLAESPANA", "Zone.villaespana");
+  static readonly VILLAFIORITO = new Zone("VILLAFIORITO", "Zone.villafiorito");
+  static readonly VILLAGENERALMITRE = new Zone(
+    "VILLAGENERALMITRE",
+    "Zone.villageneralmitre"
+  );
+  static readonly VILLALAFLORIDA = new Zone(
+    "VILLALAFLORIDA",
+    "Zone.villalaflorida"
+  );
+  static readonly VILLALUGANO = new Zone("VILLALUGANO", "Zone.villalugano");
+  static readonly VILLALURO = new Zone("VILLALURO", "Zone.villaluro");
+  static readonly VILLALUZURIAGA = new Zone(
+    "VILLALUZURIAGA",
+    "Zone.villaluzuriaga"
+  );
+  static readonly VILLALYNCH = new Zone("VILLALYNCH", "Zone.villalynch");
+  static readonly VILLAMADERO = new Zone("VILLAMADERO", "Zone.villamadero");
+  static readonly VILLAMAIPU = new Zone("VILLAMAIPU", "Zone.villamaipu");
+  static readonly VILLAMARTELLI = new Zone(
+    "VILLAMARTELLI",
+    "Zone.villamartelli"
+  );
+  static readonly VILLAORTUZAR = new Zone("VILLAORTUZAR", "Zone.villaortuzar");
+  static readonly VILLAPUEYRREDON = new Zone(
+    "VILLAPUEYRREDON",
+    "Zone.villapueyrredon"
+  );
+  static readonly VILLARAFFO = new Zone("VILLARAFFO", "Zone.villaraffo");
+  static readonly VILLAREAL = new Zone("VILLAREAL", "Zone.villareal");
+  static readonly VILLARIACHUELO = new Zone(
+    "VILLARIACHUELO",
+    "Zone.villariachuelo"
+  );
+  static readonly VILLASANLUIS = new Zone("VILLASANLUIS", "Zone.villasanluis");
+  static readonly VILLASANTARITA = new Zone(
+    "VILLASANTARITA",
+    "Zone.villasantarita"
+  );
+  static readonly VILLASARMIENTO = new Zone(
+    "VILLASARMIENTO",
+    "Zone.villasarmiento"
+  );
+  static readonly VILLASOLDATI = new Zone("VILLASOLDATI", "Zone.villasoldati");
+  static readonly VILLATESEI = new Zone("VILLATESEI", "Zone.villatesei");
+  static readonly VILLAURQUIZA = new Zone("VILLAURQUIZA", "Zone.villaurquiza");
+  static readonly VILLAVATTEONE = new Zone(
+    "VILLAVATTEONE",
+    "Zone.villavatteone"
+  );
+  static readonly VIRREYDELPINO = new Zone(
+    "VIRREYDELPINO",
+    "Zone.virreydelpino"
+  );
+  static readonly VIRREYES = new Zone("VIRREYES", "Zone.virreyes");
+  static readonly WILDE = new Zone("WILDE", "Zone.wilde");
+  static readonly WILLIAMCMORRIS = new Zone(
+    "WILLIAMCMORRIS",
+    "Zone.williamcmorris"
+  );
+
+  private constructor(
+    public readonly name: string,
+    public readonly description: string
+  ) {}
+}
