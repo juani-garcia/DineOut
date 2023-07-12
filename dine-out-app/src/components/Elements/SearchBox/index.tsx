@@ -4,22 +4,24 @@ import { FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from
 import { SearchBoxContainer, SearchBoxForm } from '@/components/Elements/SearchBox/styles'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-import ClearIcon from '@mui/icons-material/Clear'
+import { useSearchParams } from 'react-router-dom'
 
 function SearchBox (): JSX.Element {
-  const { register, handleSubmit, reset, setValue } = useForm()
+  const { register, handleSubmit } = useForm()
   const { t } = useTranslation()
+  const [queryParams, setQueryParams] = useSearchParams()
 
   const onSubmit = (data: any): void => {
-    // Handle form submission
+    setQueryParams(data)
     console.log(data)
+    console.log(queryParams)
   }
 
   return (
         <SearchBoxContainer>
             {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
             <SearchBoxForm onSubmit={handleSubmit(onSubmit)}>
-                <TextField label={t('SearchBox.search')} {...register('search')} />
+                <TextField label={t('SearchBox.search')} {...register('match')} />
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="categoryLabel">{t('SearchBox.category')}</InputLabel>
                     <Select {...register('category')}
@@ -38,7 +40,7 @@ function SearchBox (): JSX.Element {
                 </FormControl>
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="whereLabel">{t('SearchBox.where')}</InputLabel>
-                    <Select {...register('where')}
+                    <Select {...register('zone')}
                             defaultValue=""
                             labelId="whereLabel"
                             id="whereSelect"
@@ -55,7 +57,7 @@ function SearchBox (): JSX.Element {
                 </FormControl>
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="whenLabel">{t('SearchBox.when')}</InputLabel>
-                    <Select {...register('when')}
+                    <Select {...register('shift')}
                             defaultValue=""
                             labelId="whenLabel"
                             id="whenSelect"
@@ -72,14 +74,6 @@ function SearchBox (): JSX.Element {
                 </FormControl>
                 <IconButton type="submit" color="primary" aria-label="search">
                     <SearchIcon/>
-                </IconButton>
-                <IconButton onClick={() => { // TODO: Fix this
-                  reset()
-                  setValue('category', '')
-                  setValue('where', '')
-                  setValue('when', '6')
-                }} color="secondary" aria-label="clear">
-                    <ClearIcon/>
                 </IconButton>
             </SearchBoxForm>
         </SearchBoxContainer>
