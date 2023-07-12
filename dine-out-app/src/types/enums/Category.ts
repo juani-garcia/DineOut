@@ -1,24 +1,35 @@
-export const Category = {
-    ITALIAN: 'Category.italian',
-    AMERICAN: 'Category.american',
-    SPANISH: 'Category.spanish',
-    PIZZA: 'Category.pizza',
-    STEAKHOUSE: 'Category.steakhouse',
-    BAR: 'Category.bar',
-    CHINESE: 'Category.chinese',
-    VIET_THAI: 'Category.viet_thai',
-    BURGERS: 'Category.burgers',
-    JAPANESE: 'Category.japanese',
-    SUSHI: 'Category.sushi',
-    VEGGIE: 'Category.veggie',
-    INDIAN: 'Category.indian',
-    EMPANADAS: 'Category.empanadas',
-    BOULANGERIE: 'Category.boulangerie',
-    COFFEE: 'Category.coffee',
-    BREWERY: 'Category.brewery',
-    PERUVIAN: 'Category.peruvian',
-    NIKKEI: 'Category.nikkei',
-    ARABIAN: 'Category.arabian',
-    MEXICAN: 'Category.mexican',
-    GELATO: 'Category.gelato'
+export class Category {
+  static readonly ITALIAN = new Category("ITALIAN", "Category.italian");
+  static readonly AMERICAN = new Category("AMERICAN", "Category.american");
+  static readonly SPANISH = new Category("SPANISH", "Category.spanish");
+  static readonly PIZZA = new Category("PIZZA", "Category.pizza");
+  static readonly STEAKHOUSE = new Category(
+    "STEAKHOUSE",
+    "Category.steakhouse"
+  );
+  static readonly BAR = new Category("BAR", "Category.bar");
+  static readonly CHINESE = new Category("CHINESE", "Category.chinese");
+  static readonly VIET_THAI = new Category("VIET_THAI", "Category.viet_thai");
+  static readonly BURGERS = new Category("BURGERS", "Category.burgers");
+  static readonly JAPANESE = new Category("JAPANESE", "Category.japanese");
+  static readonly SUSHI = new Category("SUSHI", "Category.sushi");
+  static readonly VEGGIE = new Category("VEGGIE", "Category.veggie");
+  static readonly INDIAN = new Category("INDIAN", "Category.indian");
+  static readonly EMPANADAS = new Category("EMPANADAS", "Category.empanadas");
+  static readonly BOULANGERIE = new Category(
+    "BOULANGERIE",
+    "Category.boulangerie"
+  );
+  static readonly COFFEE = new Category("COFFEE", "Category.coffee");
+  static readonly BREWERY = new Category("BREWERY", "Category.brewery");
+  static readonly PERUVIAN = new Category("PERUVIAN", "Category.peruvian");
+  static readonly NIKKEI = new Category("NIKKEI", "Category.nikkei");
+  static readonly ARABIAN = new Category("ARABIAN", "Category.arabian");
+  static readonly MEXICAN = new Category("MEXICAN", "Category.mexican");
+  static readonly GELATO = new Category("GELATO", "Category.gelato");
+
+  private constructor(
+    public readonly name: string,
+    public readonly description: string
+  ) {}
 }
