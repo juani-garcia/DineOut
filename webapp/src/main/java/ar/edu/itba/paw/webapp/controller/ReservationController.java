@@ -107,6 +107,7 @@ public class ReservationController {
 
     @DELETE
     @Path("/{id}")
+    // TODO: Check if authorization levels are alright
     @PreAuthorize("@securityManager.isReservationOwner(authentication, #reservationId) or @securityManager.isReservationRestaurant(authentication, #reservationId)")
     public Response deleteReservation(
             @PathParam("id") final long reservationId
