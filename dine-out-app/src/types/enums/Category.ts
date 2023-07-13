@@ -1,4 +1,6 @@
-export class Category {
+export default class Category {
+  static values: Category[] = [];
+
   static readonly ITALIAN = new Category("ITALIAN", "Category.italian");
   static readonly AMERICAN = new Category("AMERICAN", "Category.american");
   static readonly SPANISH = new Category("SPANISH", "Category.spanish");
@@ -31,5 +33,7 @@ export class Category {
   private constructor(
     public readonly name: string,
     public readonly description: string
-  ) {}
+  ) {
+    Category.values.push(this);
+  }
 }

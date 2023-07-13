@@ -1,4 +1,6 @@
 export class Shift {
+  static values: Shift[] = [];
+
   static readonly MORNING = new Shift("MORNING", "Shift.morning", 8, 12);
   static readonly NOON = new Shift("NOON", "Shift.noon", 12, 16);
   static readonly AFTERNOON = new Shift("AFTERNOON", "Shift.afternoon", 16, 20);
