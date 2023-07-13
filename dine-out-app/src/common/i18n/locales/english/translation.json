@@ -47,5 +47,11 @@
   "Parallax": {
     "dontKnow": "Dont know where to eat?",
     "choose": "Let us choose a restaurant for you"
+  },
+  "Shift": {
+    "morning": "Morning",
+    "noon": "Noon",
+    "afternoon":  "Afternoon",
+    "evening": "Evening"
   }
 }
