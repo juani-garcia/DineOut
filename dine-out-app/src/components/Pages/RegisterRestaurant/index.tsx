@@ -6,11 +6,23 @@ import { Button, Checkbox, FormControl, FormControlLabel, TextField, InputLabel,
 import { useForm } from 'react-hook-form'
 import { useRegister } from '@/hooks/auth/useRegister'
 import Category from '@/types/enums/Category'
+import { Shift } from '@/types/enums/Shift'
+
+interface RegisterRestaurantFormInput {
+    name: string,
+    image?: string,
+    address: string,
+    email: string,
+    detail: string,
+    categories: Category[],
+    shifts: Shift[]
+}
 
 export default function RegisterRestaurant (): JSX.Element {
   const { t } = useTranslation()
   const { handleSubmit, control } = useForm()
   const [selectedCategories, setselectedCategories] = useState<string[]>([]);
+  const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
   const handleCategoryChange = (event: SelectChangeEvent<typeof selectedCategories>) => {
     const {
         target: { value },
@@ -19,12 +31,24 @@ export default function RegisterRestaurant (): JSX.Element {
         typeof value === 'string' ? value.split(',') : value,
     );
   };
+  const handleShiftChange = (event: SelectChangeEvent<typeof selectedCategories>) => {
+    const {
+        target: { value },
+    } = event;
+    setSelectedShifts(
+        typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const onSubmit = (data: any) => {
+    console.log(data)
+  };
 
   return (
     <MyContainer>
         <Title>{t('Register-restaurant')}</Title>
         <RegisterRestaurantWhiteBoxContainer>
-            <RegisterRestaurantForm>
+            <RegisterRestaurantForm onSubmit={handleSubmit(onSubmit)}>
                 <Header>{t('Register-restaurant.header')}</Header>
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <FormControl component="form"
@@ -76,10 +100,13 @@ export default function RegisterRestaurant (): JSX.Element {
                             multiple
                             autoWidth
                             fullWidth={true}
+                            variant="standard"
                             value={selectedCategories}
                             {...control.register('categories')}
                             onChange={handleCategoryChange}
-                            renderValue={(selected) => (selected as string[]).join(', ')}
+                            renderValue={(selected) => {
+                                return selected.map(category => Category.values.find(otherC => otherC.name === category)?.description).join(', ')
+                            }}
                             className='overflow_ellipsis width_100'
                         >
                             {
@@ -94,13 +121,35 @@ export default function RegisterRestaurant (): JSX.Element {
                             }
                         </Select>
                     </FormControl>
-                    <TextField
-                        label={t('Register-restaurant.categories')}
-                        fullWidth
-                        margin="normal"
-                        {...control.register('categories')}
-                        variant="standard"
-                    />
+                    <FormControl sx={{ minWidth: '100%' }}>
+                        <InputLabel id="shiftLabel">{t('Register-restaurant.shifts')}</InputLabel>
+                        <Select
+                            labelId="shiftLabel"
+                            id="shiftSelect"
+                            multiple
+                            autoWidth
+                            fullWidth={true}
+                            variant="standard"
+                            value={selectedShifts}
+                            {...control.register('shifts')}
+                            onChange={handleShiftChange}
+                            renderValue={(selected) => {
+                                return selected.map(shift => Shift.values.find(otherS => otherS.name === shift)?.description).join(', ')
+                            }}
+                            className='overflow_ellipsis width_100'
+                        >
+                            {
+                                Shift.values.map((shift) => {
+                                    return (
+                                        <MenuItem key={shift.name} value={shift.name}>
+                                            <Checkbox checked={selectedCategories.indexOf(shift.name) > -1}/>
+                                            <ListItemText primary={t(shift.description)}/>
+                                        </MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </FormControl>
                     <Button type="submit" variant="contained" color="primary">
                         {t('register')}
                     </Button>
