@@ -11,5 +11,7 @@ export class Shift {
     public readonly description: string,
     public readonly startingHour: number,
     public readonly closingHour: number
-  ) {}
+  ) {
+    Shift.values.push(this);
+  }
 }
