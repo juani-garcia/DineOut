@@ -6,6 +6,8 @@ import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ public class SecurityManager {
     private final RestaurantService restaurantService;
     private final RestaurantReviewService restaurantReviewService;
     private final ReservationService reservationService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityManager.class);
 
     @Autowired
     public SecurityManager(UserService userService, RestaurantService restaurantService, ReservationService reservationService, RestaurantReviewService restaurantReviewService) {
@@ -29,8 +32,10 @@ public class SecurityManager {
     }
 
     public boolean isUserOfId(Authentication auth, long id) {
+        LOGGER.debug("Requested user id: {}", id);
         if (!auth.isAuthenticated())
             return false;
+        LOGGER.debug("Authenticated user: {}", auth.getName());
 
         return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
     }
