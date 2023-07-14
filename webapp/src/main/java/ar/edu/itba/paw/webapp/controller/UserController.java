@@ -35,17 +35,6 @@ public class UserController {
         this.securityService = securityService;
     }
 
-    @GET
-    @Path("/{id}")
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userID)")
-    public Response readUser(@PathParam("id") final long userID) {
-        Optional<UserDTO> maybeUser = userService.getById(userID).map(u -> UserDTO.fromUser(uriInfo, u));
-        if (! maybeUser.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(maybeUser.get()).build();
-    }
-
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON, })
     public Response createUser(@Valid final UserForm userForm) {
@@ -58,6 +47,17 @@ public class UserController {
                 uriInfo.getPath());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newUser.getId())).build();
         return Response.created(location).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userID)")
+    public Response readUser(@PathParam("id") final long userID) {
+        Optional<UserDTO> maybeUser = userService.getById(userID).map(u -> UserDTO.fromUser(uriInfo, u));
+        if (! maybeUser.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(maybeUser.get()).build();
     }
 
     @PUT
