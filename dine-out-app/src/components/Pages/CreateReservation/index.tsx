@@ -80,9 +80,14 @@ export default function Reservation (): JSX.Element {
                         {...control.register('comments')}
                         variant="standard"
                     />
-                    <Button type="submit" variant="contained" color="primary">
-                        {t('Reservation.submit')}
-                    </Button>
+                    <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                        <Button variant="contained" color="error">
+                            {t('Reservation.cancel')}
+                        </Button>
+                        <Button type="submit" variant="contained" color="primary">
+                            {t('Reservation.submit')}
+                        </Button>
+                    </div>
                 </FormControl>
             </ReservationForm>
         </ReservationWhiteBoxContainer>
