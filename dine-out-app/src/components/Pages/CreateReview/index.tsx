@@ -2,7 +2,7 @@ import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReviewWhiteBoxContainer, ReviewForm, Header } from './styles'
-import { Button, Checkbox, FormControl, FormControlLabel, TextField, InputLabel, Select, MenuItem, ListItemText, SelectChangeEvent } from '@mui/material'
+import { Button, Checkbox, FormControl, FormControlLabel, TextField, InputLabel, Select, MenuItem, ListItemText, SelectChangeEvent, Rating } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import internal from 'stream'
 
@@ -32,19 +32,18 @@ export default function Review (): JSX.Element {
                                  width: '40%'
                                }
                              }}>
+                    <Controller control={control} name={"rating"} defaultValue={-1} render={({field: {onChange, value} })=> <Rating
+                        name={"rating"}
+                        size='large'
+                        onChange={onChange}
+                        value={Number(value)}
+                      />
+                    }/>
                     <TextField
                         label={t('Review.create.review')}
                         fullWidth
                         margin="normal"
                         {...control.register('review')}
-                        variant="standard"
-                    />
-                    <TextField
-                        label={t('Register-restaurant.rating')}
-                        fullWidth
-                        margin="normal"
-                        type="number"
-                        {...control.register('rating')}
                         variant="standard"
                     />
                     <div style={{display: 'flex', justifyContent: 'space-around'}}>
