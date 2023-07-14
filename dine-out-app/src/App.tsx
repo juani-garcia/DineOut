@@ -11,6 +11,10 @@ import Register from '@/components/Pages/Register'
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
 import Restaurant from '@/components/Pages/Restaurant'
 import RegisterRestaurant from '@/components/Pages/RegisterRestaurant'
+import MenuSection from '@/components/Pages/MenuSection'
+import MenuItem from '@/components/Pages/MenuItem'
+import CreateReservation from '@/components/Pages/CreateReservation'
+import CreateReview from '@/components/Pages/CreateReview'
 
 function App (): JSX.Element {
   return (
@@ -35,7 +39,15 @@ function App (): JSX.Element {
                                 <Route path="register-restaurant"
                                         element={<RegisterRestaurant/>}/>
                                 <Route path="login"
-                                       element={<Login/>}/>
+                                        element={<Login/>}/>
+                                <Route path="create-section"
+                                        element={<MenuSection/>}/>
+                                <Route path="create-item"
+                                        element={<MenuItem/>}/>
+                                <Route path="reservation"
+                                        element={<CreateReservation/>}/>
+                                <Route path="review"
+                                        element={<CreateReview/>}/>
                                 <Route
                                     path="*"
                                     element={
