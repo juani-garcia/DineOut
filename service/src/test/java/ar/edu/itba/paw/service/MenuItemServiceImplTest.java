@@ -82,7 +82,7 @@ public class MenuItemServiceImplTest {
                 thenReturn(MENU_ITEM_IMAGE);
 
         try {
-            menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID, IMAGE_BYTES);
+            menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID);
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuItem: " + e.getMessage());
@@ -95,7 +95,7 @@ public class MenuItemServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID, IMAGE_BYTES));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class MenuItemServiceImplTest {
         when(menuItemDao.getById(anyLong())).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID, IMAGE_BYTES));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class MenuItemServiceImplTest {
         when(menuSectionService.getById(anyLong())).
                 thenReturn(Optional.of(MENU_SECTION));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID, IMAGE_BYTES));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuItemService.edit(MENU_ITEM_ID, MENU_ITEM_NAME, DETAIL, PRICE, MENU_SECTION_ID));
 
     }
 
