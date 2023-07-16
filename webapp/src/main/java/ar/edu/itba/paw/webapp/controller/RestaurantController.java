@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.service.ImageService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.webapp.Utils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
@@ -139,6 +138,7 @@ public class RestaurantController {
         }
         Restaurant restaurant = maybeRestaurant.get();
         if (restaurant.getImage() == null) {
+            LOGGER.debug("There is no image");
             return Response.noContent().build();
         }
         return Response.ok(restaurant.getImage().getSource()).build();
