@@ -63,7 +63,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Transactional
     @Override
     public void delete(final long menuItemId) {
-        MenuItem menuItem = validateItem(menuItemId);
+        MenuItem menuItem = validateItem(menuItemId); // TODO: Check on cascade with image
         menuItemDao.delete(menuItemId);
     }
 
