@@ -8,9 +8,9 @@ export const RestaurantMapBoxContainer = styled.a`
   min-width: 500px;
   font-family: 'Montserrat', 'Roboto', 'Oxygen', 'sans-serif' !important;
 
-  > . card-image {
-    width: 40% !important;
-    max-width: 40% !important;
+  > .card-image {
+    width: 35% !important;
+    max-width: 35% !important;
   }
 
   > .card-content {
@@ -20,7 +20,7 @@ export const RestaurantMapBoxContainer = styled.a`
   }
 
   > .card-image + .card-content {
-    width: 60%;
+    width: 65%;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -53,7 +53,7 @@ export const CardImage = styled.img`
 `
 
 export const CardContent = styled.div`
-  padding: 24px;
+  padding: 4px;
   border-radius: 0 0 2px 2px;
   display: flex;
   flex-direction: column;

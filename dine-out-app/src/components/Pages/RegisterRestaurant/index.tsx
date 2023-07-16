@@ -32,7 +32,7 @@ export default function RegisterRestaurant (): JSX.Element {
   const { handleSubmit, control } = useForm()
   const [selectedCategories, setselectedCategories] = useState<string[]>([])
   const [selectedShifts, setSelectedShifts] = useState<string[]>([])
-  const handleCategoryChange = (event: SelectChangeEvent<typeof selectedCategories>) => {
+  const handleCategoryChange = (event: SelectChangeEvent<typeof selectedCategories>): void => {
     const {
       target: { value }
     } = event
@@ -40,7 +40,7 @@ export default function RegisterRestaurant (): JSX.Element {
       typeof value === 'string' ? value.split(',') : value
     )
   }
-  const handleShiftChange = (event: SelectChangeEvent<typeof selectedCategories>) => {
+  const handleShiftChange = (event: SelectChangeEvent<typeof selectedCategories>): void => {
     const {
       target: { value }
     } = event
@@ -49,7 +49,7 @@ export default function RegisterRestaurant (): JSX.Element {
     )
   }
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: any): void => {
     console.log(data)
   }
 
@@ -57,6 +57,7 @@ export default function RegisterRestaurant (): JSX.Element {
         <MyContainer>
             <Title>{t('Register-restaurant')}</Title>
             <RegisterRestaurantWhiteBoxContainer>
+                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <RegisterRestaurantForm onSubmit={handleSubmit(onSubmit)}>
                     <Header>{t('Register-restaurant.header')}</Header>
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
