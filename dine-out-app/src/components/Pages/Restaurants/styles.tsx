@@ -21,5 +21,14 @@ export const NoRestaurantsText = styled.h1`
   font-size: 4.2rem;
   line-height: 110%;
   font-weight: 400;
-  
+
+`
+
+export const RestaurantCardsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  box-sizing: inherit;
 `

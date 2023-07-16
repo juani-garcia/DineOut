@@ -6,7 +6,11 @@ import { useRestaurants } from '@/hooks/Restaurants/useRestaurants'
 import type Restaurant from '@/types/models/Restaurant'
 import { useSearchParams } from 'react-router-dom'
 import { Button, CircularProgress, Pagination } from '@mui/material'
-import { NoRestaurantsContainer, NoRestaurantsText } from '@/components/Pages/Restaurants/styles'
+import {
+  NoRestaurantsContainer,
+  NoRestaurantsText,
+  RestaurantCardsContainer
+} from '@/components/Pages/Restaurants/styles'
 import RestaurantsMap from '@/components/Elements/RestaurantsMap'
 import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 
@@ -79,13 +83,13 @@ function Restaurants (): JSX.Element {
                                                 </>
                                             )
                                           : (
-                                                <>
+                                                <RestaurantCardsContainer>
                                                     {
                                                         restaurantList.map((restaurant: Restaurant) => (
                                                             <RestaurantCard key={restaurant.self} name={restaurant.detail}/>
                                                         ))
                                                     }
-                                                </>
+                                                </RestaurantCardsContainer>
                                             )
                                     }
                                     <Pagination
