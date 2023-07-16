@@ -159,5 +159,4 @@ public class RestaurantController {
         return Response.ok().build();
     }
 
-
 }
