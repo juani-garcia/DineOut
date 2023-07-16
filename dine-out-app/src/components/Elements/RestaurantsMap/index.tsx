@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { GoogleMap, InfoWindowF, MarkerF } from '@react-google-maps/api'
 import RestaurantMapCard from '@/components/Elements/RestaurantMapCard'
 import type Restaurant from '@/types/models/Restaurant'
@@ -8,19 +8,19 @@ interface RestaurantsMapProps {
 }
 
 function RestaurantsMap ({ restaurantList }: RestaurantsMapProps): JSX.Element {
-  // const gmapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? ''
+  const mapRef = useRef<google.maps.Map | null>(null)
 
   const containerStyle = {
-    width: '90%',
+    width: '100%',
     height: '901px',
     boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
     borderRadius: '24px'
   }
 
-  const center = {
+  const center = new google.maps.LatLng({
     lat: -34.587608, // Set the initial center of the map here
     lng: -58.437748
-  }
+  })
 
   const [selectedRestaurant, setSelectedRestaurant] = React.useState<Restaurant | null>(null)
 
@@ -35,8 +35,12 @@ function RestaurantsMap ({ restaurantList }: RestaurantsMapProps): JSX.Element {
   return (
         <GoogleMap
             mapContainerStyle={containerStyle}
-            center={center}
             zoom={12}
+            onLoad={(map) => {
+              mapRef.current = map
+              map.setCenter(center)
+            }}
+            onClick={handleCloseInfoWindow}
         >
             {
                 restaurantList.map((restaurant: Restaurant) => (
@@ -62,7 +66,7 @@ function RestaurantsMap ({ restaurantList }: RestaurantsMapProps): JSX.Element {
                     }}
                     onCloseClick={handleCloseInfoWindow}
                 >
-                    <RestaurantMapCard name={selectedRestaurant.name}/>
+                    <RestaurantMapCard restaurant={selectedRestaurant}/>
                 </InfoWindowF>
             )}
         </GoogleMap>

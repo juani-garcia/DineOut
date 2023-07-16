@@ -10,4 +10,5 @@ export default interface Restaurant {
   rating: number
   ratingCount: number
   self: string
+  zone: string
 }
