@@ -15,9 +15,11 @@ public interface MenuItemService {
 
     void delete(long itemId);
 
-    void edit(long menuItemId, String name, String detail, double price, long menuSectionId, byte[] imageBytes);
+    void edit(long menuItemId, String name, String detail, double price, long menuSectionId);
 
     void moveUp(final long itemId);
 
     void moveDown(final long itemId);
+
+    void updateImage(final long itemId, final byte[] image);
 }
