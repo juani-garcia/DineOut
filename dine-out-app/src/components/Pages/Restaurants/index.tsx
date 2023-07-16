@@ -8,6 +8,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Button, CircularProgress, Pagination } from '@mui/material'
 import { NoRestaurantsContainer, NoRestaurantsText } from '@/components/Pages/Restaurants/styles'
 import RestaurantsMap from '@/components/Elements/RestaurantsMap'
+import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 
 function Restaurants (): JSX.Element {
   const { isLoading, restaurants } = useRestaurants()
@@ -49,53 +50,64 @@ function Restaurants (): JSX.Element {
 
   return (
         <MyContainer>
-            <SearchBox/>
-            <Button onClick={toggleMap}>Toggle map</Button>
-            {isLoading
-              ? (
-                    <CircularProgress color="secondary" size="100px"/>
-                )
-              : (
-                  restaurantList.length === 0
-                    ? (
-                            <NoRestaurantsContainer>
-                                <NoRestaurantsText>
-                                    No encontramos ningún restaurante
-                                </NoRestaurantsText>
-                            </NoRestaurantsContainer>
-                      )
-                    : (
-                        useMap
-                          ? (
-                                    <RestaurantsMap/>
-                            )
-                          : (
-                                    <>
-                                        {
-                                            restaurantList.map((restaurant: Restaurant) => (
-                                                <RestaurantCard key={restaurant.self} name={restaurant.detail}/>
-                                            ))
-                                        }
-                                        <Pagination
-                                            count={totalPages}
-                                            page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
-                                            onChange={handlePageChange}
-                                            size="large"
-                                            showFirstButton
-                                            showLastButton
-                                            siblingCount={3}
-                                            boundaryCount={3}
-                                            sx={{
-                                              '& .MuiPaginationItem-root': {
-                                                color: '#FFFFFF'
-                                              }
-                                            }}
-                                        />
-                                    </>
-                            )
-                      )
-                )
-            }
+            <CustomGMapScriptLoad>
+                <SearchBox/>
+                {isLoading
+                  ? (
+                        <CircularProgress color="secondary" size="100px"/>
+                    )
+                  : (
+                      restaurantList.length === 0
+                        ? (
+                                <NoRestaurantsContainer>
+                                    <NoRestaurantsText>
+                                        No encontramos ningún restaurante
+                                    </NoRestaurantsText>
+                                </NoRestaurantsContainer>
+                          )
+                        : (
+                                <>
+                                    <Button onClick={toggleMap}>Toggle map</Button>
+                                    {
+                                        useMap
+                                          ? (
+                                                <>
+                                                    <div style={{ marginTop: '30px' }}/>
+                                                    <RestaurantsMap restaurantList={restaurantList}/>
+                                                    {/* TODO: Move things around so the map is not loaded all over again after each pagination attempt */}
+                                                    <div style={{ marginBottom: '30px' }}/>
+                                                </>
+                                            )
+                                          : (
+                                                <>
+                                                    {
+                                                        restaurantList.map((restaurant: Restaurant) => (
+                                                            <RestaurantCard key={restaurant.self} name={restaurant.detail}/>
+                                                        ))
+                                                    }
+                                                </>
+                                            )
+                                    }
+                                    <Pagination
+                                        count={totalPages}
+                                        page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
+                                        onChange={handlePageChange}
+                                        size="large"
+                                        showFirstButton
+                                        showLastButton
+                                        siblingCount={3}
+                                        boundaryCount={3}
+                                        sx={{
+                                          '& .MuiPaginationItem-root': {
+                                            color: '#FFFFFF'
+                                          }
+                                        }}
+                                    />
+                                </>
+                          )
+                    )
+                }
+            </CustomGMapScriptLoad>
         </MyContainer>
   )
 }
