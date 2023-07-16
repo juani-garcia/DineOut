@@ -35,19 +35,19 @@ function App (): JSX.Element {
                                 <Route path="restaurant/:id"
                                        element={<Restaurant/>}/>
                                 <Route path="register"
-                                        element={<Register/>}/>
+                                       element={<Register/>}/>
                                 <Route path="register-restaurant"
-                                        element={<RegisterRestaurant/>}/>
+                                       element={<RegisterRestaurant/>}/>
                                 <Route path="login"
-                                        element={<Login/>}/>
+                                       element={<Login/>}/>
                                 <Route path="create-section"
-                                        element={<MenuSection/>}/>
+                                       element={<MenuSection/>}/>
                                 <Route path="create-item"
-                                        element={<MenuItem/>}/>
+                                       element={<MenuItem/>}/>
                                 <Route path="reservation"
-                                        element={<CreateReservation/>}/>
+                                       element={<CreateReservation/>}/>
                                 <Route path="review"
-                                        element={<CreateReview/>}/>
+                                       element={<CreateReview/>}/>
                                 <Route
                                     path="*"
                                     element={
