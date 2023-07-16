@@ -40,7 +40,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
+        // TODO: include favoriteOf user id in query build
 
         ParametrizedQuery filter = filterBuilder(name, category, shift, zone);
         String idsQuery = "SELECT id\n" + filter.query + "ORDER BY rating DESC, fav_count DESC LIMIT :limit OFFSET :offset";
