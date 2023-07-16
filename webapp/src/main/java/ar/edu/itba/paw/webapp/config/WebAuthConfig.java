@@ -27,10 +27,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.Collections;
-
-import javax.ws.rs.core.Response;
 
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @EnableWebSecurity
@@ -107,7 +106,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         cors.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         cors.setAllowedMethods(Collections.singletonList("*"));
         cors.setAllowedHeaders(Collections.singletonList("*"));
-        cors.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh-Token", "Location", "Link"));
+        cors.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh-Token", "X-Total-Pages", "Location", "Link"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
         return source;
