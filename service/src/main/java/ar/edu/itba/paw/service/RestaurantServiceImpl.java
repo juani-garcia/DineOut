@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,5 +180,23 @@ public class RestaurantServiceImpl implements RestaurantService {
         Optional<User> user = securityService.getCurrentUser();
         if (user.isPresent()) return getByUserID(user.get().getId());
         return Optional.empty();
+    }
+
+    @Override
+    public void updateRestaurantImage(final long id, final byte[] image) {
+        Restaurant restaurant = restaurantDao.getById(id).orElseThrow(NotFoundException::new); // TODO: Customize
+        Image oldImage = restaurant.getImage();
+        if (image != null && image.length > 0) { // There is new image
+            if (oldImage == null) { // There is no old image
+                restaurant.setImage(imageService.create(image));
+            } else {
+                imageService.edit(oldImage.getId(), image);
+            }
+        } else { // No new image
+            if (oldImage != null) {
+                restaurant.setImage(null);
+                imageService.delete(oldImage.getId());
+            }
+        }
     }
 }

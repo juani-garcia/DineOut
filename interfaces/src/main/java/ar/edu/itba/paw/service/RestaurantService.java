@@ -21,6 +21,7 @@ public interface RestaurantService {
 
     Restaurant getRecommendedRestaurant(boolean isDiner);
 
-
     Optional<Restaurant> getOfLoggedUser();
+
+    void updateRestaurantImage(final long id, byte[] image);
 }
