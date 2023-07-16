@@ -57,18 +57,12 @@ public class MenuItemController {
     public Response createMenuItem(
             @Valid final MenuItemForm menuItemForm
     ) {
-        byte[] image;
-        try {
-            image = menuItemForm.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
-        }
         final MenuItem menuItem = mis.create(
                 menuItemForm.getName(),
                 menuItemForm.getDetail(),
                 menuItemForm.getPrice(),
                 menuSectionId,
-                image
+                null
         );
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(menuItem.getId())).build();
         return Response.created(location).build();
@@ -95,19 +89,13 @@ public class MenuItemController {
             @PathParam("id") final long menuItemId,
             @Valid final MenuItemForm menuItemForm
     ) {
-        byte[] image;
-        try {
-            image = menuItemForm.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
-        }
         mis.edit(
                 menuItemId,
                 menuItemForm.getName(),
                 menuItemForm.getDetail(),
                 menuItemForm.getPrice(),
                 menuItemForm.getMenuSectionId(),
-                image
+                null // TODO: Change update so as to not erase image
         );
         return Response.ok().build();
     }
