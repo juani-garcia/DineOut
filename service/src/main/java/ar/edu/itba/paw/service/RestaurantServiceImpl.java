@@ -5,6 +5,8 @@ import ar.edu.itba.paw.model.exceptions.InvalidPageException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     private ImageService imageService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 
     @Override
     public Optional<Restaurant> getById(long id) {
@@ -182,18 +186,23 @@ public class RestaurantServiceImpl implements RestaurantService {
         return Optional.empty();
     }
 
+    @Transactional
     @Override
     public void updateRestaurantImage(final long id, final byte[] image) {
         Restaurant restaurant = restaurantDao.getById(id).orElseThrow(NotFoundException::new); // TODO: Customize
         Image oldImage = restaurant.getImage();
         if (image != null && image.length > 0) { // There is new image
             if (oldImage == null) { // There is no old image
+                LOGGER.debug("Creating image for restaurant {}", id);
                 restaurant.setImage(imageService.create(image));
+                LOGGER.debug("New image id: {}", restaurant.getImage().getId());
             } else {
+                LOGGER.debug("Updating image for restaurant {}", id);
                 imageService.edit(oldImage.getId(), image);
             }
         } else { // No new image
             if (oldImage != null) {
+                LOGGER.debug("Deleting image for restaurant {}", id);
                 restaurant.setImage(null);
                 imageService.delete(oldImage.getId());
             }
