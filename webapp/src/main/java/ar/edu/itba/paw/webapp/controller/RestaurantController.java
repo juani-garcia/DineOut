@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.webapp.Utils;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.apache.commons.io.IOUtils;
@@ -66,7 +66,7 @@ public class RestaurantController {
 
         UriBuilder uriBuilder = uriInfo.getRequestUriBuilder().replacePath("restaurants");
         Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
-        return Utils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
+        return ResponseUtils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
     }
 
     @POST
