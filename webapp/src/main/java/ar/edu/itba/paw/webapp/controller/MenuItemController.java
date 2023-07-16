@@ -4,6 +4,9 @@ import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -94,8 +98,7 @@ public class MenuItemController {
                 menuItemForm.getName(),
                 menuItemForm.getDetail(),
                 menuItemForm.getPrice(),
-                menuItemForm.getMenuSectionId(),
-                null // TODO: Change update so as to not erase image
+                menuItemForm.getMenuSectionId()
         );
         return Response.ok().build();
     }
@@ -109,4 +112,37 @@ public class MenuItemController {
         mis.delete(menuItemId);
         return Response.noContent().build();
     }
+
+    @GET
+    @Produces({"image/*"}) // TODO: Check
+    @Path("/{id}/image")
+    public Response getMenuItemImage(@PathParam("id") final long menuItemId) {
+        LOGGER.debug("Getting image for menu item with id {}", menuItemId);
+        Optional<MenuItem> maybeMenuItem = mis.getById(menuItemId);
+        if (! maybeMenuItem.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        MenuItem menuItem = maybeMenuItem.get();
+        if (menuItem.getImage() == null) {
+            LOGGER.debug("There is no image");
+            return Response.noContent().build();
+        }
+        return Response.ok(menuItem.getImage().getSource()).build();
+    }
+
+    @PUT
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateRestaurantImage(
+            @PathParam("id") final long menuItemId,
+            @FormDataParam("image") InputStream fileInputStream,
+            @FormDataParam("image") FormDataContentDisposition fileMetaData
+    ) throws IOException {
+        LOGGER.debug("Uploading image for menu item {}", menuItemId);
+        final byte[] image = IOUtils.toByteArray(fileInputStream); // TODO: Catch exception and throw custom one
+        mis.updateImage(menuItemId, image);
+        return Response.ok().build();
+    }
+
 }
