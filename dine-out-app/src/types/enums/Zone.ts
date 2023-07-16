@@ -1,4 +1,6 @@
 export class Zone {
+  static values: Zone[] = []
+
   static readonly VEINTEDEJUNIO = new Zone(
     'VEINTEDEJUNIO',
     'Zone.veintedejunio'
@@ -490,5 +492,6 @@ export class Zone {
     public readonly name: string,
     public readonly description: string
   ) {
+    Zone.values.push(this)
   }
 }

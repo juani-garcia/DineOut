@@ -86,7 +86,7 @@ function Restaurants (): JSX.Element {
                                                 <RestaurantCardsContainer>
                                                     {
                                                         restaurantList.map((restaurant: Restaurant) => (
-                                                            <RestaurantCard key={restaurant.self} name={restaurant.detail}/>
+                                                            <RestaurantCard key={restaurant.self} restaurant={restaurant}/>
                                                         ))
                                                     }
                                                 </RestaurantCardsContainer>
