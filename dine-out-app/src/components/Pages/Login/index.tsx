@@ -58,7 +58,7 @@ function Login (): JSX.Element {
                     </FormControl>
                 </LoginForm>
                 <RedirectionFooter>
-                  <Link to="/"><h4>{t('forgot-password')}</h4></Link>
+                  <Link to="/forgot_my_password"><h4>{t('forgot-password')}</h4></Link>
                   <Link to="/register"><h4>{t('register')}</h4></Link>
                 </RedirectionFooter>
             </LoginWhiteBoxContainer>
