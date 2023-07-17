@@ -51,7 +51,16 @@
   "Shift": {
     "morning": "Morning",
     "noon": "Noon",
-    "afternoon":  "Afternoon",
+    "afternoon": "Afternoon",
     "evening": "Evening"
+  },
+  "Reservation": {
+    "title": "Complete this form to make a reservation!",
+    "amount": "Amount of diners",
+    "date": "Date",
+    "time": "Time",
+    "comments": "Comments",
+    "cancel": "Cancel this reservation",
+    "submit": "Reserve!"
   }
 }
