@@ -2,20 +2,14 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.service.ReservationService;
-import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.SecurityService;
-import ar.edu.itba.paw.webapp.Utils;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
-import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
-import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,10 +18,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("reservations")
@@ -68,7 +60,7 @@ public class ReservationController {
                 .stream().map(r -> ReservationDTO.fromReservation(uriInfo, r))
                 .collect(Collectors.toList());
         Response.ResponseBuilder responseBuilder = Response.ok(new GenericEntity<List<ReservationDTO>>(reservationDTOList){});
-        return Utils.addLinksFromPagedQuery(
+        return ResponseUtils.addLinksFromPagedQuery(
                 reservationPagedQuery,
                 uriInfo.getRequestUriBuilder(),
                 responseBuilder).build();

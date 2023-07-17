@@ -2,9 +2,12 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.webapp.Utils;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +31,6 @@ public class RestaurantController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantController.class);
 
-    @Autowired
     private RestaurantService rs;
 
     @Context
@@ -46,13 +49,14 @@ public class RestaurantController {
             @QueryParam("match") final String match,
             @QueryParam("category") final Category category,
             @QueryParam("zone") final Zone zone,
-            @QueryParam("shift") final Shift shift
+            @QueryParam("shift") final Shift shift,
+            @QueryParam("favoriteOf") final Long favoriteOf
     ) {
-        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}",
-                page, match, category, zone, shift);
+        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}, favoriteOf={}",
+                page, match, category, zone, shift, favoriteOf);
         // TODO: Check validation of params (min for page, enums in range)
 
-        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone);
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone, favoriteOf);
 
         if (restaurantPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();
@@ -63,25 +67,26 @@ public class RestaurantController {
 
         UriBuilder uriBuilder = uriInfo.getRequestUriBuilder().replacePath("restaurants");
         Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
-        return Utils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
+        return ResponseUtils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON}) // TODO: Check Multipart form for image upload
+    @Consumes({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerWithoutRestaurant(authentication)")
     public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
         LOGGER.debug("{}", restaurantForm);
-        byte[] image = null;
-        if (restaurantForm.getImage() != null) {
-            try { // TODO: Check if we could migrate this to form with custom mapper
-                image = restaurantForm.getImage().getBytes();
-            } catch (IOException e) {
-                throw new IllegalStateException(); // This should never happen because of @ValidImage.
-                // TODO: Check https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410597884
-            }
-        }
+        // TODO: Remove this comment, only here due to TODOs
+//        byte[] image = null;
+//        if (restaurantForm.getImage() != null) {
+//            try { // TODO: Check if we could migrate this to form with custom mapper
+//                image = restaurantForm.getImage().getBytes();
+//            } catch (IOException e) {
+//                throw new IllegalStateException(); // This should never happen because of @ValidImage.
+//                // TODO: Check https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410597884
+//            }
+//        }
         Restaurant newRestaurant = rs.create(restaurantForm.getName(),
-                image,
+                null, // TODO: Remove image from restaurant creation service
                 restaurantForm.getAddress(),
                 restaurantForm.getEmail(),
                 restaurantForm.getDetail(),
@@ -110,15 +115,7 @@ public class RestaurantController {
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("/{id}")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
-    public Response updateRestaurant(@PathParam("id") final long restaurantId, @Valid final RestaurantForm restaurantForm) {
-        byte[] image = null;
-        if (restaurantForm.getImage() != null) {
-            try {
-                image = restaurantForm.getImage().getBytes();
-            } catch (IOException e) {
-                throw new IllegalStateException(); // This should never happen because of @ValidImage.
-            }
-        }
+    public Response updateRestaurant(@PathParam("id") final long restaurantId, @Valid final RestaurantForm restaurantForm) { // TODO: Remove image from form
         rs.updateCurrentRestaurant(restaurantForm.getName(),
                 restaurantForm.getAddress(),
                 restaurantForm.getEmail(),
@@ -128,7 +125,38 @@ public class RestaurantController {
                 restaurantForm.getLng(),
                 restaurantForm.getCategories(),
                 restaurantForm.getShifts(),
-                image);
+                null); // TODO: Refactor restaurant update service to not expect image
+        return Response.ok().build();
+    }
+
+    @GET
+    @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
+    @Path("/{id}/image")
+    public Response getRestaurantImage(@PathParam("id") final long restaurantID) {
+        Optional<Restaurant> maybeRestaurant = rs.getById(restaurantID);
+        if (! maybeRestaurant.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        Restaurant restaurant = maybeRestaurant.get();
+        if (restaurant.getImage() == null) {
+            LOGGER.debug("There is no image");
+            return Response.noContent().build();
+        }
+        return Response.ok(restaurant.getImage().getSource()).build();
+    }
+
+    @PUT
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateRestaurantImage(
+            @PathParam("id") final long restaurantId,
+            @FormDataParam("image") InputStream fileInputStream,
+            @FormDataParam("image") FormDataContentDisposition fileMetaData
+    ) throws IOException {
+        LOGGER.debug("Loading image for restaurant {}", restaurantId);
+        final byte[] image = IOUtils.toByteArray(fileInputStream);
+        rs.updateRestaurantImage(restaurantId, image);
         return Response.ok().build();
     }
 

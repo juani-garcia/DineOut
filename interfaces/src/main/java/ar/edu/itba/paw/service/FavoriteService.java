@@ -5,6 +5,8 @@ import ar.edu.itba.paw.model.PagedQuery;
 
 public interface FavoriteService {
 
+    boolean isFavoriteOfUser(long userId, long resId);
+
     boolean isFavoriteOfLoggedUser(long resId);
 
     PagedQuery<Favorite> getAllOfLoggedUser(int page);

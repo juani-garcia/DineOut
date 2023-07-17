@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.service.FavoriteService;
+import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.form.NewPasswordForm;
 import ar.edu.itba.paw.webapp.form.PasswordRecoveryForm;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import ar.edu.itba.paw.webapp.form.UserProfileEditForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -20,24 +25,17 @@ import java.util.Optional;
 @Component
 public class UserController {
     private final UserService userService;
+    private final SecurityService securityService;
+    private final FavoriteService favoriteService;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SecurityService securityService, FavoriteService favoriteService) {
         this.userService = userService;
-    }
-
-    @GET
-    @Path("/{id}")
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userID)")
-    public Response readUser(@PathParam("id") final long userID) {
-        Optional<UserDTO> maybeUser = userService.getById(userID).map(u -> UserDTO.fromUser(uriInfo, u));
-        if (! maybeUser.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(maybeUser.get()).build();
+        this.securityService = securityService;
+        this.favoriteService = favoriteService;
     }
 
     @POST
@@ -52,6 +50,38 @@ public class UserController {
                 uriInfo.getPath());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newUser.getId())).build();
         return Response.created(location).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response readUser(@PathParam("id") final long userId) {
+        Optional<UserDTO> maybeUser = userService.getById(userId).map(u -> UserDTO.fromUser(uriInfo, u));
+        if (! maybeUser.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(maybeUser.get()).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response updateUser(
+            @PathParam("id") final long userId,
+            @Valid final UserProfileEditForm userProfileEditForm
+    ) {
+        Optional<User> user = securityService.getCurrentUser();
+        if (! user.isPresent()) {
+            throw new UnauthenticatedUserException(); // Should not happen due to @PreAuthorize
+        }
+        userService.edit(
+                user.get(),
+                userProfileEditForm.getFirstName(),
+                userProfileEditForm.getLastName(),
+                uriInfo.getPath()
+        );
+        return Response.ok().build();
     }
 
     @POST
@@ -69,6 +99,41 @@ public class UserController {
                                         @PathParam("token") String token) {
         userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/{id}/favorites/{restaurantId}")
+    public Response readFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        final boolean favorite = favoriteService.isFavoriteOfUser(userId, restaurantId);
+        if (!favorite) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/{id}/favorites/{restaurantId}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response createFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        favoriteService.set(restaurantId, userId, true);
+        return Response.created(null).build();
+    }
+
+    @DELETE
+    @Path("/{id}/favorites/{restaurantId}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response deleteFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        favoriteService.set(restaurantId, userId, false);
+        return Response.noContent().build();
     }
 
 }

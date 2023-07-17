@@ -2,11 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantReviewService;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.webapp.Utils;
-import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantReviewDTO;
-import ar.edu.itba.paw.webapp.form.RestaurantForm;
 import ar.edu.itba.paw.webapp.form.RestaurantReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +54,7 @@ public class ReviewController {
 
         UriBuilder uriBuilder = uriInfo.getRequestUriBuilder();
         Response.ResponseBuilder responseBuilder = Response.ok(new GenericEntity<List<RestaurantReviewDTO>>(restaurantReviewDTOList){});
-        return Utils.addLinksFromPagedQuery(restaurantReviewPagedQuery, uriBuilder, responseBuilder).build();
+        return ResponseUtils.addLinksFromPagedQuery(restaurantReviewPagedQuery, uriBuilder, responseBuilder).build();
     }
 
     @POST

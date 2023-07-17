@@ -2,8 +2,11 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     private ImageService imageService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantServiceImpl.class);
+
     @Override
     public Optional<Restaurant> getById(long id) {
         return restaurantDao.getById(id);
@@ -34,9 +39,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
         if (page <= 0) throw new InvalidPageException();
-        return restaurantDao.filter(page, name, true, category, shift, zone); // TODO: Refactor filter to always search by item
+        return restaurantDao.filter(page, name, category, shift, zone, favoriteOf);
     }
 
     @Transactional
@@ -160,7 +165,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
         if (!restaurantReservedList.isEmpty())
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        return restaurantDao.filter(1, null, false, null, null, null)
+        return restaurantDao.filter(1, null, null, null, null, null)
                 .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
         // TODO: @JeroBrave Customize exception
     }
@@ -179,5 +184,28 @@ public class RestaurantServiceImpl implements RestaurantService {
         Optional<User> user = securityService.getCurrentUser();
         if (user.isPresent()) return getByUserID(user.get().getId());
         return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public void updateRestaurantImage(final long id, final byte[] image) {
+        Restaurant restaurant = restaurantDao.getById(id).orElseThrow(NotFoundException::new); // TODO: Customize
+        Image oldImage = restaurant.getImage();
+        if (image != null && image.length > 0) { // There is new image
+            if (oldImage == null) { // There is no old image
+                LOGGER.debug("Creating image for restaurant {}", id);
+                restaurant.setImage(imageService.create(image));
+                LOGGER.debug("New image id: {}", restaurant.getImage().getId());
+            } else {
+                LOGGER.debug("Updating image for restaurant {}", id);
+                imageService.edit(oldImage.getId(), image);
+            }
+        } else { // No new image
+            if (oldImage != null) {
+                LOGGER.debug("Deleting image for restaurant {}", id);
+                restaurant.setImage(null);
+                imageService.delete(oldImage.getId());
+            }
+        }
     }
 }
