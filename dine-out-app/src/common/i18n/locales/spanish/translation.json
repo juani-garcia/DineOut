@@ -47,5 +47,14 @@
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
     "choose": "Dejanos elegir un restaurante para vos"
+  },
+  "Reservation": {
+    "title": "¡Completá el formulario para hacer una reserva!",
+    "amount": "Comensales",
+    "date": "Fecha",
+    "time": "Hora",
+    "comments": "Comentarios",
+    "cancel": "Cancela la reserva",
+    "submit": "¡Reservá!"
   }
 }
