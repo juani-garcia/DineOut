@@ -3,6 +3,7 @@
   "login": "Log In",
   "email": "Email:",
   "password": "Password:",
+  "forgot-password": "Forgot your password?",
   "Footer": {
     "project": "A project of ",
     "company": "Graphene"

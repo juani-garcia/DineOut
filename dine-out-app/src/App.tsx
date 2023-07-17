@@ -42,6 +42,8 @@ function App (): JSX.Element {
                                        element={<RegisterRestaurant/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
+                                <Route path="forgot_my_password"
+                                       element={<>Forgot My Password</>}/>
                                 <Route path="create-section"
                                        element={<MenuSection/>}/>
                                 <Route path="create-item"
