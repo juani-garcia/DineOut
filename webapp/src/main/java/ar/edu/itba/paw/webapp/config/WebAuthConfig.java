@@ -23,6 +23,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import javax.ws.rs.core.Response;
 
@@ -91,9 +97,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(Response.Status.FORBIDDEN.getStatusCode()))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode()))
             .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable();
+                .cors()
+            .and().csrf().disable();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        cors.setAllowedMethods(Collections.singletonList("*"));
+        cors.setAllowedHeaders(Collections.singletonList("*"));
+        cors.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh-Token", "Location", "Link"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cors);
+        return source;
+    }
 
     @Override
     public void configure(final WebSecurity web) throws Exception {
