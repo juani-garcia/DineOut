@@ -2,11 +2,12 @@ import { MyContainer } from '@/components/Elements/utils/styles'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, ReservationForm, ReservationWhiteBoxContainer } from './styles'
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useCreateReservation } from '@/hooks/Reservations/useCreateReservation'
 import { paths } from '@/common/const'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 // interface ReservationCreationForm {
 //     amount: number,
@@ -34,8 +35,17 @@ export default function Reservation (): JSX.Element {
   const { register, handleSubmit } = useForm()
   const { isLoading, createReservation } = useCreateReservation()
   const params = useParams()
+  const { user } = useAuth()
+  const navigate = useNavigate()
 
-  if (params.id === undefined) return <>te mandaste un re moco</> // TODO: Redirect to 404
+  if (params.id === undefined) return <>404</> // TODO: Redirect to 404
+  if (user === null) {
+    navigate('/login')
+  }
+
+  const handleCancel = (): void => {
+    navigate('/restaurant/' + (params.id as string))
+  }
 
   const onSubmit = (data: any): void => {
     createReservation(paths.API_URL + paths.RESERVATION, parseInt(params.id as string), data.comments, data.amount, data.date.toString(), data.time).then((response) => {
@@ -43,8 +53,6 @@ export default function Reservation (): JSX.Element {
     }).catch((e) => {
       console.log(e)
     })
-    console.log(data)
-    console.log(isLoading)
   }
 
   return (
@@ -77,7 +85,7 @@ export default function Reservation (): JSX.Element {
                         />
                         <FormControl sx={{ minWidth: '100%', marginTop: '20px' }}>
                             <InputLabel id="timeLabel">{t('Reservation.time')}</InputLabel>
-                            <Select {...register('zone')}
+                            <Select {...register('time')}
                                     labelId="timeLabel"
                                     defaultValue={''}
                                     id="timeSelect"
@@ -101,11 +109,19 @@ export default function Reservation (): JSX.Element {
                             {...register('comments')}
                         />
                         <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                            <Button color="secondary">
+                            <Button color="secondary" onClick={handleCancel}>
                                 {t('Reservation.cancel')}
                             </Button>
                             <Button type="submit" color="primary" sx={{ fontWeight: '500' }}>
-                                {t('Reservation.submit')}
+                                {
+                                    isLoading
+                                      ? (
+                                            <CircularProgress color="secondary" size="30px"/>
+                                        )
+                                      : (
+                                            <>{t('Reservation.submit')}</>
+                                        )
+                                }
                             </Button>
                         </div>
                     </FormControl>

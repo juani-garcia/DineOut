@@ -15,6 +15,7 @@ import MenuSection from '@/components/Pages/MenuSection'
 import MenuItem from '@/components/Pages/MenuItem'
 import CreateReservation from '@/components/Pages/CreateReservation'
 import CreateReview from '@/components/Pages/CreateReview'
+import Error from '@/components/Pages/Error'
 
 function App (): JSX.Element {
   return (
@@ -53,7 +54,7 @@ function App (): JSX.Element {
                                 <Route
                                     path="*"
                                     element={
-                                        <>Vamo que vamo</>
+                                        <Error error={'404'}/>
                                     }
                                 />
                             </Route>

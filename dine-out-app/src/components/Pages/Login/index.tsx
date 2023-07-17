@@ -5,22 +5,21 @@ import { LoginForm, LoginWhiteBoxContainer, RedirectionFooter } from './styles'
 import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Login (): JSX.Element {
   const { t } = useTranslation()
 
   const { handleSubmit, control } = useForm()
   const { login } = useLogin()
+  const navigate = useNavigate()
 
   const onLogin = (data: any): void => {
     console.log('Submitted values:', data)
     login(data.username, data.password).then((response) => {
-      console.log('BOCAAAAAAAAAAAAAAAAAAAa')
-      console.log(response)
+      navigate(-2)
     }).catch((e) => {
-      console.log('ta to mal flaco')
-      console.log(e.data)
+      console.log(e.data) // TODO: Handle
     })
   }
 
@@ -58,8 +57,8 @@ function Login (): JSX.Element {
                     </FormControl>
                 </LoginForm>
                 <RedirectionFooter>
-                  <Link to="/forgot_my_password"><h4>{t('forgot-password')}</h4></Link>
-                  <Link to="/register"><h4>{t('register')}</h4></Link>
+                    <Link to="/forgot_my_password"><h4>{t('forgot-password')}</h4></Link>
+                    <Link to="/register"><h4>{t('register')}</h4></Link>
                 </RedirectionFooter>
             </LoginWhiteBoxContainer>
         </MyContainer>
