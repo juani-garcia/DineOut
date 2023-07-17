@@ -52,9 +52,15 @@ function App (): JSX.Element {
                                 <Route path="review"
                                        element={<CreateReview/>}/>
                                 <Route
+                                    path="error"
+                                    element={
+                                        <Error/>
+                                    }
+                                />
+                                <Route
                                     path="*"
                                     element={
-                                        <Error error={'404'}/>
+                                        <Error/>
                                     }
                                 />
                             </Route>

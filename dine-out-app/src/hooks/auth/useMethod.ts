@@ -2,6 +2,7 @@ import { useAuth } from './useAuth'
 import { useState } from 'react'
 import axios, { type AxiosResponse, HttpStatusCode } from 'axios'
 import type MethodRequestType from '@/types/MethodRequestType'
+import { useNavigate } from 'react-router-dom'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useMethod = () => {
@@ -11,8 +12,11 @@ export const useMethod = () => {
     getToken,
     setToken,
     getRefreshToken,
-    setRefreshToken
+    setRefreshToken,
+    logout
   } = useAuth()
+
+  const navigate = useNavigate()
 
   async function requestMethod (request: MethodRequestType): Promise<AxiosResponse> {
     setIsLoading(true)
@@ -52,10 +56,14 @@ export const useMethod = () => {
     }
     ).catch(async e => {
       if (e.response?.status === HttpStatusCode.Unauthorized && request.basic == null) {
-        if (token == null && refreshToken == null) return e.response // TODO: Logout, setIsloading false and redirect to login
+        if (token == null && refreshToken == null) {
+          logout()
+          setIsLoading(false)
+          navigate('/login')
+        } // TODO: Test
 
         if (token != null) setToken(null)
-        else if (refreshToken != null) setRefreshToken(null) // TODO: Logout, setIsloading false and redirect to login
+        else if (refreshToken != null) setRefreshToken(null)
 
         if (request.headers != null) delete request.headers.Authorization
 

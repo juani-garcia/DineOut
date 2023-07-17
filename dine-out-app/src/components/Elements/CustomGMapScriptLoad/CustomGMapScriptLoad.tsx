@@ -8,14 +8,10 @@ const libraries = (process.env.REACT_APP_GOOGLE_MAPS_LIBRARIES?.split(',') ?? []
 
 // eslint-disable-next-line react/prop-types
 function CustomGMapScriptLoad ({ children }: { children: ReactNode }): JSX.Element {
-  const { isLoaded, loadError } = useLoadScript({
+  const { isLoaded } = useLoadScript({
     googleMapsApiKey: gmapsApiKey,
     libraries
   })
-
-  if (loadError != null) {
-    return <div>Error loading Google Maps</div> // TODO: Make this err msg pretty
-  }
 
   return (
         <>

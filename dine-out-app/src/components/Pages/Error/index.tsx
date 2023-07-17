@@ -1,12 +1,11 @@
 import React from 'react'
 import { ErrorTwoTone } from '@mui/icons-material'
 import { ErrorContainer } from '@/components/Pages/Error/styles'
+import { useSearchParams } from 'react-router-dom'
 
-interface ErrorProps {
-  error: string
-}
-
-function Error ({ error }: ErrorProps): JSX.Element {
+function Error (): JSX.Element {
+  const [queryParams] = useSearchParams()
+  let error = queryParams.get('status')
   if (error == null || error === '') error = '404'
   return (
         <ErrorContainer>

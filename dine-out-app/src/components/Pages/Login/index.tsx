@@ -17,7 +17,7 @@ function Login (): JSX.Element {
   const onLogin = (data: any): void => {
     console.log('Submitted values:', data)
     login(data.username, data.password).then((response) => {
-      navigate(-2)
+      navigate(-1)
     }).catch((e) => {
       console.log(e.data) // TODO: Handle
     })
