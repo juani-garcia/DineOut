@@ -114,7 +114,7 @@ public class MenuItemController {
     }
 
     @GET
-    @Produces({"image/*"}) // TODO: Check
+    @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
     @Path("/{id}/image")
     public Response getMenuItemImage(@PathParam("id") final long menuItemId) {
         LOGGER.debug("Getting image for menu item with id {}", menuItemId);

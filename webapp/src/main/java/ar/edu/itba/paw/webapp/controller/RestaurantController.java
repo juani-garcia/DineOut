@@ -130,7 +130,7 @@ public class RestaurantController {
     }
 
     @GET
-    @Produces({"image/*"}) // TODO: Check
+    @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
     @Path("/{id}/image")
     public Response getRestaurantImage(@PathParam("id") final long restaurantID) {
         Optional<Restaurant> maybeRestaurant = rs.getById(restaurantID);
