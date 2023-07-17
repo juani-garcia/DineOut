@@ -15,3 +15,12 @@ export const LoginForm = styled.div`
 export const LoginWhiteBoxContainer = styled(WhiteBoxContainer)`
   width: 60%
 `
+
+export const RedirectionFooter = styled.div`
+  width: 50%;
+  margin-left: 25%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`
