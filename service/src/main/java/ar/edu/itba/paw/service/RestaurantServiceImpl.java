@@ -39,9 +39,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
         if (page <= 0) throw new InvalidPageException();
-        return restaurantDao.filter(page, name, category, shift, zone);
+        return restaurantDao.filter(page, name, category, shift, zone, favoriteOf);
     }
 
     @Transactional
@@ -165,7 +165,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
         if (!restaurantReservedList.isEmpty())
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        return restaurantDao.filter(1, null, null, null, null)
+        return restaurantDao.filter(1, null, null, null, null, null)
                 .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
         // TODO: @JeroBrave Customize exception
     }

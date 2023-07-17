@@ -49,13 +49,14 @@ public class RestaurantController {
             @QueryParam("match") final String match,
             @QueryParam("category") final Category category,
             @QueryParam("zone") final Zone zone,
-            @QueryParam("shift") final Shift shift
+            @QueryParam("shift") final Shift shift,
+            @QueryParam("favoriteOf") final Long favoriteOf
     ) {
-        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}",
-                page, match, category, zone, shift);
+        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}, favoriteOf={}",
+                page, match, category, zone, shift, favoriteOf);
         // TODO: Check validation of params (min for page, enums in range)
 
-        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone);
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone, favoriteOf);
 
         if (restaurantPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();

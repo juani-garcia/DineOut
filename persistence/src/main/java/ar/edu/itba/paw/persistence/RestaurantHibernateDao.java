@@ -40,9 +40,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone) {
-
-        ParametrizedQuery filter = filterBuilder(name, category, shift, zone);
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
+        ParametrizedQuery filter = filterBuilder(name, category, shift, zone, favoriteOf);
         String idsQuery = "SELECT id\n" + filter.query + "ORDER BY rating DESC, fav_count DESC LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
 
@@ -80,7 +79,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
         return new PagedQuery<>(content, (long) page, (count + PAGE_SIZE - 1) / PAGE_SIZE);
     }
 
-    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone) {
+    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
         StringBuilder sql = new StringBuilder();
         sql.append("FROM (SELECT restaurant.*, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
@@ -114,6 +113,11 @@ public class RestaurantHibernateDao implements RestaurantDao {
         if (zone != null) {
             sql.append("AND zone_id = :zone\n");
             args.put("zone", zone.getId());
+        }
+
+        if (favoriteOf != null) {
+            sql.append("AND id in (SELECT restaurant_id FROM favorite WHERE user_id = :favoriteOf)\n");
+            args.put("favoriteOf", favoriteOf);
         }
 
         return new ParametrizedQuery(sql.toString(), args);
