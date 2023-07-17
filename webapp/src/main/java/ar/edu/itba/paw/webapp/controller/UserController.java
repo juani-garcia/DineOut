@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.service.FavoriteService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
@@ -25,14 +26,16 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final SecurityService securityService;
+    private final FavoriteService favoriteService;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public UserController(UserService userService, SecurityService securityService) {
+    public UserController(UserService userService, SecurityService securityService, FavoriteService favoriteService) {
         this.userService = userService;
         this.securityService = securityService;
+        this.favoriteService = favoriteService;
     }
 
     @POST
@@ -51,9 +54,9 @@ public class UserController {
 
     @GET
     @Path("/{id}")
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userID)")
-    public Response readUser(@PathParam("id") final long userID) {
-        Optional<UserDTO> maybeUser = userService.getById(userID).map(u -> UserDTO.fromUser(uriInfo, u));
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response readUser(@PathParam("id") final long userId) {
+        Optional<UserDTO> maybeUser = userService.getById(userId).map(u -> UserDTO.fromUser(uriInfo, u));
         if (! maybeUser.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -63,7 +66,7 @@ public class UserController {
     @PUT
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userID)")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
     public Response updateUser(
             @PathParam("id") final long userId,
             @Valid final UserProfileEditForm userProfileEditForm
@@ -96,6 +99,41 @@ public class UserController {
                                         @PathParam("token") String token) {
         userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/{id}/favorites/{restaurantId}")
+    public Response readFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        final boolean favorite = favoriteService.isFavoriteOfUser(userId, restaurantId);
+        if (!favorite) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/{id}/favorites/{restaurantId}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response createFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        favoriteService.set(restaurantId, userId, true);
+        return Response.created(null).build();
+    }
+
+    @DELETE
+    @Path("/{id}/favorites/{restaurantId}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response deleteFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        favoriteService.set(restaurantId, userId, false);
+        return Response.noContent().build();
     }
 
 }
