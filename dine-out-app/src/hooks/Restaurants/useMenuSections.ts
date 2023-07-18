@@ -11,7 +11,7 @@ export function useMenuSections() {
     return await requestMethod({
       method: HttpMethod.GET,
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      url: paths.API_URL + uri,
+      url: uri,
     });
   }
 

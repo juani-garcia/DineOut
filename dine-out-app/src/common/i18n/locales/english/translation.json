@@ -53,7 +53,8 @@
     "morning": "Morning",
     "noon": "Noon",
     "afternoon": "Afternoon",
-    "evening": "Evening"
+    "evening": "Evening",
+    "full-description": "{{description}}(from {{startingHour}} to {{closingHour}})"
   },
   "Reservation": {
     "title": "Complete this form to make a reservation!",
@@ -62,6 +63,10 @@
     "time": "Time",
     "comments": "Comments",
     "cancel": "Cancel this reservation",
-    "submit": "Reserve!"
+    "submit": "Reserve!",
+    "prompt": "Make a reservation!"
+  },
+  "Restaurant": {
+    "opening-hours": "Opens at:"
   }
 }
