@@ -55,11 +55,11 @@ export const useMethod = () => {
       return response
     }
     ).catch(async e => {
-      if (e.response?.status === 404) {
+      if (e.response?.status === 404 || e.response?.status === 400) {
         setIsLoading(false)
         return e.response
       }
-      if (e.response?.status >= 400 && e.response?.status < 500 && request.basic == null) {
+      if (e.response?.status > 400 && e.response?.status < 500 && request.basic == null) {
         if (token == null && refreshToken == null) {
           logout()
           setIsLoading(false)

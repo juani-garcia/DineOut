@@ -49,7 +49,7 @@ export default function Reservation (): JSX.Element {
   }, [user])
 
   const handleCancel = (): void => {
-    navigate('/restaurant/' + (params.id as string))
+    navigate('/restaurant/' + (params.id as string) + '/view')
   }
 
   const onSubmit = (data: any): void => {

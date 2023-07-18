@@ -76,20 +76,28 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                                         <Divider/>
                                     </>
                                 ))}
-                                <Pagination
-                                    count={totalPages}
-                                    page={getPageFromURI(reviewListURI)}
-                                    onChange={handlePageChange}
-                                    size="large"
-                                    showFirstButton
-                                    showLastButton
-                                    siblingCount={1}
-                                    sx={{
-                                      '& .MuiPaginationItem-root': {
-                                        color: '#FFFFFF'
-                                      }
-                                    }}
-                                />
+                                {
+                                    totalPages > 1
+                                      ? (
+                                            <Pagination
+                                                count={totalPages}
+                                                page={getPageFromURI(reviewListURI)}
+                                                onChange={handlePageChange}
+                                                size="large"
+                                                showFirstButton
+                                                showLastButton
+                                                siblingCount={1}
+                                                sx={{
+                                                  '& .MuiPaginationItem-root': {
+                                                    color: '#FFFFFF'
+                                                  }
+                                                }}
+                                            />
+                                        )
+                                      : (
+                                            <></>
+                                        )
+                                }
                             </>
                         : <h1>{t('Reviews.empty')}</h1>
                     )

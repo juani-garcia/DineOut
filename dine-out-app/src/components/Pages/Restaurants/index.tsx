@@ -13,6 +13,7 @@ import {
 } from '@/components/Pages/Restaurants/styles'
 import RestaurantsMap from '@/components/Elements/RestaurantsMap'
 import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
+import Error from '@/components/Pages/Error'
 
 function Restaurants (): JSX.Element {
   const { isLoading, restaurants } = useRestaurants()
@@ -21,6 +22,7 @@ function Restaurants (): JSX.Element {
   const [totalPages, setTotalPages] = useState(1)
   const [useMap, setUseMap] = useState(JSON.parse(localStorage.getItem('useMap') ?? 'false') as boolean)
   const navigate = useNavigate()
+  const [error, setError] = useState<number | null>(null)
 
   const toggleMap = (): void => {
     localStorage.setItem('useMap', JSON.stringify(!useMap))
@@ -29,9 +31,14 @@ function Restaurants (): JSX.Element {
 
   useEffect(() => {
     restaurants(queryParams).then((response) => {
-      if (response.status !== 200) {
+      if (response.status >= 500) {
         setRestaurantList([])
         navigate('/error?status=' + response.status.toString())
+      }
+
+      if (response.status >= 400) {
+        setError(response.status)
+        return
       }
 
       setTotalPages(Number(response.headers['x-total-pages']))
@@ -47,6 +54,8 @@ function Restaurants (): JSX.Element {
       console.log(e.response)
     })
   }, [queryParams])
+
+  if (error !== null) return <Error errorProp={error}/>
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number): void => {
     const existingParams = new URLSearchParams(queryParams.toString())

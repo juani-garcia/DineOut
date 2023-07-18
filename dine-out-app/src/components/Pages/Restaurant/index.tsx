@@ -7,6 +7,12 @@ import LoadingCircle from '@/components/Elements/LoadingCircle'
 import useRestaurant from '@/hooks/Restaurants/useRestaurant'
 import ReviewBigCard from '@/components/Elements/ReviewBigCard'
 import Error from '@/components/Pages/Error'
+import {
+  MenuContainer,
+  RestaurantContainer,
+  RestaurantDetailContainer,
+  RestaurantDetailSection
+} from '@/components/Pages/Restaurant/styles'
 
 interface RestaurantProps {
   restaurant?: Restaurant
@@ -45,14 +51,16 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProps }: R
   }
   // isLoading = false, restaurant defined
   return (
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-            <div style={{ width: '40%' }}>
-                <RestaurantBigCard restaurant={restaurant}/>
-                <ReviewBigCard reviewListURI={restaurant.reviews}/>
-            </div>
-            <div style={{ width: '40%' }}>
+        <RestaurantContainer>
+            <RestaurantDetailSection>
+                <RestaurantDetailContainer>
+                    <RestaurantBigCard restaurant={restaurant}/>
+                    <ReviewBigCard reviewListURI={restaurant.reviews}/>
+                </RestaurantDetailContainer>
+            </RestaurantDetailSection>
+            <MenuContainer>
                 <Menu menuSectionsURI={restaurant.menuSections}/>
-            </div>
-        </div>
+            </MenuContainer>
+        </RestaurantContainer>
   )
 }
