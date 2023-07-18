@@ -42,12 +42,6 @@ function Restaurants (): JSX.Element {
       }
 
       setTotalPages(Number(response.headers['x-total-pages']))
-      const existingParams = new URLSearchParams(queryParams.toString())
-
-      if (existingParams.get('page') === null || existingParams.get('page') === '') {
-        existingParams.set('page', String(1))
-        setQueryParams(existingParams)
-      }
 
       setRestaurantList(response.data as Restaurant[])
     }).catch((e) => {

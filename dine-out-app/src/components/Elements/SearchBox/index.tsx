@@ -14,11 +14,14 @@ function SearchBox (): JSX.Element {
   const location = useLocation()
 
   const onSubmit = (data: any): void => {
-    setQueryParams(data)
+    const existingParams = new URLSearchParams(queryParams.toString())
+
+    setQueryParams({ ...data, page: existingParams.get('page') ?? '1' })
 
     if (location.pathname === '/') {
-      const queryParamsString = new URLSearchParams(data).toString()
-      navigate('/restaurants?' + queryParamsString)
+      const existingParams = new URLSearchParams(data)
+      existingParams.set('page', '1')
+      navigate('/restaurants?' + existingParams.toString())
     }
   }
 
@@ -34,7 +37,7 @@ function SearchBox (): JSX.Element {
             {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
             <SearchBoxForm onSubmit={handleSubmit(onSubmit)}>
                 <TextField label={t('SearchBox.search')} {...register('match')} />
-                <FormControl sx={{ minWidth: 100 }}>
+                <FormControl sx={{ minWidth: 101 }}>
                     <InputLabel id="categoryLabel">{t('SearchBox.category')}</InputLabel>
                     <Select {...register('category')}
                             labelId="categoryLabel"
