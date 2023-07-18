@@ -2,9 +2,10 @@ import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ReviewWhiteBoxContainer, ReviewForm, Header } from './styles'
-import { Button, Checkbox, FormControl, FormControlLabel, TextField, InputLabel, Select, MenuItem, ListItemText, SelectChangeEvent, Rating } from '@mui/material'
+import { Checkbox, FormControl, FormControlLabel, TextField, InputLabel, Select, MenuItem, ListItemText, SelectChangeEvent, Rating } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import internal from 'stream'
+import { Button } from '@/components/Elements/utils/styles'
 
 interface ReviewCreationForm {
     review: string,
@@ -47,10 +48,10 @@ export default function Review (): JSX.Element {
                         variant="standard"
                     />
                     <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                        <Button variant="contained" color="error">
+                        <Button color="error">
                             {t('Review.cancel')}
                         </Button>
-                        <Button type="submit" variant="contained" color="primary">
+                        <Button type="submit" color="primary">
                             {t('Review.submit')}
                         </Button>
                     </div>

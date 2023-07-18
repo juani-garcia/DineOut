@@ -17,9 +17,10 @@ import StarBorderIcon from '@mui/icons-material/StarBorder'
 import Category from '@/types/enums/Category'
 import { Shift } from '@/types/enums/Shift'
 import { t } from 'i18next'
-import { Button } from '@mui/material'
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-  
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
+import { Link } from 'react-router-dom'
+import { WhiteButton as Button } from './styles'
+
 interface RestaurantBigCardProps {
   restaurant: Restaurant
 }
@@ -67,10 +68,10 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
             }
         </div>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
-            <Button color="primary">
+            <Button as={Link} to={`/restaurant/${restaurant.id}/review`}>
                 {t('Review.prompt')}
             </Button>
-            <Button color="primary">
+            <Button as={Link} to={`/reserve/${restaurant.id}`}>
                 {t('Reservation.prompt')}
             </Button>
         </div>
