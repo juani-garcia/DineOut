@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Header, RedirectionFooter, RegisterForm, RegisterWhiteBoxContainer } from './styles'
 import { Button, Checkbox, CircularProgress, FormControl, FormControlLabel, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useRegister } from '@/hooks/auth/useRegister'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { useAuth } from '@/hooks/auth/useAuth'
@@ -18,6 +18,7 @@ function Register (): JSX.Element {
   const { isLoading: isLogginIn, login } = useLogin()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const location = useLocation()
 
   if (user !== null) navigate(-1)
 
@@ -30,7 +31,11 @@ function Register (): JSX.Element {
         .then((response) => {
           if (response.status === 200 || response.status === 201) {
             login(data.username, data.password).then((response) => {
-              navigate(-1)
+              if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
+                navigate(-1)
+              } else {
+                navigate(location.state.from, { replace: true })
+              }
             }).catch((e) => {
               console.log(e.data)
             })

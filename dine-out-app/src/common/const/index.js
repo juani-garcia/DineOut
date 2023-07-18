@@ -4,3 +4,10 @@ export const paths = {
   RESTAURANTS: '/restaurants',
   RESERVATION: '/reservations'
 }
+
+export const roles = {
+  ADMIN: 'ADMIN',
+  RESTAURANT: 'RESTAURANT',
+  DINER: 'DINER',
+  BASIC_USER: 'BASIC_USER'
+}

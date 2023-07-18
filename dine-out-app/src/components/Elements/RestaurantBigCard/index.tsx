@@ -28,13 +28,18 @@ import Category from '@/types/enums/Category'
 import { Shift } from '@/types/enums/Shift'
 import { t } from 'i18next'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
+import { roles } from '@/common/const'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
 }
 
 export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProps): JSX.Element {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
   return (
         <RestaurantBlackBoxContainer>
             <RestaurantHeader>
@@ -92,13 +97,32 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                     ))
                 }
             </ShiftsContainer>
+
             <ButtonsContainer>
-                <Button as={Link} to={`/restaurant/${restaurant.id}/review`}>
-                    {t('Review.prompt')}
-                </Button>
-                <Button as={Link} to={`/reserve/${restaurant.id}`}>
-                    {t('Reservation.prompt')}
-                </Button>
+                {
+                    ((user?.roles.includes(roles.DINER)) === true)
+                      ? (
+                            <>
+                                <Button as={Link} to={`/restaurant/${restaurant.id}/review`}>
+                                    {t('Review.prompt')}
+                                </Button>
+                                <Button as={Link} to={`/reserve/${restaurant.id}`} style={{ marginLeft: 'auto' }}>
+                                    {t('Reservation.prompt')}
+                                </Button>
+                            </>
+                        )
+                      : (
+                            <>
+                                <Button onClick={() => {
+                                  navigate('/register', {
+                                    state: { from: window.location.pathname }
+                                  })
+                                }}>
+                                    {t('registerToReserve')}
+                                </Button>
+                            </>
+                        )
+                }
             </ButtonsContainer>
         </RestaurantBlackBoxContainer>
   )

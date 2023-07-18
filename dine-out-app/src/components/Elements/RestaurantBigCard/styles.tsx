@@ -215,7 +215,7 @@ export const ButtonsContainer = styled.div`
   padding: 24px;
   border-radius: 0 0 2px 2px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   overflow: hidden;

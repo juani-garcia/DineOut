@@ -11,12 +11,13 @@ import {
   RegisterButton
 } from './styles'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   return (
         <Navigation>
@@ -28,12 +29,20 @@ function Navbar (): JSX.Element {
                 {user == null
                   ? <NavRight>
                         <ListItem>
-                            <RegisterButton as={Link} to="/register">
-                                          {t('register')}
+                            <RegisterButton onClick={() => {
+                              navigate('/register', {
+                                state: { from: window.location.pathname }
+                              })
+                            }}>
+                                {t('register')}
                             </RegisterButton>
                         </ListItem>
                         <ListItem>
-                            <LoginButton as={Link} to="/login">
+                            <LoginButton onClick={() => {
+                              navigate('/login', {
+                                state: { from: window.location.pathname }
+                              })
+                            }}>
                                 {t('login')}
                             </LoginButton>
                         </ListItem>
