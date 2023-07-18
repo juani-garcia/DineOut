@@ -93,21 +93,29 @@ function Restaurants (): JSX.Element {
                                                 </RestaurantCardsContainer>
                                             )
                                     }
-                                    <Pagination
-                                        count={totalPages}
-                                        page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
-                                        onChange={handlePageChange}
-                                        size="large"
-                                        showFirstButton
-                                        showLastButton
-                                        siblingCount={3}
-                                        boundaryCount={3}
-                                        sx={{
-                                          '& .MuiPaginationItem-root': {
-                                            color: '#FFFFFF'
-                                          }
-                                        }}
-                                    />
+                                    {
+                                        totalPages > 1
+                                          ? (
+                                                <Pagination
+                                                    count={totalPages}
+                                                    page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
+                                                    onChange={handlePageChange}
+                                                    size="large"
+                                                    showFirstButton
+                                                    showLastButton
+                                                    siblingCount={3}
+                                                    boundaryCount={3}
+                                                    sx={{
+                                                      '& .MuiPaginationItem-root': {
+                                                        color: '#FFFFFF'
+                                                      }
+                                                    }}
+                                                />
+                                            )
+                                          : (
+                                                <></>
+                                            )
+                                    }
                                 </>
                           )
                     )
