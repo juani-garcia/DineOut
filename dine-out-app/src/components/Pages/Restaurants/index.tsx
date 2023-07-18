@@ -4,7 +4,7 @@ import { MyContainer } from '@/components/Elements/utils/styles'
 import SearchBox from '@/components/Elements/SearchBox'
 import { useRestaurants } from '@/hooks/Restaurants/useRestaurants'
 import type Restaurant from '@/types/models/Restaurant'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button, CircularProgress, Pagination } from '@mui/material'
 import {
   NoRestaurantsContainer,
@@ -20,6 +20,7 @@ function Restaurants (): JSX.Element {
   const [queryParams, setQueryParams] = useSearchParams() // I would add the page in the query params
   const [totalPages, setTotalPages] = useState(1)
   const [useMap, setUseMap] = useState(false)
+  const navigate = useNavigate()
 
   const toggleMap = (): void => {
     setUseMap(!useMap)
@@ -29,8 +30,8 @@ function Restaurants (): JSX.Element {
     restaurants(queryParams).then((response) => {
       if (response.status !== 200) {
         setRestaurantList([])
-        return
-      } // TODO: Handle error
+        navigate('/error?status=' + response.status.toString())
+      }
 
       setTotalPages(Number(response.headers['x-total-pages']))
       const existingParams = new URLSearchParams(queryParams.toString())
@@ -54,8 +55,8 @@ function Restaurants (): JSX.Element {
 
   return (
         <MyContainer>
+            <SearchBox/>
             <CustomGMapScriptLoad>
-                <SearchBox/>
                 {isLoading
                   ? (
                         <CircularProgress color="secondary" size="100px"/>
@@ -78,7 +79,6 @@ function Restaurants (): JSX.Element {
                                                 <>
                                                     <div style={{ marginTop: '30px' }}/>
                                                     <RestaurantsMap restaurantList={restaurantList}/>
-                                                    {/* TODO: Move things around so the map is not loaded all over again after each pagination attempt */}
                                                     <div style={{ marginBottom: '30px' }}/>
                                                 </>
                                             )

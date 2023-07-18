@@ -38,7 +38,7 @@ export default function Reservation (): JSX.Element {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  if (params.id === undefined) return <>404</> // TODO: Redirect to 404
+  if (params.id === undefined) navigate('/error?status=404') // TODO: ad restaurant prop so we can send to 404 when /reserve/invalidid
   if (user === null) {
     navigate('/login')
   }
@@ -49,9 +49,9 @@ export default function Reservation (): JSX.Element {
 
   const onSubmit = (data: any): void => {
     createReservation(paths.API_URL + paths.RESERVATION, parseInt(params.id as string), data.comments, data.amount, data.date.toString(), data.time).then((response) => {
-      console.log(response)
+      navigate(-1)
     }).catch((e) => {
-      console.log(e)
+      console.log(e) // TODO Handle error
     })
   }
 

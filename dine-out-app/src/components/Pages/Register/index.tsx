@@ -2,9 +2,9 @@ import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, RedirectionFooter, RegisterForm, RegisterWhiteBoxContainer } from './styles'
-import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material'
+import { Button, Checkbox, CircularProgress, FormControl, FormControlLabel, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useRegister } from '@/hooks/auth/useRegister'
 import { useLogin } from '@/hooks/auth/useLogin'
 
@@ -13,8 +13,9 @@ function Register (): JSX.Element {
   const { handleSubmit, control } = useForm()
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
-  const { register } = useRegister()
-  const { login } = useLogin()
+  const { isLoading, register } = useRegister()
+  const { isLoading: isLogginIn, login } = useLogin()
+  const navigate = useNavigate()
 
   const onRegister = (data: any): void => {
     if (data.password !== confirmPassword) {
@@ -23,12 +24,9 @@ function Register (): JSX.Element {
       setPasswordError('')
       register(data.firstName, data.lastName, data.username, data.password, confirmPassword, data.isRestaurant)
         .then((response) => {
-          console.log(response)
           if (response.status === 200 || response.status === 201) {
             login(data.username, data.password).then((response) => {
-              console.log('BOCAAAAAAAAAAAAAAAAAAAa')
-              console.log(response)
-              // TODO: Redirect to home
+              navigate(-1)
             }).catch((e) => {
               console.log('ta to mal flaco')
               console.log(e.data)
@@ -100,7 +98,15 @@ function Register (): JSX.Element {
                             label={t('Register.isRestaurant')}
                         />
                         <Button type="submit" variant="contained" color="primary">
-                            {t('register')}
+                            {
+                                isLoading || isLogginIn
+                                  ? (
+                                        <CircularProgress color="secondary" size="30px"/>
+                                    )
+                                  : (
+                                        <>{t('register')}</>
+                                    )
+                            }
                         </Button>
                     </FormControl>
                     <RedirectionFooter>
