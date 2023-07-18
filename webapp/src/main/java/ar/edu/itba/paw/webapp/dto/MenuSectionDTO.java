@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.model.MenuSection;
+import ar.edu.itba.paw.model.Restaurant;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -20,16 +22,25 @@ public class MenuSectionDTO {
         final MenuSectionDTO dto = new MenuSectionDTO();
 
         dto.name = menuSection.getName();
-        UriBuilder restaurantUriBuilder = uriInfo.getAbsolutePathBuilder().replacePath("restaurants").path(String.valueOf(menuSection.getRestaurant().getId()));
+        UriBuilder restaurantUriBuilder = RestaurantDTO.getUriBuilder(uriInfo, menuSection.getRestaurant());
         dto.restaurant = restaurantUriBuilder.clone().build();
         dto.ordering = menuSection.getOrdering();
-        UriBuilder menuSectionUriBuilder = restaurantUriBuilder.clone().path("menu-sections").path(String.valueOf(menuSection.getId()));
+        UriBuilder menuSectionUriBuilder = MenuSectionDTO.getUriBuilder(uriInfo, menuSection);
         dto.self = menuSectionUriBuilder.clone().build();
-        UriBuilder menuItemUriBuilder = menuSectionUriBuilder.clone().path("menu-items");
-        dto.menuItemList = menuItemUriBuilder.clone().build();
+        dto.menuItemList = MenuItemDTO.;
 
         return dto;
     }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Restaurant restaurant) {
+        return RestaurantDTO.getUriBuilder(uriInfo, restaurant).path("menu-sections");
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuSection menuSection) {
+        return MenuSectionDTO.getUriBuilder(uriInfo, menuSection.getRestaurant()).path(String.valueOf(menuSection.getId()));
+    }
+
+
 
     public String getName() {
         return name;

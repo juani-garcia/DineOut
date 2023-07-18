@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.MenuItem;
+import ar.edu.itba.paw.model.MenuSection;
+import org.glassfish.jersey.server.Uri;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
@@ -21,8 +24,21 @@ public class MenuItemDTO {
         dto.name = menuItem.getName();
         dto.detail = menuItem.getDetail();
         dto.price = menuItem.getPrice();
-        // TODO: Complete
+        dto.menuSection = MenuSectionDTO.getUriBuilder(uriInfo, menuItem.getSection()).build();
+        dto.ordering = menuItem.getOrdering();
+        final UriBuilder menuItemUriBuilder = MenuItemDTO.getUriBuilder(uriInfo, menuItem);
+        dto.image = menuItemUriBuilder.clone().path("image").build();
+        dto.self = menuItemUriBuilder.clone().build();
+
         return dto;
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuSection menuSection) {
+        return MenuItemDTO.getUriBuilder(uriInfo, menuSection);
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuItem menuItem) {
+        return MenuItemDTO.getUriBuilder(uriInfo, menuItem.getSection()).path(String.valueOf(menuItem.getId()));
     }
 
     public String getName() {
