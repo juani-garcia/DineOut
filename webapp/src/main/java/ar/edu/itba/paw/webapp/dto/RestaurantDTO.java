@@ -30,6 +30,7 @@ public class RestaurantDTO {
     private Set<Shift> shifts;
     private Set<Category> categories;
     private URI menuSections;
+    private URI reviews;
 
     public static RestaurantDTO fromRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
         final RestaurantDTO dto = new RestaurantDTO();
@@ -57,6 +58,8 @@ public class RestaurantDTO {
         dto.shifts = restaurant.getShifts();
         dto.categories = restaurant.getCategories();
         dto.menuSections = restaurantUriBuilder.path("menu-sections").build();
+
+        dto.reviews = RestaurantReviewDTO.getUriBuilderForRestaurant(uriInfo, restaurant).build();
 
         // TODO: Check if we move the link creation to their respective DTO class
 
@@ -197,5 +200,13 @@ public class RestaurantDTO {
 
     public void setMenuSections(URI menuSections) {
         this.menuSections = menuSections;
+    }
+
+    public URI getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(URI reviews) {
+        this.reviews = reviews;
     }
 }

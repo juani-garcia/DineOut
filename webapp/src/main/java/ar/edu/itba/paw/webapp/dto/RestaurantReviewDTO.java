@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.*;
+import org.glassfish.jersey.server.Uri;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -34,6 +35,10 @@ public class RestaurantReviewDTO {
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final RestaurantReview restaurantReview) {
         return RestaurantReviewDTO.getUriBuilder(uriInfo)
                 .path(String.valueOf(restaurantReview.getId()));
+    }
+
+    public static UriBuilder getUriBuilderForRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
+        return RestaurantReviewDTO.getUriBuilder(uriInfo).queryParam("forRestaurant", restaurant.getId());
     }
 
     public Long getId() {
