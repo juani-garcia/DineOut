@@ -32,10 +32,14 @@ export default class Category {
   static readonly MEXICAN = new Category('MEXICAN', 'Category.mexican')
   static readonly GELATO = new Category('GELATO', 'Category.gelato')
 
-  private constructor (
+  private constructor(
     public readonly name: string,
     public readonly description: string
   ) {
     Category.values.push(this)
+  }
+
+  static fromName(name: string) {
+    return Category.values.find((category) => category.name === name)
   }
 }
