@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import Menu from '@/components/Elements/Menu'
 import type Restaurant from '@/types/models/Restaurant'
 import RestaurantBigCard from '@/components/Elements/RestaurantBigCard'
@@ -17,9 +17,13 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProps }: R
   const [restaurant, setRestaurant] = useState<Restaurant>()
   const params = useParams()
   const [error, setError] = useState<number | null>(null)
+  const location = useLocation()
 
   useEffect(() => {
     if (restaurant != null) {
+      return
+    } else if (location.state?.restaurant !== undefined && location.state?.restaurant != null) {
+      setRestaurant(location.state.restaurant)
       return
     }
     requestRestaurant(Number(params.id)).then(response => {

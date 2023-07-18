@@ -9,6 +9,7 @@ export const RestaurantWhiteBoxContainer = styled(WhiteBoxContainer)`
   box-sizing: border-box;
   width: 100%;
   min-width: 500px;
+  cursor: pointer;
 
 
   transition: all 0.2s ease-in-out;

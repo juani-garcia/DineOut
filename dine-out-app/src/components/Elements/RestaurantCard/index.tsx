@@ -22,6 +22,7 @@ import type Restaurant from '@/types/models/Restaurant'
 import { Zone } from '@/types/enums/Zone'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
+import { useNavigate } from 'react-router-dom'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
@@ -34,12 +35,18 @@ function RestaurantCard ({ restaurant }: RestaurantCardProps): JSX.Element {
     restaurantZoneName = Zone.values.find(otherZ => otherZ.name === restaurant.zone)?.description
   }
 
+  const navigate = useNavigate()
+
+  const handleGoToRestaurantView = (): void => {
+    navigate('/restaurant/' + restaurant.id.toString() + '/view', { state: { restaurant } })
+  }
+
   const MAX_RATING = 5
   const secondaryColorStars = restaurant.rating
   const primaryColorStars = MAX_RATING - restaurant.rating
 
   return (
-        <RestaurantWhiteBoxContainer>
+        <RestaurantWhiteBoxContainer onClick={handleGoToRestaurantView}>
             <CardImageContainer className="card-image">
                 <CardImage src={'http://pawserver.it.itba.edu.ar/paw-2022a-10/image/1'}/>
             </CardImageContainer>
