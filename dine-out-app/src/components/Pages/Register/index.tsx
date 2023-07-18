@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useRegister } from '@/hooks/auth/useRegister'
 import { useLogin } from '@/hooks/auth/useLogin'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 function Register (): JSX.Element {
   const { t } = useTranslation()
@@ -16,6 +17,9 @@ function Register (): JSX.Element {
   const { isLoading, register } = useRegister()
   const { isLoading: isLogginIn, login } = useLogin()
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  if (user !== null) navigate(-1)
 
   const onRegister = (data: any): void => {
     if (data.password !== confirmPassword) {
@@ -28,7 +32,6 @@ function Register (): JSX.Element {
             login(data.username, data.password).then((response) => {
               navigate(-1)
             }).catch((e) => {
-              console.log('ta to mal flaco')
               console.log(e.data)
             })
           } // TODO: Handle error on else

@@ -1,11 +1,12 @@
 import React from 'react'
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import { useTranslation } from 'react-i18next'
-import { LoginForm, LoginWhiteBoxContainer, RedirectionFooter } from './styles'
+import { LinkTo, LoginForm, LoginWhiteBoxContainer, RedirectionFooter } from './styles'
 import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 function Login (): JSX.Element {
   const { t } = useTranslation()
@@ -14,6 +15,9 @@ function Login (): JSX.Element {
   const { login } = useLogin()
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAuth()
+
+  if (user !== null) navigate(-1)
 
   const onLogin = (data: any): void => {
     console.log('Submitted values:', data)
@@ -62,8 +66,8 @@ function Login (): JSX.Element {
                     </FormControl>
                 </LoginForm>
                 <RedirectionFooter>
-                    <Link to="/forgot_my_password"><h4>{t('forgot-password')}</h4></Link>
-                    <Link to="/register"><h4>{t('register')}</h4></Link>
+                    <LinkTo as={Link} to="/forgot_my_password">{t('forgot-password')}</LinkTo>
+                    <LinkTo as={Link} to="/register">{t('register')}</LinkTo>
                 </RedirectionFooter>
             </LoginWhiteBoxContainer>
         </MyContainer>
