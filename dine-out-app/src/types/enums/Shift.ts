@@ -18,7 +18,7 @@ export class Shift {
     const slots: string[] = []
     shifts
       .map((shift) => this.getSlotsFromShift(shift))
-      .forEach((newSlots) => slots.concat(newSlots))
+      .forEach((newSlots) => slots.push(...newSlots)) // Use push to add elements to the array
     return slots
   }
 
