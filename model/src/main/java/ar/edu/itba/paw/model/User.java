@@ -37,6 +37,9 @@ public class User implements Serializable {
     )
     private Set<UserRole> roles = new HashSet<>();
 
+    @OneToOne(mappedBy = "user")
+    private Restaurant restaurant;
+
     protected User() {
     }
 
@@ -84,6 +87,9 @@ public class User implements Serializable {
 
     public Locale getLocale() {
         return locale;
+    }
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     public void setPassword(String password) {
