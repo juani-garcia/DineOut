@@ -18,7 +18,7 @@ interface RestaurantProps {
   restaurant?: Restaurant
 }
 
-export default function RestaurantDetailPage ({ restaurant: restaurantProps }: RestaurantProps): JSX.Element {
+export default function RestaurantDetailPage ({ restaurant: restaurantProp }: RestaurantProps): JSX.Element {
   const { isLoading, restaurant: requestRestaurant } = useRestaurant()
   const [restaurant, setRestaurant] = useState<Restaurant>()
   const params = useParams()
@@ -26,10 +26,13 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProps }: R
   const location = useLocation()
 
   useEffect(() => {
-    if (restaurant != null) {
+    if (restaurant != null && restaurant.id === parseInt(params.id as string)) {
       return
-    } else if (location.state?.restaurant !== undefined && location.state?.restaurant != null) {
+    } else if (location.state?.restaurant !== undefined && location.state?.restaurant != null && location.state?.restaurant.id === parseInt(params.id as string)) {
       setRestaurant(location.state.restaurant)
+      return
+    } else if (restaurantProp?.id !== undefined && restaurantProp.id === parseInt(params.id as string)) {
+      setRestaurant(restaurantProp)
       return
     }
     requestRestaurant(Number(params.id)).then(response => {

@@ -113,13 +113,21 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                         )
                       : (
                             <>
-                                <Button onClick={() => {
-                                  navigate('/register', {
-                                    state: { from: window.location.pathname }
-                                  })
-                                }}>
-                                    {t('registerToReserve')}
-                                </Button>
+                                {
+                                    ((user?.roles.includes(roles.RESTAURANT)) === false)
+                                      ? (
+                                            <>
+                                                <Button onClick={() => {
+                                                  navigate('/register', {
+                                                    state: { from: window.location.pathname }
+                                                  })
+                                                }}>
+                                                    {t('registerToReserve')}
+                                                </Button>
+                                            </>
+                                        )
+                                      : (<></>)
+                                }
                             </>
                         )
                 }

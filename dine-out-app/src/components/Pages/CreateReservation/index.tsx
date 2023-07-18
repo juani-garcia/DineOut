@@ -1,13 +1,18 @@
 import { MyContainer } from '@/components/Elements/utils/styles'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, ReservationForm, ReservationWhiteBoxContainer } from './styles'
 import { Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useCreateReservation } from '@/hooks/Reservations/useCreateReservation'
-import { paths } from '@/common/const'
-import { useNavigate, useParams } from 'react-router-dom'
+import { paths, roles } from '@/common/const'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
+import type Restaurant from '@/types/models/Restaurant'
+import useRestaurant from '@/hooks/Restaurants/useRestaurant'
+import Error from '@/components/Pages/Error'
+import { HttpStatusCode } from 'axios'
+import { Shift } from '@/types/enums/Shift'
 
 // interface ReservationCreationForm {
 //     amount: number,
@@ -15,12 +20,6 @@ import { useAuth } from '@/hooks/auth/useAuth'
 //     hour: Date,
 //     comments: string
 // };
-
-const options: string[] = [ // TODO: Get from restaurant shifts.
-  '1',
-  '2',
-  '3'
-]
 
 const getCurrentDate = (): string => {
   const now = new Date()
@@ -30,23 +29,58 @@ const getCurrentDate = (): string => {
   return `${year}-${month}-${day}`
 }
 
-export default function Reservation (): JSX.Element {
+interface ReservationProps {
+  restaurant?: Restaurant
+}
+
+export default function Reservation ({ restaurant: restaurantProp }: ReservationProps): JSX.Element {
   const { t } = useTranslation()
   const { register, handleSubmit } = useForm()
   const { isLoading, createReservation } = useCreateReservation()
+  const { isLoading: isLoadingRestaurant, restaurant: requestRestaurant } = useRestaurant()
+  const [error, setError] = useState<number | null>(null)
+
+  const [restaurant, setRestaurant] = useState<Restaurant>()
+
   const params = useParams()
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  if (params.id === undefined) navigate('/error?status=404') // TODO: ad restaurant prop so we can send to 404 when /reserve/invalidid
+  const location = useLocation()
+
+  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Unauthorized}/>
 
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: window.location.pathname }
+        state: { from: '/reserve/' + (params.id === undefined ? '' : params.id.toString()) }
       })
     }
   }, [user])
+
+  useEffect(() => {
+    if (restaurant != null && restaurant.id === parseInt(params.id as string)) {
+      return
+    } else if (location.state?.restaurant !== undefined && location.state?.restaurant != null && location.state?.restaurant.id === parseInt(params.id as string)) {
+      setRestaurant(location.state.restaurant)
+      return
+    } else if (restaurantProp?.id !== undefined && restaurantProp.id === parseInt(params.id as string)) {
+      setRestaurant(restaurantProp)
+      return
+    }
+    requestRestaurant(Number(params.id)).then(response => {
+      if (response.status === 404) {
+        setRestaurant(undefined)
+        setError(404)
+        return
+      }
+      setRestaurant(response.data as Restaurant)
+    }).catch(e => {
+      console.error(e.response)
+    })
+  }, [restaurant, params])
+
+  if (error !== null) return <Error errorProp={error}/>
 
   const handleCancel = (): void => {
     navigate('/restaurant/' + (params.id as string) + '/view')
@@ -59,9 +93,17 @@ export default function Reservation (): JSX.Element {
       }
       console.log(response.status)
     }).catch((e) => {
-      console.log(e) // TODO Handle error
+      console.log(e) // TODO Handle errorrs
     })
   }
+
+  const restaurantShifts = restaurant?.shifts.map(Shift.fromName).filter((shift) => shift) as Shift[]
+  if (restaurantShifts === undefined) return <></>
+
+  console.log(restaurantShifts)
+
+  const shiftSlots = Shift.getSlotsfromShiftArray(restaurantShifts)
+  console.log(shiftSlots)
 
   return (
         <MyContainer>
@@ -69,70 +111,80 @@ export default function Reservation (): JSX.Element {
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <ReservationForm onSubmit={handleSubmit(onSubmit)}>
                     <Header>{t('Reservation.title')}</Header>
-                    {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                    <FormControl component="form"
-                                 sx={{
-                                   '& .MuiButton-root': {
-                                     width: '40%'
-                                   }
-                                 }}>
-                        <TextField
-                            label={t('Reservation.amount')}
-                            fullWidth
-                            margin="normal"
-                            {...register('amount')}
-                            type='number'
-                        />
-                        <TextField
-                            label={t('Reservation.date')}
-                            fullWidth
-                            margin="normal"
-                            type='date'
-                            defaultValue={getCurrentDate()}
-                            {...register('date')}
-                        />
-                        <FormControl sx={{ minWidth: '100%', marginTop: '20px' }}>
-                            <InputLabel id="timeLabel">{t('Reservation.time')}</InputLabel>
-                            <Select {...register('time')}
-                                    labelId="timeLabel"
-                                    defaultValue={''}
-                                    id="timeSelect"
-                                    fullWidth={true}
-                                    label={t('Reservation.time')}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                {options.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            label={t('Reservation.comments')}
-                            fullWidth
-                            margin="normal"
-                            {...register('comments')}
-                        />
-                        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                            <Button color="secondary" onClick={handleCancel}>
-                                {t('Reservation.cancel')}
-                            </Button>
-                            <Button type="submit" color="primary" sx={{ fontWeight: '500' }}>
-                                {
-                                    isLoading
-                                      ? (
-                                            <CircularProgress color="secondary" size="30px"/>
-                                        )
-                                      : (
-                                            <>{t('Reservation.submit')}</>
-                                        )
-                                }
-                            </Button>
-                        </div>
-                    </FormControl>
+                    <>{
+                        isLoadingRestaurant || restaurant === null
+                          ? (
+                                <CircularProgress color="secondary" size="100px"/>
+                            )
+                          : (
+                                <>
+                                    {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+                                    <FormControl component="form"
+                                                 sx={{
+                                                   '& .MuiButton-root': {
+                                                     width: '40%'
+                                                   }
+                                                 }}>
+                                        <TextField
+                                            label={t('Reservation.amount')}
+                                            fullWidth
+                                            margin="normal"
+                                            {...register('amount')}
+                                            type='number'
+                                        />
+                                        <TextField
+                                            label={t('Reservation.date')}
+                                            fullWidth
+                                            margin="normal"
+                                            type='date'
+                                            defaultValue={getCurrentDate()}
+                                            {...register('date')}
+                                        />
+                                        <FormControl sx={{ minWidth: '100%', marginTop: '20px' }}>
+                                            <InputLabel id="timeLabel">{t('Reservation.time')}</InputLabel>
+                                            <Select {...register('time')}
+                                                    labelId="timeLabel"
+                                                    defaultValue={''}
+                                                    id="timeSelect"
+                                                    fullWidth={true}
+                                                    label={t('Reservation.time')}
+                                            >
+                                                {
+                                                    shiftSlots.map(shiftSlot => (
+                                                        <MenuItem key={shiftSlot}
+                                                                  value={shiftSlot}>{shiftSlot}</MenuItem>
+
+                                                    ))
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                        <TextField
+                                            label={t('Reservation.comments')}
+                                            fullWidth
+                                            margin="normal"
+                                            {...register('comments')}
+                                        />
+                                        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                            <Button color="secondary" onClick={handleCancel}>
+                                                {t('Reservation.cancel')}
+                                            </Button>
+                                            <Button type="submit" color="primary" sx={{ fontWeight: '500' }}>
+                                                {
+                                                    isLoading
+                                                      ? (
+                                                            <CircularProgress color="secondary" size="30px"/>
+                                                        )
+                                                      : (
+                                                            <>{t('Reservation.submit')}</>
+                                                        )
+                                                }
+                                            </Button>
+                                        </div>
+                                    </FormControl>
+                                </>
+                            )
+                    }
+                    </>
                 </ReservationForm>
             </ReservationWhiteBoxContainer>
         </MyContainer>
