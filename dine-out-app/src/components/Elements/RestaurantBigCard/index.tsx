@@ -18,6 +18,7 @@ import Category from '@/types/enums/Category'
 import { Shift } from '@/types/enums/Shift'
 import { t } from 'i18next'
 import { Button } from '@mui/material'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
   
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -41,6 +42,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
         <CardImageContainer className="card-image">
                 <CardImage src={restaurant.image}/>
         </CardImageContainer>
+        <RestaurantMenuIcon fontSize='large' color='primary'/>
         <h1>{restaurant.detail}</h1>
         <ZoneContainer className={'restaurant-zone'}>&#128205;{restaurant.address}</ZoneContainer>
         <CategoriesContainer>
@@ -64,9 +66,14 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                 ))
             }
         </div>
-        <Button color="primary">
-            {t('Reservation.prompt')}
-        </Button>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
+            <Button color="primary">
+                {t('Review.prompt')}
+            </Button>
+            <Button color="primary">
+                {t('Reservation.prompt')}
+            </Button>
+        </div>
     </RestaurantBlackBoxContainer>
     )
 }
