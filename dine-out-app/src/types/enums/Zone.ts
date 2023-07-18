@@ -488,14 +488,14 @@ export class Zone {
     'Zone.williamcmorris'
   )
 
-  private constructor(
+  private constructor (
     public readonly name: string,
     public readonly description: string
   ) {
     Zone.values.push(this)
   }
 
-  static fromName(name: string) {
+  static fromName (name: string): Zone | undefined {
     return Zone.values.find((zone) => zone.name === name)
   }
 }

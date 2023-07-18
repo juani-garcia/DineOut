@@ -1,5 +1,4 @@
 import { useMethod } from '../auth/useMethod'
-import { paths } from '@/common/const'
 import { type AxiosResponse } from 'axios'
 import { HttpMethod } from '@/types/enums/HTTPMethod'
 
@@ -10,7 +9,6 @@ export default function useReviewList () {
   async function requestReviewList (uri: string): Promise<AxiosResponse> {
     return await requestMethod({
       method: HttpMethod.GET,
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       url: uri
     })
   }

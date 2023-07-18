@@ -5,7 +5,7 @@ import { LoginForm, LoginWhiteBoxContainer, RedirectionFooter } from './styles'
 import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 function Login (): JSX.Element {
   const { t } = useTranslation()
@@ -13,11 +13,16 @@ function Login (): JSX.Element {
   const { handleSubmit, control } = useForm()
   const { login } = useLogin()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const onLogin = (data: any): void => {
     console.log('Submitted values:', data)
     login(data.username, data.password).then((response) => {
-      navigate(-1)
+      if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
+        navigate(-1)
+      } else {
+        navigate(location.state.from, { replace: true })
+      }
     }).catch((e) => {
       console.log(e.data) // TODO: Handle
     })

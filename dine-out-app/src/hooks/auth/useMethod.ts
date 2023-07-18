@@ -1,6 +1,6 @@
 import { useAuth } from './useAuth'
 import { useState } from 'react'
-import axios, { type AxiosResponse, HttpStatusCode } from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import type MethodRequestType from '@/types/MethodRequestType'
 import { useNavigate } from 'react-router-dom'
 
@@ -55,11 +55,16 @@ export const useMethod = () => {
       return response
     }
     ).catch(async e => {
-      if (e.response?.status === HttpStatusCode.Unauthorized && request.basic == null) {
+      if (e.response?.status === 404) {
+        setIsLoading(false)
+        return e.response
+      }
+      if (e.response?.status >= 400 && e.response?.status < 500 && request.basic == null) {
         if (token == null && refreshToken == null) {
           logout()
           setIsLoading(false)
           navigate('/login')
+          return e.response
         } // TODO: Test
 
         if (token != null) setToken(null)

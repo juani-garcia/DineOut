@@ -1,7 +1,7 @@
 export default interface MenuSection {
-  name: string;
-  ordering: number;
-  menuItemList: string;
-  restaurant: string;
-  self: string;
+  name: string
+  ordering: number
+  menuItemList: string
+  restaurant: string
+  self: string
 }

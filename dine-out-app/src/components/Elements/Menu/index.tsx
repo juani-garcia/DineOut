@@ -5,7 +5,6 @@ import { MenuTitle } from './styles'
 import { useTranslation } from 'react-i18next'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 import type MenuSection from '@/types/models/MenuSection'
-import MenuSectionComponent from '@/components/Elements/MenuSection'
 
 interface MenuProps {
   menuSectionsURI: string
@@ -29,26 +28,30 @@ export default function MenuComponent ({ menuSectionsURI }: MenuProps): JSX.Elem
   }, [menuSectionsURI])
 
   return (
-    <WhiteBoxContainer style={{ width: '100%', padding: 24 }}>
-        <MenuTitle>{menuSectionList.length > 0 ? t('Menu.title') : t('Menu.empty')}</MenuTitle>
-        {
-          isLoading
-            ? (
-              <LoadingCircle/>
-              )
-            : (
-                menuSectionList.length > 0
-                ? (
-                  menuSectionList.sort((s1, s2) => s1.ordering - s2.ordering).map(section => (
-                    <MenuSectionComponent menuSection={section} key={section.self}/>
-                  )
-                  )
-                )
-                : (
-                  <></>
-                )
-              )
-        }
-    </WhiteBoxContainer>
+        <WhiteBoxContainer style={{ width: '100%', padding: 24 }}>
+            <MenuTitle>{menuSectionList.length > 0 ? t('Menu.title') : t('Menu.empty')}</MenuTitle>
+            {
+                isLoading
+                  ? (
+                        <LoadingCircle/>
+                    )
+                  : (
+                      menuSectionList.length > 0
+                        ? (
+                                <>
+                                    {/* menuSectionList.sort((s1, s2) => s1.ordering - s2.ordering).map( */}
+                                    {/* (section) => ( */}
+                                    {/* <MenuSectionComponent menuSection={section} key={section.self}/> */}
+                                    {/* ) */}
+                                    {/* ) */}
+                                </>
+                          )
+                        : (
+                                <></>
+                          )
+
+                    )
+            }
+        </WhiteBoxContainer>
   )
 }

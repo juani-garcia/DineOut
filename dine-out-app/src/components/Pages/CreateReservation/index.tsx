@@ -1,5 +1,5 @@
 import { MyContainer } from '@/components/Elements/utils/styles'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, ReservationForm, ReservationWhiteBoxContainer } from './styles'
 import { Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
@@ -39,9 +39,14 @@ export default function Reservation (): JSX.Element {
   const navigate = useNavigate()
 
   if (params.id === undefined) navigate('/error?status=404') // TODO: ad restaurant prop so we can send to 404 when /reserve/invalidid
-  if (user === null) {
-    navigate('/login')
-  }
+
+  useEffect(() => {
+    if (user === null) {
+      navigate('/login', {
+        state: { from: window.location.pathname }
+      })
+    }
+  }, [user])
 
   const handleCancel = (): void => {
     navigate('/restaurant/' + (params.id as string))
@@ -49,7 +54,10 @@ export default function Reservation (): JSX.Element {
 
   const onSubmit = (data: any): void => {
     createReservation(paths.API_URL + paths.RESERVATION, parseInt(params.id as string), data.comments, data.amount, data.date.toString(), data.time).then((response) => {
-      navigate(-1)
+      if (response.status >= 200 && response.status <= 300) {
+        navigate(-1)
+      }
+      console.log(response.status)
     }).catch((e) => {
       console.log(e) // TODO Handle error
     })
