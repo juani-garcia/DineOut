@@ -33,8 +33,9 @@ function App (): JSX.Element {
                                 <Route index element={<MainContent/>}/>
                                 <Route path="restaurants"
                                        element={<Restaurants/>}/>
-                                <Route path="restaurant/:id"
-                                       element={<Restaurant/>}/>
+                                <Route path="restaurant/:id">
+                                    <Route path="view" element={<Restaurant/>}/>
+                                </Route>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
                                 <Route path="register"
