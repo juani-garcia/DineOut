@@ -19,10 +19,11 @@ function Restaurants (): JSX.Element {
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([])
   const [queryParams, setQueryParams] = useSearchParams() // I would add the page in the query params
   const [totalPages, setTotalPages] = useState(1)
-  const [useMap, setUseMap] = useState(false)
+  const [useMap, setUseMap] = useState(JSON.parse(localStorage.getItem('useMap') ?? 'false') as boolean)
   const navigate = useNavigate()
 
   const toggleMap = (): void => {
+    localStorage.setItem('useMap', JSON.stringify(!useMap))
     setUseMap(!useMap)
   }
 

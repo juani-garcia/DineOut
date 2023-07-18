@@ -6,6 +6,7 @@ export const RestaurantMapBoxContainer = styled.a`
   box-sizing: border-box;
   width: 100%;
   min-width: 500px;
+  cursor: pointer;
   font-family: 'Montserrat', 'Roboto', 'Oxygen', 'sans-serif' !important;
 
   > .card-image {
