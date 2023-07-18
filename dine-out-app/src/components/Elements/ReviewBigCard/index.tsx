@@ -34,6 +34,9 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
     const [totalPages, setTotalPages] = useState<number>(0)
 
     useEffect(() => {
+        if (getPageFromURI(reviewListURI) === 0) {
+            setPage(1)
+        }
         requestReviewList(reviewListURI).then(response => {
             if (response.status !== 200) {
                 setReviewsList([])
@@ -47,11 +50,15 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
         })
     }, [reviewListURI])
 
-    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number): void => {
+    const setPage = (page: number): void => {
         const url = new URL(reviewListURI)
         const searchParams = url.searchParams
         searchParams.set('page', String(page))
         setReviewListURI(url.toString())
+    }
+
+    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number): void => {
+        setPage(page)
     }
 
     const getPageFromURI = (uri: string): number => {
