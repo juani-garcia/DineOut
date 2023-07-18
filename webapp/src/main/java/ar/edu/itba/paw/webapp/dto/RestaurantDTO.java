@@ -24,7 +24,6 @@ public class RestaurantDTO {
     private String detail;
 
     private URI self;
-    private Long ownerId;
     private URI owner;
     private URI image;
     private Zone zone;
@@ -49,7 +48,6 @@ public class RestaurantDTO {
 
         final UriBuilder restaurantUriBuilder = RestaurantDTO.getUriBuilder(uriInfo, restaurant);
         dto.self = restaurantUriBuilder.clone().build();
-        dto.ownerId = restaurant.getUser().getId();
         dto.owner = UserDTO.getUriBuilder(uriInfo, restaurant.getUser()).build();
         if (restaurant.getImage() != null)
             dto.image = restaurantUriBuilder.clone().path("image").build();
@@ -214,11 +212,4 @@ public class RestaurantDTO {
         this.reviews = reviews;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
 }
