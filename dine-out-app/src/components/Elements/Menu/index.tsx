@@ -6,15 +6,20 @@ import { useTranslation } from 'react-i18next'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 import type MenuSection from '@/types/models/MenuSection'
 import MenuSectionComponent from '@/components/Elements/MenuSection'
+import { useAuth } from '@/hooks/auth/useAuth'
+import { WhiteButton } from '@/components/Elements/RestaurantBigCard/styles'
+import { Link } from 'react-router-dom'
 
 interface MenuProps {
   menuSectionsURI: string
+  editable?: boolean
 }
 
-export default function MenuComponent ({ menuSectionsURI }: MenuProps): JSX.Element {
+export default function MenuComponent ({ menuSectionsURI, editable = true }: MenuProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuSections } = useMenuSections()
   const [menuSectionList, setMenuSectionList] = useState<MenuSection[]>([])
+  const { user } = useAuth()
 
   useEffect(() => {
     menuSections(menuSectionsURI).then((response) => {
@@ -31,6 +36,16 @@ export default function MenuComponent ({ menuSectionsURI }: MenuProps): JSX.Elem
   return (
         <WhiteBoxContainer style={{ width: '100%', padding: 24 }}>
             <MenuTitle>{menuSectionList.length > 0 ? t('Menu.title') : t('Menu.empty')}</MenuTitle>
+            { editable && (
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' ,margin: '2rem 0rem'}}>
+                <WhiteButton as={Link} to={`/restaurant/section`}>
+                  {t('MenuSection.creation.prompt')}
+                </WhiteButton>
+                <WhiteButton as={Link} to={`/restaurant/item`}>
+                  {t('MenuItem.creation.prompt')}
+                </WhiteButton>
+              </div>
+            )}
             {
                 isLoading
                   ? (

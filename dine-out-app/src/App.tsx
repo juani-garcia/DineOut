@@ -40,6 +40,10 @@ function App (): JSX.Element {
                                 </Route>
                                 <Route path="restaurant/edit"
                                        element={<RegisterRestaurant/>}/>
+                                <Route path="restaurant/section"
+                                        element={<MenuSection/>}/>
+                                <Route path="restaurant/item"
+                                        element={<MenuItem/>}/>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
                                 <Route path="reservations"
@@ -52,10 +56,6 @@ function App (): JSX.Element {
                                        element={<Login/>}/>
                                 <Route path="forgot_my_password"
                                        element={<>Forgot My Password</>}/>
-                                <Route path="create-section"
-                                       element={<MenuSection/>}/>
-                                <Route path="create-item"
-                                       element={<MenuItem/>}/>
                                 <Route
                                     path="error"
                                     element={
