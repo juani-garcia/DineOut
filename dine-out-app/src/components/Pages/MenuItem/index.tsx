@@ -5,7 +5,7 @@ import { Header, MenuItemForm, MenuItemWhiteBoxContainer } from './styles'
 import { Button, FormControl, MenuItem, Select, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import MenuSection from '@/types/models/MenuSection'
-import { useNavigate, useNavigation, useNavigationType, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useNavigation, useNavigationType, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 import { paths, roles } from '@/common/const'
@@ -21,16 +21,16 @@ import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
 
 export default function MenuItemCreation (): JSX.Element {
   const { t } = useTranslation()
-  const { handleSubmit, control } = useForm()
+  const { handleSubmit, control, setValue } = useForm()
   const params = useParams()
   const { user } = useAuth()
   const isNewItem = !Boolean(params.id)
   const navigate = useNavigate()
   const { menuSections } = useMenuSections()
   const [sections, setSections] = useState<MenuSection[]>([])
-  const { createMenuItem, getMenuItem } = useMenuItems()
+  const { createMenuItem, updateMenuItem } = useMenuItems()
   const location = useLocation()
-  const menuItem = location.state.menuItem
+  const menuItem = location.state?.menuItem
 
   useEffect(() => {
     if (user === null ){
@@ -48,24 +48,46 @@ export default function MenuItemCreation (): JSX.Element {
         }
         setSections(response.data as MenuSection[])
     })
-    if (params.id !== null && params.id !== undefined) {
-        getMenuItem()
-    }
   }, [user])
 
+  useEffect(() => {
+    if (menuItem !== null && menuItem !== undefined) {
+        setValue('name', menuItem.name)
+        setValue('detail', menuItem.detail)
+        setValue('price', menuItem.price)
+        setValue('section', menuItem.section)
+    }
+  }, [menuItem])
+
   const onSubmit = (data: any): void => {
-    createMenuItem(`${paths.API_URL}${paths.RESTAURANTS}/${restaurantId}/menu-sections/${data.section}/menu-items`,
-    data.name,
-    data.detail,
-    data.price,
-    data.section).then(response => {
-        if (response.status !== 201) {
-            return
-        }
-        navigate(`/restaurant/${user?.restaurantId}/view`)
-    }).catch(e => {
-        console.error(e.response)
-    })
+    if (menuItem !== null && menuItem !== undefined) {
+        console.log(data)
+        updateMenuItem(menuItem.self,
+            data.name,
+            data.detail,
+            data.price,
+            data.section).then(response => {
+                if (response.status !== 200) {
+                    return
+                }
+                navigate(`/restaurant/${user?.restaurantId}/view`)
+            }).catch(e => {
+                console.error(e.response)
+            })
+    } else {
+        createMenuItem(`${paths.API_URL}${paths.RESTAURANTS}/${user?.restaurantId}/menu-sections/${data.section}/menu-items`,
+        data.name,
+        data.detail,
+        data.price,
+        data.section).then(response => {
+            if (response.status !== 201) {
+                return
+            }
+            navigate(`/restaurant/${user?.restaurantId}/view`)
+        }).catch(e => {
+            console.error(e.response)
+        })
+    }
   }
 
   return (

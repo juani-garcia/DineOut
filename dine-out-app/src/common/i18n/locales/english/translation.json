@@ -140,7 +140,8 @@
       "name": "Name of the item",
       "detail": "Detail of the item",
       "price": "Price of the item",
-      "section": "Section of the item"
+      "section": "Section of the item",
+      "submit": "Save item"
     }
   },
   "Errors": {
