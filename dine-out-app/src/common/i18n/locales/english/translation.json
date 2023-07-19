@@ -24,7 +24,11 @@
   },
   "Login": {
     "noAccount": "Want an account?",
-    "restorePassword": "Forgot my password"
+    "restorePassword": "Forgot my password",
+    "usernameTooLong": "Email is too long",
+    "invalidUsername": "Invalid email",
+    "passwordTooLong": "Password is too long",
+    "passwordTooShort": "Password must be completed"
   },
   "Register": {
     "confirmPassword": "Confirm password:",
@@ -83,5 +87,9 @@
   },
   "Menu": {
     "empty": "The restaurant hasn't uploaded a menu yet."
+  },
+  "Errors": {
+    "oops": "Oops! Something went wrong. Try again later.",
+    "invalidCredentials": "The email and password sent are incorrect. Please check the data."
   }
 }

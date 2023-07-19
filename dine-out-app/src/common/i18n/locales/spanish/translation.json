@@ -23,7 +23,11 @@
   },
   "Login": {
     "noAccount": "¿No tenés una cuenta?",
-    "restorePassword": "Recuperar mi contraseña"
+    "restorePassword": "Recuperar mi contraseña",
+    "usernameTooLong": "El email es demasiado largo",
+    "invalidUsername": "Email inválido",
+    "passwordTooLong": "La contraseña es demasiado larga",
+    "passwordTooShort": "Se debe completar la contraseña"
   },
   "Register": {
     "confirmPassword": "Repita su contraseña:",
@@ -56,5 +60,9 @@
     "comments": "Comentarios",
     "cancel": "Cancela la reserva",
     "submit": "¡Reservá!"
+  },
+  "Errors": {
+    "oops": "¡Ups! Algo salió mal. Vuelve a intentarlo más tarde.",
+    "invalidCredentials": "El email y contraseña ingresados no son correctos. Por favor, revisá tus datos."
   }
 }
