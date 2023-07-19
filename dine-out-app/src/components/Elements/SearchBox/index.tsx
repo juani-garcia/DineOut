@@ -55,7 +55,7 @@ function SearchBox (): JSX.Element {
                             label={t('SearchBox.category')}
                     >
                         <MenuItem value="">
-                            <em>None</em>
+                            <em>{t('SearchBox.none')}</em>
                         </MenuItem>
                         {
                             categoryOptions.map(category => (
@@ -78,7 +78,7 @@ function SearchBox (): JSX.Element {
                             label={t('SearchBox.where')}
                     >
                         <MenuItem value="">
-                            <em>None</em>
+                            <em>{t('SearchBox.none')}</em>
                         </MenuItem>
                         {
                             zoneOptions.map(zone => (
@@ -101,7 +101,7 @@ function SearchBox (): JSX.Element {
                             label={t('SearchBox.when')}
                     >
                         <MenuItem value="">
-                            <em>None</em>
+                            <em>{t('SearchBox.none')}</em>
                         </MenuItem>
                         {
                             whenOptions.map(shift => (

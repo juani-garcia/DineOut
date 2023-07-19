@@ -48,6 +48,11 @@
     "passwordTooLong": "Password is too long",
     "invalidPassword": "Password must contain at least one upper-case, one lower-case, one number and be 8 or more characters long"
   },
+  "Navbar": {
+    "logout": "Log out",
+    "myReservations": "My reservations",
+    "myRestaurant": "My restaurant"
+  },
   "SearchBox": {
     "search": "Search",
     "category": "Category",
@@ -57,7 +62,8 @@
     "anyCategory": "Any category",
     "anyTime": "Any time!",
     "anyWhere": "Wherever!",
-    "searchBy": "Search for"
+    "searchBy": "Search for",
+    "none": "None"
   },
   "Parallax": {
     "dontKnow": "Dont know where to eat?",
@@ -70,6 +76,30 @@
     "evening": "Evening",
     "full-description": "{{description}} (from {{startingHour}} to {{closingHour}})"
   },
+  "Category": {
+    "italian": "Italian",
+    "american": "American",
+    "spanish": "Spanish",
+    "pizza": "Pizza",
+    "steakhouse": "Steakhouse",
+    "bar": "Bar", 
+    "chinese": "Chinese",
+    "viet_thai": "Viet Thai",
+    "burgers": "Burgers",
+    "japanese": "Japanese",
+    "sushi": "Sushi",
+    "empanadas": "Empanadas",
+    "coffee": "Coffee",
+    "boulangerie": "Boulangerie",
+    "indian": "Indian",
+    "veggie": "Veggie",
+    "brewery": "Brewery",
+    "mexican": "Mexican",
+    "arabian": "Arabian",
+    "nikkei": "Nikkei",
+    "peruvian": "Peruvian",
+    "gelato": "Gelato"
+  },
   "Reservation": {
     "title": "Complete this form to make a reservation!",
     "amount": "Amount of diners",
@@ -79,6 +109,10 @@
     "cancel": "Cancel this reservation",
     "submit": "Reserve!",
     "prompt": "Make a reservation!"
+  },
+  "Reviews": {
+    "prompt": "Leave a review",
+    "title": "Reviews"
   },
   "Restaurant": {
     "opening-hours": "Opens:"
