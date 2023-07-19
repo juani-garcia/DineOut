@@ -14,8 +14,11 @@ import {
 import RestaurantsMap from '@/components/Elements/RestaurantsMap'
 import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 import Error from '@/components/Pages/Error'
+import { useSnackbar } from 'notistack'
+import { useTranslation } from 'react-i18next'
 
 function Restaurants (): JSX.Element {
+  const { t } = useTranslation()
   const { isLoading, restaurants } = useRestaurants()
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([])
   const [queryParams, setQueryParams] = useSearchParams()
@@ -23,6 +26,7 @@ function Restaurants (): JSX.Element {
   const [useMap, setUseMap] = useState(JSON.parse(localStorage.getItem('useMap') ?? 'false') as boolean)
   const navigate = useNavigate()
   const [error, setError] = useState<number | null>(null)
+  const { enqueueSnackbar } = useSnackbar()
 
   const toggleMap = (): void => {
     localStorage.setItem('useMap', JSON.stringify(!useMap))
@@ -45,7 +49,9 @@ function Restaurants (): JSX.Element {
 
       setRestaurantList(response.data as Restaurant[])
     }).catch((e) => {
-      console.log(e.response)
+      enqueueSnackbar(t('Errors.oops'), {
+        variant: 'error'
+      })
     })
   }, [queryParams])
 

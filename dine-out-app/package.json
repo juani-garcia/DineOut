@@ -23,6 +23,7 @@
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
     "jwt-decode": "^3.1.2",
+    "notistack": "v3",
     "parse-link-header": "^2.0.0",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",

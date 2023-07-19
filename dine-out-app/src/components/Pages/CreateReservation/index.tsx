@@ -13,6 +13,7 @@ import useRestaurant from '@/hooks/Restaurants/useRestaurant'
 import Error from '@/components/Pages/Error'
 import { HttpStatusCode } from 'axios'
 import { Shift } from '@/types/enums/Shift'
+import { useSnackbar } from 'notistack'
 
 // interface ReservationCreationForm {
 //     amount: number,
@@ -39,14 +40,12 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
   const { isLoading, createReservation } = useCreateReservation()
   const { isLoading: isLoadingRestaurant, restaurant: requestRestaurant } = useRestaurant()
   const [error, setError] = useState<number | null>(null)
-
   const [restaurant, setRestaurant] = useState<Restaurant>()
-
   const params = useParams()
   const { user } = useAuth()
   const navigate = useNavigate()
-
   const location = useLocation()
+  const { enqueueSnackbar } = useSnackbar()
 
   if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Unauthorized}/>
 
@@ -77,7 +76,9 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
       }
       setRestaurant(response.data as Restaurant)
     }).catch(e => {
-      console.error(e.response)
+      enqueueSnackbar(t('Errors.oops'), {
+        variant: 'error'
+      })
     })
   }, [restaurant, params])
 
@@ -91,20 +92,22 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
     createReservation(paths.API_URL + paths.RESERVATION, parseInt(params.id as string), data.comments, data.amount, data.date.toString(), data.time).then((response) => {
       if (response.status >= 200 && response.status <= 300) {
         navigate(-1)
+      } else {
+        enqueueSnackbar(t('Errors.tryAgain'), {
+          variant: 'warning'
+        })
       }
-      console.log(response.status)
     }).catch((e) => {
-      console.log(e) // TODO Handle errorrs
+      enqueueSnackbar(t('Errors.oops'), {
+        variant: 'error'
+      })
     })
   }
 
   const restaurantShifts = restaurant?.shifts.map(Shift.fromName).filter((shift) => shift) as Shift[]
   if (restaurantShifts === undefined) return <></>
 
-  console.log(restaurantShifts)
-
   const shiftSlots = Shift.getSlotsfromShiftArray(restaurantShifts)
-  console.log(shiftSlots)
 
   return (
         <MyContainer>

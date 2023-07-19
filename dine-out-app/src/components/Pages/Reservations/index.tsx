@@ -18,8 +18,12 @@ import { useAuth } from '@/hooks/auth/useAuth'
 import { HttpStatusCode } from 'axios'
 import Error from '@/components/Pages/Error'
 import { CircularProgress, Pagination } from '@mui/material'
+import { useSnackbar } from 'notistack'
+import { useTranslation } from 'react-i18next'
+import { roles } from '@/common/const'
 
 function Reservations (): JSX.Element {
+  const { t } = useTranslation()
   const [past, setPast] = useState<boolean>(JSON.parse(localStorage.getItem('past') ?? 'false') as boolean)
   const [reservationList, setReservationList] = useState<Reservation[]>([])
   const [queryParams, setQueryParams] = useSearchParams()
@@ -28,6 +32,7 @@ function Reservations (): JSX.Element {
   const [error, setError] = useState<number | null>(null)
   const { isLoading, reservations } = useReservations()
   const { user } = useAuth()
+  const { enqueueSnackbar } = useSnackbar()
 
   const handlePastToggle = (): void => {
     localStorage.setItem('past', JSON.stringify(!past))
@@ -68,6 +73,12 @@ function Reservations (): JSX.Element {
   useEffect(() => {
     if (user?.userId.toString() === queryParams.get('userId')) {
       reservations(queryParams).then((response) => {
+        if (response.status >= 400 && user?.roles.includes(roles.RESTAURANT)) {
+          navigate('/register-restaurant', {
+            state: { from: '/reservations' }
+          })
+        }
+
         if (response.status >= 500) {
           setReservationList([])
           navigate('/error?status=' + response.status.toString())
@@ -81,11 +92,10 @@ function Reservations (): JSX.Element {
         setTotalPages(Number(response.headers['x-total-pages']))
 
         setReservationList(response.data as Reservation[])
-
-        console.log(reservationList)
-        console.log(totalPages)
       }).catch((e) => {
-        console.log(e.response)
+        enqueueSnackbar(t('Errors.oops'), {
+          variant: 'error'
+        })
       })
     }
   }, [queryParams])

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Menu from '@/components/Elements/Menu'
 import type Restaurant from '@/types/models/Restaurant'
 import RestaurantBigCard from '@/components/Elements/RestaurantBigCard'
@@ -13,17 +13,22 @@ import {
   RestaurantDetailContainer,
   RestaurantDetailSection
 } from '@/components/Pages/Restaurant/styles'
+import { useTranslation } from 'react-i18next'
+import { useSnackbar } from 'notistack'
 
 interface RestaurantProps {
   restaurant?: Restaurant
 }
 
 export default function RestaurantDetailPage ({ restaurant: restaurantProp }: RestaurantProps): JSX.Element {
+  const { t } = useTranslation()
   const { isLoading, restaurant: requestRestaurant } = useRestaurant()
   const [restaurant, setRestaurant] = useState<Restaurant>()
   const params = useParams()
   const [error, setError] = useState<number | null>(null)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     if (restaurant != null && restaurant.id === parseInt(params.id as string)) {
@@ -36,14 +41,21 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
       return
     }
     requestRestaurant(Number(params.id)).then(response => {
-      if (response.status === 404) {
+      if (response.status >= 500) {
         setRestaurant(undefined)
-        setError(404)
+        navigate('/error?status=' + response.status.toString())
+      }
+
+      if (response.status >= 400) {
+        setRestaurant(undefined)
+        setError(response.status)
         return
       }
       setRestaurant(response.data as Restaurant)
     }).catch(e => {
-      console.error(e.response)
+      enqueueSnackbar(t('Errors.oops'), {
+        variant: 'error'
+      })
     })
   }, [restaurant, params])
 

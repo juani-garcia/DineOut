@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { HttpStatusCode } from 'axios'
+import { useSnackbar } from 'notistack'
 
 function Login (): JSX.Element {
   const { t } = useTranslation()
@@ -16,19 +18,27 @@ function Login (): JSX.Element {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
+  const { enqueueSnackbar } = useSnackbar()
 
   if (user !== null) navigate(-1)
 
   const onLogin = (data: any): void => {
-    console.log('Submitted values:', data)
     login(data.username, data.password).then((response) => {
-      if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
-        navigate(-1)
+      if (response.status === HttpStatusCode.Accepted || response.status === HttpStatusCode.Ok) {
+        if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
+          navigate(-1)
+        } else {
+          navigate(location.state.from, { replace: true })
+        }
       } else {
-        navigate(location.state.from, { replace: true })
+        enqueueSnackbar(t('Errors.invalidCredentials'), {
+          variant: 'error'
+        })
       }
     }).catch((e) => {
-      console.log(e.data) // TODO: Handle
+      enqueueSnackbar(t('Errors.oops'), {
+        variant: 'error'
+      })
     })
   }
 

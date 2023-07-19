@@ -54,6 +54,13 @@ export const muiTheme = createTheme({
           }
         }
       }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          maxHeight: '300px !important'
+        }
+      }
     }
   },
   typography: {
