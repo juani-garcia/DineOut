@@ -3,32 +3,32 @@ export class Zone {
 
   static readonly VEINTEDEJUNIO = new Zone(
     'VEINTEDEJUNIO',
-    'Zone.veintedejunio'
+    '20 de Junio'
   )
 
-  static readonly NUEVEDEABRIL = new Zone('NUEVEDEABRIL', 'Zone.nuevedeabril')
-  static readonly ACASSUSO = new Zone('ACASSUSO', 'Zone.acassuso')
-  static readonly ADROGUE = new Zone('ADROGUE', 'Zone.adrogue')
-  static readonly AGRONOMIA = new Zone('AGRONOMIA', 'Zone.agronomia')
-  static readonly ALDOBONZI = new Zone('ALDOBONZI', 'Zone.aldobonzi')
-  static readonly ALMAGRO = new Zone('ALMAGRO', 'Zone.almagro')
+  static readonly NUEVEDEABRIL = new Zone('NUEVEDEABRIL', '9 de Abril')
+  static readonly ACASSUSO = new Zone('ACASSUSO', 'Acassuso')
+  static readonly ADROGUE = new Zone('ADROGUE', 'Adrogué')
+  static readonly AGRONOMIA = new Zone('AGRONOMIA', 'Agronomía')
+  static readonly ALDOBONZI = new Zone('ALDOBONZI', 'Aldo Bonzi')
+  static readonly ALMAGRO = new Zone('ALMAGRO', 'Almagro')
   static readonly AREADEPROMOCIONELTRIANGULO = new Zone(
-    '',
-    'Zone.areadepromocioneltriangulo'
+    'AREADEPROMOCIONELTRIANGULO',
+    'Área de Promoción El Triángulo'
   )
 
-  static readonly AVELLANEDA = new Zone('AVELLANEDA', 'Zone.avellaneda')
-  static readonly BALVANERA = new Zone('BALVANERA', 'Zone.balvanera')
-  static readonly BANFIELD = new Zone('BANFIELD', 'Zone.banfield')
-  static readonly BARRACAS = new Zone('BARRACAS', 'Zone.barracas')
-  static readonly BECCAR = new Zone('BECCAR', 'Zone.beccar')
-  static readonly BELGRANO = new Zone('BELGRANO', 'Zone.belgrano')
-  static readonly BELLAVISTA = new Zone('BELLAVISTA', 'Zone.bellavista')
-  static readonly BENAVIDEZ = new Zone('BENAVIDEZ', 'Zone.benavidez')
-  static readonly BERAZATEGUI = new Zone('BERAZATEGUI', 'Zone.berazategui')
+  static readonly AVELLANEDA = new Zone('AVELLANEDA', 'Avellaneda')
+  static readonly BALVANERA = new Zone('BALVANERA', 'Balvanera')
+  static readonly BANFIELD = new Zone('BANFIELD', 'Banfield')
+  static readonly BARRACAS = new Zone('BARRACAS', 'Barracas')
+  static readonly BECCAR = new Zone('BECCAR', 'Beccar')
+  static readonly BELGRANO = new Zone('BELGRANO', 'Belgrano')
+  static readonly BELLAVISTA = new Zone('BELLAVISTA', 'Bella Vista')
+  static readonly BENAVIDEZ = new Zone('BENAVIDEZ', 'Benavídez')
+  static readonly BERAZATEGUI = new Zone('BERAZATEGUI', 'Berazategui')
   static readonly BERAZATEGUIOESTE = new Zone(
     'BERAZATEGUIOESTE',
-    'Zone.berazateguioeste'
+    'Berazategui Oeste'
   )
 
   static readonly BERNAL = new Zone('BERNAL', 'Zone.bernal')

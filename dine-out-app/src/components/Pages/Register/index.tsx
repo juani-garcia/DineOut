@@ -9,6 +9,7 @@ import { useRegister } from '@/hooks/auth/useRegister'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useSnackbar } from 'notistack'
+import { roles } from '@/common/const'
 
 function Register (): JSX.Element {
   const { t } = useTranslation()
@@ -33,10 +34,15 @@ function Register (): JSX.Element {
         .then((response) => {
           if (response.status === 200 || response.status === 201) {
             login(data.username, data.password).then((response) => {
-              if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
-                navigate(-1)
-              } else {
-                navigate(location.state.from, { replace: true })
+              if (user != null) {
+                if (user.roles.includes(roles.RESTAURANT)) {
+                  navigate('/register-restaurant')
+                }
+                if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
+                  navigate(-1)
+                } else {
+                  navigate(location.state.from, { replace: true })
+                }
               }
             }).catch((e) => {
               enqueueSnackbar(t('Errors.oops'), {
