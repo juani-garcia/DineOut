@@ -16,6 +16,7 @@ import MenuItem from '@/components/Pages/MenuItem'
 import CreateReservation from '@/components/Pages/CreateReservation'
 import CreateReview from '@/components/Pages/CreateReview'
 import Error from '@/components/Pages/Error'
+import Reservations from '@/components/Pages/Reservations'
 
 function App (): JSX.Element {
   return (
@@ -39,6 +40,8 @@ function App (): JSX.Element {
                                 </Route>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
+                                <Route path="reservations"
+                                       element={<Reservations/>}/>
                                 <Route path="register"
                                        element={<Register/>}/>
                                 <Route path="register-restaurant"

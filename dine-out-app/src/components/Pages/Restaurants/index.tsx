@@ -18,7 +18,7 @@ import Error from '@/components/Pages/Error'
 function Restaurants (): JSX.Element {
   const { isLoading, restaurants } = useRestaurants()
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([])
-  const [queryParams, setQueryParams] = useSearchParams() // I would add the page in the query params
+  const [queryParams, setQueryParams] = useSearchParams()
   const [totalPages, setTotalPages] = useState(1)
   const [useMap, setUseMap] = useState(JSON.parse(localStorage.getItem('useMap') ?? 'false') as boolean)
   const navigate = useNavigate()

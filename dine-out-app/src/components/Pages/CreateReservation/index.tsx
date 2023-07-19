@@ -52,6 +52,7 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
 
   useEffect(() => {
     if (user === null) {
+      console.log('fiumba')
       navigate('/login', {
         state: { from: '/reserve/' + (params.id === undefined ? '' : params.id.toString()) }
       })

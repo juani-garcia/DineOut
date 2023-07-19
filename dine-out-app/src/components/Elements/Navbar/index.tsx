@@ -13,6 +13,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { Button } from '@/components/Elements/utils/styles'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
@@ -49,6 +50,11 @@ function Navbar (): JSX.Element {
                     </NavRight>
                   : <NavRight>
                         <ListItem>Boeeenas {user.sub}</ListItem>
+                        <ListItem>
+                            <Button as={Link} to={'/reservations'}>
+                                Mis Reservas
+                            </Button>
+                        </ListItem>
                         <ListItem><LogoutButton onClick={() => {
                           logout()
                         }}>Chau chau</LogoutButton></ListItem>
