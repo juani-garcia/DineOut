@@ -13,9 +13,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 interface MenuSectionProps {
   menuSection: MenuSection
   editable?: boolean
+  onDelete?: (section: MenuSection) => void
 }
 
-export default function MenuSectionComponent ({ menuSection, editable = false }: MenuSectionProps): JSX.Element {
+export default function MenuSectionComponent ({ menuSection, editable = false, onDelete }: MenuSectionProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuItems, deleteMenuItem } = useMenuItems()
   const [menuItemList, setMenuItemList] = useState<MenuItem[]>([])
@@ -36,6 +37,9 @@ export default function MenuSectionComponent ({ menuSection, editable = false }:
     deleteMenuItem(menuSection.self).then(response => {
       if (response.status !== 204) {
         // TODO: ?????
+      }
+      if (onDelete) {
+        onDelete(menuSection)
       }
     }).catch(e => {
       console.error(e)

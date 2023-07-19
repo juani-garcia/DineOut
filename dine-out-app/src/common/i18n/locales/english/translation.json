@@ -70,11 +70,18 @@
     "opening-hours": "Opens:"
   },
   "MenuSection": {
+    "empty": "This section has no items",
     "form": {
       "title": "New menu section",
       "header": "Add a section to the menu",
       "name": "Name of the section",
       "submit": "Create section"
+    },
+    "creation" : {
+      "prompt": "Add section"
     }
+  },
+  "Menu": {
+    "empty": "The restaurant hasn't uploaded a menu yet."
   }
 }

@@ -31,6 +31,11 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
     })
   }, [menuSectionsURI])
 
+  const handleSectionDeletion = (menuSection: MenuSection): void => {
+    const newMenuSectionList = menuSectionList.filter(section => section.ordering !== menuSection.ordering)
+    setMenuSectionList(newMenuSectionList)
+  }
+
   return (
         <WhiteBoxContainer style={{ width: '100%', padding: 24 }}>
             <MenuTitle>{menuSectionList.length > 0 ? t('Menu.title') : t('Menu.empty')}</MenuTitle>
@@ -55,7 +60,7 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
                                 <>
                                     {menuSectionList.sort((s1, s2) => s1.ordering - s2.ordering).map(
                                       (section) => (
-                                            <MenuSectionComponent menuSection={section} key={section.self} editable={editable}/>
+                                            <MenuSectionComponent menuSection={section} key={section.self} editable={editable} onDelete={handleSectionDeletion}/>
                                       )
                                     )}
                                 </>
