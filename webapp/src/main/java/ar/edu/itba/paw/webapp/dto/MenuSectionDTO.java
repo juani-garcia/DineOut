@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class MenuSectionDTO {
 
+    private Long id;
     private String name;
     private URI restaurant;
     private long ordering;
@@ -21,6 +22,7 @@ public class MenuSectionDTO {
     public static MenuSectionDTO fromMenuSection(final UriInfo uriInfo, final MenuSection menuSection) {
         final MenuSectionDTO dto = new MenuSectionDTO();
 
+        dto.id = menuSection.getId();
         dto.name = menuSection.getName();
         UriBuilder restaurantUriBuilder = RestaurantDTO.getUriBuilder(uriInfo, menuSection.getRestaurant());
         dto.restaurant = restaurantUriBuilder.clone().build();
@@ -40,7 +42,13 @@ public class MenuSectionDTO {
         return MenuSectionDTO.getUriBuilder(uriInfo, menuSection.getRestaurant()).path(String.valueOf(menuSection.getId()));
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

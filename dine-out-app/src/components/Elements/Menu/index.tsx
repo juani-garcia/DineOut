@@ -36,6 +36,22 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
     setMenuSectionList(newMenuSectionList)
   }
 
+  const handleSectionUp = (menuSection: MenuSection): void => {
+    const newList = [...menuSectionList]
+    const currentIndex = newList.indexOf(menuSection)
+    newList[currentIndex].ordering -= 1
+    newList[currentIndex - 1].ordering += 1
+    setMenuSectionList(newList)
+  }
+
+  const handleSectionDown = (menuSection: MenuSection): void => {
+    const newList = [...menuSectionList]
+    const currentIndex = newList.indexOf(menuSection)
+    newList[currentIndex].ordering += 1
+    newList[currentIndex + 1].ordering -= 1
+    setMenuSectionList(newList)
+  }
+
   return (
         <WhiteBoxContainer style={{ width: '100%', padding: 24 }}>
             <MenuTitle>{menuSectionList.length > 0 ? t('Menu.title') : t('Menu.empty')}</MenuTitle>
@@ -60,7 +76,15 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
                                 <>
                                     {menuSectionList.sort((s1, s2) => s1.ordering - s2.ordering).map(
                                       (section) => (
-                                            <MenuSectionComponent menuSection={section} key={section.self} editable={editable} onDelete={handleSectionDeletion}/>
+                                            <MenuSectionComponent
+                                              menuSection={section}
+                                              key={section.self}
+                                              editable={editable}
+                                              last={section.ordering === menuSectionList.length - 1}
+                                              onDelete={handleSectionDeletion}
+                                              onUp={handleSectionUp}
+                                              onDown={handleSectionDown}
+                                              />
                                       )
                                     )}
                                 </>

@@ -9,17 +9,26 @@ import MenuItemComponent from '@/components/Elements/MenuItem'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
+import EditIcon from '@mui/icons-material/Edit'
+import { Link } from 'react-router-dom'
+import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 
 interface MenuSectionProps {
   menuSection: MenuSection
   editable?: boolean
+  last?: boolean
   onDelete?: (section: MenuSection) => void
+  onUp?: (section: MenuSection) => void
+  onDown?: (section: MenuSection) => void
 }
 
-export default function MenuSectionComponent ({ menuSection, editable = false, onDelete }: MenuSectionProps): JSX.Element {
+export default function MenuSectionComponent ({ menuSection, editable = false, last = false, onDelete, onUp, onDown }: MenuSectionProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuItems, deleteMenuItem } = useMenuItems()
   const [menuItemList, setMenuItemList] = useState<MenuItem[]>([])
+  const { moveSection } = useMenuSections()
 
   useEffect(() => {
     menuItems(menuSection.menuItemList).then((response) => {
@@ -46,15 +55,50 @@ export default function MenuSectionComponent ({ menuSection, editable = false, o
     })
   }
 
+  const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
+    moveSection(menuSection.self, true).then(response => {
+      if (response.status !== 200)
+        return
+        if (onUp) {
+          onUp(menuSection)
+        }          
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
+  const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
+    moveSection(menuSection.self, false).then(response => {
+      if (response.status !== 200)
+        return
+        if (onDown) {
+          onDown(menuSection)
+        }          
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
   return (
         <>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
                 {editable && (
                     <div>
-                        <IconButton onClick={handleDeletion} color="secondary" aria-label="delete">
-                            <DeleteIcon/>
+                      <IconButton onClick={handleUp} color="secondary" disabled={menuSection.ordering === 0}>
+                          <ArrowUpwardIcon/>
+                      </IconButton>
+                      <IconButton onClick={handleDown} color="secondary" disabled={last}>
+                          <ArrowDownwardIcon/>
+                      </IconButton>
+                      <Link to={`/restaurant/section/${menuSection.id}/edit`} state={menuSection}>
+                        <IconButton color="secondary">
+                            <EditIcon/>
                         </IconButton>
+                      </Link>
+                      <IconButton onClick={handleDeletion} color="secondary">
+                          <DeleteIcon/>
+                      </IconButton>
                     </div>
                 )}
             </div>
