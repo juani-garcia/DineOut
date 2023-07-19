@@ -10,10 +10,24 @@ import { useAuth } from '@/hooks/auth/useAuth'
 import { HttpStatusCode } from 'axios'
 import { useSnackbar } from 'notistack'
 
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 function Login (): JSX.Element {
   const { t } = useTranslation()
 
-  const { handleSubmit, control } = useForm()
+  const schema = z.object({
+    username: z.string()
+      .max(64, t('Login.usernameTooLong').toString())
+      .email(t('Login.invalidUsername').toString()),
+    password: z.string()
+      .min(1, t('Login.passwordTooShort').toString())
+      .max(64, t('Login.passwordTooLong').toString())
+  })
+
+  const { handleSubmit, control, formState: { errors } } = useForm({
+    resolver: zodResolver(schema)
+  })
   const { login } = useLogin()
   const navigate = useNavigate()
   const location = useLocation()
@@ -32,7 +46,7 @@ function Login (): JSX.Element {
         }
       } else {
         enqueueSnackbar(t('Errors.invalidCredentials'), {
-          variant: 'error'
+          variant: 'warning'
         })
       }
     }).catch((e) => {
@@ -61,6 +75,7 @@ function Login (): JSX.Element {
                             margin="normal"
                             {...control.register('username')}
                             variant="standard"
+                            helperText={errors?.username?.message?.toString()}
                         />
                         <TextField
                             label={t('password')}
@@ -69,6 +84,7 @@ function Login (): JSX.Element {
                             margin="normal"
                             {...control.register('password')}
                             variant="standard"
+                            helperText={errors?.password?.message?.toString()}
                         />
                         <Button type="submit" variant="contained" color="primary">
                             {t('login')}
