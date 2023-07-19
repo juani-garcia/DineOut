@@ -38,6 +38,8 @@ function App (): JSX.Element {
                                     <Route path="view" element={<Restaurant/>}/>
                                     <Route path="review" element={<CreateReview/>}/>
                                 </Route>
+                                <Route path="restaurant/register"
+                                       element={<RegisterRestaurant/>}/>
                                 <Route path="restaurant/edit"
                                        element={<RegisterRestaurant/>}/>
                                 <Route path="restaurant/section"
@@ -52,8 +54,6 @@ function App (): JSX.Element {
                                        element={<Reservations/>}/>
                                 <Route path="register"
                                        element={<Register/>}/>
-                                <Route path="register-restaurant"
-                                       element={<RegisterRestaurant/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
                                 <Route path="forgot_my_password"
