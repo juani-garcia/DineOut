@@ -4,14 +4,11 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.persistence.ReservationDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -68,7 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (page <= 0) throw new InvalidPageException();
 
         User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
-        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalStateException("Invalid restaurant"));
+        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid restaurant"));
 
         return reservationDao.getAllByRestaurant(self.getId(), page, past);
     }
