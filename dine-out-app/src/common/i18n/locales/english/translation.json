@@ -68,5 +68,13 @@
   },
   "Restaurant": {
     "opening-hours": "Opens:"
+  },
+  "MenuSection": {
+    "form": {
+      "title": "New menu section",
+      "header": "Add a section to the menu",
+      "name": "Name of the section",
+      "submit": "Create section"
+    }
   }
 }

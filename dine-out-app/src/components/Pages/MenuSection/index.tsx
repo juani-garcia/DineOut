@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { Header, MenuSectionForm, MenuSectionWhiteBoxContainer } from './styles'
 import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 // interface MenuSectionFormInput {
 //   name: string
@@ -12,9 +15,24 @@ import { useForm } from 'react-hook-form'
 export default function MenuSectionCreation (): JSX.Element {
   const { t } = useTranslation()
   const { handleSubmit, control } = useForm()
+  const location = useLocation()
+  const menuSectionsURI = location.state
+  const navigate = useNavigate()
+  const { user } = useAuth()
+
   const onSubmit = (data: any) => {
-    console.log(data)
+    if (! menuSectionsURI)
+      return
+    createMenuSection(menuSectionsURI, data.name).then(response => {
+      if (response.status !== 201) {
+        return
+      }
+      navigate(`/restaurant/${user?.restaurantId}/view`)
+    }).catch(e => {
+      console.error(e.response)
+    })
   }
+  const { isLoading, menuSections, createMenuSection } = useMenuSections()
 
   return (
         <MyContainer>
