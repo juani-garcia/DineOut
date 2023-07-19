@@ -48,7 +48,8 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
             <RestaurantHeader>
                 <RestaurantTitle>
                     {restaurant.name}
-                    { !isOwner && <Link to={`/restaurant/edit`}><IconButton color='secondary' size='large' aria-label='edit'><EditIcon/></IconButton></Link>}
+                    {!isOwner && <Link to={'/restaurant/edit'}><IconButton color='secondary' size='large'
+                                                                           aria-label='edit'><EditIcon/></IconButton></Link>}
                 </RestaurantTitle>
                 <RatingContainer>
                     <Rating>

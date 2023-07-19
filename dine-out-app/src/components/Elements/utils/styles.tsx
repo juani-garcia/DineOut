@@ -49,7 +49,9 @@ export const Button = styled.button`
   position: relative;
   cursor: pointer;
   display: inline-block;
+  background-color: ${(props) => props.theme.defaultWhite};
   overflow: hidden;
+  color: ${(props) => props.theme.black} !important;
   user-select: none;
   vertical-align: middle;
   z-index: 1;
