@@ -11,9 +11,36 @@ import { useAuth } from '@/hooks/auth/useAuth'
 import { useSnackbar } from 'notistack'
 import { roles } from '@/common/const'
 
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 function Register (): JSX.Element {
   const { t } = useTranslation()
-  const { handleSubmit, control } = useForm()
+
+  const schema = z.object({
+    firstName: z.string()
+      .min(1, t('Register.firstNameEmpty').toString())
+      .max(64, t('Register.firstTooLong').toString()),
+    lastName: z.string()
+      .min(1, t('Register.lastNameEmpty').toString())
+      .max(64, t('Register.lastNameTooLing').toString()),
+    username: z.string()
+      .email(t('Register.invalidUsername').toString())
+      .max(64, t('Reguster.usernameTooLong').toString()),
+    password: z.string()
+      .min(1, t('Register.passwordEmpty').toString())
+      .max(64, t('Register.passwordTooLong').toString())
+      .refine((password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
+        if (!regex.test(password))
+          return false
+        return true
+      }, t('Register.invalidPassword').toString())
+  })
+
+  const { handleSubmit, control, formState: { errors} } = useForm({
+    resolver: zodResolver(schema)
+  })
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const { isLoading, register } = useRegister()
@@ -27,7 +54,7 @@ function Register (): JSX.Element {
 
   const onRegister = (data: any): void => {
     if (data.password !== confirmPassword) {
-      setPasswordError('Passwords do not match')
+      setPasswordError(t('Register.passwordsDoNotMatch').toString())
     } else {
       setPasswordError('')
       register(data.firstName, data.lastName, data.username, data.password, confirmPassword, data.isRestaurant)
@@ -81,6 +108,7 @@ function Register (): JSX.Element {
                             margin="normal"
                             {...control.register('firstName')}
                             variant="standard"
+                            helperText={errors?.firstName?.message?.toString()}
                         />
                         <TextField
                             label={t('Register.lastName')}
@@ -88,6 +116,7 @@ function Register (): JSX.Element {
                             margin="normal"
                             {...control.register('lastName')}
                             variant="standard"
+                            helperText={errors?.lastName?.message?.toString()}
                         />
                         <TextField
                             label={t('email')}
@@ -95,6 +124,7 @@ function Register (): JSX.Element {
                             margin="normal"
                             {...control.register('username')}
                             variant="standard"
+                            helperText={errors?.username?.message?.toString()}
                         />
                         <TextField
                             label={t('password')}
@@ -103,6 +133,7 @@ function Register (): JSX.Element {
                             margin="normal"
                             {...control.register('password')}
                             variant="standard"
+                            helperText={errors?.password?.message?.toString()}
                         />
                         <TextField
                             label={t('Register.confirmPassword')}
