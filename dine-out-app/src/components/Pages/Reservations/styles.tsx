@@ -62,7 +62,9 @@ export const ReservationsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  align-items: center;
   box-sizing: inherit;
+  padding-bottom: 20px;
 `
 
 export const PastToggle = styled.a`
@@ -82,4 +84,42 @@ export const PastToggle = styled.a`
   &:hover {
     transform: scale(1.1);
   }
+`
+
+export const NoReservationsText = styled.h1`
+  color: ${(props) => props.theme.defaultLight};
+  text-align: center;
+  margin: 2.8rem 0 2.8rem 0;
+  font-size: 4.2rem;
+  line-height: 110%;
+  font-weight: 400;
+`
+
+export const ExploreRestaurantsText = styled.h6`
+  color: ${(props) => props.theme.defaultLight};
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 30px;
+  text-decoration: underline;
+  font-size: 1.15rem;
+  line-height: 110%;
+  font-weight: 400;
+  box-sizing: inherit;
+  cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`
+
+export const ReservationInfo = styled.div`
+  padding: 24px;
+  border-radius: 0 0 2px 2px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 `

@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import {
+  ExploreRestaurantsText,
+  NoReservationsText,
   PastToggle,
   ReservationCardContainer,
   ReservationCardHolder,
+  ReservationInfo,
   ReservationMainContainer,
   ReservationsContainer,
   ReservationTitle,
   ShowPreviousContainer
 } from '@/components/Pages/Reservations/styles'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import type Reservation from '@/types/models/Reservation'
 import { useReservations } from '@/hooks/Reservations/useReservations'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { HttpStatusCode } from 'axios'
 import Error from '@/components/Pages/Error'
+import { CircularProgress, Pagination } from '@mui/material'
 
 function Reservations (): JSX.Element {
   const [past, setPast] = useState<boolean>(JSON.parse(localStorage.getItem('past') ?? 'false') as boolean)
@@ -78,7 +82,6 @@ function Reservations (): JSX.Element {
 
         setReservationList(response.data as Reservation[])
 
-        console.log(isLoading)
         console.log(reservationList)
         console.log(totalPages)
       }).catch((e) => {
@@ -89,17 +92,89 @@ function Reservations (): JSX.Element {
 
   if (error !== null) return <Error errorProp={error}/>
 
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number): void => {
+    const existingParams = new URLSearchParams(queryParams.toString())
+    existingParams.set('page', String(page))
+    setQueryParams(existingParams)
+  }
+
   return (
         <ReservationMainContainer>
             <ReservationCardHolder>
                 <ReservationCardContainer>
                     <ReservationTitle>
-                        Mis Reservas
+                        Reservas {past ? 'pasadas' : 'próximas'}
                     </ReservationTitle>
                     <ShowPreviousContainer>
-                        <PastToggle onClick={handlePastToggle}>Mostrar reservas pasadas</PastToggle>
+                        <PastToggle onClick={handlePastToggle}>Mostrar
+                            reservas {past ? 'pasadas' : 'próximas'}</PastToggle>
                     </ShowPreviousContainer>
-                    <ReservationsContainer>{past ? <>FOUsMBA</> : <>Pumbate</>}</ReservationsContainer>
+                    <ReservationsContainer>
+                        {isLoading
+                          ? (
+                                <CircularProgress color="secondary" size="100px"/>
+                            )
+                          : (
+                              reservationList.length === 0
+                                ? (
+                                        <>
+                                            <NoReservationsText>
+                                                No hay ninguna reserva
+                                            </NoReservationsText>
+                                            <ExploreRestaurantsText as={Link} to={'/restaurants?page=1'}>
+                                                ¡Explorá los mejores restaurantes!
+                                            </ExploreRestaurantsText>
+                                        </>
+                                  )
+                                : (
+                                        <>
+                                            {
+                                                reservationList.map((reservation: Reservation) => (
+                                                    <ReservationInfo key={reservation.id}>
+                                                        <hr style={{
+                                                          boxSizing: 'content-box',
+                                                          height: '0',
+                                                          overflow: 'visible',
+                                                          width: '100%'
+                                                        }}/>
+                                                        {/* TODO: Style when i have the restaurant name */}
+                                                        <div>{reservation.restaurant}</div>
+                                                        <div>{reservation.amount}</div>
+                                                        <div>{reservation.comments}</div>
+                                                        <div>{reservation.dateTime}</div>
+                                                        <div>{reservation.isConfirmed}</div>
+                                                    </ReservationInfo>
+                                                ))
+                                            }
+
+                                            {
+                                                totalPages > 1
+                                                  ? (
+                                                        <Pagination
+                                                            count={totalPages}
+                                                            page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
+                                                            onChange={handlePageChange}
+                                                            size="large"
+                                                            showFirstButton
+                                                            showLastButton
+                                                            siblingCount={3}
+                                                            boundaryCount={3}
+                                                            sx={{
+                                                              '& .MuiPaginationItem-root': {
+                                                                color: '#000000'
+                                                              }
+                                                            }}
+                                                        />
+                                                    )
+                                                  : (
+                                                        <></>
+                                                    )
+                                            }
+                                        </>
+                                  )
+                            )
+                        }
+                    </ReservationsContainer>
                 </ReservationCardContainer>
             </ReservationCardHolder>
         </ReservationMainContainer>

@@ -49,7 +49,7 @@ export const useMethod = () => {
       params: request.params
     }).then(response => {
       if (response.headers.authorization != null) setToken(response.headers.authorization)
-      if (response.headers['X-Refresh-Token'] != null) setRefreshToken(response.headers['X-Refresh-Token'])
+      if (response.headers['x-refresh-token'] != null) setRefreshToken(response.headers['x-refresh-token'])
 
       setIsLoading(false)
       return response
@@ -65,7 +65,7 @@ export const useMethod = () => {
           setIsLoading(false)
           navigate('/login')
           return e.response
-        } // TODO: Test
+        }
 
         if (token != null) setToken(null)
         else if (refreshToken != null) setRefreshToken(null)
