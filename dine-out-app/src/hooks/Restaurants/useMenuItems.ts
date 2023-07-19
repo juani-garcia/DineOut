@@ -6,11 +6,25 @@ import { HttpMethod } from '@/types/enums/HTTPMethod'
 export function useMenuItems () {
   const { isLoading, requestMethod } = useMethod()
   const { isLoading: ild, requestMethod: rmd } = useMethod()
+  const { requestMethod: rmc } = useMethod()
 
   async function menuItems (uri: string): Promise<AxiosResponse> {
     return await requestMethod({
       method: HttpMethod.GET,
       url: uri
+    })
+  }
+
+  async function createMenuItem(uri: string, name: string, detail: string, price: number, section: number): Promise<AxiosResponse> {
+    return await rmc({
+      method: HttpMethod.POST,
+      url: uri,
+      data: {
+        name,
+        detail,
+        price,
+        section
+      }
     })
   }
 
@@ -21,5 +35,5 @@ export function useMenuItems () {
     })
   }
 
-  return { isLoading, ild, menuItems, deleteMenuItem }
+  return { isLoading, ild, menuItems, createMenuItem, deleteMenuItem }
 }
