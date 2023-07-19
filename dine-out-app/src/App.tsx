@@ -38,6 +38,8 @@ function App (): JSX.Element {
                                     <Route path="view" element={<Restaurant/>}/>
                                     <Route path="review" element={<CreateReview/>}/>
                                 </Route>
+                                <Route path="restaurant/edit"
+                                       element={<RegisterRestaurant/>}/>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
                                 <Route path="reservations"

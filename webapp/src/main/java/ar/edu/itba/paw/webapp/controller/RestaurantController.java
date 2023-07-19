@@ -160,4 +160,14 @@ public class RestaurantController {
         return Response.ok().build();
     }
 
+    @DELETE
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response deleteRestaurantImage(
+            @PathParam("id") final long restaurantId
+    ) {
+        rs.updateRestaurantImage(restaurantId, null);
+        return Response.ok().build();
+    }
+
 }

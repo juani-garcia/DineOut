@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type Restaurant from '@/types/models/Restaurant'
 import {
   ButtonsContainer,
@@ -33,6 +33,10 @@ import { useAuth } from '@/hooks/auth/useAuth'
 import { roles } from '@/common/const'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
+import { Input } from '@mui/material'
+import useImage from '@/hooks/Images/useImage'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { HttpMethod } from '@/types/enums/HTTPMethod'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -41,14 +45,39 @@ interface RestaurantBigCardProps {
 export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProps): JSX.Element {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const isOwner = user?.userId === restaurant.ownerId
+  const isOwner = user?.restaurantId === restaurant.id
+  const [imagePreview, setImagePreview] = useState<string | undefined>(restaurant.image)
+  const { isLoading, updateImage, deleteImage } = useImage()
+
+  const handleUpdate: React.ChangeEventHandler<HTMLInputElement> = event => {
+    if (event.target.files == null)
+        return
+    const newImage = event.target.files[0]
+    updateImage(`${restaurant.self}/image`, newImage).then( response => {
+        if (response.status !== 200)
+            return
+        setImagePreview(URL.createObjectURL(newImage))
+    }).catch(e => {
+        console.error(e.response)
+    })
+  }
+
+  const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = event => {
+    deleteImage(`${restaurant.self}/image`).then(response => {
+        if (response.status !== 200)
+            return
+        setImagePreview(undefined)
+    }).catch(e => {
+        console.error(e.response)
+    })
+  }
 
   return (
         <RestaurantBlackBoxContainer>
             <RestaurantHeader>
                 <RestaurantTitle>
                     {restaurant.name}
-                    {!isOwner && <Link to={'/restaurant/edit'}><IconButton color='secondary' size='large'
+                    {isOwner && <Link to={'/restaurant/edit'}><IconButton color='secondary' size='large'
                                                                            aria-label='edit'><EditIcon/></IconButton></Link>}
                 </RestaurantTitle>
                 <RatingContainer>
@@ -63,7 +92,17 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                 </RatingContainer>
             </RestaurantHeader>
             <CardImageContainer className="card-image">
-                <CardImage src={restaurant.image}/>
+                { imagePreview && (
+                    <CardImage src={imagePreview} />
+                )}
+                { isOwner &&
+                    <div>
+                        <Input type='file' name='image' onChange={handleUpdate} />
+                        <IconButton onClick={handleDeletion}color="secondary" aria-label="delete">
+                            <DeleteIcon/>
+                        </IconButton>
+                    </div>
+                }
             </CardImageContainer>
             <DetailContainer>
                 <Detail>

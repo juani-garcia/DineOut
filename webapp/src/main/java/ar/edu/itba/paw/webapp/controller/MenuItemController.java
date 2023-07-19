@@ -133,7 +133,7 @@ public class MenuItemController {
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     @Path("/{id}/image")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
-    public Response updateRestaurantImage(
+    public Response updateMenuItemImage(
             @PathParam("id") final long menuItemId,
             @FormDataParam("image") InputStream fileInputStream,
             @FormDataParam("image") FormDataContentDisposition fileMetaData
@@ -141,6 +141,16 @@ public class MenuItemController {
         LOGGER.debug("Uploading image for menu item {}", menuItemId);
         final byte[] image = IOUtils.toByteArray(fileInputStream); // TODO: Catch exception and throw custom one
         mis.updateImage(menuItemId, image);
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response deleteMenuItemImage(
+            @PathParam("id") final long menuItemId
+    ) {
+        mis.updateImage(menuItemId, null);
         return Response.ok().build();
     }
 
