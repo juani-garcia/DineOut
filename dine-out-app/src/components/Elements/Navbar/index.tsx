@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { Button } from '@/components/Elements/utils/styles'
+import { roles } from '@/common/const'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
@@ -55,6 +56,22 @@ function Navbar (): JSX.Element {
                                 Mis Reservas
                             </Button>
                         </ListItem>
+                        {(user?.roles.includes(roles.RESTAURANT))
+                          ? (
+                                <ListItem>
+                                    <Button as={Link} to={
+                                        user.restaurantId !== undefined
+                                          ? '/restaurant/' + user.restaurantId.toString() + '/view'
+                                          : '/register-restaurant'
+                                    }>
+                                        Mis Restaurant
+                                    </Button>
+                                </ListItem>
+                            )
+                          : (
+                                <></>
+                            )
+                        }
                         <ListItem><LogoutButton onClick={() => {
                           logout()
                         }}>Chau chau</LogoutButton></ListItem>
