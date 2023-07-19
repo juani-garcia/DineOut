@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 import type MenuSection from '@/types/models/MenuSection'
 import MenuSectionComponent from '@/components/Elements/MenuSection'
+import { WhiteButton } from '@/components/Elements/RestaurantBigCard/styles'
+import { Link } from 'react-router-dom'
 
 interface MenuProps {
   menuSectionsURI: string
@@ -60,12 +62,12 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
                   justifyContent: 'space-between',
                   margin: '2rem 0rem'
                 }}>
-                    {/* <WhiteButton as={Link} to={`/restaurant/section`} state={{menuSectionsURI: menuSectionsURI}}> */}
-                    {/*  {t('MenuSection.creation.prompt')} */}
-                    {/* </WhiteButton> */}
-                    {/* <WhiteButton as={Link} to={`/restaurant/item`}> */}
-                    {/*  {t('MenuItem.creation.prompt')} */}
-                    {/* </WhiteButton> */}
+                    <WhiteButton as={Link} to={'/restaurant/section'} state={{ menuSectionsURI }}>
+                        {t('MenuSection.creation.prompt')}
+                    </WhiteButton>
+                    <WhiteButton as={Link} to={'/restaurant/item'}>
+                        {t('MenuItem.creation.prompt')}
+                    </WhiteButton>
                 </div>
             )}
             {

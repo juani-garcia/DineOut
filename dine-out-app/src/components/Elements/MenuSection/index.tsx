@@ -109,6 +109,9 @@ export default function MenuSectionComponent ({
     setMenuItemList(newList)
   }
 
+  if (menuSection.id == null) {
+    return (<></>)
+  }
   return (
         <>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -121,7 +124,8 @@ export default function MenuSectionComponent ({
                         <IconButton onClick={handleDown} color="secondary" disabled={last}>
                             <ArrowDownwardIcon/>
                         </IconButton>
-                        <Link to={'/restaurant/section/' + menuSection.id.toString() + '/edit'} state={{ menuSection }}>
+                        <Link to={'/restaurant/section/' + menuSection.id.toString() + '/edit'}
+                              state={{ menuSection }}>
                             <IconButton color="secondary">
                                 <EditIcon/>
                             </IconButton>

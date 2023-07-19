@@ -18,14 +18,14 @@ export function useMenuItems () {
     })
   }
 
-  async function getMenuItem(uri: string): Promise<AxiosResponse> {
+  async function getMenuItem (uri: string): Promise<AxiosResponse> {
     return await rmg({
       method: HttpMethod.GET,
       url: uri
     })
   }
 
-  async function createMenuItem(uri: string, name: string, detail: string, price: number, section: number): Promise<AxiosResponse> {
+  async function createMenuItem (uri: string, name: string, detail: string, price: number, section: number): Promise<AxiosResponse> {
     return await rmc({
       method: HttpMethod.POST,
       url: uri,
@@ -38,7 +38,7 @@ export function useMenuItems () {
     })
   }
 
-  async function updateMenuItem(uri: string, name: string, detail: string, price: number, section: number): Promise<AxiosResponse> {
+  async function updateMenuItem (uri: string, name: string, detail: string, price: number, section: number): Promise<AxiosResponse> {
     return await rmu({
       method: HttpMethod.PUT,
       url: uri,
@@ -58,12 +58,12 @@ export function useMenuItems () {
     })
   }
 
-  async function moveItem(uri: string, up: boolean = true): Promise<AxiosResponse> {
+  async function moveItem (uri: string, up: boolean = true): Promise<AxiosResponse> {
     return await rmm({
       method: HttpMethod.PATCH,
       url: uri,
       params: {
-        "up": up ? "true" : "false"
+        up: up ? 'true' : 'false'
       }
     })
   }

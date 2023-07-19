@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { Header, MenuItemForm, MenuItemWhiteBoxContainer } from './styles'
 import { Button, FormControl, MenuItem, Select, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
-import MenuSection from '@/types/models/MenuSection'
-import { useLocation, useNavigate, useNavigation, useNavigationType, useParams } from 'react-router-dom'
+import type MenuSection from '@/types/models/MenuSection'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 import { paths, roles } from '@/common/const'
@@ -22,9 +22,7 @@ import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
 export default function MenuItemCreation (): JSX.Element {
   const { t } = useTranslation()
   const { handleSubmit, control, setValue } = useForm()
-  const params = useParams()
   const { user } = useAuth()
-  const isNewItem = !Boolean(params.id)
   const navigate = useNavigate()
   const { menuSections } = useMenuSections()
   const [sections, setSections] = useState<MenuSection[]>([])
@@ -33,60 +31,66 @@ export default function MenuItemCreation (): JSX.Element {
   const menuItem = location.state?.menuItem
 
   useEffect(() => {
-    if (user === null ){
-        navigate('/login', {
-            state: { from: window.location.pathname}
-        })
+    if (user === null) {
+      navigate('/login', {
+        state: { from: window.location.pathname }
+      })
     } else if (!user.roles.includes(roles.RESTAURANT)) {
-        navigate('/')
+      navigate('/')
     } else if (user.restaurantId === undefined || user.restaurantId === null) {
-        navigate('/restaurant/register')
+      navigate('/restaurant/register')
     }
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     menuSections(`${paths.API_URL}${paths.RESTAURANTS}/${user?.restaurantId}/menu-sections`).then(response => {
-        if (response.status !== 200) {
-            return
-        }
-        setSections(response.data as MenuSection[])
+      if (response.status !== 200) {
+        return
+      }
+      setSections(response.data as MenuSection[])
+    }).catch((e) => {
+      console.log(e.data())
     })
   }, [user])
 
   useEffect(() => {
     if (menuItem !== null && menuItem !== undefined) {
-        setValue('name', menuItem.name)
-        setValue('detail', menuItem.detail)
-        setValue('price', menuItem.price)
-        setValue('section', menuItem.section)
+      setValue('name', menuItem.name)
+      setValue('detail', menuItem.detail)
+      setValue('price', menuItem.price)
+      setValue('section', menuItem.section)
     }
   }, [menuItem])
 
   const onSubmit = (data: any): void => {
     if (menuItem !== null && menuItem !== undefined) {
-        console.log(data)
-        updateMenuItem(menuItem.self,
-            data.name,
-            data.detail,
-            data.price,
-            data.section).then(response => {
-                if (response.status !== 200) {
-                    return
-                }
-                navigate(`/restaurant/${user?.restaurantId}/view`)
-            }).catch(e => {
-                console.error(e.response)
-            })
-    } else {
-        createMenuItem(`${paths.API_URL}${paths.RESTAURANTS}/${user?.restaurantId}/menu-sections/${data.section}/menu-items`,
+      console.log(data)
+      updateMenuItem(menuItem.self,
         data.name,
         data.detail,
         data.price,
         data.section).then(response => {
-            if (response.status !== 201) {
-                return
-            }
-            navigate(`/restaurant/${user?.restaurantId}/view`)
-        }).catch(e => {
-            console.error(e.response)
-        })
+        if (response.status !== 200) {
+          return
+        }
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        navigate(`/restaurant/${user?.restaurantId}/view`)
+      }).catch(e => {
+        console.error(e.response)
+      })
+    } else {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      createMenuItem(`${paths.API_URL}${paths.RESTAURANTS}/${user?.restaurantId}/menu-sections/${data.section}/menu-items`,
+        data.name,
+        data.detail,
+        data.price,
+        data.section).then(response => {
+        if (response.status !== 201) {
+          return
+        }
+        if (user == null) return
+        navigate('/restaurant/' + user?.restaurantId.toString() + '/view')
+      }).catch(e => {
+        console.error(e.response)
+      })
     }
   }
 

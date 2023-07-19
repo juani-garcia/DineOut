@@ -1,11 +1,14 @@
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, MenuSectionForm, MenuSectionWhiteBoxContainer } from './styles'
-import { Button, FormControl } from '@mui/material'
+import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
+import type MenuSection from '@/types/models/MenuSection'
+import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
+import { paths } from '@/common/const'
 
 // interface MenuSectionFormInput {
 //   name: string
@@ -13,52 +16,57 @@ import { useAuth } from '@/hooks/auth/useAuth'
 
 export default function MenuSectionCreation (): JSX.Element {
   const { t } = useTranslation()
-  const { handleSubmit } = useForm()
-  // const location = useLocation()
-  // const [menuSection, setMenuSection] = useState<MenuSection>(location.state?.menuSection ? location.state.menuSection : undefined)
-  // const menuSectionsURI = location.state?.menuSectionsURI
+  const { handleSubmit, control } = useForm()
+  const location = useLocation()
+  const [menuSection, setMenuSection] = useState<MenuSection>(location.state?.menuSection != null ? location.state.menuSection : undefined)
+  const menuSectionsURI = location.state?.menuSectionsURI
   const navigate = useNavigate()
   const { user } = useAuth()
   const params = useParams()
   const isNewSection = params.id == null
-  // const { createMenuSection, updateMenuSection, readMenuSection } = useMenuSections()
+  const { createMenuSection, updateMenuSection, readMenuSection } = useMenuSections()
 
   useEffect(() => {
     if (!isNewSection) {
       if ((user?.restaurantId) == null) {
         navigate('/error?status=403')
       }
-      // readMenuSection(paths.API_URL + `/restaurants/${user?.restaurantId}/menu-sections/${params.id}`).then(response => {
-      //   if (response.status !== 200) {
-      //     navigate('/error?status=404')
-      //   }
-      //   setMenuSection(response.data as MenuSection)
-      // })
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      readMenuSection(paths.API_URL + `/restaurants/${user?.restaurantId}/menu-sections/${params.id}`).then(response => {
+        if (response.status !== 200) {
+          navigate('/error?status=404')
+        }
+        setMenuSection(response.data as MenuSection)
+      }).catch((e) => {
+        console.log(e.data())
+      })
     }
   }, [params])
 
   const onSubmit = (data: any): void => {
     if (isNewSection) {
-      // createMenuSection(menuSectionsURI, data.name).then(response => {
-      //   if (response.status !== 201) {
-      //     return
-      //   }
-      //   navigate(`/restaurant/${user?.restaurantId}/view`)
-      // }).catch(e => {
-      //   console.error(e.response)
-      // })
+      createMenuSection(menuSectionsURI, data.name).then(response => {
+        if (response.status !== 201) {
+          return
+        }
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        navigate(`/restaurant/${user?.restaurantId}/view`)
+      }).catch(e => {
+        console.error(e.response)
+      })
     } else {
-      // if (!menuSection) {
-      //   return
-      // }
-      // updateMenuSection(menuSection.self, data.name).then(responses => {
-      //   if (responses.status !== 200) {
-      //     return
-      //   }
-      //   navigate(`/restaurant/${user?.restaurantId}/view`)
-      // }).catch(e => {
-      //   console.error(e.response)
-      // })
+      if (menuSection == null) {
+        return
+      }
+      updateMenuSection(menuSection.self, data.name).then(responses => {
+        if (responses.status !== 200) {
+          return
+        }
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        navigate(`/restaurant/${user?.restaurantId}/view`)
+      }).catch(e => {
+        console.error(e.response)
+      })
     }
   }
 
@@ -76,14 +84,14 @@ export default function MenuSectionCreation (): JSX.Element {
                                      width: '40%'
                                    }
                                  }}>
-                        {/* <TextField */}
-                        {/*    label={t('MenuSection.form.name')} */}
-                        {/*    fullWidth */}
-                        {/*    margin="normal" */}
-                        {/*    {...control.register('name')} */}
-                        {/*    variant="standard" */}
-                        {/*    defaultValue={isNewSection || !menuSection ? undefined : menuSection.name} */}
-                        {/* /> */}
+                        <TextField
+                            label={t('MenuSection.form.name')}
+                            fullWidth
+                            margin="normal"
+                            {...control.register('name')}
+                            variant="standard"
+                            defaultValue={isNewSection || (menuSection == null) ? undefined : menuSection.name}
+                        />
                         <Button type="submit" variant="contained" color="primary">
                             {t('MenuSection.form.submit')}
                         </Button>

@@ -47,8 +47,6 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     public MenuSection create(final String name) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(ForbiddenActionException::new);
-        if (!restaurant.getUser().equals(user))
-            throw new IllegalArgumentException("Cannot use someone else's restaurant");
         return restaurant.addMenuSection(name);
     }
 
