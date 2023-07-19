@@ -2,8 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.SecurityService;
+import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
 import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
@@ -28,31 +30,33 @@ public class ReservationController {
 
     private final ReservationService rs;
     private final SecurityService ss;
+    private final UserService us;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public ReservationController(final ReservationService rs, final SecurityService ss) {
+    public ReservationController(final ReservationService rs, final SecurityService ss, final UserService us) {
         this.rs = rs;
         this.ss = ss;
+        this.us = us;
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId) or @securityManager.isUserOfId(authentication, #restaurantId)")
-    // TODO: Check what happens when parameters are null (auth function receives long, controller receives Long)
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
     public Response readReservations(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
-            @QueryParam("byUser") final Long userId,
-            @QueryParam("forRestaurant") final Long restaurantId,
+            @QueryParam("userId") final Long userId,
             @QueryParam("past") @DefaultValue("false") final boolean past
     ) {
-        if ((userId != null && restaurantId != null) || (userId == null && restaurantId == null)) {
-            return Response.status(Response.Status.BAD_REQUEST).build(); // TODO: Check if we should send message
+        if (userId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        // TODO: Check if we'll change this
-        final PagedQuery<Reservation> reservationPagedQuery = (userId != null) ? rs.getAllForCurrentUser(page, past) : rs.getAllForCurrentRestaurant(page, past);
+
+        boolean isDiner = us.isDiner(ss.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
+
+        final PagedQuery<Reservation> reservationPagedQuery = isDiner ? rs.getAllForCurrentUser(page, past) : rs.getAllForCurrentRestaurant(page, past);
         if (reservationPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();
         }
