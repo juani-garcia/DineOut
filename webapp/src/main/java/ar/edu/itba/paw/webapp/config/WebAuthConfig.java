@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -91,7 +92,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers(HttpMethod.GET, "/restaurants/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/reviews/**").anonymous()
+                .antMatchers(HttpMethod.POST, "/users/").anonymous()
+                .antMatchers(HttpMethod.POST, "/users/password-recovery-token").anonymous()
+                .anyRequest().authenticated()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(Response.Status.FORBIDDEN.getStatusCode()))
                 .authenticationEntryPoint((request, response, ex) -> response.setStatus(Response.Status.UNAUTHORIZED.getStatusCode()))

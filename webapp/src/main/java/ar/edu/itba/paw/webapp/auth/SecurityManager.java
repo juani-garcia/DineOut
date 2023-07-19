@@ -8,6 +8,7 @@ import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,10 @@ public class SecurityManager {
         LOGGER.debug("Requested user id: {}", id);
         if (!auth.isAuthenticated() || id == null)
             return false;
+        if (auth instanceof AnonymousAuthenticationToken) {
+            LOGGER.debug("User is not authenticated");
+            return false;
+        }
         LOGGER.debug("Authenticated user: {}", auth.getName());
 
         return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
