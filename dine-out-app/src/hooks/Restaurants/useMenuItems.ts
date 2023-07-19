@@ -14,12 +14,12 @@ export function useMenuItems () {
     })
   }
 
-  async function deleteMenuItem(uri: string): Promise<AxiosResponse> {
+  async function deleteMenuItem (uri: string): Promise<AxiosResponse> {
     return await rmd({
       method: HttpMethod.DELETE,
       url: uri
     })
   }
 
-  return { isLoading, menuItems, deleteMenuItem }
+  return { isLoading, ild, menuItems, deleteMenuItem }
 }

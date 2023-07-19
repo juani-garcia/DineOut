@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form'
 export default function MenuSectionCreation (): JSX.Element {
   const { t } = useTranslation()
   const { handleSubmit, control } = useForm()
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: any): void => {
     console.log(data)
   }
 
@@ -20,6 +20,7 @@ export default function MenuSectionCreation (): JSX.Element {
         <MyContainer>
             <Title>{t('MenuSection.form.title')}</Title>
             <MenuSectionWhiteBoxContainer>
+                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <MenuSectionForm onSubmit={handleSubmit(onSubmit)}>
                     <Header>{t('MenuSection.form.header')}</Header>
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}

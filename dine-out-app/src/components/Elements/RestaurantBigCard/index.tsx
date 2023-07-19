@@ -36,7 +36,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import { Input } from '@mui/material'
 import useImage from '@/hooks/Images/useImage'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { HttpMethod } from '@/types/enums/HTTPMethod'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -47,30 +46,35 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
   const navigate = useNavigate()
   const isOwner = user?.restaurantId === restaurant.id
   const [imagePreview, setImagePreview] = useState<string | undefined>(restaurant.image)
-  const { isLoading, updateImage, deleteImage } = useImage()
+  const { updateImage, deleteImage } = useImage()
 
   const handleUpdate: React.ChangeEventHandler<HTMLInputElement> = event => {
-    if (event.target.files == null)
-        return
+    if (event.target.files == null) {
+      return
+    }
     const newImage = event.target.files[0]
-    updateImage(`${restaurant.self}/image`, newImage).then( response => {
-        if (response.status !== 200)
-            return
-        setImagePreview(URL.createObjectURL(newImage))
+    updateImage(`${restaurant.self}/image`, newImage).then(response => {
+      if (response.status !== 200) {
+        return
+      }
+      setImagePreview(URL.createObjectURL(newImage))
     }).catch(e => {
-        console.error(e.response)
+      console.error(e.response) // TODO: Toast
     })
   }
 
   const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = event => {
     deleteImage(`${restaurant.self}/image`).then(response => {
-        if (response.status !== 200)
-            return
-        setImagePreview(undefined)
+      if (response.status !== 200) {
+        return
+      }
+      setImagePreview(undefined)
     }).catch(e => {
-        console.error(e.response)
+      console.error(e.response)
     })
   }
+
+  console.log(imagePreview)
 
   return (
         <RestaurantBlackBoxContainer>
@@ -78,7 +82,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                 <RestaurantTitle>
                     {restaurant.name}
                     {isOwner && <Link to={'/restaurant/edit'}><IconButton color='secondary' size='large'
-                                                                           aria-label='edit'><EditIcon/></IconButton></Link>}
+                                                                          aria-label='edit'><EditIcon/></IconButton></Link>}
                 </RestaurantTitle>
                 <RatingContainer>
                     <Rating>
@@ -92,13 +96,13 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                 </RatingContainer>
             </RestaurantHeader>
             <CardImageContainer className="card-image">
-                { imagePreview && (
-                    <CardImage src={imagePreview} />
+                {(imagePreview != null) && (
+                    <CardImage src={imagePreview}/>
                 )}
-                { isOwner &&
+                {isOwner &&
                     <div>
-                        <Input type='file' name='image' onChange={handleUpdate} />
-                        <IconButton onClick={handleDeletion}color="secondary" aria-label="delete">
+                        <Input type='file' name='image' onChange={handleUpdate}/>
+                        <IconButton onClick={handleDeletion} color="secondary" aria-label="delete">
                             <DeleteIcon/>
                         </IconButton>
                     </div>
