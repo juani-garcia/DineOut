@@ -62,7 +62,7 @@ function Navbar (): JSX.Element {
                                     <Button as={Link} to={
                                         user.restaurantId !== undefined
                                           ? '/restaurant/' + user.restaurantId.toString() + '/view'
-                                          : '/register-restaurant'
+                                          : '/restaurant/register'
                                     }>
                                         Mis Restaurant
                                     </Button>

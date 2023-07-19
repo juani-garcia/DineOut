@@ -2,10 +2,7 @@ package ar.edu.itba.paw.model;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public enum Shift {
@@ -52,6 +49,15 @@ public enum Shift {
         for (Shift hours : Shift.values()) {
             if (hours.getId() == id) {
                 return hours;
+            }
+        }
+        return null;
+    }
+
+    public static Shift getByMessage(String message) {
+        for (Shift s : Shift.values()) {
+            if (Objects.equals(s.message, message)) {
+                return s;
             }
         }
         return null;

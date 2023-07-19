@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.model.RestaurantReview;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.service.ReservationService;
+import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;

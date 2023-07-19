@@ -11,9 +11,9 @@ import { IconButton, Stack } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
-import EditIcon from '@mui/icons-material/Edit'
-import { Link } from 'react-router-dom'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
+import { Link } from 'react-router-dom'
+import EditIcon from '@mui/icons-material/Edit'
 
 interface MenuSectionProps {
   menuSection: MenuSection
@@ -24,7 +24,14 @@ interface MenuSectionProps {
   onDown?: (section: MenuSection) => void
 }
 
-export default function MenuSectionComponent ({ menuSection, editable = false, last = false, onDelete, onUp, onDown }: MenuSectionProps): JSX.Element {
+export default function MenuSectionComponent ({
+  menuSection,
+  editable = false,
+  last = false,
+  onDelete,
+  onUp,
+  onDown
+}: MenuSectionProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuItems, deleteMenuItem } = useMenuItems()
   const [menuItemList, setMenuItemList] = useState<MenuItem[]>([])
@@ -47,7 +54,7 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
       if (response.status !== 204) {
         // TODO: ?????
       }
-      if (onDelete) {
+      if (onDelete != null) {
         onDelete(menuSection)
       }
     }).catch(e => {
@@ -57,11 +64,12 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
     moveSection(menuSection.self, true).then(response => {
-      if (response.status !== 200)
+      if (response.status !== 200) {
         return
-        if (onUp) {
-          onUp(menuSection)
-        }          
+      }
+      if (onUp != null) {
+        onUp(menuSection)
+      }
     }).catch(e => {
       console.error(e)
     })
@@ -69,18 +77,19 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
     moveSection(menuSection.self, false).then(response => {
-      if (response.status !== 200)
+      if (response.status !== 200) {
         return
-        if (onDown) {
-          onDown(menuSection)
-        }          
+      }
+      if (onDown != null) {
+        onDown(menuSection)
+      }
     }).catch(e => {
       console.error(e)
     })
   }
 
   const handleItemDeletion = (menuItem: MenuItem): void => {
-    const newMenuItemList = menuItemList.filter(item => item.ordering !== item.ordering)
+    const newMenuItemList = menuItemList.filter(item => menuItem.ordering !== item.ordering)
     setMenuItemList(newMenuItemList)
   }
 
@@ -106,21 +115,22 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
                 <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
                 {editable && (
                     <Stack direction='row'>
-                      <IconButton onClick={handleUp} color="secondary" disabled={menuSection.ordering === 0}>
-                          <ArrowUpwardIcon/>
-                      </IconButton>
-                      <IconButton onClick={handleDown} color="secondary" disabled={last}>
-                          <ArrowDownwardIcon/>
-                      </IconButton>
-                      <Link to={`/restaurant/section/${menuSection.id}/edit`} state={{menuSection: menuSection}}>
-                        <IconButton color="secondary">
-                            <EditIcon/>
+                        <IconButton onClick={handleUp} color="secondary" disabled={menuSection.ordering === 0}>
+                            <ArrowUpwardIcon/>
                         </IconButton>
-                      </Link>
-                      <IconButton onClick={handleDeletion} color="secondary">
-                          <DeleteIcon/>
-                      </IconButton>
+                        <IconButton onClick={handleDown} color="secondary" disabled={last}>
+                            <ArrowDownwardIcon/>
+                        </IconButton>
+                        <Link to={'/restaurant/section/' + menuSection.id.toString() + '/edit'} state={{ menuSection }}>
+                            <IconButton color="secondary">
+                                <EditIcon/>
+                            </IconButton>
+                        </Link>
+                        <IconButton onClick={handleDeletion} color="secondary">
+                            <DeleteIcon/>
+                        </IconButton>
                     </Stack>
+
                 )}
             </div>
             <Divider/>
@@ -135,13 +145,13 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
                             menuItemList.sort((m1, m2) => m1.ordering - m2.ordering).map(item => (
                                     <>
                                         <MenuItemComponent
-                                          menuItem={item}
-                                          key={item.self}
-                                          editable={editable}
-                                          last={item.ordering + 1 === menuItemList.length}
-                                          onDelete={handleItemDeletion}
-                                          onUp={handleItemUp}
-                                          onDown={handleItemDown}
+                                            menuItem={item}
+                                            key={item.self}
+                                            editable={editable}
+                                            last={item.ordering + 1 === menuItemList.length}
+                                            onDelete={handleItemDeletion}
+                                            onUp={handleItemUp}
+                                            onDown={handleItemDown}
                                         />
                                         <Divider/>
                                     </>

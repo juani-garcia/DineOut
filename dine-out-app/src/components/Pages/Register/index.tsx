@@ -32,13 +32,11 @@ function Register (): JSX.Element {
       .max(64, t('Register.passwordTooLong').toString())
       .refine((password) => {
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
-        if (!regex.test(password))
-          return false
-        return true
+        return regex.test(password)
       }, t('Register.invalidPassword').toString())
   })
 
-  const { handleSubmit, control, formState: { errors} } = useForm({
+  const { handleSubmit, control, formState: { errors } } = useForm({
     resolver: zodResolver(schema)
   })
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -63,7 +61,7 @@ function Register (): JSX.Element {
             login(data.username, data.password).then((response) => {
               if (user != null) {
                 if (user.roles.includes(roles.RESTAURANT)) {
-                  navigate('/register-restaurant')
+                  navigate('/restaurant/register')
                 }
                 if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
                   navigate(-1)
