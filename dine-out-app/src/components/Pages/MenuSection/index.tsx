@@ -38,6 +38,7 @@ export default function MenuSectionCreation (): JSX.Element {
         <MyContainer>
             <Title>{t('MenuSection.form.title')}</Title>
             <MenuSectionWhiteBoxContainer>
+                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <MenuSectionForm onSubmit={handleSubmit(onSubmit)}>
                     <Header>{t('MenuSection.form.header')}</Header>
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}

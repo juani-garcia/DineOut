@@ -13,7 +13,7 @@ import {
   CategoriesContainer,
   CategoriesHolder,
   CategoriesTitle,
-  Category,
+  Category as CategoryChip,
   Detail,
   Name,
   NameAndZone,
@@ -25,6 +25,8 @@ import {
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { useNavigate } from 'react-router-dom'
+import Category from '@/types/enums/Category'
+import { useTranslation } from 'react-i18next'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
@@ -33,6 +35,7 @@ interface RestaurantCardProps {
 function RestaurantMapCard ({ restaurant }: RestaurantCardProps): JSX.Element {
   if (restaurant == null) return (<></>)
   let restaurantZoneName = null
+  const { t } = useTranslation()
   if (restaurant.zone !== null && restaurant.zone !== undefined) {
     restaurantZoneName = Zone.values.find(otherZ => otherZ.name === restaurant.zone)?.description
   }
@@ -70,9 +73,12 @@ function RestaurantMapCard ({ restaurant }: RestaurantCardProps): JSX.Element {
                     <CategoriesContainer>
                         <CategoriesTitle>Categories:</CategoriesTitle>
                         <CategoriesHolder>
-                            <Category>Pumabaatae</Category>
-                            <Category>Piuamba</Category>
-                            <Category>Fiuamba</Category>
+                            {
+                                restaurant.categories.map(Category.fromName).map(category => (
+                                  (category != null) &&
+                                    <CategoryChip key={category.name}>{t(category.description)}</CategoryChip>
+                                ))
+                            }
                         </CategoriesHolder>
                     </CategoriesContainer>
                     <RatingContainer>

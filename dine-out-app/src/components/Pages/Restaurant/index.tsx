@@ -31,7 +31,7 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const { user } = useAuth()
-  const isOwner = Boolean(user && user.restaurantId === restaurant?.id)
+  const isOwner = Boolean(user?.restaurantId === restaurant?.id)
 
   useEffect(() => {
     if (restaurant != null && restaurant.id === parseInt(params.id as string)) {

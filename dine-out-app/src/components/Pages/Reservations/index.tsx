@@ -117,7 +117,7 @@ function Reservations (): JSX.Element {
                     </ReservationTitle>
                     <ShowPreviousContainer>
                         <PastToggle onClick={handlePastToggle}>Mostrar
-                            reservas {past ? 'pasadas' : 'próximas'}</PastToggle>
+                            reservas {!past ? 'pasadas' : 'próximas'}</PastToggle>
                     </ShowPreviousContainer>
                     <ReservationsContainer>
                         {isLoading

@@ -34,9 +34,9 @@ export default function MenuSectionComponent ({ menuSection, editable = false }:
 
   const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = e => {
     deleteMenuItem(menuSection.self).then(response => {
-      if (response.status !== 204)
-        return
-      
+      if (response.status !== 204) {
+        // TODO: ?????
+      }
     }).catch(e => {
       console.error(e)
     })
@@ -45,14 +45,14 @@ export default function MenuSectionComponent ({ menuSection, editable = false }:
   return (
         <>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
-              { editable && (
-                <div>
-                  <IconButton onClick={handleDeletion}color="secondary" aria-label="delete">
-                    <DeleteIcon/>
-                  </IconButton>
-                </div>
-              )}
+                <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
+                {editable && (
+                    <div>
+                        <IconButton onClick={handleDeletion} color="secondary" aria-label="delete">
+                            <DeleteIcon/>
+                        </IconButton>
+                    </div>
+                )}
             </div>
             <Divider/>
             {

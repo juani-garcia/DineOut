@@ -1,5 +1,4 @@
 import { useMethod } from '../auth/useMethod'
-import { paths } from '@/common/const'
 import { type AxiosResponse } from 'axios'
 import { HttpMethod } from '@/types/enums/HTTPMethod'
 
@@ -8,25 +7,25 @@ export default function useImage () {
   const { isLoading, requestMethod } = useMethod()
   const { isLoading: ild, requestMethod: rmd } = useMethod()
 
-  async function updateImage (uri: string, image: any ): Promise<AxiosResponse> {
+  async function updateImage (uri: string, image: any): Promise<AxiosResponse> {
     return await requestMethod({
       method: HttpMethod.PUT,
       url: uri,
       data: {
-        'image': image
+        image
       },
       headers: {
-        'Content-Type': 'multipart/form-data'    
+        'Content-Type': 'multipart/form-data'
       }
     })
   }
 
-  async function deleteImage(uri: string): Promise<AxiosResponse> {
+  async function deleteImage (uri: string): Promise<AxiosResponse> {
     return await rmd({
       method: HttpMethod.DELETE,
-      url: uri,
+      url: uri
     })
   }
 
-  return { isLoading, updateImage, deleteImage }
+  return { isLoading, ild, updateImage, deleteImage }
 }

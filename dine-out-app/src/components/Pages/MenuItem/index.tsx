@@ -22,7 +22,7 @@ const sections = [
 export default function MenuItemCreation (): JSX.Element {
   const { t } = useTranslation()
   const { handleSubmit, control } = useForm()
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: any): void => {
     console.log(data)
   }
 
@@ -30,6 +30,7 @@ export default function MenuItemCreation (): JSX.Element {
         <MyContainer>
             <Title>{t('MenuItem.form.title')}</Title>
             <MenuItemWhiteBoxContainer>
+                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <MenuItemForm onSubmit={handleSubmit(onSubmit)}>
                     <Header>{t('MenuItem.form.header')}</Header>
                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
