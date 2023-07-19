@@ -7,14 +7,17 @@ import type MenuSection from '@/types/models/MenuSection'
 import type MenuItem from '@/types/models/MenuItem'
 import MenuItemComponent from '@/components/Elements/MenuItem'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 interface MenuSectionProps {
   menuSection: MenuSection
+  editable?: boolean
 }
 
-export default function MenuSectionComponent ({ menuSection }: MenuSectionProps): JSX.Element {
+export default function MenuSectionComponent ({ menuSection, editable = false }: MenuSectionProps): JSX.Element {
   const { t } = useTranslation()
-  const { isLoading, menuItems } = useMenuItems()
+  const { isLoading, menuItems, deleteMenuItem } = useMenuItems()
   const [menuItemList, setMenuItemList] = useState<MenuItem[]>([])
 
   useEffect(() => {
@@ -29,9 +32,28 @@ export default function MenuSectionComponent ({ menuSection }: MenuSectionProps)
     })
   }, [menuSection])
 
+  const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = e => {
+    deleteMenuItem(menuSection.self).then(response => {
+      if (response.status !== 204)
+        return
+      
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
   return (
         <>
-            <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
+              { editable && (
+                <div>
+                  <IconButton onClick={handleDeletion}color="secondary" aria-label="delete">
+                    <DeleteIcon/>
+                  </IconButton>
+                </div>
+              )}
+            </div>
             <Divider/>
             {
                 isLoading

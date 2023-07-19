@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
 import type MenuSection from '@/types/models/MenuSection'
 import MenuSectionComponent from '@/components/Elements/MenuSection'
-import { useAuth } from '@/hooks/auth/useAuth'
 import { WhiteButton } from '@/components/Elements/RestaurantBigCard/styles'
 import { Link } from 'react-router-dom'
 
@@ -15,11 +14,10 @@ interface MenuProps {
   editable?: boolean
 }
 
-export default function MenuComponent ({ menuSectionsURI, editable = true }: MenuProps): JSX.Element {
+export default function MenuComponent ({ menuSectionsURI, editable = false }: MenuProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuSections } = useMenuSections()
   const [menuSectionList, setMenuSectionList] = useState<MenuSection[]>([])
-  const { user } = useAuth()
 
   useEffect(() => {
     menuSections(menuSectionsURI).then((response) => {
@@ -57,7 +55,7 @@ export default function MenuComponent ({ menuSectionsURI, editable = true }: Men
                                 <>
                                     {menuSectionList.sort((s1, s2) => s1.ordering - s2.ordering).map(
                                       (section) => (
-                                            <MenuSectionComponent menuSection={section} key={section.self}/>
+                                            <MenuSectionComponent menuSection={section} key={section.self} editable={editable}/>
                                       )
                                     )}
                                 </>

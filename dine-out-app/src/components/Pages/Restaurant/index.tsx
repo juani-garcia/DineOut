@@ -15,6 +15,7 @@ import {
 } from '@/components/Pages/Restaurant/styles'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 interface RestaurantProps {
   restaurant?: Restaurant
@@ -29,6 +30,8 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
   const location = useLocation()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
+  const { user } = useAuth()
+  const isOwner = Boolean(user && user.restaurantId === restaurant?.id)
 
   useEffect(() => {
     if (restaurant != null && restaurant.id === parseInt(params.id as string)) {
@@ -74,7 +77,7 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
                 </RestaurantDetailContainer>
             </RestaurantDetailSection>
             <MenuContainer>
-                <Menu menuSectionsURI={restaurant.menuSections}/>
+                <Menu menuSectionsURI={restaurant.menuSections} editable={isOwner}/>
             </MenuContainer>
         </RestaurantContainer>
   )
