@@ -35,7 +35,17 @@
     "firstName": "Nombre:",
     "lastName": "Apellido:",
     "isRestaurant": "Usaré esta cuenta para un restaurante.",
-    "redirectionToLogin": "¿Ya tienes cuenta?"
+    "redirectionToLogin": "¿Ya tienes cuenta?",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+    "firstNameEmpty": "El nombre es obligatorio",
+    "firstNameTooLong": "El nombre es demasiado largo",
+    "lastNameEmpty": "El apellido es obligatorio",
+    "lastNameTooLong": "El apellido es demasiado largo",
+    "invalidUsername":"Email inválido",
+    "usernameTooLong": "El email es demasiado largo",
+    "passwordEmpty": "La contraseña es obligatoria",
+    "passwordTooLong": "La contraseña es demasiado larga",
+    "invalidPassword": "La contraseña debe contener al menos una minúscula, una mayúscula y un número, y tener 8 o más caracteres"
   },
   "SearchBox": {
     "search": "Buscar",
@@ -63,6 +73,7 @@
   },
   "Errors": {
     "oops": "¡Ups! Algo salió mal. Vuelve a intentarlo más tarde.",
-    "invalidCredentials": "El email y contraseña ingresados no son correctos. Por favor, revisá tus datos."
+    "invalidCredentials": "El email y contraseña ingresados no son correctos. Por favor, revisá tus datos.",
+    "tryAgain": "Revisá los datos ingresados y volvé a intentar"
   }
 }

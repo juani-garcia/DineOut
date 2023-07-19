@@ -45,7 +45,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
   const { user } = useAuth()
   const navigate = useNavigate()
   const isOwner = user?.restaurantId === restaurant.id
-  const [imagePreview, setImagePreview] = useState<string | undefined>(restaurant.image)
+  const [imagePreview, setImagePreview] = useState<string | undefined>(restaurant.image || undefined)
   const { updateImage, deleteImage } = useImage()
 
   const handleUpdate: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -74,8 +74,6 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
     })
   }
 
-  console.log(imagePreview)
-
   return (
         <RestaurantBlackBoxContainer>
             <RestaurantHeader>
@@ -96,7 +94,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                 </RatingContainer>
             </RestaurantHeader>
             <CardImageContainer className="card-image">
-                {(imagePreview != null) && (
+                {(imagePreview) && (
                     <CardImage src={imagePreview}/>
                 )}
                 {isOwner &&

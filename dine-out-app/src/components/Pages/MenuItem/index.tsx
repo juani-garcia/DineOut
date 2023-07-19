@@ -1,9 +1,15 @@
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, MenuItemForm, MenuItemWhiteBoxContainer } from './styles'
 import { Button, FormControl, MenuItem, Select, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import MenuSection from '@/types/models/MenuSection'
+import { useNavigate, useNavigation, useNavigationType, useParams } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
+import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
+import { paths } from '@/common/const'
+import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
 
 // interface MenuItemFormInput {
 //   name: string
@@ -13,17 +19,44 @@ import { Controller, useForm } from 'react-hook-form'
 //   image?: string
 // }
 
-const sections = [
-  'a',
-  'b',
-  'c'
-]
-
 export default function MenuItemCreation (): JSX.Element {
   const { t } = useTranslation()
   const { handleSubmit, control } = useForm()
+  const params = useParams()
+  const { user } = useAuth()
+  const isNewItem = !Boolean(params.id)
+  const restaurantId = user?.restaurantId
+  const navigate = useNavigate()
+  const { menuSections } = useMenuSections()
+  const [sections, setSections] = useState<MenuSection[]>([])
+  const { createMenuItem } = useMenuItems()
+
+  useEffect(() => {
+    if (! restaurantId) {
+        navigate('/error?status=403')
+        return
+    }
+    menuSections(`${paths.API_URL}${paths.RESTAURANTS}/${restaurantId}/menu-sections`).then(response => {
+        if (response.status !== 200) {
+            return
+        }
+        setSections(response.data as MenuSection[])
+    })
+  }, [restaurantId])
+
   const onSubmit = (data: any): void => {
-    console.log(data)
+    createMenuItem(`${paths.API_URL}${paths.RESTAURANTS}/${restaurantId}/menu-sections/${data.section}/menu-items`,
+    data.name,
+    data.detail,
+    data.price,
+    data.section).then(response => {
+        if (response.status !== 201) {
+            return
+        }
+        navigate(`/restaurant/${user?.restaurantId}/view`)
+    }).catch(e => {
+        console.error(e.response)
+    })
   }
 
   return (
@@ -71,8 +104,8 @@ export default function MenuItemCreation (): JSX.Element {
                                 render={({ field }) => (
                                     <Select {...field} id="section-select" fullWidth label={t('MenuItem.form.section')}>
                                         {sections.map((option) => (
-                                            <MenuItem key={option} value={option}>
-                                                {option}
+                                            <MenuItem key={option.self} value={option.id}>
+                                                {option.name}
                                             </MenuItem>
                                         ))}
                                     </Select>

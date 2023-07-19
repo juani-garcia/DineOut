@@ -36,7 +36,17 @@
     "firstName": "First name:",
     "lastName": "Last name:",
     "isRestaurant": "I will use this account as a restaurant",
-    "redirectionToLogin": "Already have an account?"
+    "redirectionToLogin": "Already have an account?",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "firstNameEmpty": "First name is mandatory",
+    "firstNameTooLong": "First name is too long",
+    "lastNameEmpty": "Last name is empty",
+    "lastNameTooLong": "Last name is too long",
+    "invalidUsername": "Invalid email",
+    "usernameTooLong": "Email is too long",
+    "passwordEmpty": "Password is mandatory",
+    "passwordTooLong": "Password is too long",
+    "invalidPassword": "Password must contain at least one upper-case, one lower-case, one number and be 8 or more characters long"
   },
   "SearchBox": {
     "search": "Search",
@@ -90,8 +100,14 @@
     "title": "Menu",
     "empty": "The restaurant hasn't uploaded a menu yet."
   },
+  "MenuItem": {
+    "creation": {
+      "prompt":"Add item"
+    }
+  },
   "Errors": {
     "oops": "Oops! Something went wrong. Try again later.",
-    "invalidCredentials": "The email and password sent are incorrect. Please check the data."
+    "invalidCredentials": "The email and password sent are incorrect. Please check the data.",
+    "tryAgain": "Check the data and try again"
   }
 }

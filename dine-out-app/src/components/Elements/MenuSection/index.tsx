@@ -7,7 +7,7 @@ import type MenuSection from '@/types/models/MenuSection'
 import type MenuItem from '@/types/models/MenuItem'
 import MenuItemComponent from '@/components/Elements/MenuItem'
 import { useTranslation } from 'react-i18next'
-import { IconButton } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
@@ -79,12 +79,33 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
     })
   }
 
+  const handleItemDeletion = (menuItem: MenuItem): void => {
+    const newMenuItemList = menuItemList.filter(item => item.ordering !== item.ordering)
+    setMenuItemList(newMenuItemList)
+  }
+
+  const handleItemUp = (menuItem: MenuItem): void => {
+    const newList = [...menuItemList]
+    const currentIndex = newList.indexOf(menuItem)
+    newList[currentIndex].ordering -= 1
+    newList[currentIndex - 1].ordering += 1
+    setMenuItemList(newList)
+  }
+
+  const handleItemDown = (menuItem: MenuItem): void => {
+    const newList = [...menuItemList]
+    const currentIndex = newList.indexOf(menuItem)
+    newList[currentIndex].ordering += 1
+    newList[currentIndex + 1].ordering -= 1
+    setMenuItemList(newList)
+  }
+
   return (
         <>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
                 {editable && (
-                    <div>
+                    <Stack direction='row'>
                       <IconButton onClick={handleUp} color="secondary" disabled={menuSection.ordering === 0}>
                           <ArrowUpwardIcon/>
                       </IconButton>
@@ -99,7 +120,7 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
                       <IconButton onClick={handleDeletion} color="secondary">
                           <DeleteIcon/>
                       </IconButton>
-                    </div>
+                    </Stack>
                 )}
             </div>
             <Divider/>
@@ -113,7 +134,15 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
                         ? (
                             menuItemList.sort((m1, m2) => m1.ordering - m2.ordering).map(item => (
                                     <>
-                                        <MenuItemComponent menuItem={item} key={item.self}/>
+                                        <MenuItemComponent
+                                          menuItem={item}
+                                          key={item.self}
+                                          editable={editable}
+                                          last={item.ordering + 1 === menuItemList.length}
+                                          onDelete={handleItemDeletion}
+                                          onUp={handleItemUp}
+                                          onDown={handleItemDown}
+                                        />
                                         <Divider/>
                                     </>
                             ))
