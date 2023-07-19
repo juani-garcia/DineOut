@@ -2,8 +2,11 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.RestaurantDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     private ImageService imageService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantServiceImpl.class);
+
     @Override
     public Optional<Restaurant> getById(long id) {
         return restaurantDao.getById(id);
@@ -34,20 +39,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, int categoryId, int shiftId, int zoneId) {
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
         if (page <= 0) throw new InvalidPageException();
-
-        Category category = Category.getById(categoryId);
-        Zone zone = Zone.getById(zoneId);
-        Shift shift = Shift.getById(shiftId);
-
-        return restaurantDao.filter(page, name, byItem, category, shift, zone);
+        return restaurantDao.filter(page, name, category, shift, zone, favoriteOf);
     }
 
     @Transactional
     @Override
-    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts) {
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
+    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts) {
+        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new); // TODO: Catch this exception with a bad request or similar
         if (getByUserID(user.getId()).isPresent())
             throw new IllegalStateException();
         Image restaurantImage = null;
@@ -55,14 +55,14 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantImage = imageService.create(image);
         }
         Restaurant restaurant = restaurantDao.create(user, name, restaurantImage, address, mail, detail, zone, lat, lng);
-        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
-        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
+        restaurant.setCategories(categories);
+        restaurant.setShifts(shifts);
         return restaurant;
     }
 
     @Transactional
     @Override
-    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
+    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Category> categories, List<Shift> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         restaurant.setName(name);
@@ -85,8 +85,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 restaurant.setImage(imageService.create(imageBytes));
             }
         }
-        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
-        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
+        restaurant.setCategories(categories);
+        restaurant.setShifts(shifts);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return restaurantFavoriteList.stream().findFirst().orElseThrow(IllegalStateException::new);
         if (!restaurantReservedList.isEmpty())
             return restaurantReservedList.stream().findFirst().orElseThrow(IllegalStateException::new);
-        return restaurantDao.filter(1, null, false, null, null, null)
+        return restaurantDao.filter(1, null, null, null, null, null)
                 .getContent().stream().findFirst().orElseThrow(IllegalStateException::new);
         // TODO: @JeroBrave Customize exception
     }
@@ -184,5 +184,28 @@ public class RestaurantServiceImpl implements RestaurantService {
         Optional<User> user = securityService.getCurrentUser();
         if (user.isPresent()) return getByUserID(user.get().getId());
         return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public void updateRestaurantImage(final long id, final byte[] image) {
+        Restaurant restaurant = restaurantDao.getById(id).orElseThrow(NotFoundException::new); // TODO: Customize
+        Image oldImage = restaurant.getImage();
+        if (image != null && image.length > 0) { // There is new image
+            if (oldImage == null) { // There is no old image
+                LOGGER.debug("Creating image for restaurant {}", id);
+                restaurant.setImage(imageService.create(image));
+                LOGGER.debug("New image id: {}", restaurant.getImage().getId());
+            } else {
+                LOGGER.debug("Updating image for restaurant {}", id);
+                imageService.edit(oldImage.getId(), image);
+            }
+        } else { // No new image
+            if (oldImage != null) {
+                LOGGER.debug("Deleting image for restaurant {}", id);
+                restaurant.setImage(null);
+                imageService.delete(oldImage.getId());
+            }
+        }
     }
 }

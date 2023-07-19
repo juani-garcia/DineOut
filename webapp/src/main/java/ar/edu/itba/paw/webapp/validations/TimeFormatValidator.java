@@ -16,6 +16,8 @@ public class TimeFormatValidator implements ConstraintValidator<TimeFormat, Stri
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) return false;
+
         try {
             LocalTime.parse(value, formatter);
         } catch (DateTimeParseException ex) {

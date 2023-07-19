@@ -44,6 +44,14 @@ public class RestaurantReviewServiceImpl implements RestaurantReviewService {
         return restaurantReviewDao.getByRestaurantId(page, restaurantId);
     }
 
+    @Override
+    public PagedQuery<RestaurantReview> get(long page, long pageSize, Long restaurantId, Long userId) {
+        if (page < 0)
+            throw new IllegalArgumentException("Page size should be > 0");
+
+        return restaurantReviewDao.get(page, pageSize, restaurantId, userId);
+    }
+
     @Transactional
     @Override
     public RestaurantReview create(String review, long rating, long restaurantId, String contextPath) {

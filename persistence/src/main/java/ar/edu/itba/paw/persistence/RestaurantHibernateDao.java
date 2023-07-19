@@ -40,9 +40,8 @@ public class RestaurantHibernateDao implements RestaurantDao {
     }
 
     @Override
-    public PagedQuery<Restaurant> filter(int page, String name, boolean byItem, Category category, Shift shift, Zone zone) {
-
-        ParametrizedQuery filter = filterBuilder(name, byItem, category, shift, zone);
+    public PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
+        ParametrizedQuery filter = filterBuilder(name, category, shift, zone, favoriteOf);
         String idsQuery = "SELECT id\n" + filter.query + "ORDER BY rating DESC, fav_count DESC LIMIT :limit OFFSET :offset";
         Query query = em.createNativeQuery(idsQuery);
 
@@ -54,7 +53,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
 
         final List<Long> ids = new ArrayList<>();
         for (Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((Number) o).longValue());
         }
 
         String countQuery = "SELECT COUNT(*)\n" + filter.query;
@@ -80,7 +79,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
         return new PagedQuery<>(content, (long) page, (count + PAGE_SIZE - 1) / PAGE_SIZE);
     }
 
-    private ParametrizedQuery filterBuilder(String name, boolean byItem, Category category, Shift shift, Zone zone) {
+    private ParametrizedQuery filterBuilder(String name, Category category, Shift shift, Zone zone, Long favoriteOf) {
         StringBuilder sql = new StringBuilder();
         sql.append("FROM (SELECT restaurant.*, (SELECT COALESCE(FLOOR(AVG(restaurant_review.rating)), 0) FROM restaurant_review WHERE restaurant_review.restaurant_id = restaurant.id) rating, (SELECT COUNT(*) FROM favorite f WHERE f.restaurant_id = id) fav_count FROM restaurant ) restaurant_favCount\n");
         sql.append("WHERE true\n");
@@ -88,17 +87,16 @@ public class RestaurantHibernateDao implements RestaurantDao {
         Map<String, Object> args = new HashMap<>();
 
         if (name != null && !name.equals("")) {
-            sql.append("AND ");
-            if(byItem) {
+            sql.append("AND (\n");
                 sql.append("id IN (\n");
-                sql.append("(SELECT restaurant_id FROM menu_section WHERE menu_section.id IN (SELECT section_id FROM menu_item WHERE Lower(name) LIKE :name))\n");
-                sql.append("UNION\n");
-                sql.append("(SELECT restaurant_id FROM menu_section WHERE LOWER(menu_section.name) LIKE :name)\n");
+                    sql.append("SELECT restaurant_id FROM menu_section WHERE menu_section.id IN (SELECT section_id FROM menu_item WHERE Lower(name) LIKE :name)\n");
+                    sql.append("UNION\n");
+                    sql.append("SELECT restaurant_id FROM menu_section WHERE LOWER(menu_section.name) LIKE :name\n");
                 sql.append(")\n");
-            } else {
-                sql.append("LOWER(name) like :name\n");
-            }
-
+                sql.append(" OR (\n");
+                    sql.append("LOWER(name) like :name\n");
+                sql.append(")");
+            sql.append(")\n");
             args.put("name", '%' + name.toLowerCase() + '%');
         }
 
@@ -115,6 +113,11 @@ public class RestaurantHibernateDao implements RestaurantDao {
         if (zone != null) {
             sql.append("AND zone_id = :zone\n");
             args.put("zone", zone.getId());
+        }
+
+        if (favoriteOf != null) {
+            sql.append("AND id in (SELECT restaurant_id FROM favorite WHERE user_id = :favoriteOf)\n");
+            args.put("favoriteOf", favoriteOf);
         }
 
         return new ParametrizedQuery(sql.toString(), args);
@@ -211,7 +214,7 @@ public class RestaurantHibernateDao implements RestaurantDao {
         if (params != null) params.forEach(query::setParameter);
         List<Long> ids = new ArrayList<>();
         for (Object o : query.getResultList()) {
-            ids.add(((Integer) o).longValue());
+            ids.add(((Number) o).longValue());
         }
         if (ids.isEmpty())
             return new ArrayList<>();

@@ -24,6 +24,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     private RestaurantService restaurantService;
 
     @Override
+    public boolean isFavoriteOfUser(long userId, long resId) {
+        return favoriteDao.isFavorite(resId, userId);
+    }
+
+    @Override
     public boolean isFavoriteOfLoggedUser(long resId) {
         User user = securityService.getCurrentUser().orElse(null);
         if (user == null) return false;
@@ -42,6 +47,8 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void set(final long resId, final long id, final boolean set) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
         Restaurant restaurant = restaurantService.getById(resId).orElseThrow(IllegalArgumentException::new);
+        if (set == isFavoriteOfUser(id, resId))
+            return;
         if (set) {
             favoriteDao.create(user, restaurant);
         } else {
