@@ -101,10 +101,7 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
   const restaurantShifts = restaurant?.shifts.map(Shift.fromName).filter((shift) => shift) as Shift[]
   if (restaurantShifts === undefined) return <></>
 
-  console.log(restaurantShifts)
-
   const shiftSlots = Shift.getSlotsfromShiftArray(restaurantShifts)
-  console.log(shiftSlots)
 
   return (
         <MyContainer>
