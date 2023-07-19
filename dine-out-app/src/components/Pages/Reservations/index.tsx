@@ -74,7 +74,7 @@ function Reservations (): JSX.Element {
     if (user?.userId.toString() === queryParams.get('userId')) {
       reservations(queryParams).then((response) => {
         if (response.status >= 400 && user?.roles.includes(roles.RESTAURANT)) {
-          navigate('/register-restaurant', {
+          navigate('/restaurant/register', {
             state: { from: '/reservations' }
           })
         }

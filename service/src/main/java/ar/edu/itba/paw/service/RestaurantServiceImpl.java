@@ -46,7 +46,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Transactional
     @Override
-    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts) {
+    public Restaurant create(String name, byte[] image, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts) {
         User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new); // TODO: Catch this exception with a bad request or similar
         if (getByUserID(user.getId()).isPresent())
             throw new IllegalStateException();
@@ -55,14 +55,14 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantImage = imageService.create(image);
         }
         Restaurant restaurant = restaurantDao.create(user, name, restaurantImage, address, mail, detail, zone, lat, lng);
-        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
-        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
+        restaurant.setCategories(categories);
+        restaurant.setShifts(shifts);
         return restaurant;
     }
 
     @Transactional
     @Override
-    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Long> categories, List<Long> shifts, byte[] imageBytes) {
+    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Category> categories, List<Shift> shifts, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         restaurant.setName(name);
@@ -85,8 +85,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 restaurant.setImage(imageService.create(imageBytes));
             }
         }
-        restaurant.setCategories(categories.stream().map(Category::getById).collect(Collectors.toList()));
-        restaurant.setShifts(shifts.stream().map(Shift::getById).collect(Collectors.toList()));
+        restaurant.setCategories(categories);
+        restaurant.setShifts(shifts);
     }
 
     @Override

@@ -18,475 +18,190 @@ export class Zone {
   )
 
   static readonly AVELLANEDA = new Zone('AVELLANEDA', 'Avellaneda')
-  static readonly BALVANERA = new Zone('BALVANERA', 'Balvanera')
   static readonly BANFIELD = new Zone('BANFIELD', 'Banfield')
-  static readonly BARRACAS = new Zone('BARRACAS', 'Barracas')
   static readonly BECCAR = new Zone('BECCAR', 'Beccar')
-  static readonly BELGRANO = new Zone('BELGRANO', 'Belgrano')
-  static readonly BELLAVISTA = new Zone('BELLAVISTA', 'Bella Vista')
-  static readonly BENAVIDEZ = new Zone('BENAVIDEZ', 'Benavídez')
+  static readonly BELLA_VISTA = new Zone('BELLA_VISTA', 'Bella Vista')
   static readonly BERAZATEGUI = new Zone('BERAZATEGUI', 'Berazategui')
-  static readonly BERAZATEGUIOESTE = new Zone(
-    'BERAZATEGUIOESTE',
-    'Berazategui Oeste'
-  )
-
-  static readonly BERNAL = new Zone('BERNAL', 'Zone.bernal')
-  static readonly BERNALOESTE = new Zone('BERNALOESTE', 'Zone.bernaloeste')
-  static readonly BILLINGHURST = new Zone('BILLINGHURST', 'Zone.billinghurst')
-  static readonly BOEDO = new Zone('BOEDO', 'Zone.boedo')
-  static readonly BOSQUES = new Zone('BOSQUES', 'Zone.bosques')
-  static readonly BOULOGNE = new Zone('BOULOGNE', 'Zone.boulogne')
-  static readonly BURZACO = new Zone('BURZACO', 'Zone.burzaco')
-  static readonly CABALLITO = new Zone('CABALLITO', 'Zone.caballito')
-  static readonly CAMPODEMAYO = new Zone('CAMPODEMAYO', 'Zone.campodemayo')
-  static readonly CANNINGE = new Zone('CANNINGE', 'Zone.canninge')
-  static readonly CANNINGEE = new Zone('CANNINGEE', 'Zone.canningee')
-  static readonly CARAPACHAY = new Zone('CARAPACHAY', 'Zone.carapachay')
-  static readonly CARLOSSPEGAZZINI = new Zone(
-    'CARLOSSPEGAZZINI',
-    'Zone.carlosspegazzini'
-  )
-
-  static readonly CASEROS = new Zone('CASEROS', 'Zone.caseros')
-  static readonly CASTELAR = new Zone('CASTELAR', 'Zone.castelar')
-  static readonly CHACARITA = new Zone('CHACARITA', 'Zone.chacarita')
-  static readonly CHURRUCA = new Zone('CHURRUCA', 'Zone.churruca')
-  static readonly CIUDADEVITA = new Zone('CIUDADEVITA', 'Zone.ciudadevita')
-  static readonly CIUDADJARDINLOMASDELPALOMAR = new Zone(
-    '',
-    'Zone.ciudadjardinlomasdelpalomar'
-  )
-
-  static readonly CIUDADELA = new Zone('CIUDADELA', 'Zone.ciudadela')
-  static readonly CLAYPOLE = new Zone('CLAYPOLE', 'Zone.claypole')
-  static readonly COGHLAN = new Zone('COGHLAN', 'Zone.coghlan')
-  static readonly COLEGIALES = new Zone('COLEGIALES', 'Zone.colegiales')
-  static readonly CONSTITUCION = new Zone('CONSTITUCION', 'Zone.constitucion')
-  static readonly CRUCECITA = new Zone('CRUCECITA', 'Zone.crucecita')
-  static readonly CUARTELV = new Zone('CUARTELV', 'Zone.cuartelv')
-  static readonly DELVISO = new Zone('DELVISO', 'Zone.delviso')
-  static readonly DIQUELUJAN = new Zone('DIQUELUJAN', 'Zone.diquelujan')
-  static readonly DOCKSUD = new Zone('DOCKSUD', 'Zone.docksud')
-  static readonly DONBOSCO = new Zone('DONBOSCO', 'Zone.donbosco')
-  static readonly DONORIONE = new Zone('DONORIONE', 'Zone.donorione')
-  static readonly DONTORCUATO = new Zone('DONTORCUATO', 'Zone.dontorcuato')
-  static readonly ELJAGUEL = new Zone('ELJAGUEL', 'Zone.eljaguel')
-  static readonly ELLIBERTADOR = new Zone('ELLIBERTADOR', 'Zone.ellibertador')
-  static readonly ELPALOMAR = new Zone('ELPALOMAR', 'Zone.elpalomar')
-  static readonly ELPATO = new Zone('ELPATO', 'Zone.elpato')
-  static readonly ELTALAR = new Zone('ELTALAR', 'Zone.eltalar')
-  static readonly ESTEBANECHEVERRIA = new Zone(
-    'ESTEBANECHEVERRIA',
-    'Zone.estebanecheverria'
-  )
-
-  static readonly EZPELETA = new Zone('EZPELETA', 'Zone.ezpeleta')
-  static readonly EZPELETAOESTE = new Zone(
-    'EZPELETAOESTE',
-    'Zone.ezpeletaoeste'
-  )
-
-  static readonly FLORENCIOVARELA = new Zone(
-    'FLORENCIOVARELA',
-    'Zone.florenciovarela'
-  )
-
-  static readonly FLORES = new Zone('FLORES', 'Zone.flores')
-  static readonly FLORESTA = new Zone('FLORESTA', 'Zone.floresta')
-  static readonly FLORIDA = new Zone('FLORIDA', 'Zone.florida')
-  static readonly FLORIDAOESTE = new Zone('FLORIDAOESTE', 'Zone.floridaoeste')
-  static readonly FRANCISCOALVAREZ = new Zone(
-    'FRANCISCOALVAREZ',
-    'Zone.franciscoalvarez'
-  )
-
-  static readonly GENERALPACHECO = new Zone(
-    'GENERALPACHECO',
-    'Zone.generalpacheco'
-  )
-
-  static readonly GERLIA = new Zone('GERLIA', 'Zone.gerlia')
-  static readonly GERLIL = new Zone('GERLIL', 'Zone.gerlil')
-  static readonly GLEW = new Zone('GLEW', 'Zone.glew')
-  static readonly GOBERNADORCOSTA = new Zone(
-    'GOBERNADORCOSTA',
-    'Zone.gobernadorcosta'
-  )
-
-  static readonly GONZALEZCATAN = new Zone(
-    'GONZALEZCATAN',
-    'Zone.gonzalezcatan'
-  )
-
-  static readonly GRANDBOURG = new Zone('GRANDBOURG', 'Zone.grandbourg')
-  static readonly GREGORIODELAFERRERE = new Zone(
-    '',
-    'Zone.gregoriodelaferrere'
-  )
-
-  static readonly GUILLERMOHUDSON = new Zone(
-    'GUILLERMOHUDSON',
-    'Zone.guillermohudson'
-  )
-
-  static readonly HAEDO = new Zone('HAEDO', 'Zone.haedo')
-  static readonly HURLINGHAM = new Zone('HURLINGHAM', 'Zone.hurlingham')
-  static readonly INGENIEROADOLFOSOURDEAUX = new Zone(
-    '',
-    'Zone.ingenieroadolfosourdeaux'
-  )
-
-  static readonly INGENIEROALLAN = new Zone(
-    'INGENIEROALLAN',
-    'Zone.ingenieroallan'
-  )
-
-  static readonly INGENIEROBUDGE = new Zone(
-    'INGENIEROBUDGE',
-    'Zone.ingenierobudge'
-  )
-
-  static readonly ISIDROCASANOVA = new Zone(
-    'ISIDROCASANOVA',
-    'Zone.isidrocasanova'
-  )
-
-  static readonly ITUZAINGO = new Zone('ITUZAINGO', 'Zone.ituzaingo')
-  static readonly JOSECPAZ = new Zone('JOSECPAZ', 'Zone.josecpaz')
-  static readonly JOSEINGENIEROS = new Zone(
-    'JOSEINGENIEROS',
-    'Zone.joseingenieros'
-  )
-
-  static readonly JOSELEONSUAREZ = new Zone(
-    'JOSELEONSUAREZ',
-    'Zone.joseleonsuarez'
-  )
-
-  static readonly JOSEMARIAEZEIZA = new Zone(
-    'JOSEMARIAEZEIZA',
-    'Zone.josemariaezeiza'
-  )
-
-  static readonly JOSEMARMOL = new Zone('JOSEMARMOL', 'Zone.josemarmol')
-  static readonly JUANMARIAGUTIERREZ = new Zone(
-    'JUANMARIAGUTIERREZ',
-    'Zone.juanmariagutierrez'
-  )
-
-  static readonly LABOCA = new Zone('LABOCA', 'Zone.laboca')
-  static readonly LACAPILLA = new Zone('LACAPILLA', 'Zone.lacapilla')
-  static readonly LALUCILA = new Zone('LALUCILA', 'Zone.lalucila')
-  static readonly LAPATERNAL = new Zone('LAPATERNAL', 'Zone.lapaternal')
-  static readonly LAREJA = new Zone('LAREJA', 'Zone.lareja')
-  static readonly LATABLADA = new Zone('LATABLADA', 'Zone.latablada')
-  static readonly LAUNION = new Zone('LAUNION', 'Zone.launion')
-  static readonly LANUS = new Zone('LANUS', 'Zone.lanus')
-  static readonly LANUSOESTE = new Zone('LANUSOESTE', 'Zone.lanusoeste')
-  static readonly LIBERTAD = new Zone('LIBERTAD', 'Zone.libertad')
-  static readonly LINIERS = new Zone('LINIERS', 'Zone.liniers')
-  static readonly LLAVALLOL = new Zone('LLAVALLOL', 'Zone.llavallol')
-  static readonly LOMAHERMOSA3 = new Zone('', 'Zone.lomahermosa3')
-  static readonly LOMAHERMOSASM = new Zone(
-    'LOMAHERMOSASM',
-    'Zone.lomahermosasm'
-  )
-
-  static readonly LOMAHERMOSA = new Zone('LOMAHERMOSA', 'Zone.lomahermosa')
-  static readonly LOMASDEZAMORA = new Zone(
-    'LOMASDEZAMORA',
-    'Zone.lomasdezamora'
-  )
-
-  static readonly LOMASDELMIRADOR = new Zone(
-    'LOMASDELMIRADOR',
-    'Zone.lomasdelmirador'
-  )
-
-  static readonly LONGCHAMPS = new Zone('LONGCHAMPS', 'Zone.longchamps')
-  static readonly LOSPOLVORINES = new Zone(
-    'LOSPOLVORINES',
-    'Zone.lospolvorines'
-  )
-
-  static readonly LUISGUILLON = new Zone('LUISGUILLON', 'Zone.luisguillon')
-  static readonly MALVINASARGENTINAS = new Zone(
-    'MALVINASARGENTINAS',
-    'Zone.malvinasargentinas'
-  )
-
-  static readonly MARIANOACOSTA = new Zone(
-    'MARIANOACOSTA',
-    'Zone.marianoacosta'
-  )
-
-  static readonly MARTINCORONADO = new Zone(
-    'MARTINCORONADO',
-    'Zone.martincoronado'
-  )
-
-  static readonly MARTINEZ = new Zone('MARTINEZ', 'Zone.martinez')
-  static readonly MATADEROS = new Zone('MATADEROS', 'Zone.mataderos')
-  static readonly MERLO = new Zone('MERLO', 'Zone.merlo')
-  static readonly MINISTRORIVADAVIA = new Zone(
-    'MINISTRORIVADAVIA',
-    'Zone.ministrorivadavia'
-  )
-
-  static readonly MONSERRAT = new Zone('MONSERRAT', 'Zone.monserrat')
-  static readonly MONTECASTRO = new Zone('MONTECASTRO', 'Zone.montecastro')
-  static readonly MONTECHINGOLO = new Zone(
-    'MONTECHINGOLO',
-    'Zone.montechingolo'
-  )
-
-  static readonly MONTEGRANDE = new Zone('MONTEGRANDE', 'Zone.montegrande')
-  static readonly MORENO = new Zone('MORENO', 'Zone.moreno')
-  static readonly MORON = new Zone('MORON', 'Zone.moron')
-  static readonly MUNRO = new Zone('MUNRO', 'Zone.munro')
-  static readonly MUNIZ = new Zone('MUNIZ', 'Zone.muniz')
-  static readonly NUEVAPOMPEYA = new Zone('NUEVAPOMPEYA', 'Zone.nuevapompeya')
-  static readonly NUNEZ = new Zone('NUNEZ', 'Zone.nunez')
-  static readonly OLIVOS = new Zone('OLIVOS', 'Zone.olivos')
-  static readonly ONCEDESEPTIEMBRE = new Zone(
-    'ONCEDESEPTIEMBRE',
-    'Zone.oncedeseptiembre'
-  )
-
-  static readonly PABLONOGUES = new Zone('PABLONOGUES', 'Zone.pablonogues')
-  static readonly PABLOPODESTA = new Zone('PABLOPODESTA', 'Zone.pablopodesta')
-  static readonly PALERMO = new Zone('PALERMO', 'Zone.palermo')
-  static readonly PARQUEAVELLANEDA = new Zone(
-    'PARQUEAVELLANEDA',
-    'Zone.parqueavellaneda'
-  )
-
-  static readonly PARQUECHACABUCO = new Zone(
-    'PARQUECHACABUCO',
-    'Zone.parquechacabuco'
-  )
-
-  static readonly PARQUECHAS = new Zone('PARQUECHAS', 'Zone.parquechas')
-  static readonly PARQUEPATRICIOS = new Zone(
-    'PARQUEPATRICIOS',
-    'Zone.parquepatricios'
-  )
-
-  static readonly PARQUESANMARTIN = new Zone(
-    'PARQUESANMARTIN',
-    'Zone.parquesanmartin'
-  )
-
-  static readonly PASODELREY = new Zone('PASODELREY', 'Zone.pasodelrey')
-  static readonly PEREYRA = new Zone('PEREYRA', 'Zone.pereyra')
-  static readonly PINEYRO = new Zone('PINEYRO', 'Zone.pineyro')
-  static readonly PLATANOS = new Zone('PLATANOS', 'Zone.platanos')
-  static readonly PONTEVEDRA = new Zone('PONTEVEDRA', 'Zone.pontevedra')
-  static readonly PUERTOMADERO = new Zone('PUERTOMADERO', 'Zone.puertomadero')
-  static readonly QUILMES = new Zone('QUILMES', 'Zone.quilmes')
-  static readonly QUILMESOESTE = new Zone('QUILMESOESTE', 'Zone.quilmesoeste')
-  static readonly RAFAELCALZADA = new Zone(
-    'RAFAELCALZADA',
-    'Zone.rafaelcalzada'
-  )
-
-  static readonly RAFAELCASTILLO = new Zone(
-    'RAFAELCASTILLO',
-    'Zone.rafaelcastillo'
-  )
-
-  static readonly RAMOSMEJIA = new Zone('RAMOSMEJIA', 'Zone.ramosmejia')
-  static readonly RANELAGH = new Zone('RANELAGH', 'Zone.ranelagh')
-  static readonly RECOLETA = new Zone('RECOLETA', 'Zone.recoleta')
-  static readonly REMEDIOSDEESCALADA3 = new Zone(
-    '',
-    'Zone.remediosdeescalada3'
-  )
-
-  static readonly REMEDIOSDEESCALADAL = new Zone(
-    '',
-    'Zone.remediosdeescaladal'
-  )
-
-  static readonly RETIRO = new Zone('RETIRO', 'Zone.retiro')
-  static readonly RICARDOROJAS = new Zone('RICARDOROJAS', 'Zone.ricardorojas')
-  static readonly RINCONDEMILBERG = new Zone(
-    'RINCONDEMILBERG',
-    'Zone.rincondemilberg'
-  )
-
-  static readonly SAAVEDRA = new Zone('SAAVEDRA', 'Zone.saavedra')
-  static readonly SAENZPENA = new Zone('SAENZPENA', 'Zone.saenzpena')
-  static readonly SANANDRES = new Zone('SANANDRES', 'Zone.sanandres')
-  static readonly SANANTONIODEPADUA = new Zone(
-    'SANANTONIODEPADUA',
-    'Zone.sanantoniodepadua'
-  )
-
-  static readonly SANCRISTOBAL = new Zone('SANCRISTOBAL', 'Zone.sancristobal')
-  static readonly SANFERNANDO = new Zone('SANFERNANDO', 'Zone.sanfernando')
-  static readonly SANFRANCISCOSOLANOQ = new Zone(
-    '',
-    'Zone.sanfranciscosolanoq'
-  )
-
-  static readonly SANFRANCISCOSOLANOAB = new Zone(
-    '',
-    'Zone.sanfranciscosolanoab'
-  )
-
-  static readonly SANISIDRO = new Zone('SANISIDRO', 'Zone.sanisidro')
-  static readonly SANJOSE = new Zone('SANJOSE', 'Zone.sanjose')
-  static readonly SANJUSTO = new Zone('SANJUSTO', 'Zone.sanjusto')
-  static readonly SANMARTIN = new Zone('SANMARTIN', 'Zone.sanmartin')
-  static readonly SANMIGUEL = new Zone('SANMIGUEL', 'Zone.sanmiguel')
-  static readonly SANNICOLAS = new Zone('SANNICOLAS', 'Zone.sannicolas')
-  static readonly SANTELMO = new Zone('SANTELMO', 'Zone.santelmo')
-  static readonly SANTAROSA = new Zone('SANTAROSA', 'Zone.santarosa')
-  static readonly SANTOSLUGARES = new Zone(
-    'SANTOSLUGARES',
-    'Zone.santoslugares'
-  )
-
-  static readonly SARANDI = new Zone('SARANDI', 'Zone.sarandi')
-  static readonly SOURIGUES = new Zone('SOURIGUES', 'Zone.sourigues')
-  static readonly TAPIALES = new Zone('TAPIALES', 'Zone.tapiales')
-  static readonly TEMPERLEY = new Zone('TEMPERLEY', 'Zone.temperley')
-  static readonly TIGRE = new Zone('TIGRE', 'Zone.tigre')
-  static readonly TORTUGUITASM = new Zone('TORTUGUITASM', 'Zone.tortuguitasm')
-  static readonly TORTUGUITASJ = new Zone('TORTUGUITASJ', 'Zone.tortuguitasj')
-  static readonly TRISTANSUAREZ = new Zone(
-    'TRISTANSUAREZ',
-    'Zone.tristansuarez'
-  )
-
-  static readonly TRONCOSDELTALAR = new Zone(
-    'TRONCOSDELTALAR',
-    'Zone.troncosdeltalar'
-  )
-
-  static readonly TRUJUI = new Zone('TRUJUI', 'Zone.trujui')
-  static readonly TURDERA = new Zone('TURDERA', 'Zone.turdera')
-  static readonly UDAONDO = new Zone('UDAONDO', 'Zone.udaondo')
-  static readonly VALENTINALSINA = new Zone(
-    'VALENTINALSINA',
-    'Zone.valentinalsina'
-  )
-
-  static readonly VELEZSARSFIELD = new Zone(
-    'VELEZSARSFIELD',
-    'Zone.velezsarsfield'
-  )
-
-  static readonly VERSALLES = new Zone('VERSALLES', 'Zone.versalles')
-  static readonly VICENTELOPEZ = new Zone('VICENTELOPEZ', 'Zone.vicentelopez')
-  static readonly VICTORIA = new Zone('VICTORIA', 'Zone.victoria')
-  static readonly VILLAADELINAVL = new Zone(
-    'VILLAADELINAVL',
-    'Zone.villaadelinavl'
-  )
-
-  static readonly VILLAADELINASI = new Zone(
-    'VILLAADELINASI',
-    'Zone.villaadelinasi'
-  )
-
-  static readonly VILLABALLESTER = new Zone(
-    'VILLABALLESTER',
-    'Zone.villaballester'
-  )
-
-  static readonly VILLABOSCH = new Zone('VILLABOSCH', 'Zone.villabosch')
-  static readonly VILLABROWN = new Zone('VILLABROWN', 'Zone.villabrown')
-  static readonly VILLACENTENARIO = new Zone(
-    'VILLACENTENARIO',
-    'Zone.villacentenario'
-  )
-
-  static readonly VILLACRESPO = new Zone('VILLACRESPO', 'Zone.villacrespo')
-  static readonly VILLADEMAYO = new Zone('VILLADEMAYO', 'Zone.villademayo')
-  static readonly VILLADELPARQUE = new Zone(
-    'VILLADELPARQUE',
-    'Zone.villadelparque'
-  )
-
-  static readonly VILLADEVOTO = new Zone('VILLADEVOTO', 'Zone.villadevoto')
-  static readonly VILLADOMINICO = new Zone(
-    'VILLADOMINICO',
-    'Zone.villadominico'
-  )
-
-  static readonly VILLAESPANA = new Zone('VILLAESPANA', 'Zone.villaespana')
-  static readonly VILLAFIORITO = new Zone('VILLAFIORITO', 'Zone.villafiorito')
-  static readonly VILLAGENERALMITRE = new Zone(
-    'VILLAGENERALMITRE',
-    'Zone.villageneralmitre'
-  )
-
-  static readonly VILLALAFLORIDA = new Zone(
-    'VILLALAFLORIDA',
-    'Zone.villalaflorida'
-  )
-
-  static readonly VILLALUGANO = new Zone('VILLALUGANO', 'Zone.villalugano')
-  static readonly VILLALURO = new Zone('VILLALURO', 'Zone.villaluro')
-  static readonly VILLALUZURIAGA = new Zone(
-    'VILLALUZURIAGA',
-    'Zone.villaluzuriaga'
-  )
-
-  static readonly VILLALYNCH = new Zone('VILLALYNCH', 'Zone.villalynch')
-  static readonly VILLAMADERO = new Zone('VILLAMADERO', 'Zone.villamadero')
-  static readonly VILLAMAIPU = new Zone('VILLAMAIPU', 'Zone.villamaipu')
-  static readonly VILLAMARTELLI = new Zone(
-    'VILLAMARTELLI',
-    'Zone.villamartelli'
-  )
-
-  static readonly VILLAORTUZAR = new Zone('VILLAORTUZAR', 'Zone.villaortuzar')
-  static readonly VILLAPUEYRREDON = new Zone(
-    'VILLAPUEYRREDON',
-    'Zone.villapueyrredon'
-  )
-
-  static readonly VILLARAFFO = new Zone('VILLARAFFO', 'Zone.villaraffo')
-  static readonly VILLAREAL = new Zone('VILLAREAL', 'Zone.villareal')
-  static readonly VILLARIACHUELO = new Zone(
-    'VILLARIACHUELO',
-    'Zone.villariachuelo'
-  )
-
-  static readonly VILLASANLUIS = new Zone('VILLASANLUIS', 'Zone.villasanluis')
-  static readonly VILLASANTARITA = new Zone(
-    'VILLASANTARITA',
-    'Zone.villasantarita'
-  )
-
-  static readonly VILLASARMIENTO = new Zone(
-    'VILLASARMIENTO',
-    'Zone.villasarmiento'
-  )
-
-  static readonly VILLASOLDATI = new Zone('VILLASOLDATI', 'Zone.villasoldati')
-  static readonly VILLATESEI = new Zone('VILLATESEI', 'Zone.villatesei')
-  static readonly VILLAURQUIZA = new Zone('VILLAURQUIZA', 'Zone.villaurquiza')
-  static readonly VILLAVATTEONE = new Zone(
-    'VILLAVATTEONE',
-    'Zone.villavatteone'
-  )
-
-  static readonly VIRREYDELPINO = new Zone(
-    'VIRREYDELPINO',
-    'Zone.virreydelpino'
-  )
-
-  static readonly VIRREYES = new Zone('VIRREYES', 'Zone.virreyes')
-  static readonly WILDE = new Zone('WILDE', 'Zone.wilde')
-  static readonly WILLIAMCMORRIS = new Zone(
-    'WILLIAMCMORRIS',
-    'Zone.williamcmorris'
-  )
+  static readonly BERISSO = new Zone('BERISSO', 'Berisso')
+  static readonly BERNAL = new Zone('BERNAL', 'Bernal')
+  static readonly BOSQUES = new Zone('BOSQUES', 'Bosques')
+  static readonly BOULOGNE = new Zone('BOULOGNE', 'Boulogne')
+  static readonly BURZACO = new Zone('BURZACO', 'Burzaco')
+  static readonly CABALLITO = new Zone('CABALLITO', 'Caballito')
+  static readonly CANNING = new Zone('CANNING', 'Canning')
+  static readonly CASEROS = new Zone('CASEROS', 'Caseros')
+  static readonly CASTELAR = new Zone('CASTELAR', 'Castelar')
+  static readonly CHILAVERT = new Zone('CHILAVERT', 'Chilavert')
+  static readonly CIUDADJARDIN = new Zone('CIUDADJARDIN', 'Ciudad Jardín')
+  static readonly CIUDADJARDINPALOMAR = new Zone('CIUDADJARDINPALOMAR', 'Ciudad Jardín Palomar')
+  static readonly CIUDADELA = new Zone('CIUDADELA', 'Ciudadela')
+  static readonly CONSTITUCION = new Zone('CONSTITUCION', 'Constitución')
+  static readonly DEL_VISO = new Zone('DEL_VISO', 'Del Viso')
+  static readonly DON_BOSCO = new Zone('DON_BOSCO', 'Don Bosco')
+  static readonly EZEIZA = new Zone('EZEIZA', 'Ezeiza')
+  static readonly EZPELETA = new Zone('EZPELETA', 'Ezpeleta')
+  static readonly FLORENCIO_VARELA = new Zone('FLORENCIO_VARELA', 'Florencio Varela')
+  static readonly FLORIDA = new Zone('FLORIDA', 'Florida')
+  static readonly GARIN = new Zone('GARIN', 'Garín')
+  static readonly GERLI = new Zone('GERLI', 'Gerli')
+  static readonly GLEW = new Zone('GLEW', 'Glew')
+  static readonly GONZALEZ_CATAN = new Zone('GONZALEZ_CATAN', 'González Catán')
+  static readonly GREGORIO_DE_LAFERRERE = new Zone('GREGORIO_DE_LAFERRERE', 'Gregorio de Laferrere')
+  static readonly HAEDO = new Zone('HAEDO', 'Haedo')
+  static readonly HIPOLITO_YRIGOYEN = new Zone('HIPOLITO_YRIGOYEN', 'Hipólito Yrigoyen')
+  static readonly HURLINGHAM = new Zone('HURLINGHAM', 'Hurlingham')
+  static readonly ING_PABLO_NOGUES = new Zone('ING_PABLO_NOGUES', 'Ing. Pablo Nogués')
+  static readonly ISIDRO_CASANOVA = new Zone('ISIDRO_CASANOVA', 'Isidro Casanova')
+  static readonly ITUZAINGO = new Zone('ITUZAINGO', 'Ituzaingó')
+  static readonly JOSE_CPAZ = new Zone('JOSE_CPAZ', 'José C. Paz')
+  static readonly JOSE_MARMOL = new Zone('JOSE_MARMOL', 'José Mármol')
+  static readonly JOSE_LEON_SUAREZ = new Zone('JOSE_LEON_SUAREZ', 'José León Suárez')
+  static readonly JUSTO_VILLEGAS = new Zone('JUSTO_VILLEGAS', 'Justo Villegas')
+  static readonly LA_TABLADA = new Zone('LA_TABLADA', 'La Tablada')
+  static readonly LAFERRERE = new Zone('LAFERRERE', 'Laferrere')
+  static readonly LANUS = new Zone('LANUS', 'Lanús')
+  static readonly LLAVALLOL = new Zone('LLAVALLOL', 'Llavallol')
+  static readonly LOMAS_DE_ZAMORA = new Zone('LOMAS_DE_ZAMORA', 'Lomas de Zamora')
+  static readonly LOMAS_DEL_MIRADOR = new Zone('LOMAS_DEL_MIRADOR', 'Lomas del Mirador')
+  static readonly LONGCHAMPS = new Zone('LONGCHAMPS', 'Longchamps')
+  static readonly LOS_POLVORINES = new Zone('LOS_POLVORINES', 'Los Polvorines')
+  static readonly LUJAN = new Zone('LUJAN', 'Luján')
+  static readonly MALAVER = new Zone('MALAVER', 'Malaver')
+  static readonly MALVINAS_ARGENTINAS = new Zone('MALVINAS_ARGENTINAS', 'Malvinas Argentinas')
+  static readonly MANUEL_ALBERTI = new Zone('MANUEL_ALBERTI', 'Manuel Alberti')
+  static readonly MANUEL_B_GONNET = new Zone('MANUEL_B_GONNET', 'Manuel B. Gonnet')
+  static readonly MARCOS_PAZ = new Zone('MARCOS_PAZ', 'Marcos Paz')
+  static readonly MARTINEZ = new Zone('MARTINEZ', 'Martínez')
+  static readonly MERLO = new Zone('MERLO', 'Merlo')
+  static readonly MIGUELCANELO = new Zone('MIGUELCANELO', 'Miguel Canelo')
+  static readonly MINISTRO_RIVADAVIA = new Zone('MINISTRO_RIVADAVIA', 'Ministro Rivadavia')
+  static readonly MONTE_CHINGOLO = new Zone('MONTE_CHINGOLO', 'Monte Chingolo')
+  static readonly MONTE_GRANDE = new Zone('MONTE_GRANDE', 'Monte Grande')
+  static readonly MORENO = new Zone('MORENO', 'Moreno')
+  static readonly MORON = new Zone('MORON', 'Morón')
+  static readonly MUÑIZ = new Zone('MUÑIZ', 'Muñiz')
+  static readonly NUEVAPOMPEYA = new Zone('NUEVAPOMPEYA', 'Nueva Pompeya')
+  static readonly NUNEZ = new Zone('NUNEZ', 'Núñez')
+  static readonly OLIVOS = new Zone('OLIVOS', 'Olivos')
+  static readonly ONCEDESEPTIEMBRE = new Zone('ONCEDESEPTIEMBRE', 'Once de Septiembre')
+  static readonly PABLONOGUES = new Zone('PABLONOGUES', 'Pablo Nogués')
+  static readonly PABLOPODESTA = new Zone('PABLOPODESTA', 'Pablo Podestá')
+  static readonly PALERMO = new Zone('PALERMO', 'Palermo')
+  static readonly PARQUEAVELLANEDA = new Zone('PARQUEAVELLANEDA', 'Parque Avellaneda')
+  static readonly PARQUECHACABUCO = new Zone('PARQUECHACABUCO', 'Parque Chacabuco')
+  static readonly PARQUECHAS = new Zone('PARQUECHAS', 'Parque Chas')
+  static readonly PARQUEPATRICIOS = new Zone('PARQUEPATRICIOS', 'Parque Patricios')
+  static readonly PARQUESANMARTIN = new Zone('PARQUESANMARTIN', 'Parque San Martín')
+  static readonly PASODELREY = new Zone('PASODELREY', 'Paso del Rey')
+  static readonly PEREYRA = new Zone('PEREYRA', 'Pereyra')
+  static readonly PINEYRO = new Zone('PINEYRO', 'Piñeyro')
+  static readonly PLATANOS = new Zone('PLATANOS', 'Plátanos')
+  static readonly PONTEVEDRA = new Zone('PONTEVEDRA', 'Pontevedra')
+  static readonly PUERTOMADERO = new Zone('PUERTOMADERO', 'Puerto Madero')
+  static readonly PALOMAR = new Zone('PALOMAR', 'Palomar')
+  static readonly PABLO_PODEROSO = new Zone('PABLO_PODEROSO', 'Pablo Poderoso')
+  static readonly PACHECO = new Zone('PACHECO', 'Pacheco')
+  static readonly PENAFLOR = new Zone('PENAFLOR', 'Peñaflor')
+  static readonly PILAR = new Zone('PILAR', 'Pilar')
+  static readonly PINAZO = new Zone('PINAZO', 'Pinazo')
+  static readonly POLO_SUR = new Zone('POLO_SUR', 'Polo Sur')
+  static readonly PRESIDENTE_DERQUI = new Zone('PRESIDENTE_DERQUI', 'Presidente Derqui')
+  static readonly QUILMES = new Zone('QUILMES', 'Quilmes')
+  static readonly RAMALLO = new Zone('RAMALLO', 'Ramallo')
+  static readonly RAMOS_MEJIA = new Zone('RAMOS_MEJIA', 'Ramos Mejía')
+  static readonly RAFAEL_CASTILLO = new Zone('RAFAEL_CASTILLO', 'Rafael Castillo')
+  static readonly REMEDIOS_DE_ESCALADA = new Zone('REMEDIOS_DE_ESCALADA', 'Remedios de Escalada')
+  static readonly RESIDENCIAL_EL_RIO = new Zone('RESIDENCIAL_EL_RIO', 'Residencial El Río')
+  static readonly RICARDO_ROJAS = new Zone('RICARDO_ROJAS', 'Ricardo Rojas')
+  static readonly SADOP = new Zone('SADOP', 'SADOP')
+  static readonly SAN_ANTONIO_DE_PADUA = new Zone('SAN_ANTONIO_DE_PADUA', 'San Antonio de Padua')
+  static readonly SAN_CRISTOBAL = new Zone('SAN_CRISTOBAL', 'San Cristóbal')
+  static readonly SAN_FERNANDO = new Zone('SAN_FERNANDO', 'San Fernando')
+  static readonly SAN_FRANCISCO_SOLANO = new Zone('SAN_FRANCISCO_SOLANO', 'San Francisco Solano')
+  static readonly SAN_ISIDRO = new Zone('SAN_ISIDRO', 'San Isidro')
+  static readonly SAN_JOSE = new Zone('SAN_JOSE', 'San José')
+  static readonly SAN_JUSTO = new Zone('SAN_JUSTO', 'San Justo')
+  static readonly SAN_MARTIN = new Zone('SAN_MARTIN', 'San Martín')
+  static readonly SAN_MIGUEL = new Zone('SAN_MIGUEL', 'San Miguel')
+  static readonly SAN_PABLO = new Zone('SAN_PABLO', 'San Pablo')
+  static readonly SAN_PEDRO = new Zone('SAN_PEDRO', 'San Pedro')
+  static readonly SAN_VICENTE = new Zone('SAN_VICENTE', 'San Vicente')
+  static readonly SARANDI = new Zone('SARANDI', 'Sarandí')
+  static readonly SOLANO = new Zone('SOLANO', 'Solano')
+  static readonly TAPIALES = new Zone('TAPIALES', 'Tapiales')
+  static readonly TEMPERLEY = new Zone('TEMPERLEY', 'Temperley')
+  static readonly TIGRE = new Zone('TIGRE', 'Tigre')
+  static readonly TORTUGUITAS = new Zone('TORTUGUITAS', 'Tortuguitas')
+  static readonly TRISTAN_SUAREZ = new Zone('TRISTAN_SUAREZ', 'Tristán Suárez')
+  static readonly TURDERA = new Zone('TURDERA', 'Turdera')
+  static readonly VALENTINALSINA = new Zone('VALENTINALSINA', 'Valentín Alsina')
+  static readonly VARELA = new Zone('VARELA', 'Varela')
+  static readonly VICTORIA = new Zone('VICTORIA', 'Victoria')
+  static readonly VILLA_ADRIANA = new Zone('VILLA_ADRIANA', 'Villa Adriana')
+  static readonly VILLA_ALBERTINA = new Zone('VILLA_ALBERTINA', 'Villa Albertina')
+  static readonly VILLA_ANGELICA = new Zone('VILLA_ANGELICA', 'Villa Angélica')
+  static readonly VILLA_BALLESTER = new Zone('VILLA_BALLESTER', 'Villa Ballester')
+  static readonly VILLA_BOSCH = new Zone('VILLA_BOSCH', 'Villa Bosch')
+  static readonly VILLA_CARAZA = new Zone('VILLA_CARAZA', 'Villa Caraza')
+  static readonly VILLA_CENTENARIO = new Zone('VILLA_CENTENARIO', 'Villa Centenario')
+  static readonly VILLA_CLUB = new Zone('VILLA_CLUB', 'Villa Club')
+  static readonly VILLA_CRESPO = new Zone('VILLA_CRESPO', 'Villa Crespo')
+  static readonly VILLA_DARREGUEIRA = new Zone('VILLA_DARREGUEIRA', 'Villa Darregueira')
+  static readonly VILLA_DELMOSQUE = new Zone('VILLA_DELMOSQUE', 'Villa del Mosquito')
+  static readonly VILLA_DEL_PARQUE = new Zone('VILLA_DEL_PARQUE', 'Villa del Parque')
+  static readonly VILLA_DEL_PLATA = new Zone('VILLA_DEL_PLATA', 'Villa del Plata')
+  static readonly VILLA_DELFINA = new Zone('VILLA_DELFINA', 'Villa Delfina')
+  static readonly VILLA_DOMINICO = new Zone('VILLA_DOMINICO', 'Villa Dominico')
+  static readonly VILLA_EDELMIRA = new Zone('VILLA_EDELMIRA', 'Villa Edelmira')
+  static readonly VILLA_EL_CARMEN = new Zone('VILLA_EL_CARMEN', 'Villa El Carmen')
+  static readonly VILLA_ELISA = new Zone('VILLA_ELISA', 'Villa Elisa')
+  static readonly VILLA_ESPANA = new Zone('VILLA_ESPANA', 'Villa España')
+  static readonly VILLA_ESTANZUELA = new Zone('VILLA_ESTANZUELA', 'Villa Estanzuela')
+  static readonly VILLA_FIORITO = new Zone('VILLA_FIORITO', 'Villa Fiorito')
+  static readonly VILLA_GARIBALDI = new Zone('VILLA_GARIBALDI', 'Villa Garibaldi')
+  static readonly VILLA_GODAY_CRUZ = new Zone('VILLA_GODAY_CRUZ', 'Villa Goday Cruz')
+  static readonly VILLA_GUILLERMINA = new Zone('VILLA_GUILLERMINA', 'Villa Guillermina')
+  static readonly VILLA_INDEPENDENCIA = new Zone('VILLA_INDEPENDENCIA', 'Villa Independencia')
+  static readonly VILLA_INSUPERABLE = new Zone('VILLA_INSUPERABLE', 'Villa Insuperable')
+  static readonly VILLA_IRIS = new Zone('VILLA_IRIS', 'Villa Iris')
+  static readonly VILLA_KRAUSE = new Zone('VILLA_KRAUSE', 'Villa Krause')
+  static readonly VILLA_LAFE = new Zone('VILLA_LAFE', 'Villa Laff')
+  static readonly VILLA_LINCH = new Zone('VILLA_LINCH', 'Villa Linch')
+  static readonly VILLA_LOURDES = new Zone('VILLA_LOURDES', 'Villa Lourdes')
+  static readonly VILLA_LUZURIAGA = new Zone('VILLA_LUZURIAGA', 'Villa Luzuriaga')
+  static readonly VILLA_MADERO = new Zone('VILLA_MADERO', 'Villa Madero')
+  static readonly VILLA_MALDONADO = new Zone('VILLA_MALDONADO', 'Villa Maldonado')
+  static readonly VILLA_MARTINEZ = new Zone('VILLA_MARTINEZ', 'Villa Martínez')
+  static readonly VILLA_MERCED = new Zone('VILLA_MERCED', 'Villa Merced')
+  static readonly VILLA_MONICA = new Zone('VILLA_MONICA', 'Villa Mónica')
+  static readonly VILLA_MORRA = new Zone('VILLA_MORRA', 'Villa Morra')
+  static readonly VILLA_NUMANCIA = new Zone('VILLA_NUMANCIA', 'Villa Numancia')
+  static readonly VILLA_OLGA = new Zone('VILLA_OLGA', 'Villa Olga')
+  static readonly VILLA_PARQUE = new Zone('VILLA_PARQUE', 'Villa Parque')
+  static readonly VILLA_PIOLIN = new Zone('VILLA_PIOLIN', 'Villa Piolín')
+  static readonly VILLA_PROGRESO = new Zone('VILLA_PROGRESO', 'Villa Progreso')
+  static readonly VILLA_PUEYRREDON = new Zone('VILLA_PUEYRREDON', 'Villa Pueyrredón')
+  static readonly VILLA_RAFFO = new Zone('VILLA_RAFFO', 'Villa Raffo')
+  static readonly VILLA_RAMALLO = new Zone('VILLA_RAMALLO', 'Villa Ramallo')
+  static readonly VILLA_RAQUEL = new Zone('VILLA_RAQUEL', 'Villa Raquel')
+  static readonly VILLA_RICCIARDI = new Zone('VILLA_RICCIARDI', 'Villa Ricciardi')
+  static readonly VILLA_ROBERTO = new Zone('VILLA_ROBERTO', 'Villa Roberto')
+  static readonly VILLA_RODOLFO = new Zone('VILLA_RODOLFO', 'Villa Rodolfo')
+  static readonly VILLA_ROSA = new Zone('VILLA_ROSA', 'Villa Rosa')
+  static readonly VILLA_SANTOS_TESEI = new Zone('VILLA_SANTOS_TESEI', 'Villa Santos Tesei')
+  static readonly VILLA_SARMIENTO = new Zone('VILLA_SARMIENTO', 'Villa Sarmiento')
+  static readonly VILLA_SOCORRO = new Zone('VILLA_SOCORRO', 'Villa Socorro')
+  static readonly VILLA_TESEI = new Zone('VILLA_TESEI', 'Villa Tesei')
+  static readonly VILLA_TITA = new Zone('VILLA_TITA', 'Villa Tita')
+  static readonly VILLA_TRANQUILA = new Zone('VILLA_TRANQUILA', 'Villa Tranquila')
+  static readonly VILLA_TRIANGULO = new Zone('VILLA_TRIANGULO', 'Villa Triángulo')
+  static readonly VILLA_VENTANA = new Zone('VILLA_VENTANA', 'Villa Ventana')
+  static readonly VILLA_VICTORIA = new Zone('VILLA_VICTORIA', 'Villa Victoria')
+  static readonly VILLA_VIOR = new Zone('VILLA_VIOR', 'Villa Vior')
+  static readonly VILLA_WALDEMAR = new Zone('VILLA_WALDEMAR', 'Villa Waldemar')
+  static readonly VILLA_ZAGALA = new Zone('VILLA_ZAGALA', 'Villa Zagala')
+  static readonly VILLA_ZAPIOLA = new Zone('VILLA_ZAPIOLA', 'Villa Zapiola')
+  static readonly VILLA_ZUMAQUE = new Zone('VILLA_ZUMAQUE', 'Villa Zumaque')
 
   private constructor (
     public readonly name: string,
@@ -497,5 +212,9 @@ export class Zone {
 
   static fromName (name: string): Zone | undefined {
     return Zone.values.find((zone) => zone.name === name)
+  }
+
+  static fromDescription (description: string): Zone | undefined {
+    return Zone.values.find((zone) => zone.description === description)
   }
 }

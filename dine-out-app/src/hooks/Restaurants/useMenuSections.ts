@@ -1,7 +1,6 @@
 import { useMethod } from '../auth/useMethod'
 import { type AxiosResponse } from 'axios'
 import { HttpMethod } from '@/types/enums/HTTPMethod'
-import { request } from 'http'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useMenuSections () {
@@ -18,39 +17,39 @@ export function useMenuSections () {
     })
   }
 
-  async function readMenuSection(uri: string): Promise<AxiosResponse> {
+  async function readMenuSection (uri: string): Promise<AxiosResponse> {
     return await rmr({
       method: HttpMethod.GET,
       url: uri
     })
   }
 
-  async function createMenuSection(uri: string, name: string): Promise<AxiosResponse> {
+  async function createMenuSection (uri: string, name: string): Promise<AxiosResponse> {
     return await rmc({
       method: HttpMethod.POST,
       url: uri,
       data: {
-        'name': name
+        name
       }
     })
   }
 
-  async function moveSection(uri: string, up: boolean = true): Promise<AxiosResponse> {
+  async function moveSection (uri: string, up: boolean = true): Promise<AxiosResponse> {
     return await rmm({
       method: HttpMethod.PATCH,
       url: uri,
       params: {
-        "up": up ? "true" : "false"
+        up: up ? 'true' : 'false'
       }
     })
   }
 
-  async function updateMenuSection(uri: string, name: string): Promise<AxiosResponse> {
+  async function updateMenuSection (uri: string, name: string): Promise<AxiosResponse> {
     return await rmu({
       method: HttpMethod.PUT,
       url: uri,
       data: {
-        'name': name
+        name
       }
     })
   }

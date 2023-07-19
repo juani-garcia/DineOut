@@ -17,6 +17,7 @@ import CreateReservation from '@/components/Pages/CreateReservation'
 import CreateReview from '@/components/Pages/CreateReview'
 import Error from '@/components/Pages/Error'
 import Reservations from '@/components/Pages/Reservations'
+import EditRestaurant from '@/components/Pages/EditRestaurant'
 
 function App (): JSX.Element {
   return (
@@ -41,13 +42,13 @@ function App (): JSX.Element {
                                 <Route path="restaurant/register"
                                        element={<RegisterRestaurant/>}/>
                                 <Route path="restaurant/edit"
-                                       element={<RegisterRestaurant/>}/>
+                                       element={<EditRestaurant/>}/>
                                 <Route path="restaurant/section"
-                                        element={<MenuSection/>}/>
+                                       element={<MenuSection/>}/>
                                 <Route path="restaurant/section/:id/edit"
-                                        element={<MenuSection/>}/>
+                                       element={<MenuSection/>}/>
                                 <Route path="restaurant/item"
-                                        element={<MenuItem/>}/>
+                                       element={<MenuItem/>}/>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
                                 <Route path="reservations"
