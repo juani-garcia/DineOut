@@ -115,7 +115,10 @@ public class RestaurantController {
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("/{id}")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
-    public Response updateRestaurant(@PathParam("id") final long restaurantId, @Valid final RestaurantForm restaurantForm) { // TODO: Remove image from form
+    public Response updateRestaurant(
+            @PathParam("id") final long restaurantId,
+            @Valid final RestaurantForm restaurantForm
+    ) { // TODO: Remove image from form
         rs.updateCurrentRestaurant(restaurantForm.getName(),
                 restaurantForm.getAddress(),
                 restaurantForm.getEmail(),

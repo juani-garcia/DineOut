@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("restaurants/{id}/menu-sections")
+@Path("restaurants/{restaurantId}/menu-sections")
 @Component
 public class MenuSectionController {
 
@@ -59,7 +59,7 @@ public class MenuSectionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MenuSectionController.class);
 
-    @PathParam("id")
+    @PathParam("restaurantId")
     private long restaurantId;
 
     @GET
@@ -82,6 +82,7 @@ public class MenuSectionController {
     @Consumes({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response createMenuSection(
+            @PathParam("restaurantId") final long restaurantId,
             @Valid final MenuSectionForm menuSectionForm
     ) {
         final MenuSection menuSection = mss.create(menuSectionForm.getName());
@@ -107,6 +108,7 @@ public class MenuSectionController {
     @Consumes({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateMenuSection(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuSectionId,
             @Valid final MenuSectionForm menuSectionForm
     ) {
@@ -118,6 +120,7 @@ public class MenuSectionController {
     @Path("/{id}")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response deleteMenuSection(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuSectionId
     ) {
         mss.delete(menuSectionId);

@@ -22,7 +22,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Path("restaurants/{rId}/menu-sections/{msId}/menu-items")
+@Path("restaurants/{restaurantId}/menu-sections/{msId}/menu-items")
 @Component
 public class MenuItemController {
 
@@ -34,7 +34,7 @@ public class MenuItemController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MenuItemController.class);
 
-    @PathParam("rId")
+    @PathParam("restaurantId")
     private long restaurantId;
 
     @PathParam("msId")
@@ -58,6 +58,7 @@ public class MenuItemController {
     @Consumes({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response createMenuItem(
+            @PathParam("restaurantId") final long restaurantId,
             @Valid final MenuItemForm menuItemForm
     ) {
         final MenuItem menuItem = mis.create(
@@ -89,6 +90,7 @@ public class MenuItemController {
     @Produces({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateMenuItem(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId,
             @Valid final MenuItemForm menuItemForm
     ) {
@@ -106,6 +108,7 @@ public class MenuItemController {
     @Path("/{id}")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response deleteMenuItem(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId
     ) {
         mis.delete(menuItemId);
@@ -134,6 +137,7 @@ public class MenuItemController {
     @Path("/{id}/image")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateMenuItemImage(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId,
             @FormDataParam("image") InputStream fileInputStream,
             @FormDataParam("image") FormDataContentDisposition fileMetaData
@@ -148,6 +152,7 @@ public class MenuItemController {
     @Path("/{id}/image")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response deleteMenuItemImage(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId
     ) {
         mis.updateImage(menuItemId, null);
