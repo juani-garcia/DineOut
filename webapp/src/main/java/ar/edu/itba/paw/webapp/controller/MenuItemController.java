@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -101,6 +102,22 @@ public class MenuItemController {
                 menuItemForm.getPrice(),
                 menuItemForm.getMenuSectionId()
         );
+        return Response.ok().build();
+    }
+
+    @PATCH
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateMenuSection(
+            @PathParam("restaurantId") final long restaurantId,
+            @PathParam("id") final long menuSectionId,
+            @QueryParam("up") @DefaultValue("true") final boolean up
+    ) {
+        if (up) {
+            mis.moveUp(menuSectionId);
+        } else {
+            mis.moveDown(menuSectionId);
+        }
         return Response.ok().build();
     }
 

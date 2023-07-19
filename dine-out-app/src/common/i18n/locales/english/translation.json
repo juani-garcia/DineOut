@@ -85,5 +85,10 @@
   "Menu": {
     "title": "Menu",
     "empty": "The restaurant hasn't uploaded a menu yet."
+  },
+  "MenuItem": {
+    "creation": {
+      "prompt":"Add item"
+    }
   }
 }
