@@ -74,8 +74,6 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
     })
   }
 
-  console.log(imagePreview)
-
   return (
         <RestaurantBlackBoxContainer>
             <RestaurantHeader>

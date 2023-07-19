@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import type MenuItem from '@/types/models/MenuItem'
-import { IconButton, Stack } from '@mui/material'
+import { IconButton, Input, InputLabel, Stack } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import EditIcon from '@mui/icons-material/Edit'
 import { Link } from 'react-router-dom'
 import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import useImage from '@/hooks/Images/useImage'
 
 interface MenuItemProps {
   menuItem: MenuItem,
@@ -19,6 +21,9 @@ interface MenuItemProps {
 
 export default function MenuItemComponent ({ menuItem, editable = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
   const { deleteMenuItem, moveItem } = useMenuItems()
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | undefined>(menuItem.image || undefined)
+  const { updateImage, deleteImage } = useImage()
 
   const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = e => {
     deleteMenuItem(menuItem.self).then(response => {
@@ -57,9 +62,66 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
     })
   }
 
+  const handleUpdateImage: React.ChangeEventHandler<HTMLInputElement> = event => {
+    if (event.target.files == null) {
+      return
+    }
+    const newImage = event.target.files[0]
+    updateImage(`${menuItem.self}/image`, newImage).then(response => {
+      if (response.status !== 200) {
+        return
+      }
+      setImagePreview(URL.createObjectURL(newImage))
+    }).catch(e => {
+      console.error(e.response) // TODO: Toast
+    })
+  }
+
+  const handleDeleteImage: React.MouseEventHandler<HTMLButtonElement> = event => {
+    deleteImage(`${menuItem.self}/image`).then(response => {
+      if (response.status !== 200) {
+        return
+      }
+      setImagePreview(undefined)
+    }).catch(e => {
+      console.error(e.response)
+    })
+  }
+
   return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            {(menuItem.image) && <img style={{ flex: 1 }} src={menuItem.image} alt={menuItem.name}/>}
+            <Stack>
+              {(imagePreview !== undefined) && <img style={{ flex: 1 }} src={imagePreview} alt={menuItem.name}/>}
+              {editable && (
+                <Stack direction='row'
+                  justifyContent='flex-start'
+                  alignItems='center'
+                >
+                  <Input
+                    style={{display: 'hidden', visibility: 'collapse', width: '39px'}}          
+                    type='file'
+                    name='image'
+                    inputRef={fileInputRef}
+                    onChange={handleUpdateImage}
+                    endAdornment={(
+                      <>
+                          <IconButton
+                            style={{display: 'block', visibility: 'visible'}}
+                            onClick={() => fileInputRef.current?.click()}
+                            color="secondary"
+                            aria-label="delete"
+                          >
+                            <AddPhotoAlternateIcon/>
+                          </IconButton>
+                      </>
+                    )}
+                  />
+                  <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete">
+                    <DeleteIcon/>
+                  </IconButton>
+                </Stack>
+              )}
+            </Stack>
             <div style={{ flex: 10, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <h3>{menuItem.name}</h3>
