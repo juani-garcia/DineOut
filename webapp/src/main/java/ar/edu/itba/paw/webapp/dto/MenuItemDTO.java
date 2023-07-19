@@ -6,6 +6,7 @@ import org.glassfish.jersey.server.Uri;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.awt.*;
 import java.net.URI;
 
 public class MenuItemDTO {
@@ -27,14 +28,15 @@ public class MenuItemDTO {
         dto.menuSection = MenuSectionDTO.getUriBuilder(uriInfo, menuItem.getSection()).build();
         dto.ordering = menuItem.getOrdering();
         final UriBuilder menuItemUriBuilder = MenuItemDTO.getUriBuilder(uriInfo, menuItem);
-        dto.image = menuItemUriBuilder.clone().path("image").build();
+        if (menuItem.getImage() != null)
+            dto.image = menuItemUriBuilder.clone().path("image").build();
         dto.self = menuItemUriBuilder.clone().build();
 
         return dto;
     }
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuSection menuSection) {
-        return MenuItemDTO.getUriBuilder(uriInfo, menuSection);
+        return MenuSectionDTO.getUriBuilder(uriInfo, menuSection).path("menu-items");
     }
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuItem menuItem) {

@@ -27,7 +27,7 @@ public class MenuSectionDTO {
         dto.ordering = menuSection.getOrdering();
         UriBuilder menuSectionUriBuilder = MenuSectionDTO.getUriBuilder(uriInfo, menuSection);
         dto.self = menuSectionUriBuilder.clone().build();
-        dto.menuItemList = MenuItemDTO.;
+        dto.menuItemList = MenuItemDTO.getUriBuilder(uriInfo, menuSection).build();
 
         return dto;
     }

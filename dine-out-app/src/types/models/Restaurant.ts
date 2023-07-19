@@ -7,6 +7,7 @@ export default interface Restaurant {
   name: string
   lat: string
   lng: string
+  ownerId: number
   owner: string
   rating: number
   ratingCount: number

@@ -31,6 +31,8 @@ import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { roles } from '@/common/const'
+import IconButton from '@mui/material/IconButton'
+import EditIcon from '@mui/icons-material/Edit'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -39,11 +41,15 @@ interface RestaurantBigCardProps {
 export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProps): JSX.Element {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const isOwner = user?.userId === restaurant.ownerId
 
   return (
         <RestaurantBlackBoxContainer>
             <RestaurantHeader>
-                <RestaurantTitle>{restaurant.name}</RestaurantTitle>
+                <RestaurantTitle>
+                    {restaurant.name}
+                    { !isOwner && <Link to={`/restaurant/edit`}><IconButton color='secondary' size='large' aria-label='edit'><EditIcon/></IconButton></Link>}
+                </RestaurantTitle>
                 <RatingContainer>
                     <Rating>
                         {[...Array(restaurant.rating)].map((_, index) => (

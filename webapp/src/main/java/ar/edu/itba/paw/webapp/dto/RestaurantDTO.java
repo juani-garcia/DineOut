@@ -211,4 +211,5 @@ public class RestaurantDTO {
     public void setReviews(URI reviews) {
         this.reviews = reviews;
     }
+
 }

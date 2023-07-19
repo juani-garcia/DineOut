@@ -61,6 +61,9 @@ public class JwtUtils {
         claims.setSubject(user.getUsername());
         claims.setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION_TIME));
         claims.put("userId", user.getId());
+        if (user.getRestaurant() != null) {
+            claims.put("restaurantId", user.getRestaurant().getId());
+        }
 
         StringBuilder sb = new StringBuilder();
 
