@@ -57,7 +57,7 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
             <MenuTitle>{menuSectionList.length > 0 ? t('Menu.title') : t('Menu.empty')}</MenuTitle>
             { editable && (
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' ,margin: '2rem 0rem'}}>
-                <WhiteButton as={Link} to={`/restaurant/section`} state={menuSectionsURI}>
+                <WhiteButton as={Link} to={`/restaurant/section`} state={{menuSectionsURI: menuSectionsURI}}>
                   {t('MenuSection.creation.prompt')}
                 </WhiteButton>
                 <WhiteButton as={Link} to={`/restaurant/item`}>

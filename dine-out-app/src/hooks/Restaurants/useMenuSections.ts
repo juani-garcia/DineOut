@@ -8,9 +8,18 @@ export function useMenuSections () {
   const { isLoading, requestMethod } = useMethod()
   const { requestMethod: rmc } = useMethod()
   const { requestMethod: rmm } = useMethod()
+  const { requestMethod: rmu } = useMethod()
+  const { requestMethod: rmr } = useMethod()
 
   async function menuSections (uri: string): Promise<AxiosResponse> {
     return await requestMethod({
+      method: HttpMethod.GET,
+      url: uri
+    })
+  }
+
+  async function readMenuSection(uri: string): Promise<AxiosResponse> {
+    return await rmr({
       method: HttpMethod.GET,
       url: uri
     })
@@ -36,5 +45,15 @@ export function useMenuSections () {
     })
   }
 
-  return { isLoading, menuSections, createMenuSection, moveSection }
+  async function updateMenuSection(uri: string, name: string): Promise<AxiosResponse> {
+    return await rmm({
+      method: HttpMethod.PUT,
+      url: uri,
+      data: {
+        'name': name
+      }
+    })
+  }
+
+  return { isLoading, menuSections, readMenuSection, createMenuSection, moveSection, updateMenuSection }
 }

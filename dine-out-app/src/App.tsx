@@ -42,6 +42,8 @@ function App (): JSX.Element {
                                        element={<RegisterRestaurant/>}/>
                                 <Route path="restaurant/section"
                                         element={<MenuSection/>}/>
+                                <Route path="restaurant/section/:id/edit"
+                                        element={<MenuSection/>}/>
                                 <Route path="restaurant/item"
                                         element={<MenuItem/>}/>
                                 <Route path="reserve/:id"
