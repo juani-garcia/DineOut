@@ -152,7 +152,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                       ? (
                             <>
                                 <Button as={Link} to={`/restaurant/${restaurant.id}/review`}>
-                                    {t('Review.prompt')}
+                                    {t('Reviews.prompt')}
                                 </Button>
                                 <Button as={Link} to={`/reserve/${restaurant.id}`} style={{ marginLeft: 'auto' }}>
                                     {t('Reservation.prompt')}
