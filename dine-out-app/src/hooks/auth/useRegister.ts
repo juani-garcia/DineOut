@@ -12,15 +12,15 @@ export function useRegister () {
       method: HttpMethod.POST,
       url: paths.USERS,
       data: {
-        firstName: firstName,
-        lastName: lastName,
-        username: username,
-        password: password,
-        confirmPassword: confirmPassword,
-        isRestaurant: isRestaurant
+        firstName,
+        lastName,
+        username,
+        password,
+        confirmPassword,
+        isRestaurant
       }
     })
   }
-  
+
   return { isLoading, register }
 }

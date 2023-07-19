@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -19,11 +20,10 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Path("restaurants/{rId}/menu-sections/{msId}/menu-items")
+@Path("restaurants/{restaurantId}/menu-sections/{msId}/menu-items")
 @Component
 public class MenuItemController {
 
@@ -35,7 +35,7 @@ public class MenuItemController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MenuItemController.class);
 
-    @PathParam("rId")
+    @PathParam("restaurantId")
     private long restaurantId;
 
     @PathParam("msId")
@@ -59,6 +59,7 @@ public class MenuItemController {
     @Consumes({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response createMenuItem(
+            @PathParam("restaurantId") final long restaurantId,
             @Valid final MenuItemForm menuItemForm
     ) {
         final MenuItem menuItem = mis.create(
@@ -90,6 +91,7 @@ public class MenuItemController {
     @Produces({MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateMenuItem(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId,
             @Valid final MenuItemForm menuItemForm
     ) {
@@ -103,10 +105,27 @@ public class MenuItemController {
         return Response.ok().build();
     }
 
+    @PATCH
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateMenuSection(
+            @PathParam("restaurantId") final long restaurantId,
+            @PathParam("id") final long menuSectionId,
+            @QueryParam("up") @DefaultValue("true") final boolean up
+    ) {
+        if (up) {
+            mis.moveUp(menuSectionId);
+        } else {
+            mis.moveDown(menuSectionId);
+        }
+        return Response.ok().build();
+    }
+
     @DELETE
     @Path("/{id}")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response deleteMenuItem(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId
     ) {
         mis.delete(menuItemId);
@@ -134,7 +153,8 @@ public class MenuItemController {
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     @Path("/{id}/image")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
-    public Response updateRestaurantImage(
+    public Response updateMenuItemImage(
+            @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuItemId,
             @FormDataParam("image") InputStream fileInputStream,
             @FormDataParam("image") FormDataContentDisposition fileMetaData
@@ -142,6 +162,17 @@ public class MenuItemController {
         LOGGER.debug("Uploading image for menu item {}", menuItemId);
         final byte[] image = IOUtils.toByteArray(fileInputStream); // TODO: Catch exception and throw custom one
         mis.updateImage(menuItemId, image);
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response deleteMenuItemImage(
+            @PathParam("restaurantId") final long restaurantId,
+            @PathParam("id") final long menuItemId
+    ) {
+        mis.updateImage(menuItemId, null);
         return Response.ok().build();
     }
 

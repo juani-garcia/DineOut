@@ -30,6 +30,7 @@ public class RestaurantDTO {
     private Set<Shift> shifts;
     private Set<Category> categories;
     private URI menuSections;
+    private URI reviews;
 
     public static RestaurantDTO fromRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
         final RestaurantDTO dto = new RestaurantDTO();
@@ -45,22 +46,26 @@ public class RestaurantDTO {
         dto.address = restaurant.getAddress();
         dto.detail = restaurant.getDetail();
 
-        final UriBuilder restaurantUriBuilder = uriInfo.getAbsolutePathBuilder()
-                .replacePath("restaurants").path(String.valueOf(restaurant.getId()));
-        dto.self = restaurantUriBuilder.build();
-        final UriBuilder usersUriBuilder = uriInfo.getAbsolutePathBuilder()
-                .replacePath("users");
-        dto.owner = usersUriBuilder
-                .path(String.valueOf(restaurant.getUser().getId())).build();
-        // TODO: dto.image = (depends on endpoint design)
+        final UriBuilder restaurantUriBuilder = RestaurantDTO.getUriBuilder(uriInfo, restaurant);
+        dto.self = restaurantUriBuilder.clone().build();
+        dto.owner = UserDTO.getUriBuilder(uriInfo, restaurant.getUser()).build();
+        if (restaurant.getImage() != null)
+            dto.image = restaurantUriBuilder.clone().path("image").build();
         dto.zone = restaurant.getZone();
         dto.shifts = restaurant.getShifts();
         dto.categories = restaurant.getCategories();
-        dto.menuSections = restaurantUriBuilder.path("menu-sections").build();
-
-        // TODO: Check if we move the link creation to their respective DTO class
+        dto.menuSections = MenuSectionDTO.getUriBuilder(uriInfo, restaurant).build();
+        dto.reviews = RestaurantReviewDTO.getUriBuilderForRestaurant(uriInfo, restaurant).build();
 
         return dto;
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().path("restaurants");
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Restaurant restaurant) {
+        return RestaurantDTO.getUriBuilder(uriInfo).path(String.valueOf(restaurant.getId()));
     }
 
     public Long getId() {
@@ -198,4 +203,13 @@ public class RestaurantDTO {
     public void setMenuSections(URI menuSections) {
         this.menuSections = menuSections;
     }
+
+    public URI getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(URI reviews) {
+        this.reviews = reviews;
+    }
+
 }

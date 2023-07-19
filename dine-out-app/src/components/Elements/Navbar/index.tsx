@@ -11,12 +11,15 @@ import {
   RegisterButton
 } from './styles'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { Button } from '@/components/Elements/utils/styles'
+import { roles } from '@/common/const'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   return (
         <Navigation>
@@ -28,21 +31,49 @@ function Navbar (): JSX.Element {
                 {user == null
                   ? <NavRight>
                         <ListItem>
-                            <RegisterButton as={Link} to="/register">
-                                          {t('register')}
+                            <RegisterButton onClick={() => {
+                              navigate('/register', {
+                                state: { from: window.location.pathname }
+                              })
+                            }}>
+                                {t('register')}
                             </RegisterButton>
                         </ListItem>
                         <ListItem>
-                            <LoginButton as={Link} to="/login">
+                            <LoginButton onClick={() => {
+                              navigate('/login', {
+                                state: { from: window.location.pathname }
+                              })
+                            }}>
                                 {t('login')}
                             </LoginButton>
                         </ListItem>
                     </NavRight>
                   : <NavRight>
-                        <ListItem>Boeeenas {user.sub}</ListItem>
+                        <ListItem>
+                            <Button as={Link} to={'/reservations'}>
+                              {t('Navbar.myReservations')}
+                            </Button>
+                        </ListItem>
+                        {(user?.roles.includes(roles.RESTAURANT))
+                          ? (
+                                <ListItem>
+                                    <Button as={Link} to={
+                                        user.restaurantId !== undefined
+                                          ? '/restaurant/' + user.restaurantId.toString() + '/view'
+                                          : '/restaurant/register'
+                                    }>
+                                        {t('Navbar.myRestaurant')}
+                                    </Button>
+                                </ListItem>
+                            )
+                          : (
+                                <></>
+                            )
+                        }
                         <ListItem><LogoutButton onClick={() => {
                           logout()
-                        }}>Chau chau</LogoutButton></ListItem>
+                        }}>{t('Navbar.logout')}</LogoutButton></ListItem>
                     </NavRight>}
 
             </NavigationContainer>

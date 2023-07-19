@@ -3,5 +3,6 @@ export const HttpMethod = {
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
-  OPTIONS: 'OPTIONS'
+  OPTIONS: 'OPTIONS',
+  PATCH: 'PATCH'
 }

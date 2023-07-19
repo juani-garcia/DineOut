@@ -37,6 +37,9 @@ public class User implements Serializable {
     )
     private Set<UserRole> roles = new HashSet<>();
 
+    @OneToOne(mappedBy = "user")
+    private Restaurant restaurant;
+
     protected User() {
     }
 
@@ -85,6 +88,9 @@ public class User implements Serializable {
     public Locale getLocale() {
         return locale;
     }
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -109,9 +115,9 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || ! (o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId());
+        return getId().longValue() == user.getId().longValue();
     }
 
     @Override

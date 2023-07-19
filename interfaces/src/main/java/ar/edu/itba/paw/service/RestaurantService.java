@@ -13,9 +13,9 @@ public interface RestaurantService {
 
     PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf);
 
-    Restaurant create(final String name, final byte[] image, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts);
+    Restaurant create(final String name, final byte[] image, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts);
 
-    void updateCurrentRestaurant(final String name, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Long> categories, final List<Long> shifts, byte[] imageBytes);
+    void updateCurrentRestaurant(final String name, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts, byte[] imageBytes);
 
     Optional<Restaurant> getByUserID(long id);
 

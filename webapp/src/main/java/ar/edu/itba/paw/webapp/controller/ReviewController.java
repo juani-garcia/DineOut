@@ -41,10 +41,11 @@ public class ReviewController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response readReviews(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
+            @QueryParam("pageSize") @DefaultValue("5") @Min(value = 1) final int pageSize,
             @QueryParam("byUser") final Long userId,
             @QueryParam("forRestaurant") final Long restaurantId
     ) {
-        final PagedQuery<RestaurantReview> restaurantReviewPagedQuery = null; // TODO: Implement search
+        final PagedQuery<RestaurantReview> restaurantReviewPagedQuery = rrs.get(page, pageSize, restaurantId, userId);
         if (restaurantReviewPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();
         }

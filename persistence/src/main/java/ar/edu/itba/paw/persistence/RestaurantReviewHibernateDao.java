@@ -8,9 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class RestaurantReviewHibernateDao implements RestaurantReviewDao {
@@ -60,6 +58,54 @@ public class RestaurantReviewHibernateDao implements RestaurantReviewDao {
 
         return new PagedQuery<>(reviews.getResultList(), (long) page, (count+PAGE_SIZE-1)/PAGE_SIZE);
 
+    }
+
+    @Override
+    public PagedQuery<RestaurantReview> get(long page, long pageSize, Long restaurantId, Long userId) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object> args = new HashMap<>();
+
+        sb.append("FROM restaurant_review\n");
+        sb.append("WHERE true\n");
+        if (restaurantId != null) {
+            sb.append("AND restaurant_id = :restaurantId\n");
+            args.put("restaurantId", restaurantId);
+        }
+        if (userId != null) {
+            sb.append("AND user_id = :userId\n");
+            args.put("userId", userId);
+        }
+
+        String idsQuery = "SELECT id " + sb + "LIMIT :limit OFFSET :offset";
+        Query query = em.createNativeQuery(idsQuery);
+        for (String key : args.keySet()) {
+            query.setParameter(key, args.get(key));
+        }
+        query.setParameter("limit", pageSize);
+        query.setParameter("offset", pageSize * (page - 1));
+
+        final List<Long> ids = new ArrayList<>();
+        for(Object o : query.getResultList()) {
+            ids.add(((Number) o).longValue());
+        }
+
+        String countQuery = "SELECT COUNT(*)\n" + sb;
+        query = em.createNativeQuery(countQuery);
+        for (String key : args.keySet()) {
+            query.setParameter(key, args.get(key));
+        }
+
+        @SuppressWarnings("unchecked")
+        long count = ((Number) query.getResultList().stream().findFirst().orElse(0)).longValue();
+
+        if (ids.isEmpty())
+            return new PagedQuery<>(Collections.emptyList(), page, (count+pageSize-1)/pageSize);
+
+        final TypedQuery<RestaurantReview> reviews =
+                em.createQuery("from RestaurantReview as r where r.id IN :ids", RestaurantReview.class);
+        reviews.setParameter("ids", ids);
+
+        return new PagedQuery<>(reviews.getResultList(), page, (count+pageSize-1)/pageSize);
     }
 
     @Override

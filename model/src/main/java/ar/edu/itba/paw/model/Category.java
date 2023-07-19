@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import java.util.Objects;
+
 public enum Category {
     ITALIAN("category.italian.name"),
     AMERICAN("category.american.name"),
@@ -45,6 +47,15 @@ public enum Category {
     public static Category getById(long id) {
         for (Category c : Category.values()) {
             if (c.ordinal() == id) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static Category getByMessage(String message) {
+        for (Category c : Category.values()) {
+            if (Objects.equals(c.message, message)) {
                 return c;
             }
         }

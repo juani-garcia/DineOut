@@ -67,6 +67,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public void delete(final long menuItemId) {
         MenuItem menuItem = validateItem(menuItemId); // TODO: Check on cascade with image
+        menuItem.getSection().getMenuItemList().remove(menuItem);
         menuItemDao.delete(menuItemId);
     }
 

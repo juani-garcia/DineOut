@@ -1,7 +1,8 @@
 import { useAuth } from './useAuth'
 import { useState } from 'react'
-import axios, { type AxiosResponse, HttpStatusCode } from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import type MethodRequestType from '@/types/MethodRequestType'
+import { useNavigate } from 'react-router-dom'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useMethod = () => {
@@ -11,8 +12,11 @@ export const useMethod = () => {
     getToken,
     setToken,
     getRefreshToken,
-    setRefreshToken
+    setRefreshToken,
+    logout
   } = useAuth()
+
+  const navigate = useNavigate()
 
   async function requestMethod (request: MethodRequestType): Promise<AxiosResponse> {
     setIsLoading(true)
@@ -45,17 +49,26 @@ export const useMethod = () => {
       params: request.params
     }).then(response => {
       if (response.headers.authorization != null) setToken(response.headers.authorization)
-      if (response.headers['X-Refresh-Token'] != null) setRefreshToken(response.headers['X-Refresh-Token'])
+      if (response.headers['x-refresh-token'] != null) setRefreshToken(response.headers['x-refresh-token'])
 
       setIsLoading(false)
       return response
     }
     ).catch(async e => {
-      if (e.response?.status === HttpStatusCode.Unauthorized && request.basic == null) {
-        if (token == null && refreshToken == null) return e.response // TODO: Logout, setIsloading false and redirect to login
+      if (e.response?.status === 404 || e.response?.status === 400) {
+        setIsLoading(false)
+        return e.response
+      }
+      if (e.response?.status > 400 && e.response?.status < 500 && request.basic == null) {
+        if (token == null && refreshToken == null) {
+          logout()
+          setIsLoading(false)
+          navigate('/login')
+          return e.response
+        }
 
         if (token != null) setToken(null)
-        else if (refreshToken != null) setRefreshToken(null) // TODO: Logout, setIsloading false and redirect to login
+        else if (refreshToken != null) setRefreshToken(null)
 
         if (request.headers != null) delete request.headers.Authorization
 

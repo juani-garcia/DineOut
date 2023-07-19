@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
-import ar.edu.itba.paw.model.RestaurantReview;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.service.ReservationService;
+import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;
@@ -32,8 +31,10 @@ public class SecurityManager {
         this.restaurantReviewService = restaurantReviewService;
     }
 
-    public boolean isUserOfId(Authentication auth, long id) {
+    public boolean isUserOfId(Authentication auth, Long id) {
         LOGGER.debug("Requested user id: {}", id);
+        if (!auth.isAuthenticated() || id == null)
+            return false;
         if (auth instanceof AnonymousAuthenticationToken) {
             LOGGER.debug("User is not authenticated");
             return false;
@@ -55,7 +56,9 @@ public class SecurityManager {
         return !restaurantService.getOfLoggedUser().isPresent();
     }
 
-    public boolean isRestaurantOwnerOfId(Authentication auth, final long id) {
+    public boolean isRestaurantOwnerOfId(Authentication auth, final Long id) {
+        if (id == null)
+            return false;
         return restaurantService.getById(id)
                 .filter(r -> r.getUser().getUsername().equals(auth.getName())) // TODO: Check if NPE is possible (https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410599200)
                 .isPresent();

@@ -9,6 +9,7 @@ export const RestaurantWhiteBoxContainer = styled(WhiteBoxContainer)`
   box-sizing: border-box;
   width: 100%;
   min-width: 500px;
+  cursor: pointer;
 
 
   transition: all 0.2s ease-in-out;
@@ -19,8 +20,8 @@ export const RestaurantWhiteBoxContainer = styled(WhiteBoxContainer)`
   }
 
   > .card-image {
-    width: 40% !important;
-    max-width: 40% !important;
+    width: 35% !important;
+    max-width: 35% !important;
   }
 
   > .card-content {
@@ -30,7 +31,7 @@ export const RestaurantWhiteBoxContainer = styled(WhiteBoxContainer)`
   }
 
   > .card-image + .card-content {
-    width: 60%;
+    width: 65%;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -71,5 +72,153 @@ export const CardContent = styled.div`
   justify-content: center;
   color: ${(props) => props.theme.defaultDark};
 !important;
+  box-sizing: inherit;
+`
+
+export const NameAndZone = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+  color: ${(props) => props.theme.defaultDark} !important;
+
+  > .restaurant-name {
+    margin-right: auto;
+  }
+
+  > .restaurant-zone + .restaurant-name {
+    margin-left: 0;
+  }
+
+
+`
+
+export const Name = styled.h6`
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.15rem;
+  line-height: 110%;
+  margin: 0.7666666667rem 0 0.46rem 0;
+  box-sizing: inherit;
+`
+
+export const ZoneContainer = styled.h6`
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.15rem;
+  line-height: 110%;
+  margin: 0.7666666667rem 0 0.46rem 0;
+  box-sizing: inherit;
+  margin-left: auto !important;
+`
+
+export const Detail = styled.p`
+  margin: 0;
+  width: 100%;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 2rem;
+`
+
+export const Address = styled.p`
+  margin: 0;
+  width: 70%;
+  font-weight: 300;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 2rem;
+`
+
+export const CategoriesAndRating = styled.div`
+  width: 100%;
+  margin-top: auto !important;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+`
+
+export const CategoriesContainer = styled.div`
+  width: 75% !important;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+`
+
+export const CategoriesTitle = styled.p`
+  margin: 0;
+  font-weight: 300;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 2rem;
+  box-sizing: inherit;
+`
+
+export const CategoriesHolder = styled.div`
+  z-index: 9999;
+  width: 100%;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  scrollbar-width: none;
+  overflow-x: auto;
+  box-sizing: inherit;
+`
+
+export const Category = styled.h6`
+  z-index: 9999;
+  padding: 4px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 20px;
+  background-color: #fff;
+  margin: 0.5rem 5px 1rem 5px !important;
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  font-size: 1.15rem;
+  line-height: 110%;
+  font-weight: 400;
+  box-sizing: inherit;
+  white-space: nowrap;
+`
+
+export const RatingContainer = styled.div`
+  width: 20% !important;
+  margin-top: auto !important;
+  margin-left: auto !important;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+`
+
+export const Rating = styled.h3`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 2.92rem;
+  line-height: 110%;
+  margin: 0 0 0 0;
+  box-sizing: inherit;
+`
+
+export const RatingCount = styled.h6`
+  font-size: 1.15rem;
+  line-height: 110%;
+  margin: 0 0 0 0;
+  color: ${(props) => props.theme.defaultLight} !important;
+  text-align: center;
+  font-weight: 400;
   box-sizing: inherit;
 `

@@ -22,6 +22,15 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
     return localStorage.getItem('refreshToken')
   }
 
+  const setUserRestaurantId = (resId: number): void => {
+    setUser((prevUser) => {
+      if (prevUser != null) {
+        return { ...prevUser, restaurantId: resId }
+      }
+      return null
+    })
+  }
+
   const setToken = (token: string | null): void => {
     if (token != null) {
       localStorage.setItem('token', token)
@@ -48,6 +57,7 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
   return <AuthContext.Provider value={{
     user,
     setUser,
+    setUserRestaurantId,
     getToken,
     setToken,
     getRefreshToken,

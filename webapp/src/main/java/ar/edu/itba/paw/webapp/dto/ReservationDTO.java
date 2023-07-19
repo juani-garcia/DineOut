@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.Reservation;
+import ar.edu.itba.paw.model.User;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -20,15 +22,23 @@ public class ReservationDTO {
         final ReservationDTO dto = new ReservationDTO();
 
         dto.id = reservation.getId();
-        // TODO: dto.restaurant = reservation.getRestaurant()
-        // TODO: dto.owner
+        dto.restaurant = RestaurantDTO.getUriBuilder(uriInfo, reservation.getRestaurant()).build();
+        dto.owner = UserDTO.getUriBuilder(uriInfo, reservation.getOwner()).build();
         dto.amount = reservation.getAmount();
         dto.dateTime = reservation.getDateTime();
         dto.comments = reservation.getComments();
         dto.isConfirmed = reservation.getIsConfirmed();
-        // TODO: dto.self
+        dto.self = ReservationDTO.getUriBuilder(uriInfo, reservation).build();
 
         return dto;
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().path("reservations");
+    }
+
+    public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Reservation reservation) {
+        return ReservationDTO.getUriBuilder(uriInfo).path(String.valueOf(reservation.getId()));
     }
 
     public Long getId() {

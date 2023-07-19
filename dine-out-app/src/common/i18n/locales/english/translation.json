@@ -3,6 +3,7 @@
   "login": "Log In",
   "email": "Email:",
   "password": "Password:",
+  "forgot-password": "Forgot your password?",
   "Footer": {
     "project": "A project of ",
     "company": "Graphene"
@@ -23,7 +24,11 @@
   },
   "Login": {
     "noAccount": "Want an account?",
-    "restorePassword": "Forgot my password"
+    "restorePassword": "Forgot my password",
+    "usernameTooLong": "Email is too long",
+    "invalidUsername": "Invalid email",
+    "passwordTooLong": "Password is too long",
+    "passwordTooShort": "Password must be completed"
   },
   "Register": {
     "confirmPassword": "Confirm password:",
@@ -31,7 +36,22 @@
     "firstName": "First name:",
     "lastName": "Last name:",
     "isRestaurant": "I will use this account as a restaurant",
-    "redirectionToLogin": "Already have an account?"
+    "redirectionToLogin": "Already have an account?",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "firstNameEmpty": "First name is mandatory",
+    "firstNameTooLong": "First name is too long",
+    "lastNameEmpty": "Last name is empty",
+    "lastNameTooLong": "Last name is too long",
+    "invalidUsername": "Invalid email",
+    "usernameTooLong": "Email is too long",
+    "passwordEmpty": "Password is mandatory",
+    "passwordTooLong": "Password is too long",
+    "invalidPassword": "Password must contain at least one upper-case, one lower-case, one number and be 8 or more characters long"
+  },
+  "Navbar": {
+    "logout": "Log out",
+    "myReservations": "My reservations",
+    "myRestaurant": "My restaurant"
   },
   "SearchBox": {
     "search": "Search",
@@ -42,10 +62,96 @@
     "anyCategory": "Any category",
     "anyTime": "Any time!",
     "anyWhere": "Wherever!",
-    "searchBy": "Search for"
+    "searchBy": "Search for",
+    "none": "None"
   },
   "Parallax": {
     "dontKnow": "Dont know where to eat?",
     "choose": "Let us choose a restaurant for you"
+  },
+  "Shift": {
+    "morning": "Morning",
+    "noon": "Noon",
+    "afternoon": "Afternoon",
+    "evening": "Evening",
+    "full-description": "{{description}} (from {{startingHour}} to {{closingHour}})"
+  },
+  "Category": {
+    "italian": "Italian",
+    "american": "American",
+    "spanish": "Spanish",
+    "pizza": "Pizza",
+    "steakhouse": "Steakhouse",
+    "bar": "Bar", 
+    "chinese": "Chinese",
+    "viet_thai": "Viet Thai",
+    "burgers": "Burgers",
+    "japanese": "Japanese",
+    "sushi": "Sushi",
+    "empanadas": "Empanadas",
+    "coffee": "Coffee",
+    "boulangerie": "Boulangerie",
+    "indian": "Indian",
+    "veggie": "Veggie",
+    "brewery": "Brewery",
+    "mexican": "Mexican",
+    "arabian": "Arabian",
+    "nikkei": "Nikkei",
+    "peruvian": "Peruvian",
+    "gelato": "Gelato"
+  },
+  "Reservation": {
+    "title": "Complete this form to make a reservation!",
+    "amount": "Amount of diners",
+    "date": "Date",
+    "time": "Time",
+    "comments": "Comments",
+    "cancel": "Cancel this reservation",
+    "submit": "Reserve!",
+    "prompt": "Make a reservation!"
+  },
+  "Reviews": {
+    "prompt": "Leave a review",
+    "title": "Reviews"
+  },
+  "Restaurant": {
+    "opening-hours": "Opens:"
+  },
+  "MenuSection": {
+    "empty": "This section has no items",
+    "form": {
+      "title": "Menu section",
+      "header": "Add a section to the menu",
+      "header-edit": "Edit a section to the menu",
+      "name": "Name of the section",
+      "submit": "Save section"
+    },
+    "creation" : {
+      "prompt": "Add section"
+    }
+  },
+  "Menu": {
+    "title": "Menu",
+    "empty": "The restaurant hasn't uploaded a menu yet."
+  },
+  "MenuItem": {
+    "creation": {
+      "prompt":"Add item"
+    },
+    "form": {
+      "title": "Menu item",
+      "header": "Add an item to the menu",
+      "header-edit": "Edit an item of the menu",
+      "name": "Name of the item",
+      "detail": "Detail of the item",
+      "price": "Price of the item",
+      "section": "Section of the item",
+      "submit": "Save item"
+    }
+  },
+  "Errors": {
+    "oops": "Oops! Something went wrong. Try again later.",
+    "invalidCredentials": "The email and password sent are incorrect. Please check the data.",
+    "tryAgain": "Check the data and try again"
   }
 }

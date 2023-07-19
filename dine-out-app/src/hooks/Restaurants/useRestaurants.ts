@@ -7,9 +7,10 @@ import { HttpMethod } from '@/types/enums/HTTPMethod'
 export function useRestaurants () {
   const { isLoading, requestMethod } = useMethod()
 
-  async function restaurants (): Promise<AxiosResponse> {
+  async function restaurants (queryParams: URLSearchParams): Promise<AxiosResponse> {
     return await requestMethod({
       method: HttpMethod.GET,
+      params: Object.fromEntries(queryParams.entries()),
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       url: paths.API_URL + paths.RESTAURANTS
     })
