@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals'
 // import i18n (needs to be bundled ;))
 import { I18nextProvider } from 'react-i18next'
 import i18n from './common/i18n/i18n'
+import { SnackbarProvider } from 'notistack'
 
 const container = document.getElementById('app')
 if (container != null) {
@@ -15,7 +16,9 @@ if (container != null) {
   root.render(
         <React.StrictMode>
             <I18nextProvider i18n={i18n}>
-                <App/>
+                <SnackbarProvider>
+                    <App/>
+                </SnackbarProvider>
             </I18nextProvider>
         </React.StrictMode>
   )

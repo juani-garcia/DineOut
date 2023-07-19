@@ -8,6 +8,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useRegister } from '@/hooks/auth/useRegister'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { useAuth } from '@/hooks/auth/useAuth'
+import { useSnackbar } from 'notistack'
 
 function Register (): JSX.Element {
   const { t } = useTranslation()
@@ -19,6 +20,7 @@ function Register (): JSX.Element {
   const navigate = useNavigate()
   const { user } = useAuth()
   const location = useLocation()
+  const { enqueueSnackbar } = useSnackbar()
 
   if (user !== null) navigate(-1)
 
@@ -37,11 +39,19 @@ function Register (): JSX.Element {
                 navigate(location.state.from, { replace: true })
               }
             }).catch((e) => {
-              console.log(e.data)
+              enqueueSnackbar(t('Errors.oops'), {
+                variant: 'error'
+              })
             })
-          } // TODO: Handle error on else
+          } else {
+            enqueueSnackbar(t('Errors.tryAgain'), {
+              variant: 'warning'
+            })
+          }
         }).catch((e: any) => {
-          console.log(e)
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
         })
     }
   }
