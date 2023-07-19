@@ -62,27 +62,29 @@ function Reservations (): JSX.Element {
   }, [user])
 
   useEffect(() => {
-    reservations(queryParams).then((response) => {
-      if (response.status >= 500) {
-        setReservationList([])
-        navigate('/error?status=' + response.status.toString())
-      }
+    if (user?.userId.toString() === queryParams.get('userId')) {
+      reservations(queryParams).then((response) => {
+        if (response.status >= 500) {
+          setReservationList([])
+          navigate('/error?status=' + response.status.toString())
+        }
 
-      if (response.status >= 400) {
-        setError(response.status)
-        return
-      }
+        if (response.status >= 400) {
+          setError(response.status)
+          return
+        }
 
-      setTotalPages(Number(response.headers['x-total-pages']))
+        setTotalPages(Number(response.headers['x-total-pages']))
 
-      setReservationList(response.data as Reservation[])
+        setReservationList(response.data as Reservation[])
 
-      console.log(isLoading)
-      console.log(reservationList)
-      console.log(totalPages)
-    }).catch((e) => {
-      console.log(e.response)
-    })
+        console.log(isLoading)
+        console.log(reservationList)
+        console.log(totalPages)
+      }).catch((e) => {
+        console.log(e.response)
+      })
+    }
   }, [queryParams])
 
   if (error !== null) return <Error errorProp={error}/>
