@@ -56,6 +56,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     @Override
     public void delete(final long menuSectionId) {
         MenuSection menuSection = validateSection(menuSectionId);
+        menuSection.getRestaurant().getMenuSectionList().remove(menuSection);
         menuSectionDao.delete(menuSectionId);
     }
 
