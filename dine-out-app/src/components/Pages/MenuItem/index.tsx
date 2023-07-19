@@ -78,14 +78,6 @@ export default function MenuItemCreation (): JSX.Element {
                                 )}
                             />
                         </FormControl>
-                        <TextField
-                            label={t('MenuItem.form.image')}
-                            fullWidth
-                            margin="normal"
-                            type="file"
-                            {...control.register('image')}
-                            variant="standard"
-                        />
                         <Button type="submit" variant="contained" color="primary">
                             {t('MenuItem.form.submit')}
                         </Button>
