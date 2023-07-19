@@ -20,6 +20,7 @@ import Error from '@/components/Pages/Error'
 import { CircularProgress, Pagination } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
+import { roles } from '@/common/const'
 
 function Reservations (): JSX.Element {
   const { t } = useTranslation()
@@ -72,6 +73,12 @@ function Reservations (): JSX.Element {
   useEffect(() => {
     if (user?.userId.toString() === queryParams.get('userId')) {
       reservations(queryParams).then((response) => {
+        if (response.status >= 400 && user?.roles.includes(roles.RESTAURANT)) {
+          navigate('/register-restaurant', {
+            state: { from: '/reservations' }
+          })
+        }
+
         if (response.status >= 500) {
           setReservationList([])
           navigate('/error?status=' + response.status.toString())
