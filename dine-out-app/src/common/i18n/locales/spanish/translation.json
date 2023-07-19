@@ -59,6 +59,11 @@
     "searchBy": "Buscar por",
     "none": "Ninguna"
   },
+  "Navbar": {
+    "logout": "Cerrar sesión",
+    "myReservations": "Mis reservas",
+    "myRestaurant": "Mi restaurante"
+  },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
     "choose": "Dejanos elegir un restaurante para vos"

@@ -48,6 +48,11 @@
     "passwordTooLong": "Password is too long",
     "invalidPassword": "Password must contain at least one upper-case, one lower-case, one number and be 8 or more characters long"
   },
+  "Navbar": {
+    "logout": "Log out",
+    "myReservations": "My reservations",
+    "myRestaurant": "My restaurant"
+  },
   "SearchBox": {
     "search": "Search",
     "category": "Category",

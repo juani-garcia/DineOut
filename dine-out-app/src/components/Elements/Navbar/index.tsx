@@ -50,10 +50,9 @@ function Navbar (): JSX.Element {
                         </ListItem>
                     </NavRight>
                   : <NavRight>
-                        <ListItem>Boeeenas {user.sub}</ListItem>
                         <ListItem>
                             <Button as={Link} to={'/reservations'}>
-                                Mis Reservas
+                              {t('Navbar.myReservations')}
                             </Button>
                         </ListItem>
                         {(user?.roles.includes(roles.RESTAURANT))
@@ -64,7 +63,7 @@ function Navbar (): JSX.Element {
                                           ? '/restaurant/' + user.restaurantId.toString() + '/view'
                                           : '/restaurant/register'
                                     }>
-                                        Mis Restaurant
+                                        {t('Navbar.myRestaurant')}
                                     </Button>
                                 </ListItem>
                             )
@@ -74,7 +73,7 @@ function Navbar (): JSX.Element {
                         }
                         <ListItem><LogoutButton onClick={() => {
                           logout()
-                        }}>Chau chau</LogoutButton></ListItem>
+                        }}>{t('Navbar.logout')}</LogoutButton></ListItem>
                     </NavRight>}
 
             </NavigationContainer>
