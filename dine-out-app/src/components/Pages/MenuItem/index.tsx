@@ -8,7 +8,7 @@ import MenuSection from '@/types/models/MenuSection'
 import { useNavigate, useNavigation, useNavigationType, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useMenuSections } from '@/hooks/Restaurants/useMenuSections'
-import { paths } from '@/common/const'
+import { paths, roles } from '@/common/const'
 import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
 
 // interface MenuItemFormInput {
@@ -25,24 +25,33 @@ export default function MenuItemCreation (): JSX.Element {
   const params = useParams()
   const { user } = useAuth()
   const isNewItem = !Boolean(params.id)
-  const restaurantId = user?.restaurantId
   const navigate = useNavigate()
   const { menuSections } = useMenuSections()
   const [sections, setSections] = useState<MenuSection[]>([])
-  const { createMenuItem } = useMenuItems()
+  const { createMenuItem, getMenuItem } = useMenuItems()
+  const location = useLocation()
+  const menuItem = location.state.menuItem
 
   useEffect(() => {
-    if (! restaurantId) {
-        navigate('/error?status=403')
-        return
+    if (user === null ){
+        navigate('/login', {
+            state: { from: window.location.pathname}
+        })
+    } else if (!user.roles.includes(roles.RESTAURANT)) {
+        navigate('/')
+    } else if (user.restaurantId === undefined || user.restaurantId === null) {
+        navigate('/restaurant/register')
     }
-    menuSections(`${paths.API_URL}${paths.RESTAURANTS}/${restaurantId}/menu-sections`).then(response => {
+    menuSections(`${paths.API_URL}${paths.RESTAURANTS}/${user?.restaurantId}/menu-sections`).then(response => {
         if (response.status !== 200) {
             return
         }
         setSections(response.data as MenuSection[])
     })
-  }, [restaurantId])
+    if (params.id !== null && params.id !== undefined) {
+        getMenuItem()
+    }
+  }, [user])
 
   const onSubmit = (data: any): void => {
     createMenuItem(`${paths.API_URL}${paths.RESTAURANTS}/${restaurantId}/menu-sections/${data.section}/menu-items`,

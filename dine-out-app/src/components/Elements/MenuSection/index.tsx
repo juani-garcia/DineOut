@@ -80,7 +80,7 @@ export default function MenuSectionComponent ({ menuSection, editable = false, l
   }
 
   const handleItemDeletion = (menuItem: MenuItem): void => {
-    const newMenuItemList = menuItemList.filter(item => item.ordering !== item.ordering)
+    const newMenuItemList = menuItemList.filter(item => menuItem.ordering !== item.ordering)
     setMenuItemList(newMenuItemList)
   }
 

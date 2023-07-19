@@ -103,6 +103,15 @@
   "MenuItem": {
     "creation": {
       "prompt":"Add item"
+    },
+    "form": {
+      "title": "Menu item",
+      "header": "Add an item to the menu",
+      "header-edit": "Edit an item of the menu",
+      "name": "Name of the item",
+      "detail": "Detail of the item",
+      "price": "Price of the item",
+      "section": "Section of the item"
     }
   },
   "Errors": {

@@ -8,9 +8,17 @@ export function useMenuItems () {
   const { isLoading: ild, requestMethod: rmd } = useMethod()
   const { requestMethod: rmc } = useMethod()
   const { requestMethod: rmm } = useMethod()
+  const { requestMethod: rmg } = useMethod()
 
   async function menuItems (uri: string): Promise<AxiosResponse> {
     return await requestMethod({
+      method: HttpMethod.GET,
+      url: uri
+    })
+  }
+
+  async function getMenuItem(uri: string): Promise<AxiosResponse> {
+    return await rmg({
       method: HttpMethod.GET,
       url: uri
     })
@@ -46,5 +54,5 @@ export function useMenuItems () {
     })
   }
 
-  return { isLoading, ild, menuItems, createMenuItem, deleteMenuItem, moveItem }
+  return { isLoading, ild, menuItems, getMenuItem, createMenuItem, deleteMenuItem, moveItem }
 }

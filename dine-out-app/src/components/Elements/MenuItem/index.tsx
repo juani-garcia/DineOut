@@ -137,7 +137,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                       <IconButton onClick={handleDown} color="secondary" disabled={last}>
                           <ArrowDownwardIcon/>
                       </IconButton>
-                      <Link to={`/restaurant/item/${menuItem.id}/edit`} state={{menuSection: menuItem}}>
+                      <Link to={`/restaurant/item`} state={{menuItem: menuItem}}>
                         <IconButton color="secondary">
                             <EditIcon/>
                         </IconButton>
