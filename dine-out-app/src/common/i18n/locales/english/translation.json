@@ -82,6 +82,7 @@
     }
   },
   "Menu": {
+    "title": "Menu",
     "empty": "The restaurant hasn't uploaded a menu yet."
   }
 }
