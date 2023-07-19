@@ -5,6 +5,7 @@ import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +114,22 @@ public class MenuSectionController {
             @Valid final MenuSectionForm menuSectionForm
     ) {
         mss.updateName(menuSectionId, menuSectionForm.getName());
+        return Response.ok().build();
+    }
+
+    @PATCH
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateMenuSection(
+            @PathParam("restaurantId") final long restaurantId,
+            @PathParam("id") final long menuSectionId,
+            @QueryParam("up") @DefaultValue("true") final boolean up
+    ) {
+        if (up) {
+            mss.moveUp(menuSectionId);
+        } else {
+            mss.moveDown(menuSectionId);
+        }
         return Response.ok().build();
     }
 

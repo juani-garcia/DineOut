@@ -1,14 +1,25 @@
 import { useMethod } from '../auth/useMethod'
 import { type AxiosResponse } from 'axios'
 import { HttpMethod } from '@/types/enums/HTTPMethod'
+import { request } from 'http'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useMenuSections () {
   const { isLoading, requestMethod } = useMethod()
   const { requestMethod: rmc } = useMethod()
+  const { requestMethod: rmm } = useMethod()
+  const { requestMethod: rmu } = useMethod()
+  const { requestMethod: rmr } = useMethod()
 
   async function menuSections (uri: string): Promise<AxiosResponse> {
     return await requestMethod({
+      method: HttpMethod.GET,
+      url: uri
+    })
+  }
+
+  async function readMenuSection(uri: string): Promise<AxiosResponse> {
+    return await rmr({
       method: HttpMethod.GET,
       url: uri
     })
@@ -24,5 +35,25 @@ export function useMenuSections () {
     })
   }
 
-  return { isLoading, menuSections, createMenuSection }
+  async function moveSection(uri: string, up: boolean = true): Promise<AxiosResponse> {
+    return await rmm({
+      method: HttpMethod.PATCH,
+      url: uri,
+      params: {
+        "up": up ? "true" : "false"
+      }
+    })
+  }
+
+  async function updateMenuSection(uri: string, name: string): Promise<AxiosResponse> {
+    return await rmm({
+      method: HttpMethod.PUT,
+      url: uri,
+      data: {
+        'name': name
+      }
+    })
+  }
+
+  return { isLoading, menuSections, readMenuSection, createMenuSection, moveSection, updateMenuSection }
 }

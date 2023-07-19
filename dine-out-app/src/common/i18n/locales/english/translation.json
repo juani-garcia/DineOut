@@ -76,16 +76,18 @@
   "MenuSection": {
     "empty": "This section has no items",
     "form": {
-      "title": "New menu section",
+      "title": "Menu section",
       "header": "Add a section to the menu",
+      "header-edit": "Edit a section to the menu",
       "name": "Name of the section",
-      "submit": "Create section"
+      "submit": "Save section"
     },
     "creation" : {
       "prompt": "Add section"
     }
   },
   "Menu": {
+    "title": "Menu",
     "empty": "The restaurant hasn't uploaded a menu yet."
   },
   "Errors": {

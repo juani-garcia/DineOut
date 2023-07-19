@@ -1,4 +1,5 @@
-export default interface MenuSection {
+export default interface MenuItem {
+  id: number
   name: string;
   detail: string;
   price: number;

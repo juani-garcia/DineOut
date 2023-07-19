@@ -11,6 +11,7 @@ import java.net.URI;
 
 public class MenuItemDTO {
 
+    private Long id;
     private String name;
     private String detail;
     private double price;
@@ -22,6 +23,7 @@ public class MenuItemDTO {
     public static MenuItemDTO fromMenuItem(final UriInfo uriInfo, final MenuItem menuItem) {
         final MenuItemDTO dto = new MenuItemDTO();
 
+        dto.id = menuItem.getId();
         dto.name = menuItem.getName();
         dto.detail = menuItem.getDetail();
         dto.price = menuItem.getPrice();
@@ -41,6 +43,14 @@ public class MenuItemDTO {
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuItem menuItem) {
         return MenuItemDTO.getUriBuilder(uriInfo, menuItem.getSection()).path(String.valueOf(menuItem.getId()));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
