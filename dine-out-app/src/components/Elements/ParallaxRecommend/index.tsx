@@ -57,7 +57,7 @@ function ParallaxRecommend (): JSX.Element {
             <ChooseP>{t('Parallax.choose')}</ChooseP>
         </ParallaxCardRecommend>
         <ParallaxImageContainer id="parallax">
-            <ParallaxImage src="http://pawserver.it.itba.edu.ar/paw-2022a-10/resources/media/background2.jpg"
+            <ParallaxImage src="/background2.jpg"
                            id="parallax-img"/>
         </ParallaxImageContainer>
     </ParallaxContainer>)
