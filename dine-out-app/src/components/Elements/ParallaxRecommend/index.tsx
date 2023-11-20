@@ -45,9 +45,9 @@ function ParallaxRecommend (): JSX.Element {
     window.addEventListener('load', handleScroll)
     window.addEventListener('resize', handleScroll)
     return () => {
-      window.addEventListener('scroll', handleScroll)
-      window.addEventListener('load', handleScroll)
-      window.addEventListener('resize', handleScroll)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('load', handleScroll)
+      window.removeEventListener('resize', handleScroll)
     }
   }, [])
 
@@ -57,8 +57,7 @@ function ParallaxRecommend (): JSX.Element {
             <ChooseP>{t('Parallax.choose')}</ChooseP>
         </ParallaxCardRecommend>
         <ParallaxImageContainer id="parallax">
-            <ParallaxImage src="/background2.jpg"
-                           id="parallax-img"/>
+            <ParallaxImage src={`${process.env.PUBLIC_URL}/static/background2.jpg`} id="parallax-img"/>
         </ParallaxImageContainer>
     </ParallaxContainer>)
 }
