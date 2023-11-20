@@ -24,7 +24,7 @@ function SearchBox (): JSX.Element {
     if (location.pathname === '/') {
       const existingParams = new URLSearchParams(data)
       existingParams.set('page', '1')
-      navigate('/restaurants?' + existingParams.toString())
+      navigate('/restaurant?' + existingParams.toString())
     }
   }
 

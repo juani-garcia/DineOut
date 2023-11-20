@@ -13,6 +13,7 @@ import { SnackbarProvider } from 'notistack'
 const container = document.getElementById('app')
 if (container != null) {
   const root = createRoot(container) // createRoot(container!) if you use TypeScript
+  // TODO: REMOVE ON DEPLOY StrictMode
   root.render(
         <React.StrictMode>
             <I18nextProvider i18n={i18n}>
