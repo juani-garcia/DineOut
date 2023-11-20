@@ -9,17 +9,17 @@ export const AuthContext = createContext<AuthContextType>(null!)
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function AuthProvider ({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
-    const userInfo = localStorage.getItem('token')?.split(' ')[1]
+    const userInfo = localStorage.getItem('DineOut_token')?.split(' ')[1]
     if (userInfo == null) return null
     return jwtDecode(userInfo)
   })
 
   const getToken = (): string | null => {
-    return localStorage.getItem('token')
+    return localStorage.getItem('DineOut_token')
   }
 
   const getRefreshToken = (): string | null => {
-    return localStorage.getItem('refreshToken')
+    return localStorage.getItem('DineOut_refreshToken')
   }
 
   const setUserRestaurantId = (resId: number): void => {
@@ -33,18 +33,18 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
 
   const setToken = (token: string | null): void => {
     if (token != null) {
-      localStorage.setItem('token', token)
+      localStorage.setItem('DineOut_token', token)
       setUser(jwtDecode(token.split(' ')[1]))
     } else {
-      localStorage.removeItem('token')
+      localStorage.removeItem('DineOut_token')
     }
   }
 
   const setRefreshToken = (token: string | null): void => {
     if (token != null) {
-      localStorage.setItem('refreshToken', token)
+      localStorage.setItem('DineOut_refreshToken', token)
     } else {
-      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('DineOut_refreshToken')
     }
   }
 
