@@ -33,25 +33,28 @@ function App (): JSX.Element {
                                 }
                             >
                                 <Route index element={<MainContent/>}/>
-                                <Route path="restaurants"
-                                       element={<Restaurants/>}/>
-                                <Route path="restaurant/:id">
-                                    <Route path="view" element={<Restaurant/>}/>
-                                    <Route path="review" element={<CreateReview/>}/>
+                                <Route
+                                    path='/restaurant'
+                                >
+                                    <Route index element={ <Restaurants/> }/>
+                                    <Route path=":id">
+                                        <Route path="view" element={<Restaurant/>}/>
+                                        <Route path="review" element={<CreateReview/>}/>
+                                    </Route>
+                                    <Route path="register"
+                                           element={<RegisterRestaurant/>}/>
+                                    <Route path="edit"
+                                           element={<EditRestaurant/>}/>
+                                    <Route path="section"
+                                           element={<MenuSection/>}/>
+                                    <Route path="section/:id/edit"
+                                           element={<MenuSection/>}/>
+                                    <Route path="item"
+                                           element={<MenuItem/>}/>
                                 </Route>
-                                <Route path="restaurant/register"
-                                       element={<RegisterRestaurant/>}/>
-                                <Route path="restaurant/edit"
-                                       element={<EditRestaurant/>}/>
-                                <Route path="restaurant/section"
-                                       element={<MenuSection/>}/>
-                                <Route path="restaurant/section/:id/edit"
-                                       element={<MenuSection/>}/>
-                                <Route path="restaurant/item"
-                                       element={<MenuItem/>}/>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
-                                <Route path="reservations"
+                                <Route path="reservation"
                                        element={<Reservations/>}/>
                                 <Route path="register"
                                        element={<Register/>}/>

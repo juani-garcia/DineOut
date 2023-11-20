@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import type MenuItem from '@/types/models/MenuItem'
-import { IconButton, Input, InputLabel, Stack } from '@mui/material'
+import { IconButton, Input, Stack } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
@@ -11,26 +11,26 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import useImage from '@/hooks/Images/useImage'
 
 interface MenuItemProps {
-  menuItem: MenuItem,
-  editable?: boolean,
-  last?: boolean,
-  onDelete?: (menuItem: MenuItem) => void,
-  onUp?: (menuItem: MenuItem) => void,
+  menuItem: MenuItem
+  editable?: boolean
+  last?: boolean
+  onDelete?: (menuItem: MenuItem) => void
+  onUp?: (menuItem: MenuItem) => void
   onDown?: (menuItem: MenuItem) => void
 }
 
 export default function MenuItemComponent ({ menuItem, editable = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
   const { deleteMenuItem, moveItem } = useMenuItems()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | undefined>(menuItem.image || undefined)
+  const [imagePreview, setImagePreview] = useState<string | undefined>((menuItem.image === '') ? undefined : menuItem.image)
   const { updateImage, deleteImage } = useImage()
 
   const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = e => {
     deleteMenuItem(menuItem.self).then(response => {
       if (response.status !== 204) {
-        // TODO: ?????
+        // TODO: ??????
       }
-      if (onDelete) {
+      if (onDelete != null) {
         onDelete(menuItem)
       }
     }).catch(e => {
@@ -40,11 +40,10 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
     moveItem(menuItem.self, true).then(response => {
-      if (response.status !== 200)
-        return
-        if (onUp) {
-          onUp(menuItem)
-        }          
+      if (response.status !== 200) { return }
+      if (onUp != null) {
+        onUp(menuItem)
+      }
     }).catch(e => {
       console.error(e)
     })
@@ -52,11 +51,10 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
     moveItem(menuItem.self, false).then(response => {
-      if (response.status !== 200)
-        return
-        if (onDown) {
-          onDown(menuItem)
-        }          
+      if (response.status !== 200) { return }
+      if (onDown != null) {
+        onDown(menuItem)
+      }
     }).catch(e => {
       console.error(e)
     })
@@ -98,7 +96,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                   alignItems='center'
                 >
                   <Input
-                    style={{display: 'hidden', visibility: 'collapse', width: '39px'}}          
+                    style={{ display: 'hidden', visibility: 'collapse', width: '39px' }}
                     type='file'
                     name='image'
                     inputRef={fileInputRef}
@@ -106,7 +104,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                     endAdornment={(
                       <>
                           <IconButton
-                            style={{display: 'block', visibility: 'visible'}}
+                            style={{ display: 'block', visibility: 'visible' }}
                             onClick={() => fileInputRef.current?.click()}
                             color="secondary"
                             aria-label="delete"
@@ -137,7 +135,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                       <IconButton onClick={handleDown} color="secondary" disabled={last}>
                           <ArrowDownwardIcon/>
                       </IconButton>
-                      <Link to={`/restaurant/item`} state={{menuItem: menuItem}}>
+                      <Link to={'/restaurant/item'} state={{ menuItem }}>
                         <IconButton color="secondary">
                             <EditIcon/>
                         </IconButton>
@@ -146,7 +144,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                           <DeleteIcon/>
                       </IconButton>
                     </Stack>
-                )}
+            )}
         </div>
   )
 }

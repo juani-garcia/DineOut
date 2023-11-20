@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { Button } from '@/components/Elements/utils/styles'
-import { roles } from '@/common/const'
+import { localPaths, roles } from '@/common/const'
 
 function Navbar (): JSX.Element {
   const { t } = useTranslation()
@@ -26,6 +26,7 @@ function Navbar (): JSX.Element {
             <NavigationContainer>
                 <NavTitle id="logo-container" href="#" as={Link} to="/">Dine Out
                     <Logo src="https://images.emojiterra.com/google/android-pie/512px/1f35c.png"/>
+                {/*  TODO: ADD STATIC IMAGE TO public/static  */}
                 </NavTitle>
 
                 {user == null
@@ -51,7 +52,7 @@ function Navbar (): JSX.Element {
                     </NavRight>
                   : <NavRight>
                         <ListItem>
-                            <Button as={Link} to={'/reservations'}>
+                            <Button as={Link} to={localPaths.RESERVATION}>
                               {t('Navbar.myReservations')}
                             </Button>
                         </ListItem>

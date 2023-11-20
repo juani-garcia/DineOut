@@ -40,7 +40,7 @@
                         code="home.index.picker.question"/></h5>
                 <p class="center default_dark_text"><spring:message code="home.index.picker.answer"/></p>
             </a>
-            <div class="parallax white"><img src="<c:url value="/resources/media/background2.jpg"/>"
+            <div class="parallax white"><img src="<c:url value="/public/static/background2.jpg"/>"
                                              alt=""></div>   <!-- Custom restaurant image -->
         </div>
     </div>

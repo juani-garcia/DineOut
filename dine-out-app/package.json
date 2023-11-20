@@ -2,6 +2,7 @@
   "name": "dine-out-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/paw-2022a-10",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -41,6 +42,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "build-prod": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },

@@ -6,10 +6,7 @@ import ar.edu.itba.paw.service.FavoriteService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
-import ar.edu.itba.paw.webapp.form.NewPasswordForm;
-import ar.edu.itba.paw.webapp.form.PasswordRecoveryForm;
-import ar.edu.itba.paw.webapp.form.UserForm;
-import ar.edu.itba.paw.webapp.form.UserProfileEditForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -114,26 +111,16 @@ public class UserController {
         return Response.ok().build();
     }
 
-    @POST
+    @PUT
     @Path("/{id}/favorites/{restaurantId}")
     @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
-    public Response createFavoriteRelation(
+    public Response updateFavoriteRelation(
             @PathParam("id") final long userId,
-            @PathParam("restaurantId") final long restaurantId
-    ) {
-        favoriteService.set(restaurantId, userId, true);
-        return Response.created(null).build();
-    }
-
-    @DELETE
-    @Path("/{id}/favorites/{restaurantId}")
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
-    public Response deleteFavoriteRelation(
-            @PathParam("id") final long userId,
-            @PathParam("restaurantId") final long restaurantId
-    ) {
-        favoriteService.set(restaurantId, userId, false);
-        return Response.noContent().build();
+            @PathParam("restaurantId") final long restaurantId,
+            @Valid FavoriteForm fm
+            ) {
+        favoriteService.set(restaurantId, userId, fm.isUpVote());
+        return Response.ok().build();
     }
 
 }

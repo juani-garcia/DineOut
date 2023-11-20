@@ -20,7 +20,7 @@ import Error from '@/components/Pages/Error'
 import { CircularProgress, Pagination } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
-import { roles } from '@/common/const'
+import { localPaths, roles } from '@/common/const'
 
 function Reservations (): JSX.Element {
   const { t } = useTranslation()
@@ -48,7 +48,7 @@ function Reservations (): JSX.Element {
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: '/reservations' }
+        state: { from: localPaths.RESERVATION }
       })
     } else {
       const existingParams = new URLSearchParams(queryParams.toString())
@@ -75,7 +75,7 @@ function Reservations (): JSX.Element {
       reservations(queryParams).then((response) => {
         if (response.status >= 400 && user?.roles.includes(roles.RESTAURANT)) {
           navigate('/restaurant/register', {
-            state: { from: '/reservations' }
+            state: { from: localPaths.RESERVATION }
           })
         }
 

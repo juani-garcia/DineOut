@@ -1,9 +1,15 @@
 export const paths = {
-  API_URL: 'http://localhost:9090',
-  USERS: 'http://localhost:9090/users',
+  API_URL: 'http://' + process.env.REACT_APP_BASE_URL,
+  USERS: 'http://' + process.env.REACT_APP_BASE_URL + '/users',
   RESTAURANTS: '/restaurants',
   RESERVATION: '/reservations',
   REVIEWS: '/reviews'
+}
+
+export const localPaths = {
+  RESTAURANTS: '/restaurant',
+  RESERVATION: '/reservation',
+  REVIEWS: '/review'
 }
 
 export const roles = {
