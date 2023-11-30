@@ -46,14 +46,15 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtUtils = jwtu;
     }
 
-    private static final String REFRESH_CUSTOM_HEADER = "X-Refresh-Token",
+    private static final String REFRESH_TOKEN_HEADER = "DineOut-Refresh-Token",
+                                AUTH_HEADER = "DineOut-Authorization",
                                 SEPARATOR = " ";
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String header = request.getHeader(AUTH_HEADER);
         if(header == null) {
             LOGGER.debug("No authorization header, continuing...");
             chain.doFilter(request, response);
@@ -122,8 +123,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 User user = optionalUser.get();
 
-                context.response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer "+context.jwtUtils.getToken(user));
-                context.response.setHeader(REFRESH_CUSTOM_HEADER, "Bearer "+context.jwtUtils.getRefreshToken(user));
+                context.response.setHeader(AUTH_HEADER, "Bearer "+context.jwtUtils.getToken(user));
+                context.response.setHeader(REFRESH_TOKEN_HEADER, "Bearer "+context.jwtUtils.getRefreshToken(user));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -155,7 +156,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     }
 
                     context.response.setHeader(
-                            HttpHeaders.AUTHORIZATION, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
+                            AUTH_HEADER, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
                     );
                 }
 
