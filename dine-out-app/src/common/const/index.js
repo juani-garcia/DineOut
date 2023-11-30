@@ -18,3 +18,9 @@ export const roles = {
   DINER: 'DINER',
   BASIC_USER: 'BASIC_USER'
 }
+
+export const DineOutHeaders = {
+  AUTH_HEADER: 'dineout-authorization',
+  REFRESH_TOKEN_HEADER: 'dineout-refresh-token',
+  TOTAL_PAGES_HEADER: 'dineout-total-pages'
+}

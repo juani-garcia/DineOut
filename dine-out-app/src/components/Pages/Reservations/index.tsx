@@ -20,7 +20,7 @@ import Error from '@/components/Pages/Error'
 import { CircularProgress, Pagination } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
-import { localPaths, roles } from '@/common/const'
+import { DineOutHeaders, localPaths, roles } from '@/common/const'
 
 function Reservations (): JSX.Element {
   const { t } = useTranslation()
@@ -89,7 +89,7 @@ function Reservations (): JSX.Element {
           return
         }
 
-        setTotalPages(Number(response.headers['x-total-pages']))
+        setTotalPages(Number(response.headers[DineOutHeaders.TOTAL_PAGES_HEADER]))
 
         setReservationList(response.data as Reservation[])
       }).catch((e) => {

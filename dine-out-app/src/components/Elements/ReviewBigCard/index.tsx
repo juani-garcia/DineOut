@@ -8,6 +8,7 @@ import { Divider, Pagination } from '@mui/material'
 import type Review from '@/types/models/Review'
 import useReviewList from '@/hooks/Reviews/useReviewList'
 import LoadingCircle from '@/components/Elements/LoadingCircle'
+import { DineOutHeaders } from '@/common/const'
 
 interface ReviewBigCardProps {
   reviewListURI: string
@@ -29,7 +30,7 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
         return
       }
 
-      setTotalPages(Number(response.headers['x-total-pages']))
+      setTotalPages(Number(response.headers[DineOutHeaders.TOTAL_PAGES_HEADER]))
       setReviewsList(response.data as Review[])
     }).catch(e => {
       console.error(e.response)

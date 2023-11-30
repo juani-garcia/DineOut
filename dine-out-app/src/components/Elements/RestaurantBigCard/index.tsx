@@ -30,7 +30,7 @@ import { t } from 'i18next'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
-import { roles } from '@/common/const'
+import { localPaths, roles } from '@/common/const'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import { Input } from '@mui/material'
@@ -123,7 +123,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                         restaurant.categories.map(Category.fromName).map(category => (
                           (category != null) &&
                             <CategoryChip key={category.name} as={Link}
-                                          to={'/restaurants?category=' + category.name}>{category.description}</CategoryChip>
+                                          to={localPaths.RESTAURANTS + '?category=' + category.name}>{category.description}</CategoryChip>
                         ))
                     }
                 </CategoriesHolder>
