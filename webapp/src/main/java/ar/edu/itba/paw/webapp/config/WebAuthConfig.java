@@ -96,7 +96,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/reviews/**").anonymous()
                 .antMatchers(HttpMethod.POST, "/users/").anonymous()
                 .antMatchers(HttpMethod.POST, "/users/password-recovery-token").anonymous()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(Response.Status.FORBIDDEN.getStatusCode()))
