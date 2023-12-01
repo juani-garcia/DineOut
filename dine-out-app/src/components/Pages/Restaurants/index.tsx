@@ -16,6 +16,7 @@ import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/Cus
 import Error from '@/components/Pages/Error'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
+import { DineOutHeaders } from '@/common/const'
 
 function Restaurants (): JSX.Element {
   const { t } = useTranslation()
@@ -45,7 +46,7 @@ function Restaurants (): JSX.Element {
         return
       }
 
-      setTotalPages(Number(response.headers['x-total-pages']))
+      setTotalPages(Number(response.headers[DineOutHeaders.TOTAL_PAGES_HEADER]))
 
       setRestaurantList(response.data as Restaurant[])
     }).catch((e) => {

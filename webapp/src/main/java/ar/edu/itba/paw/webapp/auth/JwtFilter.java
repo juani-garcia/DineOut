@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +21,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -128,6 +124,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                LOGGER.debug("Authorized user {}", userDetails.getUsername());
                 return !error;
             }
         },
@@ -166,6 +163,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                LOGGER.debug("Authorized user {}", username);
                 return true;
             }
         },
