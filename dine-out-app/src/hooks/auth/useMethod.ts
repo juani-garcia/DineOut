@@ -42,14 +42,14 @@ export const useMethod = () => {
       }
     }
 
-    const response = await axios({
+    return await axios({
       url: request.url,
       method: request.method,
       headers: request.headers,
       data: request.data,
       params: request.params
     }).then(response => {
-      if (response.headers[DineOutHeaders.AUTH_HEADER] != null) setToken(response.headers.authorization)
+      if (response.headers[DineOutHeaders.AUTH_HEADER] != null) setToken(response.headers[DineOutHeaders.AUTH_HEADER])
       if (response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER] != null) setRefreshToken(response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER])
 
       setIsLoading(false)
@@ -82,8 +82,6 @@ export const useMethod = () => {
     }).finally(() => {
       setIsLoading(false)
     })
-
-    return response
   }
 
   return { isLoading, requestMethod }
