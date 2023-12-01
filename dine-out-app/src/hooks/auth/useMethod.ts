@@ -19,7 +19,7 @@ export const useMethod = () => {
 
   const navigate = useNavigate()
 
-  async function requestMethod (request: MethodRequestType): Promise<AxiosResponse> {
+  async function requestMethod (request: MethodRequestType, retry: boolean = false): Promise<AxiosResponse> {
     setIsLoading(true)
 
     const refreshToken = getRefreshToken()
@@ -30,7 +30,7 @@ export const useMethod = () => {
         [DineOutHeaders.AUTH_HEADER]: `Basic ${request.basic}`,
         ...request.headers
       }
-    } else if (token != null) {
+    } else if (token != null && !retry) {
       request.headers = {
         ...request.headers,
         [DineOutHeaders.AUTH_HEADER]: `${token}`
@@ -65,17 +65,17 @@ export const useMethod = () => {
         if (token == null && refreshToken == null) {
           logout()
           setIsLoading(false)
-          navigate('/login')
+          navigate('/login', {
+            state: { from: window.location.pathname }
+          })
           return e.response
         }
 
-        if (token != null) setToken(null)
-        else if (refreshToken != null) setRefreshToken(null)
+        if (retry) {
+          return e.response
+        }
 
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        if (request.headers != null) delete request.headers[DineOutHeaders.AUTH_HEADER]
-
-        return await requestMethod(request)
+        return await requestMethod(request, true)
       }
       setIsLoading(false) // Failed credentials for login or other HTTP status code.
       return e.response

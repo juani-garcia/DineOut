@@ -5,7 +5,7 @@ import { LinkTo, LoginForm, LoginWhiteBoxContainer, RedirectionFooter } from './
 import { Button, FormControl, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { HttpStatusCode } from 'axios'
 import { useSnackbar } from 'notistack'
@@ -30,7 +30,7 @@ function Login (): JSX.Element {
   })
   const { login } = useLogin()
   const navigate = useNavigate()
-  // const location = useLocation()
+  const location = useLocation()
   const { user } = useAuth()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -39,11 +39,11 @@ function Login (): JSX.Element {
   const onLogin = (data: any): void => {
     login(data.username, data.password).then((response) => {
       if (response.status === HttpStatusCode.Accepted || response.status === HttpStatusCode.Ok) {
-        // if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
-        navigate(-1)
-        // } else {
-        //   navigate(location.state.from, { replace: true })
-        // }
+        if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
+          navigate('/')
+        } else {
+          navigate(location.state.from, { replace: true })
+        }
       } else {
         enqueueSnackbar(t('Errors.invalidCredentials'), {
           variant: 'warning'

@@ -5,7 +5,7 @@ import { Header, ReviewForm, ReviewWhiteBoxContainer } from './styles'
 import { CircularProgress, FormControl, Rating, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { useAuth } from '@/hooks/auth/useAuth'
-import { paths, roles } from '@/common/const'
+import { localPaths, paths, roles } from '@/common/const'
 import Error from '@/components/Pages/Error'
 import { HttpStatusCode } from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -30,9 +30,8 @@ export default function Review (): JSX.Element {
 
   useEffect(() => {
     if (user === null) {
-      console.log('fiumba')
       navigate('/login', {
-        state: { from: '/restaurant/' + (params.id === undefined ? '' : params.id.toString()) + '/review' }
+        state: { from: localPaths.RESTAURANTS + '/' + (params.id === undefined ? '' : params.id.toString()) + '/review' }
       })
     }
   }, [user])
