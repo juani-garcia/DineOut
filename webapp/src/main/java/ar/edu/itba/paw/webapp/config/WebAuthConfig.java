@@ -94,7 +94,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
             .and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/reviews/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/password-recovery-token").permitAll()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .anyRequest().authenticated()
