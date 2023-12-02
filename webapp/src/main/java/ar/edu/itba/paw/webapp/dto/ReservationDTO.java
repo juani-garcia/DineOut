@@ -41,6 +41,10 @@ public class ReservationDTO {
         return ReservationDTO.getUriBuilder(uriInfo).path(String.valueOf(reservation.getId()));
     }
 
+    public static UriBuilder getUriBuilderByUser(final UriInfo uriInfo, final User user) {
+        return ReservationDTO.getUriBuilder(uriInfo).queryParam("owner", user.getId());
+    }
+
     public Long getId() {
         return id;
     }
