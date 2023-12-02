@@ -58,15 +58,15 @@ public class MenuSectionServiceImplTest {
         Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
     }
 
-    @Test
-    public void testCannotCreateIfNotOwner() {
-        when(securityService.getCurrentUser()).
-                thenReturn(Optional.of(AUX_USER));
-        when(restaurantService.getByUserID(anyLong())).
-                thenReturn(Optional.of(RESTAURANT));
-
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
-    }
+//    @Test
+//    public void testCannotCreateIfNotOwner() {
+//        when(securityService.getCurrentUser()).
+//                thenReturn(Optional.of(AUX_USER));
+//        when(restaurantService.getByUserID(anyLong())).
+//                thenReturn(Optional.of(RESTAURANT));
+//
+//        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.create(MENU_SECTION_NAME));
+//    }
 
     @Test
     public void testUpdateNameMenuSection() {

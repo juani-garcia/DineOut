@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.model.Category;
+import ar.edu.itba.paw.model.Shift;
+import ar.edu.itba.paw.model.Zone;
 import ar.edu.itba.paw.webapp.validations.DuplicatedMail;
 import ar.edu.itba.paw.webapp.validations.FileSize;
 import ar.edu.itba.paw.webapp.validations.FileType;
-import ar.edu.itba.paw.webapp.validations.ValidZone;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -19,7 +21,7 @@ public class RestaurantForm {
     @NotNull
     private String name;
 
-    @FileSize(mb = 10)
+    @FileSize(mb = 1)
     @FileType(types = {"image/png", "image/jpeg"})
     private MultipartFile image;
 
@@ -38,8 +40,7 @@ public class RestaurantForm {
     private String detail;
 
     @NotNull
-    @ValidZone
-    private String zone;
+    private Zone zone;
 
     @NotNull
     @Range(min = -90, max = 90)
@@ -50,11 +51,11 @@ public class RestaurantForm {
     private Float lng;
 
     @NotNull
-    private List<Long> categories;
+    private List<Category> categories;
 
     @NotNull
     @NotEmpty
-    private List<Long> shifts;
+    private List<Shift> shifts;
 
     public String getName() {
         return name;
@@ -84,11 +85,11 @@ public class RestaurantForm {
         this.image = image;
     }
 
-    public String getZone() {
+    public Zone getZone() {
         return zone;
     }
 
-    public void setZone(String zone) {
+    public void setZone(Zone zone) {
         this.zone = zone;
     }
 
@@ -104,19 +105,19 @@ public class RestaurantForm {
         this.detail = detail;
     }
 
-    public List<Long> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Long> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 
-    public List<Long> getShifts() {
+    public List<Shift> getShifts() {
         return shifts;
     }
 
-    public void setShifts(List<Long> shifts) {
+    public void setShifts(List<Shift> shifts) {
         this.shifts = shifts;
     }
 

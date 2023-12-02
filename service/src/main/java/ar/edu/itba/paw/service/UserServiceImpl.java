@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.model.PasswordResetToken;
-import ar.edu.itba.paw.model.Role;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
+import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.InvalidPageException;
+import ar.edu.itba.paw.model.exceptions.InvalidPasswordRecoveryTokenException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PagedQuery<User> getUsers(final int page) {
+        if (page <= 0)
+            throw new InvalidPageException();
+
+        return userDao.getUsers(page);
+    }
+
+    @Override
     public Optional<User> getById(final long id) {
         return userDao.getById(id);
     }
@@ -51,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(String username, String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath) {
-        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName);
+        User user = userDao.create(username, passwordEncoder.encode(password), firstName, lastName, LocaleContextHolder.getLocale());
         if (user == null) return null;
 
         String role = isRestaurant ? Role.RESTAURANT.getRoleName() : Role.DINER.getRoleName();
@@ -59,22 +66,22 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow( () -> new IllegalStateException("El rol " + role + " no esta presente en la bbdd"));
         user.addRole(userRole);
 
-        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath, LocaleContextHolder.getLocale());
+        emailService.sendAccountCreationMail(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
         return user;
     }
 
     @Override
     @Transactional
-    public User edit(User user, String firstName, String lastName, String contextPath) {
-        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return null;
+    public Optional<User> edit(User user, String firstName, String lastName, String contextPath) {
+        if (user.getFirstName().equals(firstName) && user.getLastName().equals(lastName)) return Optional.empty();
 
         user.setFirstName(firstName);
         user.setLastName(lastName);
 
-        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, LocaleContextHolder.getLocale());
+        emailService.sendAccountModification(user.getUsername(), user.getFirstName(), contextPath, user.getLocale());
 
-        return user;
+        return Optional.of(user);
     }
 
     @Override
@@ -95,19 +102,21 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void createPasswordResetTokenForUser(User user, String contextPath) {
+    public void createPasswordResetTokenByUsername(String username, String contextPath) {
+        final User user = getByUsername(username).orElseThrow(NotFoundException::new);
+
         if (passwordResetTokenService.hasValidToken(user.getId())) return;
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         emailService.sendChangePassword(
                 user.getUsername(), user.getFirstName(),
-                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath,
-                LocaleContextHolder.getLocale());
+                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath, user.getLocale());
 
     }
 
     @Override
     public User getUserByPasswordResetToken(String token) {
-        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).orElseThrow(IllegalStateException::new);
+        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).
+                orElseThrow(InvalidPasswordRecoveryTokenException::new);
         return passwordResetToken.getUser();
     }
 

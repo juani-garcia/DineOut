@@ -6,6 +6,8 @@ import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.persistence.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Autowired
     private MenuItemDao menuItemDao;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MenuItemServiceImpl.class);
 
     @Override
     public Optional<MenuItem> getById(final long menuItemId) {
@@ -63,7 +66,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Transactional
     @Override
     public void delete(final long menuItemId) {
-        MenuItem menuItem = validateItem(menuItemId);
+        MenuItem menuItem = validateItem(menuItemId); // TODO: Check on cascade with image
+        menuItem.getSection().getMenuItemList().remove(menuItem);
         menuItemDao.delete(menuItemId);
     }
 
@@ -71,7 +75,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public void edit(final long menuItemId, final String name,
                      final String detail, final double price,
-                     final long menuSectionId, final byte[] imageBytes) {
+                     final long menuSectionId) {
         final MenuItem menuItem = validateItem(menuItemId);
         final MenuSection menuSection = menuSectionService.getById(menuSectionId).orElseThrow(IllegalArgumentException::new);
 
@@ -79,18 +83,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItem.setDetail(detail);
         menuItem.setPrice(price);
         menuItem.setSection(menuSection);
-        Image image = menuItem.getImage();
-        if (imageBytes == null || imageBytes.length == 0) {
-            if (image != null) {
-                imageService.delete(image.getId());
-            }
-        } else {
-            if (image != null) {
-                imageService.edit(image.getId(), imageBytes);
-            } else {
-                menuItem.setImage(imageService.create(imageBytes));
-            }
-        }
     }
 
     protected void move(final long menuItemId, final boolean moveUp) {
@@ -124,6 +116,29 @@ public class MenuItemServiceImpl implements MenuItemService {
         if (!Objects.equals(restaurant.getUser().getId(), user.getId()))
             throw new IllegalArgumentException("Cannot edit someone else's item");
         return menuItem;
+    }
+
+    @Transactional
+    @Override
+    public void updateImage(final long menuItemId, final byte[] image) {
+        final MenuItem menuItem = validateItem(menuItemId);
+        Image oldImage = menuItem.getImage();
+        if (image != null && image.length > 0) { // There is new image
+            if (oldImage == null) { // There is no old image
+                LOGGER.debug("Creating image for menu item {}", menuItemId);
+                menuItem.setImage(imageService.create(image));
+                LOGGER.debug("New image id: {}", menuItem.getImage().getId());
+            } else {
+                LOGGER.debug("Updating image for menu item {}", menuItemId);
+                imageService.edit(oldImage.getId(), image);
+            }
+        } else { // No new image
+            if (oldImage != null) {
+                LOGGER.debug("Deleting image for menu item {}", menuItemId);
+                menuItem.setImage(null);
+                imageService.delete(oldImage.getId());
+            }
+        }
     }
 
 }

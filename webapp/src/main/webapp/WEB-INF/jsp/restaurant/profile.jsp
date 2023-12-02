@@ -52,14 +52,26 @@
                     </div>
                 </c:if>
                 <div class="card-content same_width_elements flex_center">
-                    <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap">
-                        <c:forEach items="${restaurant.categories}" var="category">
-                            <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
-                               href="<c:url value ="/restaurants?category="/>${category.id}">
-                                <spring:message code="${category.message}"/>
-                            </a>
-                        </c:forEach>
-                    </div>
+                    <c:if test="${restaurant.categories != null && restaurant.categories.size() <= 4}">
+                        <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap flex_center">
+                            <c:forEach items="${restaurant.categories}" var="category">
+                                <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
+                                   href="<c:url value ="/restaurants?category="/>${category.id}">
+                                    <spring:message code="${category.message}"/>
+                                </a>
+                            </c:forEach>
+                        </div>
+                    </c:if>
+                    <c:if test="${restaurant.categories != null && restaurant.categories.size() > 5}">
+                        <div class="flex_row_only scrollable_row width_100 z_index_9999 white_space_nowrap ">
+                            <c:forEach items="${restaurant.categories}" var="category">
+                                <a class="card margins_lr_5px padding_4px grow_on_hover white_shadowed_small z_index_9999 black-text"
+                                   href="<c:url value ="/restaurants?category="/>${category.id}">
+                                    <spring:message code="${category.message}"/>
+                                </a>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
                 <div class="card-content same_width_elements flex_center">
                     <h5 class="center text_overflow_ellipsis">

@@ -25,10 +25,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
@@ -44,7 +40,6 @@ import java.util.Properties;
         "ar.edu.itba.paw.service",
         "ar.edu.itba.paw.persistence"
 })
-@EnableWebMvc
 @EnableAsync
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -77,15 +72,8 @@ public class WebConfig {
     @Value("classpath:sql/schema11.sql")
     private Resource schemaSql11;
 
-    @Bean
-    public ViewResolver viewResolver() {
-        final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setViewClass(JstlView.class);
-        resolver.setPrefix("/WEB-INF/jsp/");
-        resolver.setSuffix(".jsp");
-
-        return resolver;
-    }
+    @Value("classpath:sql/schema12.sql")
+    private Resource schemaSql12;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -135,7 +123,7 @@ public class WebConfig {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScripts(schemaSql, schemaSql2, schemaSql3,
                 schemaSql4, schemaSql5, schemaSql6, schemaSql7,
-                schemaSql8, schemaSql9, schemaSql10, schemaSql11);
+                schemaSql8, schemaSql9, schemaSql10, schemaSql11, schemaSql12);
         return populator;
     }
 
@@ -201,7 +189,6 @@ public class WebConfig {
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        // multipartResolver.setMaxUploadSize(100000);
         return multipartResolver;
     }
 

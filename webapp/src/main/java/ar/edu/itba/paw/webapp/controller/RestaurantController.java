@@ -1,356 +1,177 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
-import ar.edu.itba.paw.model.exceptions.NotFoundException;
-import ar.edu.itba.paw.model.exceptions.RepeatedReviewException;
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
-import ar.edu.itba.paw.service.*;
-import ar.edu.itba.paw.webapp.form.MenuItemForm;
-import ar.edu.itba.paw.webapp.form.MenuSectionForm;
+import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
+import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
-import ar.edu.itba.paw.webapp.form.RestaurantReviewForm;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import java.io.IOException;
-import java.security.InvalidParameterException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Controller
-@RequestMapping("/restaurant")
+@Path("restaurants")
+@Component
 public class RestaurantController {
 
-    @Autowired
-    private RestaurantService restaurantService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantController.class);
+
+    private RestaurantService rs;
+
+    @Context
+    private UriInfo uriInfo;
 
     @Autowired
-    private MenuSectionService menuSectionService;
-
-    @Autowired
-    private MenuItemService menuItemService;
-
-    @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private FavoriteService favoriteService;
-
-    @Autowired
-    private ReservationService reservationService;
-
-    @Autowired
-    private RestaurantReviewService restaurantReviewService;
-
-    @RequestMapping("")
-    public ModelAndView restaurantProfile(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage) {
-        final ModelAndView mav = new ModelAndView("restaurant/profile");
-
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
-        if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
-        mav.addObject("restaurant", restaurant);
-
-
-        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        mav.addObject("sections", menuSectionList);
-
-        PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, restaurant.getId());
-        long reviewPages = restaurantReviewPagedQuery.getPageCount();
-        if (reviewPage != 1 && reviewPages < reviewPage)
-            return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view?page=" + reviewPage);
-
-
-        mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
-        mav.addObject("reviewPages", reviewPages);
-        mav.addObject("shifts", restaurant.getShifts());
-        return mav;
+    public RestaurantController(final RestaurantService rs) {
+        this.rs = rs;
     }
 
-    @RequestMapping("/register")
-    public ModelAndView restaurantForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        ModelAndView mav = new ModelAndView("register/register_restaurant");
-        mav.addObject("categories", Category.values());
-        mav.addObject("zones", Zone.values());
-        mav.addObject("shifts", Shift.values());
-        return mav;
-    }
+    // GET /restaurant
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response readRestaurants(
+            @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
+            @QueryParam("match") final String match,
+            @QueryParam("category") final Category category,
+            @QueryParam("zone") final Zone zone,
+            @QueryParam("shift") final Shift shift,
+            @QueryParam("favoriteOf") final Long favoriteOf
+    ) {
+        LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}, favoriteOf={}",
+                page, match, category, zone, shift, favoriteOf);
+        // TODO: Check validation of params (min for page, enums in range)
 
-    @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ModelAndView create(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form, final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return restaurantForm(form);
-        }
-        byte[] image;
-        try {
-            image = form.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
-        }
-        restaurantService.create(form.getName(), image, form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getLat(), form.getLng(), form.getCategories(), form.getShifts());
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone, favoriteOf);
 
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/edit")
-    public ModelAndView restaurantEditForm(@ModelAttribute("restaurantForm") final RestaurantForm form) {
-        ModelAndView mav = new ModelAndView("restaurant/edit_restaurant");
-        Restaurant restaurant = restaurantService.getByUserID(securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId()).orElseThrow(NotFoundException::new);
-        mav.addObject("categories", Category.values());
-        mav.addObject("zones", Zone.values());
-        mav.addObject("shifts", Shift.values());
-        form.setName(restaurant.getName());
-        form.setAddress(restaurant.getAddress());
-        form.setEmail(restaurant.getMail());
-        form.setDetail(restaurant.getDetail());
-        form.setLat(restaurant.getLat());
-        form.setLng(restaurant.getLng());
-        form.setZone(restaurant.getZone().getName());
-        form.setCategories(restaurant.getCategories().
-                stream().mapToLong(Category::getId).boxed().collect(Collectors.toList()));
-        form.setShifts(restaurant.getShifts().
-                stream().mapToLong(Shift::getId).boxed().collect(Collectors.toList()));
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/edit", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ModelAndView restaurantEdit(@Valid @ModelAttribute("restaurantForm") final RestaurantForm form,
-                                       final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return restaurantEditForm(form);
+        if (restaurantPagedQuery.getContent().isEmpty()) {
+            return Response.noContent().build();
         }
 
-        byte[] image;
-        try {
-            image = form.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
+        final List<RestaurantDTO> restaurantDTOList = restaurantPagedQuery.getContent().
+                stream().map(r -> RestaurantDTO.fromRestaurant(uriInfo, r)).collect(Collectors.toList());
+
+        UriBuilder uriBuilder = uriInfo.getRequestUriBuilder().replacePath("restaurants");
+        Response.ResponseBuilder baseResponse = Response.ok(new GenericEntity<List<RestaurantDTO>>(restaurantDTOList){});
+        return ResponseUtils.addLinksFromPagedQuery(restaurantPagedQuery, uriBuilder, baseResponse).build();
+    }
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.isRestaurantOwnerWithoutRestaurant(authentication)")
+    public Response createRestaurant(@Valid final RestaurantForm restaurantForm) {
+        LOGGER.debug("{}", restaurantForm);
+        // TODO: Remove this comment, only here due to TODOs
+//        byte[] image = null;
+//        if (restaurantForm.getImage() != null) {
+//            try { // TODO: Check if we could migrate this to form with custom mapper
+//                image = restaurantForm.getImage().getBytes();
+//            } catch (IOException e) {
+//                throw new IllegalStateException(); // This should never happen because of @ValidImage.
+//                // TODO: Check https://bitbucket.org/itba/paw-2022a-10/pull-requests/122#comment-410597884
+//            }
+//        }
+        Restaurant newRestaurant = rs.create(restaurantForm.getName(),
+                null, // TODO: Remove image from restaurant creation service
+                restaurantForm.getAddress(),
+                restaurantForm.getEmail(),
+                restaurantForm.getDetail(),
+                restaurantForm.getZone(),
+                restaurantForm.getLat(),
+                restaurantForm.getLng(),
+                restaurantForm.getCategories(),
+                restaurantForm.getShifts());
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newRestaurant.getId())).build();
+        return Response.created(location).build();
+    }
+
+    // GET /restaurants/{id}
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    public Response getRestaurant(@PathParam("id") final long restaurantID) {
+        Optional<RestaurantDTO> maybeRestaurant = rs.getById(restaurantID).map(r -> RestaurantDTO.fromRestaurant(uriInfo, r));
+        if (! maybeRestaurant.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-
-        restaurantService.updateCurrentRestaurant(form.getName(), form.getAddress(), form.getEmail(), form.getDetail(), Zone.getByName(form.getZone()), form.getLat(), form.getLng(), form.getCategories(), form.getShifts(), image);
-
-        return new ModelAndView("redirect:/restaurant");
+         return Response.ok(maybeRestaurant.get()).build();
     }
 
-    @RequestMapping(value = "/section")
-    public ModelAndView sectionForm(@ModelAttribute("sectionForm") final MenuSectionForm form) {
-        return new ModelAndView("restaurant/section_form");
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateRestaurant(
+            @PathParam("id") final long restaurantId,
+            @Valid final RestaurantForm restaurantForm
+    ) { // TODO: Remove image from form
+        rs.updateCurrentRestaurant(restaurantForm.getName(),
+                restaurantForm.getAddress(),
+                restaurantForm.getEmail(),
+                restaurantForm.getDetail(),
+                restaurantForm.getZone(),
+                restaurantForm.getLat(),
+                restaurantForm.getLng(),
+                restaurantForm.getCategories(),
+                restaurantForm.getShifts(),
+                null); // TODO: Refactor restaurant update service to not expect image
+        return Response.ok().build();
     }
 
-    @RequestMapping(value = "/section", method = {RequestMethod.POST})
-    public ModelAndView section(@Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
-                                final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return sectionForm(form);
+    @GET
+    @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
+    @Path("/{id}/image")
+    public Response getRestaurantImage(@PathParam("id") final long restaurantID, @Context Request request) {
+        Optional<Restaurant> maybeRestaurant = rs.getById(restaurantID);
+        if (! maybeRestaurant.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-
-        menuSectionService.create(form.getName());
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/section/{sectionId}/edit")
-    public ModelAndView sectionEditForm(@PathVariable final long sectionId,
-                                        @ModelAttribute("sectionForm") final MenuSectionForm form) {
-        MenuSection menuSection = menuSectionService.getById(sectionId).orElseThrow(MenuSectionNotFoundException::new);
-        ModelAndView mav = new ModelAndView("restaurant/section_edit_form");
-        mav.addObject("section", menuSection);
-        form.setName(menuSection.getName());
-        return mav;
-    }
-
-    @RequestMapping(value = "/section/{sectionId}/edit", method = {RequestMethod.POST})
-    public ModelAndView sectionEdit(@PathVariable final long sectionId,
-                                    @Valid @ModelAttribute("sectionForm") final MenuSectionForm form,
-                                    final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return sectionEditForm(sectionId, form);
+        Restaurant restaurant = maybeRestaurant.get();
+        if (restaurant.getImage() == null) {
+            LOGGER.debug("There is no image");
+            return Response.noContent().build();
         }
-        menuSectionService.updateName(sectionId, form.getName());
-        return new ModelAndView("redirect:/restaurant");
+        return ResponseUtils.addCacheToImage(request, restaurant.getImage());
     }
 
-    @RequestMapping(value = "/section/{sectionId}/up", method = {RequestMethod.POST})
-    public ModelAndView sectionUp(@PathVariable final long sectionId) {
-        menuSectionService.moveUp(sectionId);
-        return new ModelAndView("redirect:/restaurant");
+    @PUT
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response updateRestaurantImage(
+            @PathParam("id") final long restaurantId,
+            @FormDataParam("image") InputStream fileInputStream,
+            @FormDataParam("image") FormDataContentDisposition fileMetaData
+    ) throws IOException {
+        LOGGER.debug("Loading image for restaurant {}", restaurantId);
+        final byte[] image = IOUtils.toByteArray(fileInputStream);
+        rs.updateRestaurantImage(restaurantId, image);
+        return Response.ok().build();
     }
 
-    @RequestMapping(value = "/section/{sectionId}/down", method = {RequestMethod.POST})
-    public ModelAndView sectionDown(@PathVariable final long sectionId) {
-        menuSectionService.moveDown(sectionId);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/section/{sectionId}/delete", method = {RequestMethod.POST})
-    public ModelAndView sectionDeletion(@PathVariable final long sectionId) {
-        menuSectionService.delete(sectionId);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/item")
-    public ModelAndView itemForm(@ModelAttribute("itemForm") final MenuItemForm form) {
-        ModelAndView mav = new ModelAndView("restaurant/item_form");
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
-        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        mav.addObject("sections", menuSectionList);
-        return mav;
-    }
-
-    @RequestMapping(value = "/item", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ModelAndView item(@Valid @ModelAttribute("itemForm") final MenuItemForm form, final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return itemForm(form);
-        }
-
-        byte[] image;
-        try {
-            image = form.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
-        }
-
-        MenuItem menuItem = menuItemService.create(form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/item/{itemId}/edit")
-    public ModelAndView itemEditForm(@PathVariable final long itemId,
-                                     @ModelAttribute("itemForm") final MenuItemForm form) {
-        ModelAndView mav = new ModelAndView("restaurant/item_edit_form");
-        MenuItem menuItem = menuItemService.getById(itemId).orElseThrow(InvalidParameterException::new);
-        mav.addObject("item", menuItem);
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElseThrow(NotFoundException::new);
-        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        mav.addObject("sections", menuSectionList);
-        form.setName(menuItem.getName());
-        form.setDetail(menuItem.getDetail());
-        form.setPrice(menuItem.getPrice());
-        form.setMenuSectionId(menuItem.getSection().getId());
-        return mav;
-    }
-
-    @RequestMapping(value = "/item/{itemId}/edit", method = {RequestMethod.POST}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ModelAndView itemEdit(@PathVariable final long itemId,
-                                 @Valid @ModelAttribute("itemForm") final MenuItemForm form,
-                                 final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return itemEditForm(itemId, form);
-        }
-
-        byte[] image;
-        try {
-            image = form.getImage().getBytes();
-        } catch (IOException e) {
-            throw new IllegalStateException(); // This should never happen because of @ValidImage.
-        }
-
-        menuItemService.edit(itemId, form.getName(), form.getDetail(), form.getPrice(), form.getMenuSectionId(), image);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/item/{itemId}/up", method = {RequestMethod.POST})
-    public ModelAndView itemUp(@PathVariable final long itemId) {
-        menuItemService.moveUp(itemId);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/item/{itemId}/down", method = {RequestMethod.POST})
-    public ModelAndView itemDown(@PathVariable final long itemId) {
-        menuItemService.moveDown(itemId);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping(value = "/item/{itemId}/delete", method = {RequestMethod.POST})
-    public ModelAndView itemDeletion(@PathVariable final long itemId) {
-        menuItemService.delete(itemId);
-        return new ModelAndView("redirect:/restaurant");
-    }
-
-    @RequestMapping("/{resId}/view")
-    public ModelAndView reservation(@RequestParam(name = "review_page", defaultValue = "1") final int reviewPage,
-                                    @PathVariable final long resId) {
-        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-        User user = securityService.getCurrentUser().orElse(null);
-        if (restaurant.getUser().equals(user)) {
-            return new ModelAndView("redirect:/restaurant");
-        }
-
-        final ModelAndView mav = new ModelAndView("restaurant/public_detail");
-
-        PagedQuery<RestaurantReview> restaurantReviewPagedQuery = restaurantReviewService.getByRestaurantId(reviewPage, resId);
-        long reviewPages = restaurantReviewPagedQuery.getPageCount();
-        if (reviewPage != 1 && reviewPages < reviewPage)
-            return new ModelAndView("redirect:/restaurant/" + resId + "/view?page=" + reviewPage);
-
-        mav.addObject("hasReviewed", user != null && restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId()));
-        mav.addObject("reviews", restaurantReviewPagedQuery.getContent());
-        mav.addObject("reviewPages", reviewPages);
-        mav.addObject("restaurant", restaurant);
-        mav.addObject("isUserFavorite", favoriteService.isFavoriteOfLoggedUser(resId));
-        mav.addObject("formSuccess", false);
-        mav.addObject("shifts", restaurant.getShifts());
-        List<MenuSection> menuSectionList = menuSectionService.getByRestaurantId(restaurant.getId());
-        mav.addObject("sections", menuSectionList);
-        return mav;
-    }
-
-    @RequestMapping("/{resId}/review")
-    public ModelAndView addReview(@ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form, @PathVariable final long resId) {  // resId belongs here to preserve the context for the POST
-        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        if (restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId())) {
-            throw new RepeatedReviewException();
-        }
-        ModelAndView mav = new ModelAndView("restaurant/add_review");
-        mav.addObject("restaurant", restaurant);
-        return mav;
-    }
-
-    @RequestMapping(value = "/{resId}/review", method = {RequestMethod.POST})
-    public ModelAndView section(@Valid @ModelAttribute("restaurantReviewForm") final RestaurantReviewForm form,
-                                final BindingResult errors,
-                                @PathVariable final long resId,
-                                final HttpServletRequest request) {
-        Restaurant restaurant = restaurantService.getById(resId).orElseThrow(NotFoundException::new);
-        User user = securityService.getCurrentUser().orElseThrow(UnauthenticatedUserException::new);
-        if (restaurantReviewService.hasReviewedRestaurant(user.getId(), restaurant.getId())) {
-            throw new RepeatedReviewException();
-        }
-
-        if (errors.hasErrors()) {
-            return addReview(form, resId);
-        }
-
-        restaurantReviewService.create(form.getReview(), form.getRating(), resId, request.getRequestURL().toString().replace(request.getServletPath(), ""));
-        return new ModelAndView("redirect:/restaurant/" + resId + "/view");
-    }
-
-    @RequestMapping("/reservations")
-    public ModelAndView reservations(
-            @RequestParam(name = "page", defaultValue = "1") final int page,
-            @RequestParam(name = "past", defaultValue = "false") final boolean past) {
-
-        Restaurant restaurant = restaurantService.getOfLoggedUser().orElse(null);
-        if (restaurant == null) return new ModelAndView("redirect:/restaurant/register");
-
-        PagedQuery<Reservation> reservationPagedQuery =
-                reservationService.getAllForCurrentRestaurant(page, past);
-        long pages = reservationPagedQuery.getPageCount();
-        if (page != 1 && pages < page) return new ModelAndView("redirect:/restaurant/reservations" + "?page=" + pages);
-
-        ModelAndView mav = new ModelAndView("restaurant/reservations");
-        mav.addObject("past", past);
-        mav.addObject("pages", pages);
-        mav.addObject("reservations", reservationPagedQuery.getContent());
-        return mav;
+    @DELETE
+    @Path("/{id}/image")
+    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    public Response deleteRestaurantImage(
+            @PathParam("id") final long restaurantId
+    ) {
+        rs.updateRestaurantImage(restaurantId, null);
+        return Response.ok().build();
     }
 
 }
-

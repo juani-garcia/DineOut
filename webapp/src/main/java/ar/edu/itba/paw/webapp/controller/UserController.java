@@ -1,149 +1,126 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Role;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.NotFoundException;
-import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.service.FavoriteService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
-import ar.edu.itba.paw.webapp.form.NewPasswordForm;
-import ar.edu.itba.paw.webapp.form.PasswordRecoveryForm;
-import ar.edu.itba.paw.webapp.form.UserForm;
+import ar.edu.itba.paw.webapp.dto.UserDTO;
+import ar.edu.itba.paw.webapp.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.net.URI;
+import java.util.Optional;
 
-@Controller
+@Path("users")
+@Component
 public class UserController {
+    private final UserService userService;
+    private final SecurityService securityService;
+    private final FavoriteService favoriteService;
+
+    @Context
+    private UriInfo uriInfo;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    protected AuthenticationManager authenticationManager;
-
-    @Autowired
-    private RestaurantService restaurantService;
-
-
-    @RequestMapping(value = "/restaurant_picker")
-    public ModelAndView restaurantPicker(HttpServletRequest request) {
-        Restaurant restaurant = restaurantService.getRecommendedRestaurant(request.isUserInRole(Role.DINER.getRoleName()));
-        return new ModelAndView("redirect:/restaurant/" + restaurant.getId() + "/view");
+    public UserController(UserService userService, SecurityService securityService, FavoriteService favoriteService) {
+        this.userService = userService;
+        this.securityService = securityService;
+        this.favoriteService = favoriteService;
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public ModelAndView registerForm(@ModelAttribute("registerForm") final UserForm form) {
-        return new ModelAndView("register/register");
+    @POST
+    @Consumes(value = {MediaType.APPLICATION_JSON, })
+    public Response createUser(@Valid final UserForm userForm) {
+        final User newUser = userService.create(
+                userForm.getUsername(),
+                userForm.getPassword(),
+                userForm.getFirstName(),
+                userForm.getLastName(),
+                userForm.getIsRestaurant(),
+                uriInfo.getPath());
+        final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newUser.getId())).build();
+        return Response.created(location).build();
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView register(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors, HttpServletRequest request) {
-
-        if (errors.hasErrors()) {
-            return registerForm(form);
+    @GET
+    @Path("/{id}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response readUser(@PathParam("id") final long userId) {
+        Optional<UserDTO> maybeUser = userService.getById(userId).map(u -> UserDTO.fromUser(uriInfo, u));
+        if (! maybeUser.isPresent()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-
-        userService.create(form.getUsername(), form.getPassword(), form.getFirstName(), form.getLastName(), form.getIsRestaurant(), request.getRequestURL().toString().replace(request.getServletPath(), ""));
-        authenticateUserAndSetSession(request, form.getUsername(), form.getPassword());
-
-        return new ModelAndView("redirect:/profile");
+        return Response.ok(maybeUser.get()).build();
     }
 
-    /* Referenced from : https://www.baeldung.com/spring-security-auto-login-user-after-registration#authManager */
-    private void authenticateUserAndSetSession(HttpServletRequest request, String username, String password) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-
-        // generate session if one doesn't exist
-        request.getSession();
-
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-    }
-
-    @RequestMapping("/login")
-    public ModelAndView login(HttpServletRequest request) {
-        final HttpSession session = request.getSession();
-        final String referer = request.getHeader("Referer");
-        if (session != null && referer != null && !referer.contains("login")) {
-            session.setAttribute("login_referer", referer);
+    @PUT
+    @Path("/{id}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response updateUser(
+            @PathParam("id") final long userId,
+            @Valid final UserProfileEditForm userProfileEditForm
+    ) {
+        Optional<User> user = securityService.getCurrentUser();
+        if (! user.isPresent()) {
+            throw new UnauthenticatedUserException(); // Should not happen due to @PreAuthorize
         }
-        return new ModelAndView("home/login");
+        userService.edit(
+                user.get(),
+                userProfileEditForm.getFirstName(),
+                userProfileEditForm.getLastName(),
+                uriInfo.getPath()
+        );
+        return Response.ok().build();
     }
 
-    @RequestMapping("/profile")
-    public ModelAndView profile(HttpServletRequest request) {
-        if (request.isUserInRole(Role.RESTAURANT.getRoleName())) {
-            return new ModelAndView("redirect:/restaurant");
-        } else if (request.isUserInRole(Role.DINER.getRoleName())) {
-            return new ModelAndView("redirect:/diner/profile");
-        }
-        throw new BadCredentialsException("Logged user is neither a RESTAURANT or a DINER");
+    @POST
+    @Path("/password-recovery-token")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createPasswordRecoveryToken(@Valid PasswordRecoveryForm passwordRecoveryForm) {
+        userService.createPasswordResetTokenByUsername(passwordRecoveryForm.getUsername(), uriInfo.getPath());
+        return Response.ok().build();
     }
 
-
-    // Referenced from: https://www.baeldung.com/spring-security-registration-i-forgot-my-password
-    @RequestMapping("/forgot_my_password")
-    public ModelAndView forgotMyPassword(@ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm) {
-        return new ModelAndView("/forgot_my_password");
-    }
-
-    @RequestMapping(value = "/reset_password", method = {RequestMethod.POST})
-    public ModelAndView resetPassword(@Valid @ModelAttribute("passwordRecoveryForm") final PasswordRecoveryForm passwordRecoveryForm, final BindingResult errors, HttpServletRequest request) {
-        if (errors.hasErrors()) {
-            return forgotMyPassword(passwordRecoveryForm);
-        }
-
-        User user = userService.getByUsername(passwordRecoveryForm.getUsername()).orElseThrow(NotFoundException::new);
-        userService.createPasswordResetTokenForUser(user, request.getRequestURL().toString().replace(request.getServletPath(), ""));
-        return new ModelAndView("redirect:/");
-    }
-
-    @RequestMapping("/change_password")
-    public ModelAndView changePassword(@RequestParam(name = "token") final String token, @ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm) {
-        String result = securityService.validatePasswordResetToken(token);
-        if (result == null) {
-            ModelAndView mav = new ModelAndView("/update_password");
-            mav.addObject("token", token);
-            return mav;
-        }
-
-        return new ModelAndView("redirect:/login");
-    }
-
-    @RequestMapping(value = "/save_password", method = RequestMethod.POST)
-    public ModelAndView savePassword(@Valid @ModelAttribute("newPasswordForm") final NewPasswordForm newPasswordForm, final BindingResult errors) {
-        if (errors.hasErrors()) {
-            return changePassword(newPasswordForm.getToken(), newPasswordForm);
-        }
-        String result = securityService.validatePasswordResetToken(newPasswordForm.getToken());
-
-        if (result != null) {
-            return new ModelAndView("redirect:/login");
-        }
-
+    @PUT
+    @Path("/password-recovery-token/{token}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editPasswordByToken(@Valid NewPasswordForm newPasswordForm,
+                                        @PathParam("token") String token) {
         userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
-        return new ModelAndView("redirect:/login");
+        return Response.ok().build();
     }
+
+    @GET
+    @Path("/{id}/favorites/{restaurantId}")
+    public Response readFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId
+    ) {
+        final boolean favorite = favoriteService.isFavoriteOfUser(userId, restaurantId);
+        if (!favorite) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/{id}/favorites/{restaurantId}")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response updateFavoriteRelation(
+            @PathParam("id") final long userId,
+            @PathParam("restaurantId") final long restaurantId,
+            @Valid FavoriteForm fm
+            ) {
+        favoriteService.set(restaurantId, userId, fm.isUpVote());
+        return Response.ok().build();
+    }
+
 }

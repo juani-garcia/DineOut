@@ -75,7 +75,7 @@ public class EmailServiceImpl implements EmailService {
         model.put("amount", reservation.getAmount());
         model.put("time", reservation.getTimeString());
         model.put("firstName", user.getFirstName());
-        model.put("lastName", user.getFirstName());
+        model.put("lastName", user.getLastName());
         model.put("dine_out", contextPath);
         sendMessageUsingThymeleafTemplate(to, model, "reservation-created-restaurant.html", "subject.reservation_created", locale);
     }
