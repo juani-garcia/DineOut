@@ -167,7 +167,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                                             <>
                                                 <Button onClick={() => {
                                                   navigate('/register', {
-                                                    state: { from: window.location.pathname }
+                                                    state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
                                                   })
                                                 }}>
                                                     {t('registerToReserve')}

@@ -21,7 +21,7 @@ import { Zone } from '@/types/enums/Zone'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { redirect, useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { roles } from '@/common/const'
+import { localPaths, roles } from '@/common/const'
 import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 import { Autocomplete, GoogleMap, MarkerF } from '@react-google-maps/api'
 import { MapSearchContainer } from '@/components/Elements/MapSearch/styles'
@@ -64,12 +64,12 @@ export default function WithMap (): JSX.Element {
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: '/restaurant/register' }
+        state: { from: localPaths.RESTAURANTS + '/' + 'register' }
       })
     } else if (!user.roles.includes(roles.RESTAURANT)) {
       navigate('/')
     } else if (user.restaurantId !== undefined && user.restaurantId !== null) {
-      navigate('/restaurant/' + user.restaurantId.toString() + '/view')
+      navigate(localPaths.RESTAURANTS + '/' + user.restaurantId.toString() + '/view')
     }
   }, [user])
 

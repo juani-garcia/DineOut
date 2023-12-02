@@ -5,7 +5,7 @@ import { Header, ReservationForm, ReservationWhiteBoxContainer } from './styles'
 import { Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useCreateReservation } from '@/hooks/Reservations/useCreateReservation'
-import { paths, roles } from '@/common/const'
+import { localPaths, paths, roles } from '@/common/const'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import type Restaurant from '@/types/models/Restaurant'
@@ -47,12 +47,13 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
   const location = useLocation()
   const { enqueueSnackbar } = useSnackbar()
 
-  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Unauthorized}/>
+  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Forbidden}/>
 
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: '/reserve/' + (params.id === undefined ? '' : params.id.toString()) }
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        state: { from: localPaths.RESERVE + '/' + (params.id === undefined ? '' : params.id.toString()) }
       })
     }
   }, [user])

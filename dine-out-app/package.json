@@ -2,7 +2,7 @@
   "name": "dine-out-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "/paw-2022a-10",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",

@@ -31,7 +31,7 @@ public class MenuItemDTO {
         dto.ordering = menuItem.getOrdering();
         final UriBuilder menuItemUriBuilder = MenuItemDTO.getUriBuilder(uriInfo, menuItem);
         if (menuItem.getImage() != null)
-            dto.image = menuItemUriBuilder.clone().path("image").build();
+            dto.image = MenuItemDTO.getUriBuilderForImage(uriInfo, menuItem).build();
         dto.self = menuItemUriBuilder.clone().build();
 
         return dto;
@@ -43,6 +43,10 @@ public class MenuItemDTO {
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuItem menuItem) {
         return MenuItemDTO.getUriBuilder(uriInfo, menuItem.getSection()).path(String.valueOf(menuItem.getId()));
+    }
+
+    public static UriBuilder getUriBuilderForImage(final UriInfo uriInfo, final MenuItem menuItem) {
+        return MenuItemDTO.getUriBuilder(uriInfo, menuItem).path("image");
     }
 
     public Long getId() {
