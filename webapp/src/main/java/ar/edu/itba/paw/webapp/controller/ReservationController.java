@@ -44,13 +44,13 @@ public class ReservationController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #owner)")
     public Response readReservations(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
-            @QueryParam("userId") final Long userId,
+            @QueryParam("owner") final Long owner,
             @QueryParam("past") @DefaultValue("false") final boolean past
     ) {
-        if (userId == null) {
+        if (owner == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
