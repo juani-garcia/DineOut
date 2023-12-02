@@ -22,7 +22,8 @@ public class RestaurantReviewDTO {
         dto.id = restaurantReview.getId();
         dto.review = restaurantReview.getReview();
         dto.rating = restaurantReview.getRating();
-        // TODO: dto.restaurant
+        dto.restaurant = RestaurantDTO.getUriBuilder(uriInfo, restaurantReview.getRestaurant()).build();
+        dto.user = UserDTO.getUriBuilder(uriInfo, restaurantReview.getUser()).build();
         dto.self = RestaurantReviewDTO.getUriBuilder(uriInfo, restaurantReview).build();
 
         return dto;
@@ -39,6 +40,10 @@ public class RestaurantReviewDTO {
 
     public static UriBuilder getUriBuilderForRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
         return RestaurantReviewDTO.getUriBuilder(uriInfo).queryParam("forRestaurant", restaurant.getId());
+    }
+
+    public static UriBuilder getUriBuilderByUser(final UriInfo uriInfo, final User user) {
+        return RestaurantReviewDTO.getUriBuilder(uriInfo).queryParam("byUser", user.getId());
     }
 
     public Long getId() {

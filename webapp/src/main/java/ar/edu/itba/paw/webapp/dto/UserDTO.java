@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.dto;
 
+import ar.edu.itba.paw.model.Reservation;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.UserRole;
 
@@ -27,12 +28,16 @@ public class UserDTO {
         final UserDTO dto = new UserDTO();
         final UriBuilder userUriBuilder = UserDTO.getUriBuilder(uriInfo, user);
 
+        dto.id = user.getId();
         dto.username = user.getUsername();
         dto.firstName = user.getFirstName();
         dto.lastName = user.getLastName();
         dto.locale = user.getLocale();
         dto.roles = new HashSet<>(user.getRoles());
         dto.self = userUriBuilder.build();
+        dto.favoriteRestaurants = RestaurantDTO.getUriBuilderForUserFavorites(uriInfo, user).build();
+        dto.reviews = RestaurantReviewDTO.getUriBuilderByUser(uriInfo, user).build();
+        dto.reservations = ReservationDTO.getUriBuilderByUser(uriInfo, user).build();
 
         return dto;
     }
