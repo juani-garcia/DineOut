@@ -66,7 +66,7 @@ export const useMethod = () => {
           logout()
           setIsLoading(false)
           navigate('/login', {
-            state: { from: window.location.pathname }
+            state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
           })
           return e.response
         }

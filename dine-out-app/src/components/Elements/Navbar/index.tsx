@@ -34,7 +34,7 @@ function Navbar (): JSX.Element {
                         <ListItem>
                             <RegisterButton onClick={() => {
                               navigate('/register', {
-                                state: { from: window.location.pathname }
+                                state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
                               })
                             }}>
                                 {t('register')}
@@ -43,7 +43,7 @@ function Navbar (): JSX.Element {
                         <ListItem>
                             <LoginButton onClick={() => {
                               navigate('/login', {
-                                state: { from: window.location.pathname }
+                                state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
                               })
                             }}>
                                 {t('login')}
