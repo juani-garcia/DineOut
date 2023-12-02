@@ -5,6 +5,7 @@ import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
 import ar.edu.itba.paw.webapp.utils.PATCH;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -135,7 +136,7 @@ public class MenuItemController {
     @GET
     @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
     @Path("/{id}/image")
-    public Response getMenuItemImage(@PathParam("id") final long menuItemId) {
+    public Response getMenuItemImage(@PathParam("id") final long menuItemId, @Context Request request) {
         LOGGER.debug("Getting image for menu item with id {}", menuItemId);
         Optional<MenuItem> maybeMenuItem = mis.getById(menuItemId);
         if (! maybeMenuItem.isPresent()) {
@@ -146,7 +147,7 @@ public class MenuItemController {
             LOGGER.debug("There is no image");
             return Response.noContent().build();
         }
-        return Response.ok(menuItem.getImage().getSource()).build();
+        return ResponseUtils.addCacheToImage(request, menuItem.getImage());
     }
 
     @PUT

@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -50,7 +47,7 @@ public class RestaurantDTO {
         dto.self = restaurantUriBuilder.clone().build();
         dto.owner = UserDTO.getUriBuilder(uriInfo, restaurant.getUser()).build();
         if (restaurant.getImage() != null)
-            dto.image = restaurantUriBuilder.clone().path("image").build();
+            dto.image = RestaurantDTO.getUriBuilderForImage(uriInfo, restaurant).build();
         dto.zone = restaurant.getZone();
         dto.shifts = restaurant.getShifts();
         dto.categories = restaurant.getCategories();
@@ -66,6 +63,14 @@ public class RestaurantDTO {
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Restaurant restaurant) {
         return RestaurantDTO.getUriBuilder(uriInfo).path(String.valueOf(restaurant.getId()));
+    }
+
+    public static UriBuilder getUriBuilderForImage(final UriInfo uriInfo, final Restaurant restaurant) {
+        return RestaurantDTO.getUriBuilder(uriInfo, restaurant).path("image");
+    }
+
+    public static UriBuilder getUriBuilderForUserFavorites(final UriInfo uriInfo, final User user) {
+        return RestaurantDTO.getUriBuilder(uriInfo).queryParam("favoriteOf", user.getId());
     }
 
     public Long getId() {

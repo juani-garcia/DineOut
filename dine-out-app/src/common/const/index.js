@@ -9,7 +9,8 @@ export const paths = {
 export const localPaths = {
   RESTAURANTS: '/restaurant',
   RESERVATION: '/reservation',
-  REVIEWS: '/review'
+  REVIEWS: '/review',
+  RESERVE: '/reserve'
 }
 
 export const roles = {

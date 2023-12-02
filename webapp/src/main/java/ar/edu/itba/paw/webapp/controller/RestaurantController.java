@@ -21,6 +21,7 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -135,7 +136,7 @@ public class RestaurantController {
     @GET
     @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
     @Path("/{id}/image")
-    public Response getRestaurantImage(@PathParam("id") final long restaurantID) {
+    public Response getRestaurantImage(@PathParam("id") final long restaurantID, @Context Request request) {
         Optional<Restaurant> maybeRestaurant = rs.getById(restaurantID);
         if (! maybeRestaurant.isPresent()) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -145,7 +146,7 @@ public class RestaurantController {
             LOGGER.debug("There is no image");
             return Response.noContent().build();
         }
-        return Response.ok(restaurant.getImage().getSource()).build();
+        return ResponseUtils.addCacheToImage(request, restaurant.getImage());
     }
 
     @PUT
