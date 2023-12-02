@@ -26,7 +26,7 @@ export default function Review (): JSX.Element {
   const { isLoading, createReview } = useCreateReview()
   const { enqueueSnackbar } = useSnackbar()
 
-  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Unauthorized}/>
+  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Forbidden}/>
 
   useEffect(() => {
     if (user === null) {

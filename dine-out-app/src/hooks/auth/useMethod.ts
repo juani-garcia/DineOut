@@ -60,7 +60,6 @@ export const useMethod = () => {
         setIsLoading(false)
         return e.response
       }
-      // TODO: Change logic, if not authorized it should try with refresh token but keep the token. If I am authenticated but try to acces something I can not, it should just say so not make me login again, roles could be added to avoid this.
       if (e.response?.status > 400 && e.response?.status < 500 && request.basic == null) {
         if (token == null && refreshToken == null) {
           logout()

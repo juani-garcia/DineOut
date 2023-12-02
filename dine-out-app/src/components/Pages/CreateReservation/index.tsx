@@ -47,7 +47,7 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
   const location = useLocation()
   const { enqueueSnackbar } = useSnackbar()
 
-  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Unauthorized}/>
+  if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Forbidden}/>
 
   useEffect(() => {
     if (user === null) {
