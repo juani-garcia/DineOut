@@ -2,6 +2,9 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.ForbiddenActionException;
+import ar.edu.itba.paw.model.exceptions.UnauthorizedException;
+import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -9,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,6 +40,14 @@ public class SecurityServiceImpl implements SecurityService {
         if (username == null) return Optional.empty();
 
         return userService.getByUsername(getCurrentUsername());
+    }
+
+    @Override
+    public User checkCurrentUser(Long userId) {
+        Optional<User> maybeUser = getCurrentUser();
+        if(!maybeUser.isPresent()) throw new UnauthorizedException();
+        if(!Objects.equals(maybeUser.get().getId(), userId)) throw new ForbiddenActionException();
+        return maybeUser.get();
     }
 
     @Override
