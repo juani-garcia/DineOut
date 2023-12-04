@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model;
 
+import java.util.Collections;
 import java.util.List;
 
 public class PagedQuery<T> {
@@ -23,5 +24,9 @@ public class PagedQuery<T> {
 
     public Long getPageCount() {
         return pageCount;
+    }
+
+    public static <T> PagedQuery<T> emptyPage() {
+        return new PagedQuery<T>(Collections.emptyList(), 1L, 1L);
     }
 }
