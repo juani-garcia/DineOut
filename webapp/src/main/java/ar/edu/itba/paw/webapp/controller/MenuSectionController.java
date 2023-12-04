@@ -117,22 +117,6 @@ public class MenuSectionController {
         return Response.ok().build();
     }
 
-    @PATCH
-    @Path("/{id}")
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
-    public Response updateMenuSection(
-            @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuSectionId,
-            @QueryParam("up") @DefaultValue("true") final boolean up
-    ) {
-        if (up) {
-            mss.moveUp(menuSectionId);
-        } else {
-            mss.moveDown(menuSectionId);
-        }
-        return Response.ok().build();
-    }
-
     @DELETE
     @Path("/{id}")
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
