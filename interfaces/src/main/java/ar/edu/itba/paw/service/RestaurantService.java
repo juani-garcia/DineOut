@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Filter;
 
 public interface RestaurantService {
 
@@ -11,15 +12,13 @@ public interface RestaurantService {
 
     Optional<Restaurant> getByMail(String mail);
 
-    PagedQuery<Restaurant> filter(int page, String name, Category category, Shift shift, Zone zone, Long favoriteOf);
+    PagedQuery<Restaurant> filter(FilterParams params);
 
     Restaurant create(final String name, final byte[] image, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts);
 
     void updateCurrentRestaurant(final String name, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts, byte[] imageBytes);
 
     Optional<Restaurant> getByUserID(long id);
-
-    Restaurant getRecommendedRestaurant(boolean isDiner);
 
     Optional<Restaurant> getOfLoggedUser();
 
