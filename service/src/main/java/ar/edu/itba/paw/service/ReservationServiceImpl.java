@@ -18,6 +18,9 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationDao reservationDao;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private RestaurantService restaurantService;
 
     @Autowired
@@ -52,22 +55,24 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDao.getReservation(id);
     }
 
-    @Override
-    public PagedQuery<Reservation> getAllForCurrentUser(int page, boolean past) {
-        String username = securityService.getCurrentUsername();
-        if (username == null) throw new UnauthenticatedUserException();
+    private PagedQuery<Reservation> getAllForUser(User user, int page, boolean past) {
+        return reservationDao.getAllByUsername(user.getUsername(), page, past);
+    }
 
-        return reservationDao.getAllByUsername(username, page, past);
+    public PagedQuery<Reservation> getAllForRestaurant(Long restaurantId, int page, boolean past) {
+        return reservationDao.getAllByRestaurant(restaurantId, page, past);
     }
 
     @Override
-    public PagedQuery<Reservation> getAllForCurrentRestaurant(int page, boolean past) {
-        if (page <= 0) throw new InvalidPageException();
+    public PagedQuery<Reservation> getForUser(Long userId, int page, boolean past) {
+        if(userId == null) throw new IllegalArgumentException("No user provided");
 
-        User user = securityService.getCurrentUser().orElseThrow(() -> new IllegalStateException("Not logged in"));
-        Restaurant self = restaurantService.getByUserID(user.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid restaurant"));
-
-        return reservationDao.getAllByRestaurant(self.getId(), page, past);
+        final User user = securityService.checkCurrentUser(userId);
+        if (userService.isDiner(user.getId())) {
+            return getAllForUser(user, page, past);
+        }
+        final Restaurant restaurant = restaurantService.getByUserID(user.getId()).orElseThrow(IllegalArgumentException::new);
+        return getAllForRestaurant(restaurant.getId(), page, past);
     }
 
     @Transactional
