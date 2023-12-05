@@ -10,6 +10,8 @@ import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
 import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +33,7 @@ public class ReservationController {
     private final ReservationService rs;
     private final SecurityService ss;
     private final UserService us;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
     @Context
     private UriInfo uriInfo;
@@ -44,28 +47,23 @@ public class ReservationController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #owner)")
     public Response readReservations(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
-            @QueryParam("owner") final Long owner,
+            @QueryParam("userId") final Long owner,
             @QueryParam("past") @DefaultValue("false") final boolean past
     ) {
-        if (owner == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+        LOGGER.debug("Reading reservations for user {}", owner);
 
-        boolean isDiner = us.isDiner(ss.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
-
-        final PagedQuery<Reservation> reservationPagedQuery = isDiner ? rs.getAllForCurrentUser(page, past) : rs.getAllForCurrentRestaurant(page, past);
-        if (reservationPagedQuery.getContent().isEmpty()) {
+        final PagedQuery<Reservation> result = rs.getForUser(owner, page, past);
+        if (result.getContent().isEmpty()) {
             return Response.noContent().build();
         }
-        final List<ReservationDTO> reservationDTOList = reservationPagedQuery.getContent()
+        final List<ReservationDTO> reservationDTOList = result.getContent()
                 .stream().map(r -> ReservationDTO.fromReservation(uriInfo, r))
                 .collect(Collectors.toList());
         Response.ResponseBuilder responseBuilder = Response.ok(new GenericEntity<List<ReservationDTO>>(reservationDTOList){});
         return ResponseUtils.addLinksFromPagedQuery(
-                reservationPagedQuery,
+                result,
                 uriInfo.getRequestUriBuilder(),
                 responseBuilder).build();
     }
