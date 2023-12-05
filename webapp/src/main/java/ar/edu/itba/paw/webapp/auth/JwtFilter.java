@@ -89,7 +89,13 @@ public class JwtFilter extends OncePerRequestFilter {
             @Override
             boolean authorize(String token, ContextProvider context) {
                 boolean error = false;
-                String decoded = new String(Base64.getDecoder().decode(token));
+                String decoded;
+                try {
+                    decoded = new String(Base64.getDecoder().decode(token));
+                } catch (IllegalArgumentException e) {
+                    LOGGER.debug("Header not valid as Base64: {}", e.getMessage());
+                    return unauthorized(context.response);
+                }
                 LOGGER.debug("Decoded credentials: {}", decoded);
                 String[] credentials = decoded.split(":", 2);
 
