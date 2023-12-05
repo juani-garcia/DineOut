@@ -59,7 +59,7 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDao.getAllByUsername(user.getUsername(), page, past);
     }
 
-    public PagedQuery<Reservation> getAllForRestaurant(Long restaurantId, int page, boolean past) {
+    private PagedQuery<Reservation> getAllForRestaurant(Long restaurantId, int page, boolean past) {
         return reservationDao.getAllByRestaurant(restaurantId, page, past);
     }
 
