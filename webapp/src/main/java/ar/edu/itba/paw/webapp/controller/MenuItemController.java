@@ -4,7 +4,6 @@ import ar.edu.itba.paw.model.MenuItem;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
-import ar.edu.itba.paw.webapp.utils.PATCH;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -21,7 +20,8 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("restaurants/{restaurantId}/menu-sections/{msId}/menu-items")
