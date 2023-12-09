@@ -2,18 +2,19 @@ package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
-public class MenuSectionUpdateForm extends MenuSectionForm{
+public class MenuSectionUpdateForm extends MenuSectionForm {
 
     @NotNull
-    // TODO: Add valid order in section list validation
-    private Long ordering;
+    // TODO: Add valid and all menuItems validation
+    private List<Long> menuItems;
 
-    public Long getOrdering() {
-        return ordering;
+    public List<Long> getMenuItems() {
+        return menuItems;
     }
 
-    public void setOrdering(Long ordering) {
-        this.ordering = ordering;
+    public void setMenuItems(List<Long> menuItems) {
+        this.menuItems = menuItems;
     }
 }

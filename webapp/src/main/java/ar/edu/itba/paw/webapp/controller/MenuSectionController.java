@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
+import ar.edu.itba.paw.webapp.form.MenuSectionUpdateForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class MenuSectionController {
     public Response updateMenuSection(
             @PathParam("restaurantId") final long restaurantId,
             @PathParam("id") final long menuSectionId,
-            @Valid final MenuSectionForm menuSectionForm
+            @Valid final MenuSectionUpdateForm menuSectionForm
     ) {
         mss.updateName(menuSectionId, menuSectionForm.getName());
         return Response.ok().build();
