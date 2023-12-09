@@ -123,6 +123,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public void updateImage(final long menuItemId, final byte[] image) {
         final MenuItem menuItem = validateItem(menuItemId);
         Image oldImage = menuItem.getImage();
+        // TODO: Move code below to function in image service
         if (image != null && image.length > 0) { // There is new image
             if (oldImage == null) { // There is no old image
                 LOGGER.debug("Creating image for menu item {}", menuItemId);

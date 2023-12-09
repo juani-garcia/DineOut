@@ -18,7 +18,7 @@ import java.util.List;
 public class RestaurantUpdateForm extends RestaurantForm {
 
     @NotNull
-    // TODO: Add validation for own menuSections
+    // TODO: Add validation for own menuSections: check that list is permutation if menuSections' ids
     private List<Long> menuSectionsOrder;
 
     public List<Long> getMenuSectionsOrder() {
