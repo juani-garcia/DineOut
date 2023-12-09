@@ -16,7 +16,6 @@ public class MenuItemDTO {
     private String detail;
     private double price;
     private URI menuSection;
-    private long ordering;
     private URI image;
     private URI self;
 
@@ -28,7 +27,6 @@ public class MenuItemDTO {
         dto.detail = menuItem.getDetail();
         dto.price = menuItem.getPrice();
         dto.menuSection = MenuSectionDTO.getUriBuilder(uriInfo, menuItem.getSection()).build();
-        dto.ordering = menuItem.getOrdering();
         final UriBuilder menuItemUriBuilder = MenuItemDTO.getUriBuilder(uriInfo, menuItem);
         if (menuItem.getImage() != null)
             dto.image = MenuItemDTO.getUriBuilderForImage(uriInfo, menuItem).build();
@@ -87,14 +85,6 @@ public class MenuItemDTO {
 
     public void setMenuSection(URI menuSection) {
         this.menuSection = menuSection;
-    }
-
-    public long getOrdering() {
-        return ordering;
-    }
-
-    public void setOrdering(long ordering) {
-        this.ordering = ordering;
     }
 
     public URI getImage() {
