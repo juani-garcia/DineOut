@@ -137,6 +137,7 @@ public class RestaurantController {
                 restaurantForm.getLng(),
                 restaurantForm.getCategories(),
                 restaurantForm.getShifts(),
+                restaurantForm.getMenuSectionsOrder(),
                 null); // TODO: Refactor restaurant update service to not expect image
         return Response.ok().build();
     }
