@@ -1,20 +1,19 @@
 package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 public class MenuSectionUpdateForm extends MenuSectionForm {
 
     @NotNull
     // TODO: Add valid and all menuItems validation
-    private List<Long> menuItems;
+    private List<Long> menuItemsOrder;
 
-    public List<Long> getMenuItems() {
-        return menuItems;
+    public List<Long> getMenuItemsOrder() {
+        return menuItemsOrder;
     }
 
-    public void setMenuItems(List<Long> menuItems) {
-        this.menuItems = menuItems;
+    public void setMenuItemsOrder(List<Long> menuItemsOrder) {
+        this.menuItemsOrder = menuItemsOrder;
     }
 }
