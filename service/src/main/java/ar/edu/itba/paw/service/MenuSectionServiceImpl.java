@@ -60,7 +60,7 @@ public class MenuSectionServiceImpl implements MenuSectionService {
 
     @Transactional
     @Override
-    public void updateName(final long sectionId, final String newName) {
+    public void update(final long sectionId, final String newName, List<Long> menuItemsOrder) {
         MenuSection menuSection = validateSection(sectionId);
         menuSection.setName(newName);
     }

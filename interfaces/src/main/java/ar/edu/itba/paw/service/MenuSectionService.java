@@ -15,7 +15,7 @@ public interface MenuSectionService {
 
     void delete(long sectionId);
 
-    void updateName(long sectionId, String newName);
+    void update(long sectionId, String newName, List<Long> menuItemsOrder);
 
     void moveUp(final long sectionId);
 

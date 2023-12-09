@@ -84,7 +84,7 @@ public class MenuSectionController {
             @PathParam("id") final long menuSectionId,
             @Valid final MenuSectionUpdateForm menuSectionForm
     ) {
-        mss.updateName(menuSectionId, menuSectionForm.getName());
+        mss.update(menuSectionId, menuSectionForm.getName(), menuSectionForm.getMenuItemsOrder());
         return Response.ok().build();
     }
 
