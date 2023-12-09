@@ -12,9 +12,7 @@ public interface ReservationService {
 
     Optional<Reservation> getById(final long id);
 
-    PagedQuery<Reservation> getAllForCurrentUser(int page, boolean past);
-
-    PagedQuery<Reservation> getAllForCurrentRestaurant(int page, boolean past);
+    PagedQuery<Reservation> getForUser(Long userId, int page, boolean past);
 
     void delete(long reservationId, String contextPath);
 
