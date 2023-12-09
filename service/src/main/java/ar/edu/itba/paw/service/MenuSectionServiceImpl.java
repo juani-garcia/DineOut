@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MenuSectionServiceImpl implements MenuSectionService {
@@ -63,6 +60,10 @@ public class MenuSectionServiceImpl implements MenuSectionService {
     public void update(final long sectionId, final String newName, List<Long> menuItemsOrder) {
         MenuSection menuSection = validateSection(sectionId);
         menuSection.setName(newName);
+        menuSection.getMenuItemList().sort(Comparator.comparingInt(mi -> {
+            int index = menuItemsOrder.indexOf(mi.getId());
+            return index >= 0 ? index : Integer.MAX_VALUE;
+        }));
     }
 
     private void move(final long sectionId, boolean moveUp) {
