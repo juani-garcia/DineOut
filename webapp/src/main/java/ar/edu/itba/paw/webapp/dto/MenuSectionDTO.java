@@ -15,7 +15,6 @@ public class MenuSectionDTO {
     private Long id;
     private String name;
     private URI restaurant;
-    private long ordering;
     private URI menuItemList;
     private URI self;
 
@@ -26,7 +25,6 @@ public class MenuSectionDTO {
         dto.name = menuSection.getName();
         UriBuilder restaurantUriBuilder = RestaurantDTO.getUriBuilder(uriInfo, menuSection.getRestaurant());
         dto.restaurant = restaurantUriBuilder.clone().build();
-        dto.ordering = menuSection.getOrdering();
         UriBuilder menuSectionUriBuilder = MenuSectionDTO.getUriBuilder(uriInfo, menuSection);
         dto.self = menuSectionUriBuilder.clone().build();
         dto.menuItemList = MenuItemDTO.getUriBuilder(uriInfo, menuSection).build();
@@ -64,14 +62,6 @@ public class MenuSectionDTO {
 
     public void setRestaurant(URI restaurant) {
         this.restaurant = restaurant;
-    }
-
-    public long getOrdering() {
-        return ordering;
-    }
-
-    public void setOrdering(long ordering) {
-        this.ordering = ordering;
     }
 
     public URI getMenuItemList() {
