@@ -42,7 +42,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void edit(final long id, final byte[] source) {
         Image image = getById(id).orElseThrow(NotFoundException::new);
-        image.setSource(source);
+        image.setSource(scale(source, MAX_WIDTH, MAX_HEIGHT));
     }
 
     @Transactional
