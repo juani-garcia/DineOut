@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -40,8 +41,7 @@ public class SecurityManager {
             return false;
         }
         LOGGER.debug("Authenticated user: {}", auth.getName());
-
-        return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
+        return userService.getByUsername(auth.getName()).filter(user -> Objects.equals(user.getId(), id)).isPresent();
     }
 
     public boolean isRestaurantOwnerWithoutRestaurant(Authentication auth) {
