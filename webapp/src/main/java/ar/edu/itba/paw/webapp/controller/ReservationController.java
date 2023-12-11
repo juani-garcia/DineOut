@@ -2,21 +2,19 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
-import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
 import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
-import org.slf4j.LoggerFactory;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -87,7 +85,7 @@ public class ReservationController {
     }
 
 
-    @PatchMapping
+    @PUT
     @Path("/{id}")
     @PreAuthorize("@securityManager.isReservationRestaurant(authentication, #reservationId)")
     public Response updateRestaurantConfirmation(
