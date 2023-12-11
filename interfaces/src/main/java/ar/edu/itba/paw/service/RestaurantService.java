@@ -16,7 +16,8 @@ public interface RestaurantService {
 
     Restaurant create(final String name, final byte[] image, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts);
 
-    void updateCurrentRestaurant(final String name, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts, byte[] imageBytes);
+    // TODO: change to updateRestaurant(long id, ...)
+    void updateCurrentRestaurant(final String name, final String address, final String mail, final String detail, final Zone zone, final Float lat, final Float lng, final List<Category> categories, final List<Shift> shifts, final List<Long> menuSectionsOrder, byte[] imageBytes);
 
     Optional<Restaurant> getByUserID(long id);
 

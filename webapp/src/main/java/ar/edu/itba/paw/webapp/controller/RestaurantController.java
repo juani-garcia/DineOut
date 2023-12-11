@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.form.RestaurantUpdateForm;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
@@ -21,9 +22,7 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("restaurants")
@@ -127,7 +126,7 @@ public class RestaurantController {
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateRestaurant(
             @PathParam("id") final long restaurantId,
-            @Valid final RestaurantForm restaurantForm
+            @Valid final RestaurantUpdateForm restaurantForm
     ) { // TODO: Remove image from form
         rs.updateCurrentRestaurant(restaurantForm.getName(),
                 restaurantForm.getAddress(),
@@ -138,6 +137,7 @@ public class RestaurantController {
                 restaurantForm.getLng(),
                 restaurantForm.getCategories(),
                 restaurantForm.getShifts(),
+                restaurantForm.getMenuSectionsOrder(),
                 null); // TODO: Refactor restaurant update service to not expect image
         return Response.ok().build();
     }

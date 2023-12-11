@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static ar.edu.itba.paw.service.TestValues.*;
@@ -76,7 +77,7 @@ public class MenuSectionServiceImplTest {
                 thenReturn(Optional.of(new MenuSection(MENU_SECTION_NAME, RESTAURANT)));
 
         try {
-            menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME);
+            menuSectionService.update(MENU_SECTION_ID, MENU_SECTION_NAME, Collections.emptyList());
         } catch (Exception e) {
             System.out.println(e.getClass());
             Assert.fail("Unexpected error during operation create menuSection: " + e.getMessage());
@@ -89,7 +90,7 @@ public class MenuSectionServiceImplTest {
         when(securityService.getCurrentUser()).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME));
+        Assert.assertThrows(UnauthenticatedUserException.class, () -> menuSectionService.update(MENU_SECTION_ID, MENU_SECTION_NAME, Collections.emptyList()));
     }
 
     @Test
@@ -99,7 +100,7 @@ public class MenuSectionServiceImplTest {
         when(menuSectionService.getById(anyLong())).
                 thenReturn(Optional.empty());
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.update(MENU_SECTION_ID, MENU_SECTION_NAME, Collections.emptyList()));
     }
 
     @Test
@@ -109,7 +110,7 @@ public class MenuSectionServiceImplTest {
         when(menuSectionDao.getById(anyLong())).
                 thenReturn(Optional.of(new MenuSection(MENU_SECTION_NAME, RESTAURANT)));
 
-        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.updateName(MENU_SECTION_ID, MENU_SECTION_NAME));
+        Assert.assertThrows(IllegalArgumentException.class, () -> menuSectionService.update(MENU_SECTION_ID, MENU_SECTION_NAME, Collections.emptyList()));
 
     }
 
