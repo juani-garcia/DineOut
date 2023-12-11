@@ -70,7 +70,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Transactional
     @Override
-    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Category> categories, List<Shift> shifts, byte[] imageBytes) {
+    public void updateCurrentRestaurant(String name, String address, String mail, String detail, Zone zone, final Float lat, final Float lng, List<Category> categories, List<Shift> shifts, List<Long> menuSectionsOrder, byte[] imageBytes) {
         User user = securityService.getCurrentUser().orElseThrow(IllegalStateException::new);
         Restaurant restaurant = restaurantDao.getByUserId(user.getId()).orElseThrow(IllegalStateException::new);
         restaurant.setName(name);
@@ -95,6 +95,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         restaurant.setCategories(categories);
         restaurant.setShifts(shifts);
+        restaurant.getMenuSectionList().sort(Comparator.comparingInt(ms -> {
+            int index = menuSectionsOrder.indexOf(ms.getId());
+            return index >= 0 ? index : Integer.MAX_VALUE;
+        }));
     }
 
     @Override
