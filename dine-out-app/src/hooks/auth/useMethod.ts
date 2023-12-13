@@ -16,15 +16,21 @@ export const useMethod = () => {
     setRefreshToken,
     logout
   } = useAuth()
+  const isTokenExpired = (token: string): boolean => {
+    const [, payloadBase64] = token.split('.')
+    const payload = JSON.parse(atob(payloadBase64))
+    return payload.exp * 1000 < Date.now()
+  }
 
   const navigate = useNavigate()
 
   async function requestMethod (request: MethodRequestType, retry: boolean = false): Promise<AxiosResponse> {
     setIsLoading(true)
 
-    const refreshToken = getRefreshToken()
-    const token = getToken()
-
+    let token = getToken()
+    if (token != null && isTokenExpired(token)) {
+      token = getRefreshToken()
+    }
     if (request.basic != null) {
       request.headers = {
         ...request.headers,
@@ -60,7 +66,7 @@ export const useMethod = () => {
         return e.response
       }
       if (e.response?.status > 400 && e.response?.status < 500 && request.basic == null) {
-        if (token == null && refreshToken == null) {
+        if (token == null) {
           logout()
           setIsLoading(false)
           navigate('/login', {
