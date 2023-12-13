@@ -27,18 +27,13 @@ export const useMethod = () => {
 
     if (request.basic != null) {
       request.headers = {
-        [DineOutHeaders.AUTH_HEADER]: `Basic ${request.basic}`,
-        ...request.headers
+        ...request.headers,
+        Authorization: `Basic ${request.basic}`
       }
     } else if (token != null && !retry) {
       request.headers = {
         ...request.headers,
-        [DineOutHeaders.AUTH_HEADER]: `${token}`
-      }
-    } else if (refreshToken != null) {
-      request.headers = {
-        ...request.headers,
-        [DineOutHeaders.AUTH_HEADER]: `${refreshToken}`
+        Authorization: `${token}`
       }
     }
 
@@ -49,8 +44,12 @@ export const useMethod = () => {
       data: request.data,
       params: request.params
     }).then(response => {
-      if (response.headers[DineOutHeaders.AUTH_HEADER] != null) setToken(response.headers[DineOutHeaders.AUTH_HEADER])
-      if (response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER] != null) setRefreshToken(response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER])
+      if (response.headers[DineOutHeaders.JWT_HEADER] != null) {
+        setToken(response.headers[DineOutHeaders.JWT_HEADER])
+      }
+      if (response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER] != null) {
+        setRefreshToken(response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER])
+      }
 
       setIsLoading(false)
       return response

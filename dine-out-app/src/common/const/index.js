@@ -21,7 +21,7 @@ export const roles = {
 }
 
 export const DineOutHeaders = {
-  AUTH_HEADER: 'dineout-authorization',
+  JWT_HEADER: 'dineout-jwt',
   REFRESH_TOKEN_HEADER: 'dineout-refresh-token',
   TOTAL_PAGES_HEADER: 'dineout-total-pages'
 }
