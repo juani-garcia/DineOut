@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.Image;
+import ar.edu.itba.paw.model.exceptions.ImageIOException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.ImageDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,7 @@ public class ImageServiceImpl implements ImageService {
 
             return buffer.toByteArray();
         } catch (IOException e) {
-            // TODO: Throw appropriate error
-            return null;
+            throw new ImageIOException(e.getMessage());
         }
     }
 
