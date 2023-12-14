@@ -112,7 +112,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         cors.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         cors.setAllowedMethods(Collections.singletonList("*"));
         cors.setAllowedHeaders(Collections.singletonList("*"));
-        cors.setExposedHeaders(Arrays.asList("DineOut-Authorization", "DineOut-Refresh-Token", "DineOut-Total-Pages", "Location", "Link"));
+        cors.setExposedHeaders(Arrays.asList(
+                "DineOut-JWT",
+                "DineOut-Refresh-Token",
+                "DineOut-Total-Pages",
+                "Location",
+                "Link"
+        ));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
         return source;
