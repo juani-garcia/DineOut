@@ -18,6 +18,7 @@ import CreateReview from '@/components/Pages/CreateReview'
 import Error from '@/components/Pages/Error'
 import Reservations from '@/components/Pages/Reservations'
 import EditRestaurant from '@/components/Pages/EditRestaurant'
+import PasswordRecovery from '@/components/Pages/PasswordRecovery'
 
 function App (): JSX.Element {
   return (
@@ -72,8 +73,8 @@ function App (): JSX.Element {
                                        element={<Register/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
-                                <Route path="forgot_my_password"
-                                       element={<>Forgot My Password</>}/>
+                                <Route path="password-recovery"
+                                       element={<PasswordRecovery/>}/>
                                 <Route
                                     path="error"
                                     element={
