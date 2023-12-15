@@ -94,7 +94,7 @@ public class UserController {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response editPasswordByToken(@Valid NewPasswordForm newPasswordForm,
                                         @PathParam("token") String token) {
-        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
+        userService.changePasswordByUserToken(token, newPasswordForm.getPassword());
         return Response.ok().build();
     }
 
