@@ -24,10 +24,9 @@ export const Header = styled.h5`
 `
 
 export const RedirectionFooter = styled.div`
-  width: 50%;
-  margin-left: 25%;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   height: 60px;
   text-align: center;
 `
@@ -41,13 +40,11 @@ export const LinkTo = styled.h4`
   font-size: 1.15rem;
   text-align: center;
   line-height: 110%;
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: auto; /* Center vertically and horizontally */
 
   cursor: pointer;
 
   transition: all 0.2s ease-in-out;
-
 
   &:hover {
     transform: scale(1.1);
