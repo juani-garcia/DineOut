@@ -153,5 +153,29 @@
     "oops": "Oops! Something went wrong. Try again later.",
     "invalidCredentials": "The email and password sent are incorrect. Please check the data.",
     "tryAgain": "Check the data and try again"
+  },
+  "FormErrors": {
+    "notEmpty": "This field cannot be left empty",
+    "tooLong": "Too long",
+    "invalidEmail": "The email is invalid",
+    "invalidPassword": "Invalid password. Must be at least 8 characters long, and contain capitals and numbers",
+    "passwordMismatch": "Passwords don't match"
+  },
+  "Recovery": {
+    "title": "Recover your password",
+    "mailSent": "Mail sent!",
+    "passwordUpdated": "Password updated!",
+    "submitEmailPrompt": "We'll send you an email with a token to update your password",
+    "submitTokenPrompt": "Go check your email and paste the token below!",
+    "success": "Your password was successfully updated!",
+    "sendEmail": "Send email",
+    "updatePassword": "Update password",
+    "token": "Token",
+    "password": "New password",
+    "confirmPassword": "Confirm password",
+    "showPassword": "Show password",
+    "emailNotFound": "The email was not found. Check the data!",
+    "invalidToken": "Invalid token. Check the data!",
+    "goToLogin": "Go to login"
   }
 }
