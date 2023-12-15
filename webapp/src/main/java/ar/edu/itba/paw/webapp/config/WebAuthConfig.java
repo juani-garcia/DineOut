@@ -96,6 +96,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/reviews/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll() // consider anonymous
                 .antMatchers(HttpMethod.POST, "/users/password-recovery-token").permitAll() // consider anonymous
+                .antMatchers(HttpMethod.PUT, "/users/password-recovery-token/**").permitAll() // consider anonymous
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
             .and().exceptionHandling()
