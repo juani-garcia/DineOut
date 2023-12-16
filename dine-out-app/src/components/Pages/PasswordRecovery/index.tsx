@@ -22,7 +22,7 @@ const PasswordRecovery: React.FC = () => {
   const submissionHook = useRecoverPassword()
   const updateHook = useUpdatePassword()
   const { t } = useTranslation()
-  const [currentStatus, setCurrentStatus] = useState<Status>(Status.Success)
+  const [currentStatus, setCurrentStatus] = useState<Status>(Status.SubmittingEmail)
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const emailSchema = z.object({
