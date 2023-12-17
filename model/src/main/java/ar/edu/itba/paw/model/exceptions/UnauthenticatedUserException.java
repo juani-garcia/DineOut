@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.model.exceptions;
 
-public class UnauthenticatedUserException extends RuntimeException{
+public class UnauthenticatedUserException extends UnauthorizedException {
 
     private static final String MESSAGE = "You must must authenticate itself to get the requested response.";
 
