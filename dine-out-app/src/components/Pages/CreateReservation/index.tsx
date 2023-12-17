@@ -59,6 +59,11 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
   }, [user])
 
   useEffect(() => {
+    if (!Number.isInteger(parseInt(params.id as string))) {
+      setError(400)
+      return
+    }
+
     if (restaurant != null && restaurant.id === parseInt(params.id as string)) {
       return
     } else if (location.state?.restaurant !== undefined && location.state?.restaurant != null && location.state?.restaurant.id === parseInt(params.id as string)) {
@@ -75,6 +80,10 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
         return
       }
       setRestaurant(response.data as Restaurant)
+      if ((response.data as Restaurant).id === undefined || (response.data as Restaurant).id == null) {
+        setRestaurant(undefined)
+        setError(404)
+      }
     }).catch(e => {
       enqueueSnackbar(t('Errors.oops'), {
         variant: 'error'

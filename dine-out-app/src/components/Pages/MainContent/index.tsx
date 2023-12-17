@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/Elements/SearchBox'
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import ParallaxRecommend from '@/components/Elements/ParallaxRecommend'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 function MainContent (): JSX.Element {
+  const { user } = useAuth()
   const { t } = useTranslation()
   return (
         <MyContainer>
@@ -14,10 +16,13 @@ function MainContent (): JSX.Element {
 
             <SearchBox></SearchBox>
 
-            <WhoAreWeContainer>
-                <WhoAreWeTitle>{t('MainContent.info.title')}</WhoAreWeTitle>
-                <WhoAreWeText>{t('MainContent.info.description')}</WhoAreWeText>
-            </WhoAreWeContainer>
+            {user == null
+              ? <WhoAreWeContainer>
+                    <WhoAreWeTitle>{t('MainContent.info.title')}</WhoAreWeTitle>
+                    <WhoAreWeText>{t('MainContent.info.description')}</WhoAreWeText>
+                </WhoAreWeContainer>
+              : <>
+                </>}
 
             <ParallaxRecommend/>
         </MyContainer>

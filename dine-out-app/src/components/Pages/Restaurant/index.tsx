@@ -34,6 +34,11 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
   const isOwner = Boolean(user?.restaurantId === restaurant?.id)
 
   useEffect(() => {
+    if (!Number.isInteger(parseInt(params.id as string))) {
+      setError(400)
+      return
+    }
+
     if (restaurant != null && restaurant.id === parseInt(params.id as string)) {
       return
     } else if (location.state?.restaurant !== undefined && location.state?.restaurant != null && location.state?.restaurant.id === parseInt(params.id as string)) {
@@ -55,6 +60,10 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
         return
       }
       setRestaurant(response.data as Restaurant)
+      if ((response.data as Restaurant).id === undefined || (response.data as Restaurant).id == null) {
+        setRestaurant(undefined)
+        setError(404)
+      }
     }).catch(e => {
       enqueueSnackbar(t('Errors.oops'), {
         variant: 'error'
@@ -69,16 +78,25 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
   }
   // isLoading = false, restaurant defined
   return (
-        <RestaurantContainer>
-            <RestaurantDetailSection>
-                <RestaurantDetailContainer>
-                    <RestaurantBigCard restaurant={restaurant}/>
-                    <ReviewBigCard reviewListURI={restaurant.reviews}/>
-                </RestaurantDetailContainer>
-            </RestaurantDetailSection>
-            <MenuContainer>
-                <Menu menuSectionsURI={restaurant.menuSections} editable={isOwner}/>
-            </MenuContainer>
-        </RestaurantContainer>
+      <>
+        {isLoading
+          ? (
+                <LoadingCircle/>
+            )
+          : (
+                <RestaurantContainer>
+                  <RestaurantDetailSection>
+                    <RestaurantDetailContainer>
+                      <RestaurantBigCard restaurant={restaurant}/>
+                      <ReviewBigCard reviewListURI={restaurant.reviews}/>
+                    </RestaurantDetailContainer>
+                  </RestaurantDetailSection>
+                  <MenuContainer>
+                    <Menu menuSectionsURI={restaurant.menuSections} editable={isOwner}/>
+                  </MenuContainer>
+                </RestaurantContainer>
+            )
+        }
+      </>
   )
 }
