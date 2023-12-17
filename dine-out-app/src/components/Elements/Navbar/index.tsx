@@ -56,6 +56,11 @@ function Navbar (): JSX.Element {
                               {t('Navbar.myReservations')}
                             </Button>
                         </ListItem>
+                        <ListItem>
+                            <Button as={Link} to={localPaths.REVIEWS}>
+                                {t('Navbar.myReviews')}
+                            </Button>
+                        </ListItem>
                         {(user?.roles.includes(roles.RESTAURANT))
                           ? (
                                 <ListItem>

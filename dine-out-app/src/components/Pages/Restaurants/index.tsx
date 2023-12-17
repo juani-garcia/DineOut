@@ -17,6 +17,7 @@ import Error from '@/components/Pages/Error'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { DineOutHeaders } from '@/common/const'
+import { HttpStatusCode } from 'axios'
 
 function Restaurants (): JSX.Element {
   const { t } = useTranslation()
@@ -48,7 +49,14 @@ function Restaurants (): JSX.Element {
 
       setTotalPages(Number(response.headers[DineOutHeaders.TOTAL_PAGES_HEADER]))
 
-      setRestaurantList(response.data as Restaurant[])
+      if (response.status === HttpStatusCode.NoContent) {
+        const existingParams = new URLSearchParams(queryParams.toString())
+        existingParams.set('page', '1')
+        setQueryParams(existingParams)
+        setRestaurantList([])
+      } else {
+        setRestaurantList(response.data as Restaurant[])
+      }
     }).catch((e) => {
       enqueueSnackbar(t('Errors.oops'), {
         variant: 'error'

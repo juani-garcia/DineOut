@@ -51,7 +51,8 @@
   "Navbar": {
     "logout": "Log out",
     "myReservations": "My reservations",
-    "myRestaurant": "My restaurant"
+    "myRestaurant": "My restaurant",
+    "myReviews": "My reviews"
   },
   "SearchBox": {
     "search": "Search",

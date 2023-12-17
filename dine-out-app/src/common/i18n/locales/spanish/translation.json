@@ -62,7 +62,8 @@
   "Navbar": {
     "logout": "Cerrar sesión",
     "myReservations": "Mis reservas",
-    "myRestaurant": "Mi restaurante"
+    "myRestaurant": "Mi restaurante",
+    "myReviews": "Mis reseñas"
   },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
