@@ -7,6 +7,8 @@ import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.form.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,12 +23,15 @@ import java.util.Optional;
 @Path("users")
 @Component
 public class UserController {
+
     private final UserService userService;
     private final SecurityService securityService;
     private final FavoriteService favoriteService;
 
     @Context
     private UriInfo uriInfo;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserService userService, SecurityService securityService, FavoriteService favoriteService) {
@@ -44,7 +49,7 @@ public class UserController {
                 userForm.getFirstName(),
                 userForm.getLastName(),
                 userForm.getIsRestaurant(),
-                uriInfo.getPath());
+                uriInfo.getBaseUri().toString());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newUser.getId())).build();
         return Response.created(location).build();
     }
@@ -76,7 +81,7 @@ public class UserController {
                 user.get(),
                 userProfileEditForm.getFirstName(),
                 userProfileEditForm.getLastName(),
-                uriInfo.getPath()
+                uriInfo.getBaseUri().toString()
         );
         return Response.ok().build();
     }
@@ -85,7 +90,7 @@ public class UserController {
     @Path("/password-recovery-token")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createPasswordRecoveryToken(@Valid PasswordRecoveryForm passwordRecoveryForm) {
-        userService.createPasswordResetTokenByUsername(passwordRecoveryForm.getUsername(), uriInfo.getPath());
+        userService.createPasswordResetTokenByUsername(passwordRecoveryForm.getUsername(), uriInfo.getBaseUri().toString());
         return Response.ok().build();
     }
 
