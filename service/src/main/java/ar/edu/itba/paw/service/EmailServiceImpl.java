@@ -23,7 +23,7 @@ import java.util.Map;
 public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
-    private static final String ADDRESS = "dineout.graphene@gmail.com";
+    private static final String ADDRESS = "dineout.graphene.help@gmail.com";
     private static final String SENDER_NAME = "DineOut";
 
     @Autowired
