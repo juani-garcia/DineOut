@@ -130,7 +130,8 @@
     "mailSent": "¡Mail enviado!",
     "passwordUpdated": "¡Contraseña actualizada!",
     "submitEmailPrompt": "Te enviaremos un email para cambiar tu contraseña",
-    "submitTokenPrompt": "¡Revisa tu casilla y pega aquí el token que te enviamos!",
+    "checkInbox": "¡Revisa tu casilla y sigue el link!",
+    "updatePasswordPrompt": "Elige una nueva contraseña",
     "success": "¡Tu contraseña fue correctamente actualizada!",
     "sendEmail": "Enviar email",
     "updatePassword": "Actualizar contraseña",
@@ -140,6 +141,8 @@
     "showPassword": "Mostrar contraseña",
     "emailNotFound": "No encontramos el correo. ¡Revisá los datos!",
     "invalidToken": "El token ingresado es inválido. ¡Revisá los datos!",
-    "goToLogin": "Ir a inicio de sesión"
+    "goToLogin": "Ir a inicio de sesión",
+    "noTokenProvided": "No se ha provisto un token",
+    "wrongUserId": "El usuario parece incorrecto. ¡Revisa tu link!"
   }
 }
