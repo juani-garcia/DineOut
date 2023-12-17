@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   GroovyRecommend,
   ParallaxCardRecommend,
@@ -14,7 +14,6 @@ import type Restaurant from '@/types/models/Restaurant'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { localPaths, roles } from '@/common/const'
-import Error from '@/components/Pages/Error'
 
 function ParallaxRecommend (): JSX.Element {
   const { t } = useTranslation()
@@ -23,7 +22,6 @@ function ParallaxRecommend (): JSX.Element {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const { user } = useAuth()
-  const [error, setError] = useState<number | null>(null)
 
   useEffect(() => {
     const handleScroll = (): void => {
@@ -71,8 +69,7 @@ function ParallaxRecommend (): JSX.Element {
     restaurants(searchParams)
       .then((response) => {
         if (response.status >= 400) {
-          setError(response.status)
-          return
+          navigate('/error?status=' + response.status.toString())
         }
         const restaurantList = response.data as Restaurant[]
         if (restaurantList.length === 0) {
@@ -87,8 +84,6 @@ function ParallaxRecommend (): JSX.Element {
         })
       })
   }
-
-  if (error !== null) return <Error errorProp={error}/>
 
   return (<ParallaxContainer id="parallax-container" className="parallax-container" ref={parallaxRef}>
         <ParallaxCardRecommend onClick={recommendedHandler}>

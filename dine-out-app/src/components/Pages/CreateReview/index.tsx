@@ -26,12 +26,16 @@ export default function Review (): JSX.Element {
   const { isLoading, createReview } = useCreateReview()
   const { enqueueSnackbar } = useSnackbar()
 
+  if (!Number.isInteger(parseInt(params.id as string))) {
+    return <Error errorProp={HttpStatusCode.BadRequest}/>
+  }
+
   if (user?.roles.includes(roles.DINER) === false) return <Error errorProp={HttpStatusCode.Forbidden}/>
 
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: localPaths.RESTAURANTS + '/' + (params.id === undefined ? '' : params.id.toString()) + '/review' }
+        state: { from: localPaths.RESTAURANTS + '/' + (params.id === undefined ? '' : params.id.toString()) + localPaths.REVIEWS }
       })
     }
   }, [user])
