@@ -12,6 +12,7 @@ public class ReservationDTO {
     private Long id;
     private URI restaurant;
     private URI owner;
+    private String mail;
     private int amount;
     private LocalDateTime dateTime;
     private String comments;
@@ -23,7 +24,10 @@ public class ReservationDTO {
 
         dto.id = reservation.getId();
         dto.restaurant = RestaurantDTO.getUriBuilder(uriInfo, reservation.getRestaurant()).build();
-        dto.owner = UserDTO.getUriBuilder(uriInfo, reservation.getOwner()).build();
+        if(reservation.getOwner() != null) {
+            dto.owner = UserDTO.getUriBuilder(uriInfo, reservation.getOwner()).build();
+        }
+        dto.mail = reservation.getMail();
         dto.amount = reservation.getAmount();
         dto.dateTime = reservation.getDateTime();
         dto.comments = reservation.getComments();
@@ -103,6 +107,14 @@ public class ReservationDTO {
 
     public URI getSelf() {
         return self;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public void setSelf(URI self) {
