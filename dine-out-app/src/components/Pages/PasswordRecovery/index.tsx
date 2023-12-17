@@ -10,7 +10,8 @@ import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
 
 const TOKEN_PARAM: string = 'token'
 const USER_ID_PARAM: string = 'userId'
@@ -29,6 +30,12 @@ const PasswordRecovery: React.FC = () => {
   const [currentStatus, setCurrentStatus] = useState<Status>(Status.SubmittingEmail)
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [searchParams] = useSearchParams()
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
+  if (user !== null) {
+    navigate(-1)
+  }
 
   const token = searchParams.get(TOKEN_PARAM)
   const userId = searchParams.get(USER_ID_PARAM)
