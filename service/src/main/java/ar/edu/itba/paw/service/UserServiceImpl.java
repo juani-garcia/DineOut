@@ -115,16 +115,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByPasswordResetToken(String token) {
-        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).
+        PasswordResetToken resetToken = passwordResetTokenService.getByToken(token).
                 orElseThrow(InvalidPasswordRecoveryTokenException::new);
-        return passwordResetToken.getUser();
+
+        if (resetToken.isUsed()) {
+            throw new InvalidPasswordRecoveryTokenException();
+        }
+
+        return resetToken.getUser();
     }
 
     @Override
     @Transactional
     public void changePasswordByUserToken(String token, String newPassword) {
         User user = getUserByPasswordResetToken(token);
-        user.setPassword(passwordEncoder.encode(newPassword));  // TODO: Check if not changed?
+        user.setPassword(passwordEncoder.encode(newPassword));
         passwordResetTokenService.setUsed(token);
     }
 
