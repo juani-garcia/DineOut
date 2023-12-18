@@ -50,9 +50,16 @@ function RestaurantCard ({ restaurant }: RestaurantCardProps): JSX.Element {
 
   return (
         <RestaurantWhiteBoxContainer onClick={handleGoToRestaurantView}>
-            <CardImageContainer className="card-image">
-                <CardImage src={restaurant.image}/>
-            </CardImageContainer>
+            {restaurant.image == null || restaurant.image === ''
+              ? (
+                 <></>
+                )
+              : (
+                <CardImageContainer className="card-image">
+                    <CardImage src={restaurant.image}/>
+                </CardImageContainer>
+                )
+            }
             <CardContent className="card-content">
                 {/* Title / zone */}
                 <NameAndZone>

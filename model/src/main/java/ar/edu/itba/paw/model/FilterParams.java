@@ -3,7 +3,7 @@ package ar.edu.itba.paw.model;
 import java.util.Optional;
 
 public class FilterParams {
-    private int page;
+    private int page = 1;
     private String match;
     private Zone zone;
     private Category category;
