@@ -109,7 +109,10 @@ public class UserServiceImpl implements UserService {
         PasswordResetToken passwordResetToken = passwordResetTokenService.create(UUID.randomUUID().toString(), user, LocalDateTime.now());
         emailService.sendChangePassword(
                 user.getUsername(), user.getFirstName(),
-                contextPath + "/change_password?token=" + passwordResetToken.getToken(), contextPath, user.getLocale());
+                contextPath + "/password-recovery?token=" + passwordResetToken.getToken() + "&userId=" + user.getId().toString(),
+                contextPath,
+                user.getLocale()
+        );
 
     }
 
