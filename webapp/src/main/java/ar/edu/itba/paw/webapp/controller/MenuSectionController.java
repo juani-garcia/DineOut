@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.MenuSection;
+import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.service.MenuSectionService;
 import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
@@ -70,7 +71,7 @@ public class MenuSectionController {
     ) {
         Optional<MenuSectionDTO> maybeMenuSection = mss.getById(menuSectionId).map(ms -> MenuSectionDTO.fromMenuSection(uriInfo, ms));
         if (! maybeMenuSection.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new MenuSectionNotFoundException();
         }
         return Response.ok(maybeMenuSection.get()).build();
     }
