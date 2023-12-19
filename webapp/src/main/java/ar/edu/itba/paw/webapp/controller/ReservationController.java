@@ -8,6 +8,7 @@ import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
 import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +90,7 @@ public class ReservationController {
     }
 
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     @PreAuthorize("@securityManager.isReservationRestaurant(authentication, #reservationId)")
     public Response updateRestaurantConfirmation(

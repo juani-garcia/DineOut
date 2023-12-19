@@ -5,11 +5,10 @@ import {
   PastToggle,
   ReservationCardContainer,
   ReservationCardHolder,
-  ReservationInfo,
   ReservationMainContainer,
-  ReservationsContainer,
   ReservationTitle,
-  ShowPreviousContainer
+  ShowPreviousContainer,
+  ReservationCardsContainer
 } from '@/components/Pages/Reservations/styles'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import type Reservation from '@/types/models/Reservation'
@@ -21,11 +20,13 @@ import { CircularProgress, Pagination } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { DineOutHeaders, localPaths, roles } from '@/common/const'
+import ReservationCard from '@/components/Elements/ReservationCard'
 
 function Reservations (): JSX.Element {
   const { t } = useTranslation()
   const [past, setPast] = useState<boolean>(JSON.parse(localStorage.getItem('past') ?? 'false') as boolean)
   const [reservationList, setReservationList] = useState<Reservation[]>([])
+  const [startedLoading, setStartedLoading] = useState<boolean>(false)
   const [queryParams, setQueryParams] = useSearchParams()
   const [totalPages, setTotalPages] = useState(1)
   const navigate = useNavigate()
@@ -34,12 +35,15 @@ function Reservations (): JSX.Element {
   const { user } = useAuth()
   const { enqueueSnackbar } = useSnackbar()
 
+  if (user === null || user === undefined) {
+    navigate(-1)
+  }
+
   const handlePastToggle = (): void => {
     localStorage.setItem('past', JSON.stringify(!past))
     const existingParams = new URLSearchParams(queryParams.toString())
     setQueryParams({
       page: existingParams.get('page') ?? '1',
-      userId: user?.userId.toString() ?? '',
       past: (!past ? 'true' : 'false')
     })
     setPast(!past)
@@ -55,31 +59,24 @@ function Reservations (): JSX.Element {
 
       if (existingParams.get('past') === 'true') {
         setPast(true)
-      } else if (existingParams.get('past') === 'false') {
+      } else {
         setPast(false)
-      } else if (existingParams.get('past') !== '' && existingParams.get('past') !== null && existingParams.get('past') !== undefined) {
-        setError(HttpStatusCode.BadRequest)
-        return
       }
-
-      setQueryParams({
-        page: existingParams.get('page') ?? '1',
-        userId: user?.userId.toString() ?? '',
-        past: (past ? 'true' : 'false')
-      })
     }
   }, [user])
 
   useEffect(() => {
-    if (user?.userId.toString() === queryParams.get('userId')) {
-      if (user?.restaurantId === undefined) {
+    if (user !== null && user !== undefined) {
+      if (user.roles.includes(roles.RESTAURANT) && user.restaurantId === undefined) {
         navigate('/restaurant/register', {
           state: { from: localPaths.REVIEWS }
         })
         return
       }
-      reservations(queryParams).then((response) => {
-        if (response.status >= 400 && user?.roles.includes(roles.RESTAURANT)) {
+      const params = new URLSearchParams(queryParams.toString())
+      params.set('userId', user.userId.toString())
+      reservations(params).then((response) => {
+        if (response.status >= 400 && user.roles.includes(roles.RESTAURANT)) {
           navigate('/restaurant/register', {
             state: { from: localPaths.RESERVATION }
           })
@@ -97,9 +94,6 @@ function Reservations (): JSX.Element {
 
         setTotalPages(Number(response.headers[DineOutHeaders.TOTAL_PAGES_HEADER]))
         if (response.status === HttpStatusCode.NoContent) {
-          const existingParams = new URLSearchParams(queryParams.toString())
-          existingParams.set('page', '1')
-          setQueryParams(existingParams)
           setReservationList([])
         } else {
           setReservationList(response.data as Reservation[])
@@ -109,6 +103,7 @@ function Reservations (): JSX.Element {
           variant: 'error'
         })
       })
+      setStartedLoading(true)
     }
   }, [queryParams])
 
@@ -120,86 +115,93 @@ function Reservations (): JSX.Element {
     setQueryParams(existingParams)
   }
 
-  return (
-        <ReservationMainContainer>
-            <ReservationCardHolder>
-                <ReservationCardContainer>
-                    <ReservationTitle>
-                        Reservas {past ? 'pasadas' : 'próximas'}
-                    </ReservationTitle>
-                    <ShowPreviousContainer>
-                        <PastToggle onClick={handlePastToggle}>Mostrar
-                            reservas {!past ? 'pasadas' : 'próximas'}</PastToggle>
-                    </ShowPreviousContainer>
-                    <ReservationsContainer>
-                        {isLoading
-                          ? (
-                                <CircularProgress color="secondary" size="100px"/>
-                            )
-                          : (
-                              reservationList.length === 0
-                                ? (
-                                        <>
-                                            <NoReservationsText>
-                                                No hay ninguna reserva
-                                            </NoReservationsText>
-                                            <ExploreRestaurantsText as={Link} to={localPaths.RESTAURANTS}>
-                                                ¡Explorá los mejores restaurantes!
-                                            </ExploreRestaurantsText>
-                                        </>
-                                  )
-                                : (
-                                        <>
-                                            {
-                                                reservationList.map((reservation: Reservation) => (
-                                                    <ReservationInfo key={reservation.id}>
-                                                        <hr style={{
-                                                          boxSizing: 'content-box',
-                                                          height: '0',
-                                                          overflow: 'visible',
-                                                          width: '100%'
-                                                        }}/>
-                                                        {/* TODO: Style when i have the restaurant name */}
-                                                        <div>{reservation.restaurant}</div>
-                                                        <div>{reservation.amount}</div>
-                                                        <div>{reservation.comments}</div>
-                                                        <div>{reservation.dateTime}</div>
-                                                        <div>{reservation.isConfirmed}</div>
-                                                    </ReservationInfo>
-                                                ))
-                                            }
+  const onDeleteReservation = (deleted: Reservation): void => {
+    const newList = reservationList.filter(reservation => reservation.id !== deleted.id)
+    setReservationList(newList)
+  }
 
-                                            {
-                                                totalPages > 1
-                                                  ? (
-                                                        <Pagination
-                                                            count={totalPages}
-                                                            page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
-                                                            onChange={handlePageChange}
-                                                            size="large"
-                                                            showFirstButton
-                                                            showLastButton
-                                                            siblingCount={3}
-                                                            boundaryCount={3}
-                                                            sx={{
-                                                              '& .MuiPaginationItem-root': {
-                                                                color: '#000000'
-                                                              }
-                                                            }}
-                                                        />
-                                                    )
-                                                  : (
-                                                        <></>
-                                                    )
-                                            }
-                                        </>
-                                  )
-                            )
-                        }
-                    </ReservationsContainer>
-                </ReservationCardContainer>
-            </ReservationCardHolder>
-        </ReservationMainContainer>
+  const onConfirmReservation = (confirmed: Reservation): void => {
+    const newList = reservationList.map(reservation => {
+      if (reservation.id === confirmed.id) reservation.isConfirmed = true
+      return reservation
+    })
+    setReservationList(newList)
+  }
+
+  return (
+    <>
+      <ReservationMainContainer>
+        <ReservationCardHolder>
+          <ReservationCardContainer>
+            <ReservationTitle>
+              {past ? t('Reservation.pastReservations') : t('Reservation.reservations')}
+            </ReservationTitle>
+            <ShowPreviousContainer>
+              <PastToggle onClick={handlePastToggle}>
+                {!past ? t('Reservation.showPast') : t('Reservation.showNext')}
+              </PastToggle>
+            </ShowPreviousContainer>
+          </ReservationCardContainer>
+        </ReservationCardHolder>
+      </ReservationMainContainer>
+      <ReservationCardsContainer>
+        {isLoading
+          ? (
+            <CircularProgress color="secondary" size="100px"/>
+            )
+          : (
+              startedLoading && reservationList.length === 0
+                ? (
+                <ReservationMainContainer>
+                  <ReservationCardHolder>
+                    <ReservationCardContainer>
+                      <NoReservationsText>
+                        {t('Reservation.noReservations')}
+                      </NoReservationsText>
+                      <ExploreRestaurantsText as={Link} to={localPaths.RESTAURANTS}>
+                        {t('Restaurant.exploreRestaurants')}
+                      </ExploreRestaurantsText>
+                    </ReservationCardContainer>
+                  </ReservationCardHolder>
+                </ReservationMainContainer>
+                  )
+                : (
+                <>
+                  {reservationList.map((reservation: Reservation) => (
+                    <ReservationCard
+                      reservation={reservation}
+                      deleteCallback={onDeleteReservation}
+                      confirmCallback={onConfirmReservation}
+                      key={reservation.id}
+                      forUser={user?.roles != null
+                        ? user.roles.includes(roles.DINER)
+                        : false }/>
+                  ))}
+                  {totalPages > 1
+                    ? (
+                      <Pagination
+                        count={totalPages}
+                        page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
+                        onChange={handlePageChange}
+                        size="large"
+                        showFirstButton
+                        showLastButton
+                        siblingCount={3}
+                        boundaryCount={3}
+                        sx={{
+                          '& .MuiPaginationItem-root': {
+                            color: '#000000'
+                          }
+                        }}/>
+                      )
+                    : (
+                      <></>
+                      )}
+                </>
+                  )
+            )}
+      </ReservationCardsContainer>
+    </>
   )
 }
 

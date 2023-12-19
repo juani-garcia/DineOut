@@ -109,14 +109,29 @@
     "comments": "Comments",
     "cancel": "Cancel this reservation",
     "submit": "Reserve!",
-    "prompt": "Make a reservation!"
+    "prompt": "Make a reservation!",
+    "reservations": "Next reservations",
+    "showPast": "Show past reservations",
+    "pastReservations": "Past reservations",
+    "showNext": "Show next reservations",
+    "awaitingConfirmation": "Awaiting confirmation from the restaurant",
+    "isConfirmed": "Reservation is confirmed",
+    "for": "For",
+    "on": "on",
+    "noReservations": "We couldn't find reservations",
+    "forOwner": "Reservation for ",
+    "confirmDelete": "Are you sure you want to delete the reservation?",
+    "confirmConfirm": "Are you sure you want to confirm the reservation?",
+    "confirmSuccessful": "Reservation confirmed",
+    "deleteSuccessful": "Reservation deleted"
   },
   "Reviews": {
     "prompt": "Leave a review",
     "title": "Reviews"
   },
   "Restaurant": {
-    "opening-hours": "Opens:"
+    "opening-hours": "Opens:",
+    "exploreRestaurants": "Explore new restaurants!"
   },
   "MenuSection": {
     "empty": "This section has no items",
@@ -181,6 +196,11 @@
     "goToLogin": "Go to login",
     "noTokenProvided": "No token provided",
     "wrongUserId": "The user seems wrong. Check your link!"
+  },
+  "Confirmation": {
+    "actionIrreversible": "The action you are about to perform is not reversible",
+    "goBack": "Go back",
+    "continue": "Continue"
   },
   "Favorite": {
     "error": "Could not mark as favorite. Please try again"
