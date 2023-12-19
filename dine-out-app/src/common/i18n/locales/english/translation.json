@@ -181,5 +181,8 @@
     "goToLogin": "Go to login",
     "noTokenProvided": "No token provided",
     "wrongUserId": "The user seems wrong. Check your link!"
+  },
+  "Favorite": {
+    "error": "Could not mark as favorite. Please try again"
   }
 }

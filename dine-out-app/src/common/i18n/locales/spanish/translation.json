@@ -145,5 +145,8 @@
     "goToLogin": "Ir a inicio de sesión",
     "noTokenProvided": "No se ha provisto un token",
     "wrongUserId": "El usuario parece incorrecto. ¡Revisa tu link!"
+  },
+  "Favorite": {
+    "error": "No pudimos marcarlo como favorito. Vuelve a intentar"
   }
 }
