@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class ReservationController {
 
     @Context
     private UriInfo uriInfo;
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     public ReservationController(final ReservationService rs, final SecurityService ss, final UserService us) {
@@ -78,7 +82,7 @@ public class ReservationController {
                 reservationForm.getAmount(),
                 reservationForm.getLocalDateTime(),
                 reservationForm.getComments(),
-                uriInfo.getBaseUri().getPath() // TODO: Check if this replaces: uriInfo.getRequestURL().toString().replace(request.getServletPath(), "")
+                getBaseURL() // TODO: Check if this replaces: uriInfo.getRequestURL().toString().replace(request.getServletPath(), "")
         );
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(reservation.getId())).build();
         return Response.created(location).build();
@@ -93,7 +97,7 @@ public class ReservationController {
             @Valid ReservationConfirmationForm reservationConfirmationForm
     ) {
         // TODO: Should we support unconfirmation?
-        rs.confirm(reservationId, uriInfo.getBaseUri().getPath());
+        rs.confirm(reservationId, getBaseURL());
         return Response.ok().build();
     }
 
@@ -105,8 +109,12 @@ public class ReservationController {
             @PathParam("id") final long reservationId
     ) {
         // TODO: Check contextPath
-        rs.delete(reservationId, uriInfo.getBaseUri().getPath());
+        rs.delete(reservationId, getBaseURL());
         return Response.noContent().build();
+    }
+
+    private String getBaseURL() {
+        return env.getProperty("url.base");
     }
 
 }
