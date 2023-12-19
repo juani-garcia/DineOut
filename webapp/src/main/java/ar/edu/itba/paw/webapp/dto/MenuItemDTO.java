@@ -35,6 +35,14 @@ public class MenuItemDTO {
         return dto;
     }
 
+    public static long getIdFromURI(URI uri) {
+        if (uri == null)
+            throw new IllegalArgumentException("Cannot get id from null URI");
+        String path = uri.getPath();
+        String idStr = path.substring(path.lastIndexOf('/') + 1);
+        return Integer.parseInt(idStr);
+    }
+
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuSection menuSection) {
         return MenuSectionDTO.getUriBuilder(uriInfo, menuSection).path("menu-items");
     }

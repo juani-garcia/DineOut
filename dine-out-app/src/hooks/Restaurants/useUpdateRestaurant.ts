@@ -7,7 +7,7 @@ import { HttpMethod } from '@/types/enums/HTTPMethod'
 export function useUpdateRestaurant () {
   const { isLoading, requestMethod } = useMethod()
 
-  async function updateRestaurant (resId: number, name: string, address: string, email: string, detail: string, zone: string, lat: number, lng: number, categories: string[], shifts: string[]): Promise<AxiosResponse> {
+  async function updateRestaurant (resId: number, name: string, address: string, email: string, detail: string, zone: string, lat: number, lng: number, categories: string[], shifts: string[], menuSectionsOrder: string[]): Promise<AxiosResponse> {
     return await requestMethod({
       method: HttpMethod.PUT,
       url: paths.API_URL + paths.RESTAURANTS + '/' + resId.toString(),
@@ -20,7 +20,8 @@ export function useUpdateRestaurant () {
         lat,
         lng,
         categories,
-        shifts
+        shifts,
+        menuSectionsOrder
       }
     })
   }

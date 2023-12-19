@@ -1,8 +1,8 @@
 export default interface MenuSection {
   id: number
   name: string
-  ordering: number
   menuItemList: string
+  menuItemsOrder: string[]
   restaurant: string
   self: string
 }
