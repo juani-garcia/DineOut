@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type Restaurant from '@/types/models/Restaurant'
 import {
   ButtonsContainer,
@@ -26,7 +26,6 @@ import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import Category from '@/types/enums/Category'
 import { Shift } from '@/types/enums/Shift'
-import { t } from 'i18next'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
@@ -36,6 +35,13 @@ import EditIcon from '@mui/icons-material/Edit'
 import { Input } from '@mui/material'
 import useImage from '@/hooks/Images/useImage'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { useFavoriteStatus } from '@/hooks/Favorites/useFavoriteStatus'
+import { HttpStatusCode } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { enqueueSnackbar } from 'notistack'
+import { useUpdateFavorite } from '@/hooks/Favorites/useUpdateFavorite'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -43,10 +49,30 @@ interface RestaurantBigCardProps {
 
 export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProps): JSX.Element {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const isOwner = user?.restaurantId === restaurant.id
   const [imagePreview, setImagePreview] = useState<string | undefined>(restaurant?.image)
   const { updateImage, deleteImage } = useImage()
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
+  const { isLoading: isLoadingStatus, checkFavorite } = useFavoriteStatus()
+  const { isLoading: isLoadingUpdate, updateFavorite } = useUpdateFavorite()
+
+  useEffect(() => {
+    if (user !== null) {
+      checkFavorite(user, restaurant.id)
+        .then(response => {
+          if (response.status === HttpStatusCode.Ok) {
+            setIsFavorite(true)
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
+        })
+    }
+  }, [])
 
   const handleUpdate: React.ChangeEventHandler<HTMLInputElement> = event => {
     if (event.target.files == null) {
@@ -61,6 +87,27 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
     }).catch(e => {
       console.error(e.response) // TODO: Toast
     })
+  }
+
+  const toggleFavorite = (): void => {
+    if (user !== null) {
+      updateFavorite(user, restaurant.id, !isFavorite)
+        .then(response => {
+          if (response.status === HttpStatusCode.Ok) {
+            restaurant.favCount += isFavorite ? -1 : 1
+            setIsFavorite(!isFavorite)
+          } else {
+            enqueueSnackbar(t('Favorite.error'), {
+              variant: 'warning'
+            })
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
+        })
+    }
   }
 
   const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = event => {
@@ -157,6 +204,19 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                                 <Button as={Link} to={`/reserve/${restaurant.id}`} style={{ marginLeft: 'auto' }}>
                                     {t('Reservation.prompt')}
                                 </Button>
+                                <button
+                                  onClick={toggleFavorite}
+                                  style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    color: 'white'
+                                  }}
+                                  disabled={isLoadingUpdate || isLoadingStatus}
+                                >
+                                  {isFavorite ? <FavoriteIcon color="inherit" /> : <FavoriteBorderIcon color="inherit" />}
+                                </button>
+                              <p>{ restaurant.favCount }</p>
                             </>
                         )
                       : (
