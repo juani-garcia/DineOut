@@ -77,11 +77,29 @@
     "comments": "Comentarios",
     "cancel": "Cancela la reserva",
     "submit": "¡Reservá!",
-    "prompt": "¡Haz una reserva!"
+    "prompt": "¡Haz una reserva!",
+    "reservations": "Reservas próximas",
+    "showPast": "Mostrar reservas pasadas",
+    "pastReservations": "Reservas pasadas",
+    "showNext": "Mostrar reservas próximas",
+    "awaitingConfirmation": "Aguardando confirmación del restaurante",
+    "isConfirmed": "¡Reserva confirmada!",
+    "for": "Para",
+    "on": "el",
+    "noReservations": "No encontramos reservas",
+    "forOwner": "Reserva para ",
+    "confirmDelete": "¿Deseas eliminar esta reserva?",
+    "confirmConfirm": "¿Deseas confirmar esta reserva?",
+    "confirmSuccessful": "Reserva confirmada",
+    "deleteSuccessful": "Reserva eliminada"
   },
   "Reviews": {
     "prompt": "Deja una reseña",
     "title": "Reseñas"
+  },
+  "Restaurant": {
+    "opening-hours": "Abre a las:",
+    "exploreRestaurants": "¡Explora nuevos restaurantes!"
   },
   "Shift": {
     "morning": "Mañana",
@@ -145,5 +163,10 @@
     "goToLogin": "Ir a inicio de sesión",
     "noTokenProvided": "No se ha provisto un token",
     "wrongUserId": "El usuario parece incorrecto. ¡Revisa tu link!"
+  },
+  "Confirmation": {
+    "actionIrreversible": "La acción que estás por hacer no es reversible",
+    "goBack": "Ir atrás",
+    "continue": "Continuar"
   }
 }
