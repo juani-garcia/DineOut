@@ -5,4 +5,5 @@ export default interface MethodRequestType {
   headers?: Record<string, string>
   data?: object
   params?: Record<string, string>
+  passwordRecoveryToken?: string
 }

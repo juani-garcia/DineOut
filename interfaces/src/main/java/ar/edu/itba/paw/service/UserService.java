@@ -16,6 +16,7 @@ public interface UserService {
 
     User create(final String username, final String password, final String firstName, final String lastName, final Boolean isRestaurant, String contextPath);
     Optional<User> edit(final User user, final String firstName, final String lastName, String contextPath);
+    void editPassword(final User user, final String password);
 
     boolean isRestaurant(long userId);
 
@@ -23,7 +24,5 @@ public interface UserService {
 
     void createPasswordResetTokenByUsername(String username, String contextPath);
 
-    User getUserByPasswordResetToken(String token);
-
-    void changePasswordByUserToken(String token, String newPassword);
+    Optional<User> getUserByPasswordResetToken(String token);
 }
