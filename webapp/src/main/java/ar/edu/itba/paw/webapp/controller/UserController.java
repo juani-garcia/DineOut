@@ -9,6 +9,7 @@ import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.utils.PATCH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -93,12 +94,14 @@ public class UserController {
         return Response.ok().build();
     }
 
-    @PUT
-    @Path("/password-recovery-token/{token}")
+    @PATCH
+    @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response editPasswordByToken(@Valid NewPasswordForm newPasswordForm,
-                                        @PathParam("token") String token) {
-        userService.changePasswordByUserToken(token, newPasswordForm.getPassword());
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response editPasswordByToken(@PathParam("id") Long userId,
+            @Valid NewPasswordForm newPasswordForm) {
+        final User user = securityService.checkCurrentUser(userId);
+        userService.editPassword(user, newPasswordForm.getPassword());
         return Response.ok().build();
     }
 
