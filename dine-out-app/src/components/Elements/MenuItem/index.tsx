@@ -40,14 +40,12 @@ export default function MenuItemComponent ({ menuItem, editable = false, first =
   }
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
-    console.log('Moving item ' + menuItem.name + ' up')
     if (onUp !== null && onUp !== undefined) {
       onUp(menuItem)
     }
   }
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
-    console.log('Moving item ' + menuItem.name + ' down')
     if (onDown !== null && onDown !== undefined) {
       onDown(menuItem)
     }

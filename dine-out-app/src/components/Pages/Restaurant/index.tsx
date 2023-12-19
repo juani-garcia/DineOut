@@ -43,13 +43,10 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
   }
 
   const handleSectionUp = (menuSection: MenuSection): void => {
-    console.log(menuSectionsOrder)
     const newMenuSectionsOrder = [...menuSectionsOrder]
     const currentIndex = menuSectionsOrder.indexOf(menuSection.self)
-    console.log('Moving section of position ' + String(currentIndex) + ' up')
     newMenuSectionsOrder[currentIndex - 1] = menuSection.self
     newMenuSectionsOrder[currentIndex] = menuSectionsOrder[currentIndex - 1]
-    console.log(newMenuSectionsOrder)
     if (restaurant === null || restaurant === undefined) {
       console.error('No restaurant to update')
       return
@@ -74,13 +71,10 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
   }
 
   const handleSectionDown = (menuSection: MenuSection): void => {
-    console.log(menuSectionsOrder)
     const newMenuSectionsOrder = [...menuSectionsOrder]
     const currentIndex = menuSectionsOrder.indexOf(menuSection.self)
-    console.log('Moving section of position ' + String(currentIndex) + ' down')
     newMenuSectionsOrder[currentIndex + 1] = menuSection.self
     newMenuSectionsOrder[currentIndex] = menuSectionsOrder[currentIndex + 1]
-    console.log(newMenuSectionsOrder)
     if (restaurant === null || restaurant === undefined) {
       console.error('No restaurant to update')
       return

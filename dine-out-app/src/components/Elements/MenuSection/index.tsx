@@ -84,10 +84,8 @@ export default function MenuSectionComponent ({
   const handleItemUp = (menuItem: MenuItem): void => {
     const newMenuItemsOrder = [...menuItemsOrder]
     const currentIndex: number = menuItemsOrder.indexOf(menuItem.self)
-    console.log('Moving position ' + String(currentIndex) + ' up')
     newMenuItemsOrder[currentIndex - 1] = menuItem.self
     newMenuItemsOrder[currentIndex] = menuItemsOrder[currentIndex - 1]
-    console.log(newMenuItemsOrder)
     updateMenuSection(menuSection.self, menuSection.name, newMenuItemsOrder).then(responses => {
       if (responses.status !== 200) {
         return
@@ -101,10 +99,8 @@ export default function MenuSectionComponent ({
   const handleItemDown = (menuItem: MenuItem): void => {
     const newMenuItemsOrder = [...menuItemsOrder]
     const currentIndex: number = menuItemsOrder.indexOf(menuItem.self)
-    console.log('Moving position ' + String(currentIndex) + ' down')
     newMenuItemsOrder[currentIndex + 1] = menuItem.self
     newMenuItemsOrder[currentIndex] = menuItemsOrder[currentIndex + 1]
-    console.log(newMenuItemsOrder)
     updateMenuSection(menuSection.self, menuSection.name, newMenuItemsOrder).then(responses => {
       if (responses.status !== 200) {
         return
