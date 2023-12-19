@@ -32,23 +32,25 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
   }, [menuSectionsURI])
 
   const handleSectionDeletion = (menuSection: MenuSection): void => {
-    const newMenuSectionList = menuSectionList.filter(section => section.ordering !== menuSection.ordering)
+    const newMenuSectionList = menuSectionList.filter(section => section.id !== menuSection.id)
     setMenuSectionList(newMenuSectionList)
   }
 
   const handleSectionUp = (menuSection: MenuSection): void => {
     const newList = [...menuSectionList]
-    const currentIndex = newList.indexOf(menuSection)
-    newList[currentIndex].ordering -= 1
-    newList[currentIndex - 1].ordering += 1
+    // TODO: Update
+    //  const currentIndex = newList.indexOf(menuSection)
+    //  newList[currentIndex].ordering -= 1
+    //  newList[currentIndex - 1].ordering += 1
     setMenuSectionList(newList)
   }
 
   const handleSectionDown = (menuSection: MenuSection): void => {
     const newList = [...menuSectionList]
-    const currentIndex = newList.indexOf(menuSection)
-    newList[currentIndex].ordering += 1
-    newList[currentIndex + 1].ordering -= 1
+    // TODO: Update
+    //  const currentIndex = newList.indexOf(menuSection)
+    //  newList[currentIndex].ordering += 1
+    //  newList[currentIndex + 1].ordering -= 1
     setMenuSectionList(newList)
   }
 
@@ -79,13 +81,13 @@ export default function MenuComponent ({ menuSectionsURI, editable = false }: Me
                       menuSectionList.length > 0
                         ? (
                                 <>
-                                    {menuSectionList.sort((s1, s2) => s1.ordering - s2.ordering).map(
+                                    {menuSectionList.sort((s1, s2) => s1.id - s2.id).map(
                                       (section) => (
                                             <MenuSectionComponent
                                                 menuSection={section}
                                                 key={section.self}
                                                 editable={editable}
-                                                last={section.ordering === menuSectionList.length - 1}
+                                                // TODO: Update last={section.ordering === menuSectionList.length - 1}
                                                 onDelete={handleSectionDeletion}
                                                 onUp={handleSectionUp}
                                                 onDown={handleSectionDown}

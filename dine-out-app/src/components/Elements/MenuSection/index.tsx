@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit'
 interface MenuSectionProps {
   menuSection: MenuSection
   editable?: boolean
+  first?: boolean
   last?: boolean
   onDelete?: (section: MenuSection) => void
   onUp?: (section: MenuSection) => void
@@ -27,6 +28,7 @@ interface MenuSectionProps {
 export default function MenuSectionComponent ({
   menuSection,
   editable = false,
+  first = false,
   last = false,
   onDelete,
   onUp,
@@ -120,7 +122,7 @@ export default function MenuSectionComponent ({
                 <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
                 {editable && (
                     <Stack direction='row'>
-                        <IconButton onClick={handleUp} color="secondary" disabled={menuSection.ordering === 0}>
+                        <IconButton onClick={handleUp} color="secondary" disabled={first}>
                             <ArrowUpwardIcon/>
                         </IconButton>
                         <IconButton onClick={handleDown} color="secondary" disabled={last}>
