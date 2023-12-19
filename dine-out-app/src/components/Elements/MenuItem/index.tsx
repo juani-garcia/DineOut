@@ -13,13 +13,14 @@ import useImage from '@/hooks/Images/useImage'
 interface MenuItemProps {
   menuItem: MenuItem
   editable?: boolean
+  first?: boolean
   last?: boolean
   onDelete?: (menuItem: MenuItem) => void
   onUp?: (menuItem: MenuItem) => void
   onDown?: (menuItem: MenuItem) => void
 }
 
-export default function MenuItemComponent ({ menuItem, editable = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
+export default function MenuItemComponent ({ menuItem, editable = false, first = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
   const { deleteMenuItem, moveItem } = useMenuItems()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [imagePreview, setImagePreview] = useState<string | undefined>((menuItem.image === '') ? undefined : menuItem.image)
@@ -129,7 +130,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
             </div>
             {editable && (
                     <Stack>
-                      <IconButton onClick={handleUp} color="secondary" disabled={menuItem.ordering === 0}>
+                      <IconButton onClick={handleUp} color="secondary" disabled={first}>
                           <ArrowUpwardIcon/>
                       </IconButton>
                       <IconButton onClick={handleDown} color="secondary" disabled={last}>

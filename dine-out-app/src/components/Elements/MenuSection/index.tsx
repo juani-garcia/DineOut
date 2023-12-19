@@ -89,23 +89,25 @@ export default function MenuSectionComponent ({
   }
 
   const handleItemDeletion = (menuItem: MenuItem): void => {
-    const newMenuItemList = menuItemList.filter(item => menuItem.ordering !== item.ordering)
+    const newMenuItemList = menuItemList.filter(item => menuItem.id !== item.id)
     setMenuItemList(newMenuItemList)
   }
 
   const handleItemUp = (menuItem: MenuItem): void => {
     const newList = [...menuItemList]
-    const currentIndex = newList.indexOf(menuItem)
-    newList[currentIndex].ordering -= 1
-    newList[currentIndex - 1].ordering += 1
+    // const currentIndex = newList.indexOf(menuItem)
+    // TODO: Remove
+    // newList[currentIndex].ordering -= 1
+    // newList[currentIndex - 1].ordering += 1
     setMenuItemList(newList)
   }
 
   const handleItemDown = (menuItem: MenuItem): void => {
     const newList = [...menuItemList]
-    const currentIndex = newList.indexOf(menuItem)
-    newList[currentIndex].ordering += 1
-    newList[currentIndex + 1].ordering -= 1
+    // const currentIndex = newList.indexOf(menuItem)
+    // TODO: Remove
+    // newList[currentIndex].ordering += 1
+    // newList[currentIndex + 1].ordering -= 1
     setMenuItemList(newList)
   }
 
@@ -146,13 +148,13 @@ export default function MenuSectionComponent ({
                   : (
                       menuItemList.length > 0
                         ? (
-                            menuItemList.sort((m1, m2) => m1.ordering - m2.ordering).map(item => (
+                            menuItemList.sort((m1, m2) => m1.id - m2.id).map(item => (
                                     <>
                                         <MenuItemComponent
                                             menuItem={item}
                                             key={item.self}
                                             editable={editable}
-                                            last={item.ordering + 1 === menuItemList.length}
+                                            // TODO: last={item.ordering + 1 === menuItemList.length}
                                             onDelete={handleItemDeletion}
                                             onUp={handleItemUp}
                                             onDown={handleItemDown}
