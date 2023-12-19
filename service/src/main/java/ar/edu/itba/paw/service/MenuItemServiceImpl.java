@@ -76,9 +76,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     public void edit(final long menuItemId, final String name,
                      final String detail, final double price,
                      final long menuSectionId) {
+        LOGGER.debug("Validating item id...");
         final MenuItem menuItem = validateItem(menuItemId);
+        LOGGER.debug("Getting menu section od if {} ...", menuSectionId);
         final MenuSection menuSection = menuSectionService.getById(menuSectionId).orElseThrow(IllegalArgumentException::new);
 
+        LOGGER.debug("Updating menu item...");
         menuItem.setName(name);
         menuItem.setDetail(detail);
         menuItem.setPrice(price);

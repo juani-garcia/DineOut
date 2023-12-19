@@ -46,7 +46,7 @@ export function useMenuItems () {
         name,
         detail,
         price,
-        section
+        menuSectionId: section
       }
     })
   }
