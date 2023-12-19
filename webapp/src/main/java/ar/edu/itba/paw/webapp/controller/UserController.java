@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.FavoriteNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.service.FavoriteService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
@@ -14,7 +16,10 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
 
@@ -55,7 +60,7 @@ public class UserController {
     public Response readUser(@PathParam("id") final long userId) {
         Optional<UserDTO> maybeUser = userService.getById(userId).map(u -> UserDTO.fromUser(uriInfo, u));
         if (! maybeUser.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new UserNotFoundException();
         }
         return Response.ok(maybeUser.get()).build();
     }
@@ -108,7 +113,7 @@ public class UserController {
     ) {
         final boolean favorite = favoriteService.isFavoriteOfUser(userId, restaurantId);
         if (!favorite) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new FavoriteNotFoundException();
         }
         return Response.ok().build();
     }
