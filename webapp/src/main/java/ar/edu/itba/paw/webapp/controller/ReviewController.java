@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.service.RestaurantReviewService;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantReviewDTO;
@@ -83,7 +84,7 @@ public class ReviewController {
         Optional<RestaurantReviewDTO> reviewDTOOptional = rrs.getById(reviewId)
                 .map(r -> RestaurantReviewDTO.fromRestaurantReview(uriInfo, r));
         if (! reviewDTOOptional.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new ReviewNotFoundException();
         }
         return Response.ok(reviewDTOOptional.get()).build();
     }

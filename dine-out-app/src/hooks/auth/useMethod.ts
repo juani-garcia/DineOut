@@ -1,6 +1,6 @@
 import { useAuth } from './useAuth'
 import { useState } from 'react'
-import axios, { type AxiosResponse } from 'axios'
+import axios, { type AxiosResponse, HttpStatusCode } from 'axios'
 import type MethodRequestType from '@/types/MethodRequestType'
 import { useNavigate } from 'react-router-dom'
 import { DineOutHeaders } from '@/common/const'
@@ -41,6 +41,12 @@ export const useMethod = () => {
         ...request.headers,
         Authorization: `${token}`
       }
+    } else if (request.passwordRecoveryToken != null) {
+      request.headers = {
+        ...request.headers,
+        // Bearer is added because token is passed through params
+        Authorization: `Bearer ${request.passwordRecoveryToken.toString()}`
+      }
     }
 
     return await axios({
@@ -61,10 +67,15 @@ export const useMethod = () => {
       return response
     }
     ).catch(async e => {
-      if (e.response?.status === 404 || e.response?.status === 400) {
+      if (e.response?.status === HttpStatusCode.NotFound || e.response?.status === HttpStatusCode.BadRequest) {
         setIsLoading(false)
         return e.response
       }
+
+      if (e.response?.status === HttpStatusCode.Unauthorized && request.passwordRecoveryToken !== null) {
+        return e.response
+      }
+
       if (e.response?.status > 400 && e.response?.status < 500 && request.basic == null) {
         if (token == null) {
           logout()

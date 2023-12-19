@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.service.RestaurantService;
 import ar.edu.itba.paw.webapp.form.RestaurantUpdateForm;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
@@ -115,7 +116,7 @@ public class RestaurantController {
     public Response getRestaurant(@PathParam("id") final long restaurantID) {
         Optional<RestaurantDTO> maybeRestaurant = rs.getById(restaurantID).map(r -> RestaurantDTO.fromRestaurant(uriInfo, r));
         if (! maybeRestaurant.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new RestaurantNotFoundException();
         }
          return Response.ok(maybeRestaurant.get()).build();
     }
@@ -148,7 +149,7 @@ public class RestaurantController {
     public Response getRestaurantImage(@PathParam("id") final long restaurantID, @Context Request request) {
         Optional<Restaurant> maybeRestaurant = rs.getById(restaurantID);
         if (! maybeRestaurant.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new RestaurantNotFoundException();
         }
         Restaurant restaurant = maybeRestaurant.get();
         if (restaurant.getImage() == null) {

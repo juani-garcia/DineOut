@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.MenuItem;
+import ar.edu.itba.paw.model.exceptions.MenuItemNotFoundException;
 import ar.edu.itba.paw.service.MenuItemService;
 import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.form.MenuItemForm;
@@ -82,7 +83,7 @@ public class MenuItemController {
     ) {
         Optional<MenuItemDTO> maybeMenuItem = mis.getById(menuItemId).map(mi -> MenuItemDTO.fromMenuItem(uriInfo, mi));
         if (!maybeMenuItem.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new MenuItemNotFoundException();
         }
         return Response.ok(maybeMenuItem.get()).build();
     }
@@ -124,7 +125,7 @@ public class MenuItemController {
         LOGGER.debug("Getting image for menu item with id {}", menuItemId);
         Optional<MenuItem> maybeMenuItem = mis.getById(menuItemId);
         if (! maybeMenuItem.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new MenuItemNotFoundException();
         }
         MenuItem menuItem = maybeMenuItem.get();
         if (menuItem.getImage() == null) {

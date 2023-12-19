@@ -138,14 +138,19 @@ public class JwtFilter extends OncePerRequestFilter {
         BEARER {
             @Override
             boolean authorize(String token, ContextProvider context) {
-                if(!context.jwtUtils.isValidToken(token)) {
+                Optional<User> passwordRecoveryUser;
+                String username;
+                if(context.jwtUtils.isValidToken(token)) {
+                    username = context.jwtUtils.getUsername(token);
+                    LOGGER.debug("Authorizing {} by jwt", username);
+                } else if((passwordRecoveryUser = context.userService.getUserByPasswordResetToken(token)).isPresent()) {
+                    username = passwordRecoveryUser.get().getUsername();
+                    LOGGER.debug("Authorizing {} (recovery token)", username);
+                } else {
                     return unauthorized(context.response);
                 }
 
-                String username = context.jwtUtils.getUsername(token);
-                LOGGER.debug("Trying to authorize user {}", username);
                 UserDetails userDetails;
-
                 try {
                     userDetails = context.userDetailsService.loadUserByUsername(username);
                 } catch(UsernameNotFoundException e) {

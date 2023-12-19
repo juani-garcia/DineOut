@@ -166,8 +166,9 @@
     "title": "Recover your password",
     "mailSent": "Mail sent!",
     "passwordUpdated": "Password updated!",
-    "submitEmailPrompt": "We'll send you an email with a token to update your password",
-    "submitTokenPrompt": "Go check your email and paste the token below!",
+    "submitEmailPrompt": "We'll send you an email with a link to update your password",
+    "checkInbox": "Go check your inbox and follow the link!",
+    "updatePasswordPrompt": "Choose a new password",
     "success": "Your password was successfully updated!",
     "sendEmail": "Send email",
     "updatePassword": "Update password",
@@ -177,6 +178,8 @@
     "showPassword": "Show password",
     "emailNotFound": "The email was not found. Check the data!",
     "invalidToken": "Invalid token. Check the data!",
-    "goToLogin": "Go to login"
+    "goToLogin": "Go to login",
+    "noTokenProvided": "No token provided",
+    "wrongUserId": "The user seems wrong. Check your link!"
   }
 }
