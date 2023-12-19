@@ -72,7 +72,7 @@ public class SecurityManager {
 
     public boolean isReservationRestaurant(Authentication auth, final long reservationId) {
         return reservationService.getById(reservationId)
-                .filter(r -> r.getOwner().getUsername().equals(auth.getName()))
+                .filter(r -> r.getRestaurant().getUser().getUsername().equals(auth.getName()))
                 .isPresent();
     }
 
