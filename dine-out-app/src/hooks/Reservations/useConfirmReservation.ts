@@ -10,7 +10,7 @@ export function useConfirmReservation () {
 
   async function confirmReservation (reservation: Reservation): Promise<AxiosResponse> {
     return await requestMethod({
-      method: HttpMethod.PUT,
+      method: HttpMethod.PATCH,
       url: paths.API_URL + paths.RESERVATION + `/${reservation.id}`,
       data: {
         isConfirmed: true
