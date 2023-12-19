@@ -146,7 +146,7 @@ export default function WithMap (): JSX.Element {
       setError(HttpStatusCode.Unauthorized)
       return
     }
-    updateRestaurant(user?.restaurantId, data.name, selectedLocation.address, data.email, data.detail, selectedLocation.zone?.name ?? '', selectedLocation.lat, selectedLocation.lng, data.categories, data.shifts).then(
+    updateRestaurant(user?.restaurantId, data.name, selectedLocation.address, data.email, data.detail, selectedLocation.zone?.name ?? '', selectedLocation.lat, selectedLocation.lng, data.categories, data.shifts, restaurant?.menuSectionsOrder ?? []).then(
       (response) => {
         if (response.status === 200 || response.status === 201) {
           navigate('/restaurant/' + user.restaurantId.toString() + '/view')

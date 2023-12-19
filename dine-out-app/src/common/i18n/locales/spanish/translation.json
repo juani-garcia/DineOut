@@ -168,5 +168,8 @@
     "actionIrreversible": "La acción que estás por hacer no es reversible",
     "goBack": "Ir atrás",
     "continue": "Continuar"
+  },
+  "Favorite": {
+    "error": "No pudimos marcarlo como favorito. Vuelve a intentar"
   }
 }

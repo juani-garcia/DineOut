@@ -44,12 +44,13 @@ export function useMenuSections () {
     })
   }
 
-  async function updateMenuSection (uri: string, name: string): Promise<AxiosResponse> {
+  async function updateMenuSection (uri: string, name: string, menuItemsOrder: string[]): Promise<AxiosResponse> {
     return await rmu({
       method: HttpMethod.PUT,
       url: uri,
       data: {
-        name
+        name,
+        menuItemsOrder
       }
     })
   }

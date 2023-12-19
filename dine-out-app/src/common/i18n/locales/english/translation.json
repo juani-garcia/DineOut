@@ -201,5 +201,8 @@
     "actionIrreversible": "The action you are about to perform is not reversible",
     "goBack": "Go back",
     "continue": "Continue"
+  },
+  "Favorite": {
+    "error": "Could not mark as favorite. Please try again"
   }
 }
