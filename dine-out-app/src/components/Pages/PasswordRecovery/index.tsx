@@ -10,11 +10,16 @@ import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
+
+const TOKEN_PARAM: string = 'token'
+const USER_ID_PARAM: string = 'userId'
 
 const PasswordRecovery: React.FC = () => {
   enum Status {
     SubmittingEmail,
+    EmailSent,
     SubmittingToken,
     Success
   }
@@ -24,6 +29,20 @@ const PasswordRecovery: React.FC = () => {
   const { t } = useTranslation()
   const [currentStatus, setCurrentStatus] = useState<Status>(Status.SubmittingEmail)
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [searchParams] = useSearchParams()
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
+  if (user !== null) {
+    navigate(-1)
+  }
+
+  const token = searchParams.get(TOKEN_PARAM)
+  const userId = searchParams.get(USER_ID_PARAM)
+
+  if (token !== null && userId !== null && currentStatus !== Status.SubmittingToken && currentStatus !== Status.Success) {
+    setCurrentStatus(Status.SubmittingToken)
+  }
 
   const emailSchema = z.object({
     username: z.string()
@@ -33,8 +52,6 @@ const PasswordRecovery: React.FC = () => {
   })
 
   const passwordSchema = z.object({
-    token: z.string()
-      .nonempty(t('FormErrors.notEmpty').toString()),
     password: z.string()
       .nonempty(t('FormErrors.notEmpty').toString())
       .max(64, t('FormErrors.tooLong').toString())
@@ -66,7 +83,7 @@ const PasswordRecovery: React.FC = () => {
           enqueueSnackbar(t('Recovery.mailSent'), {
             variant: 'success'
           })
-          setCurrentStatus(Status.SubmittingToken)
+          setCurrentStatus(Status.EmailSent)
         } else if (response.status === HttpStatusCode.BadRequest) {
           enqueueSnackbar(t('Recovery.emailNotFound'), {
             variant: 'warning'
@@ -81,24 +98,37 @@ const PasswordRecovery: React.FC = () => {
   }
 
   const onSubmitPassword = (data: any): void => {
-    updateHook.updatePassword(data.password, data.token)
-      .then((response) => {
-        if (response.status === HttpStatusCode.Ok) {
-          enqueueSnackbar(t('Recovery.passwordUpdated'), {
-            variant: 'success'
-          })
-          setCurrentStatus(Status.Success)
-        } else if (response.status === HttpStatusCode.BadRequest) {
-          enqueueSnackbar(t('Recovery.invalidToken'), {
-            variant: 'warning'
-          })
-        }
-      })
-      .catch((e) => {
-        enqueueSnackbar(t('Errors.oops'), {
-          variant: 'error'
+    if (token !== null && userId !== null) {
+      if (isNaN(parseInt(userId))) {
+        enqueueSnackbar(t('Recovery.wrongUserId'), {
+          variant: 'warning'
         })
+        return
+      }
+      updateHook.updatePassword(data.password, token, userId)
+        .then((response) => {
+          if (response.status === HttpStatusCode.Ok) {
+            enqueueSnackbar(t('Recovery.passwordUpdated'), {
+              variant: 'success'
+            })
+            window.history.replaceState({}, document.title, window.location.pathname)
+            setCurrentStatus(Status.Success)
+          } else if (response.status === HttpStatusCode.Unauthorized || response.status === HttpStatusCode.BadRequest) {
+            enqueueSnackbar(t('Recovery.invalidToken'), {
+              variant: 'warning'
+            })
+          }
+        })
+        .catch((e) => {
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
+        })
+    } else {
+      enqueueSnackbar(t('Recovery.noTokenProvided'), {
+        variant: 'warning'
       })
+    }
   }
 
   const handlePasswordVisibilityChange = (): void => {
@@ -134,10 +164,14 @@ const PasswordRecovery: React.FC = () => {
             </FormControl>
           </RecoveryForm>
         )
+      case Status.EmailSent:
+        return (
+          <Header>{ t('Recovery.checkInbox') }</Header>
+        )
       case Status.SubmittingToken:
         return (
           <RecoveryForm>
-            <Header>{ t('Recovery.submitTokenPrompt') }</Header>
+            <Header>{ t('Recovery.updatePasswordPrompt') }</Header>
             {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
             <FormControl component="form" onSubmit={passwordForm.handleSubmit(onSubmitPassword)}
                          sx={{
@@ -146,15 +180,6 @@ const PasswordRecovery: React.FC = () => {
                              marginTop: '25px'
                            }
                          }}>
-              <TextField
-                label={t('Recovery.token')}
-                fullWidth
-                margin="normal"
-                {...passwordForm.control.register('token')}
-                variant="standard"
-                error={passwordForm.formState.errors?.token?.message != null}
-                helperText={passwordForm.formState.errors?.token?.message?.toString()}
-              />
               <TextField
                 label={t('Recovery.password')}
                 type={ showPassword ? 'text' : 'password' }

@@ -7,13 +7,14 @@ import { HttpMethod } from '@/types/enums/HTTPMethod'
 export function useUpdatePassword () {
   const { isLoading, requestMethod } = useMethod()
 
-  async function updatePassword (password: string, token: string): Promise<AxiosResponse> {
+  async function updatePassword (password: string, token: string, userId: string): Promise<AxiosResponse> {
     return await requestMethod({
-      method: HttpMethod.PUT,
-      url: paths.USERS + '/password-recovery-token/' + token,
+      method: HttpMethod.PATCH,
+      url: paths.USERS + `/${userId}`,
       data: {
         password
-      }
+      },
+      passwordRecoveryToken: token
     })
   }
 

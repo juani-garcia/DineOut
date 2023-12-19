@@ -86,7 +86,12 @@ public class JwtUtils {
     }
 
     public boolean isRefreshToken(String token) {
-        Claims claims = parser.parseClaimsJws(token).getBody();
+        Claims claims;
+        try {
+            claims = parser.parseClaimsJws(token).getBody();
+        } catch (JwtException e) {
+            return false;
+        }
         Boolean value = claims.get(REFRESH_CLAIM, Boolean.class);
 
         return value != null && value;
