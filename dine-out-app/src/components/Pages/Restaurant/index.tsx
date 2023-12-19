@@ -92,7 +92,7 @@ export default function RestaurantDetailPage ({ restaurant: restaurantProp }: Re
                     </RestaurantDetailContainer>
                   </RestaurantDetailSection>
                   <MenuContainer>
-                    <Menu menuSectionsURI={restaurant.menuSections} editable={isOwner}/>
+                    <Menu menuSectionsURI={restaurant.menuSections} editable={isOwner} menuSectionsOrder={restaurant.menuSectionsOrder}/>
                   </MenuContainer>
                 </RestaurantContainer>
             )

@@ -12,9 +12,10 @@ import { Link } from 'react-router-dom'
 interface MenuProps {
   menuSectionsURI: string
   editable?: boolean
+  menuSectionsOrder: string[]
 }
 
-export default function MenuComponent ({ menuSectionsURI, editable = false }: MenuProps): JSX.Element {
+export default function MenuComponent ({ menuSectionsURI, editable = false, menuSectionsOrder }: MenuProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuSections } = useMenuSections()
   const [menuSectionList, setMenuSectionList] = useState<MenuSection[]>([])

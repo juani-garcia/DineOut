@@ -21,7 +21,7 @@ interface MenuItemProps {
 }
 
 export default function MenuItemComponent ({ menuItem, editable = false, first = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
-  const { deleteMenuItem, moveItem } = useMenuItems()
+  const { deleteMenuItem } = useMenuItems()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [imagePreview, setImagePreview] = useState<string | undefined>((menuItem.image === '') ? undefined : menuItem.image)
   const { updateImage, deleteImage } = useImage()
@@ -40,25 +40,17 @@ export default function MenuItemComponent ({ menuItem, editable = false, first =
   }
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
-    moveItem(menuItem.self, true).then(response => {
-      if (response.status !== 200) { return }
-      if (onUp != null) {
-        onUp(menuItem)
-      }
-    }).catch(e => {
-      console.error(e)
-    })
+    console.log('Moving item ' + menuItem.name + ' up')
+    if (onUp !== null && onUp !== undefined) {
+      onUp(menuItem)
+    }
   }
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
-    moveItem(menuItem.self, false).then(response => {
-      if (response.status !== 200) { return }
-      if (onDown != null) {
-        onDown(menuItem)
-      }
-    }).catch(e => {
-      console.error(e)
-    })
+    console.log('Moving item ' + menuItem.name + ' down')
+    if (onDown !== null && onDown !== undefined) {
+      onDown(menuItem)
+    }
   }
 
   const handleUpdateImage: React.ChangeEventHandler<HTMLInputElement> = event => {
