@@ -7,4 +7,7 @@ export default interface Reservation {
   comments: string
   isConfirmed: boolean
   self: string
+  mail?: string
+  ownerFirstName?: string
+  ownerLastName?: string
 }
