@@ -51,7 +51,8 @@
   "Navbar": {
     "logout": "Log out",
     "myReservations": "My reservations",
-    "myRestaurant": "My restaurant"
+    "myRestaurant": "My restaurant",
+    "myReviews": "My reviews"
   },
   "SearchBox": {
     "search": "Search",
@@ -153,5 +154,32 @@
     "oops": "Oops! Something went wrong. Try again later.",
     "invalidCredentials": "The email and password sent are incorrect. Please check the data.",
     "tryAgain": "Check the data and try again"
+  },
+  "FormErrors": {
+    "notEmpty": "This field cannot be left empty",
+    "tooLong": "Too long",
+    "invalidEmail": "The email is invalid",
+    "invalidPassword": "Invalid password. Must be at least 8 characters long, and contain capitals and numbers",
+    "passwordMismatch": "Passwords don't match"
+  },
+  "Recovery": {
+    "title": "Recover your password",
+    "mailSent": "Mail sent!",
+    "passwordUpdated": "Password updated!",
+    "submitEmailPrompt": "We'll send you an email with a link to update your password",
+    "checkInbox": "Go check your inbox and follow the link!",
+    "updatePasswordPrompt": "Choose a new password",
+    "success": "Your password was successfully updated!",
+    "sendEmail": "Send email",
+    "updatePassword": "Update password",
+    "token": "Token",
+    "password": "New password",
+    "confirmPassword": "Confirm password",
+    "showPassword": "Show password",
+    "emailNotFound": "The email was not found. Check the data!",
+    "invalidToken": "Invalid token. Check the data!",
+    "goToLogin": "Go to login",
+    "noTokenProvided": "No token provided",
+    "wrongUserId": "The user seems wrong. Check your link!"
   }
 }

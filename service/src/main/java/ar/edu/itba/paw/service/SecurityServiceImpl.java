@@ -4,7 +4,6 @@ import ar.edu.itba.paw.model.PasswordResetToken;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.ForbiddenActionException;
 import ar.edu.itba.paw.model.exceptions.UnauthorizedException;
-import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

@@ -2,7 +2,6 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.InvalidPageException;
-import ar.edu.itba.paw.model.exceptions.InvalidPasswordRecoveryTokenException;
 import ar.edu.itba.paw.model.exceptions.NotFoundException;
 import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            UserRoleService userRoleService,
-                           PasswordResetTokenService passwordResetTokenService, EmailService emailService) {
-
-
+                           PasswordResetTokenService passwordResetTokenService,
+                           EmailService emailService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.userRoleService = userRoleService;
@@ -114,18 +112,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByPasswordResetToken(String token) {
-        PasswordResetToken passwordResetToken = passwordResetTokenService.getByToken(token).
-                orElseThrow(InvalidPasswordRecoveryTokenException::new);
-        return passwordResetToken.getUser();
+    public Optional<User> getUserByPasswordResetToken(String token) {
+        Optional<PasswordResetToken> resetToken = passwordResetTokenService.getByToken(token);
+
+        if (!resetToken.isPresent() || resetToken.get().isUsed()) {
+            return Optional.empty();
+        }
+
+        passwordResetTokenService.setUsed(token);
+        return resetToken.map(PasswordResetToken::getUser);
     }
 
     @Override
     @Transactional
-    public void changePasswordByUserToken(String token, String newPassword) {
-        User user = getUserByPasswordResetToken(token);
-        user.setPassword(passwordEncoder.encode(newPassword));  // TODO: Check if not changed?
-        passwordResetTokenService.setUsed(token);
+    public void editPassword(final User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
     }
 
 }

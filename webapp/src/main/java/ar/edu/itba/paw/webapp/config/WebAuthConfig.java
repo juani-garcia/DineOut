@@ -96,6 +96,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/reviews/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll() // consider anonymous
                 .antMatchers(HttpMethod.POST, "/users/password-recovery-token").permitAll() // consider anonymous
+                .antMatchers(HttpMethod.PUT, "/users/password-recovery-token/**").permitAll() // consider anonymous
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
             .and().exceptionHandling()
@@ -112,7 +113,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         cors.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         cors.setAllowedMethods(Collections.singletonList("*"));
         cors.setAllowedHeaders(Collections.singletonList("*"));
-        cors.setExposedHeaders(Arrays.asList("DineOut-Authorization", "DineOut-Refresh-Token", "DineOut-Total-Pages", "Location", "Link"));
+        cors.setExposedHeaders(Arrays.asList(
+                "DineOut-JWT",
+                "DineOut-Refresh-Token",
+                "DineOut-Total-Pages",
+                "Location",
+                "Link"
+        ));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
         return source;

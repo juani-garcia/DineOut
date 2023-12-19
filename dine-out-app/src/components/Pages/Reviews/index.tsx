@@ -2,91 +2,80 @@ import React, { useEffect, useState } from 'react'
 import {
   ExploreRestaurantsText,
   NoReservationsText,
-  PastToggle,
   ReservationCardContainer,
   ReservationCardHolder,
-  ReservationInfo,
   ReservationMainContainer,
   ReservationsContainer,
-  ReservationTitle,
-  ShowPreviousContainer
+  ReservationTitle
 } from '@/components/Pages/Reservations/styles'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import type Reservation from '@/types/models/Reservation'
-import { useReservations } from '@/hooks/Reservations/useReservations'
 import { useAuth } from '@/hooks/auth/useAuth'
-import { HttpStatusCode } from 'axios'
 import Error from '@/components/Pages/Error'
-import { CircularProgress, Pagination } from '@mui/material'
+import { CircularProgress, Divider, Pagination } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { DineOutHeaders, localPaths, roles } from '@/common/const'
+import type Review from '@/types/models/Review'
+import { useReviews } from '@/hooks/Reviews/useReviews'
+import { Rating, RatingContainer } from '@/components/Elements/RestaurantCard/styles'
+import StarIcon from '@mui/icons-material/Star'
+import StarBorderIcon from '@mui/icons-material/StarBorder'
+import useRestaurantFromUri from '@/hooks/Restaurants/useRestaurantFromUri'
+import type Restaurant from '@/types/models/Restaurant'
+import { HttpStatusCode } from 'axios'
 
-function Reservations (): JSX.Element {
+function Reviews (): JSX.Element {
   const { t } = useTranslation()
-  const [past, setPast] = useState<boolean>(JSON.parse(localStorage.getItem('past') ?? 'false') as boolean)
-  const [reservationList, setReservationList] = useState<Reservation[]>([])
+  const [reviewList, setReviewList] = useState<Review[]>([])
   const [queryParams, setQueryParams] = useSearchParams()
   const [totalPages, setTotalPages] = useState(1)
   const navigate = useNavigate()
   const [error, setError] = useState<number | null>(null)
-  const { isLoading, reservations } = useReservations()
+  const { isLoading, reviews } = useReviews()
+  const { isLoading: ild, requestRestaurant } = useRestaurantFromUri()
   const { user } = useAuth()
   const { enqueueSnackbar } = useSnackbar()
-
-  const handlePastToggle = (): void => {
-    localStorage.setItem('past', JSON.stringify(!past))
-    const existingParams = new URLSearchParams(queryParams.toString())
-    setQueryParams({
-      page: existingParams.get('page') ?? '1',
-      userId: user?.userId.toString() ?? '',
-      past: (!past ? 'true' : 'false')
-    })
-    setPast(!past)
-  }
 
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: localPaths.RESERVATION }
+        state: { from: localPaths.REVIEWS }
       })
     } else {
       const existingParams = new URLSearchParams(queryParams.toString())
 
-      if (existingParams.get('past') === 'true') {
-        setPast(true)
-      } else if (existingParams.get('past') === 'false') {
-        setPast(false)
-      } else if (existingParams.get('past') !== '' && existingParams.get('past') !== null && existingParams.get('past') !== undefined) {
-        setError(HttpStatusCode.BadRequest)
-        return
+      if (user?.roles.includes(roles.RESTAURANT)) {
+        if (user?.restaurantId === undefined) {
+          navigate('/restaurant/register', {
+            state: { from: localPaths.REVIEWS }
+          })
+          return
+        }
+        setQueryParams({
+          page: existingParams.get('page') ?? '1',
+          byUser: user?.userId.toString() ?? '',
+          forRestaurant: user?.restaurantId.toString() ?? ''
+        })
+      } else {
+        setQueryParams({
+          page: existingParams.get('page') ?? '1',
+          byUser: user?.userId.toString() ?? ''
+        })
       }
-
-      setQueryParams({
-        page: existingParams.get('page') ?? '1',
-        userId: user?.userId.toString() ?? '',
-        past: (past ? 'true' : 'false')
-      })
     }
   }, [user])
 
   useEffect(() => {
-    if (user?.userId.toString() === queryParams.get('userId')) {
-      if (user?.restaurantId === undefined) {
-        navigate('/restaurant/register', {
-          state: { from: localPaths.REVIEWS }
-        })
-        return
-      }
-      reservations(queryParams).then((response) => {
+    if (user?.userId.toString() === queryParams.get('byUser')) {
+      reviews(queryParams).then((response) => {
         if (response.status >= 400 && user?.roles.includes(roles.RESTAURANT)) {
           navigate('/restaurant/register', {
-            state: { from: localPaths.RESERVATION }
+            state: { from: localPaths.REVIEWS }
           })
         }
 
         if (response.status >= 500) {
-          setReservationList([])
+          setReviewList([])
           navigate('/error?status=' + response.status.toString())
         }
 
@@ -100,17 +89,38 @@ function Reservations (): JSX.Element {
           const existingParams = new URLSearchParams(queryParams.toString())
           existingParams.set('page', '1')
           setQueryParams(existingParams)
-          setReservationList([])
+          setReviewList([])
         } else {
-          setReservationList(response.data as Reservation[])
+          setReviewList(response.data as Review[])
         }
-      }).catch((e) => {
+      }).catch(e => {
         enqueueSnackbar(t('Errors.oops'), {
           variant: 'error'
         })
+        console.log(e)
       })
     }
   }, [queryParams])
+
+  useEffect(() => {
+    if (reviewList.length > 0) {
+      reviewList.forEach((review) => {
+        requestRestaurant(review.restaurant).then((response) => {
+          if (response.status >= 500) {
+            setReviewList([])
+            navigate('/error?status=' + response.status.toString())
+          }
+
+          review.restaurantObj = response.data as Restaurant
+        }).catch(e => {
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
+          console.log(e)
+        })
+      })
+    }
+  }, [reviewList])
 
   if (error !== null) return <Error errorProp={error}/>
 
@@ -125,47 +135,53 @@ function Reservations (): JSX.Element {
             <ReservationCardHolder>
                 <ReservationCardContainer>
                     <ReservationTitle>
-                        Reservas {past ? 'pasadas' : 'próximas'}
+                        Reviews
                     </ReservationTitle>
-                    <ShowPreviousContainer>
-                        <PastToggle onClick={handlePastToggle}>Mostrar
-                            reservas {!past ? 'pasadas' : 'próximas'}</PastToggle>
-                    </ShowPreviousContainer>
                     <ReservationsContainer>
-                        {isLoading
+                        {isLoading || ild
                           ? (
                                 <CircularProgress color="secondary" size="100px"/>
                             )
                           : (
-                              reservationList.length === 0
+                              reviewList.length === 0
                                 ? (
                                         <>
                                             <NoReservationsText>
-                                                No hay ninguna reserva
+                                                No hay ninguna review
                                             </NoReservationsText>
+                                          {((user?.roles.includes(roles.DINER)) === true)
+                                            ? (
                                             <ExploreRestaurantsText as={Link} to={localPaths.RESTAURANTS}>
                                                 ¡Explorá los mejores restaurantes!
                                             </ExploreRestaurantsText>
+                                              )
+                                            : (
+                                                  <></>
+                                              )
+                                          }
                                         </>
                                   )
                                 : (
                                         <>
                                             {
-                                                reservationList.map((reservation: Reservation) => (
-                                                    <ReservationInfo key={reservation.id}>
-                                                        <hr style={{
-                                                          boxSizing: 'content-box',
-                                                          height: '0',
-                                                          overflow: 'visible',
-                                                          width: '100%'
-                                                        }}/>
-                                                        {/* TODO: Style when i have the restaurant name */}
-                                                        <div>{reservation.restaurant}</div>
-                                                        <div>{reservation.amount}</div>
-                                                        <div>{reservation.comments}</div>
-                                                        <div>{reservation.dateTime}</div>
-                                                        <div>{reservation.isConfirmed}</div>
-                                                    </ReservationInfo>
+                                                reviewList.map((review: Review) => (
+                                                    <>
+                                                      <RatingContainer>
+                                                        <Rating>
+                                                          {[...Array(review.rating)].map((_, index) => (
+                                                              <StarIcon key={index} color="secondary"/>
+                                                          ))}
+                                                          {[...Array(5 - review.rating)].map((_, index) => (
+                                                              <StarBorderIcon key={index} color="primary"/>
+                                                          ))}
+                                                        </Rating>
+                                                      </RatingContainer>
+                                                      <h1>{review.restaurantObj?.id}</h1>
+                                                      <h1>{review.restaurantObj?.name}</h1>
+                                                      <h1>{review.restaurantObj?.rating}</h1>
+                                                      <h1>{review.review}</h1>
+                                                      <Divider/>
+                                                    </>
                                                 ))
                                             }
 
@@ -203,4 +219,4 @@ function Reservations (): JSX.Element {
   )
 }
 
-export default Reservations
+export default Reviews

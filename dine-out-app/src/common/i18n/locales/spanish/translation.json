@@ -62,7 +62,8 @@
   "Navbar": {
     "logout": "Cerrar sesión",
     "myReservations": "Mis reservas",
-    "myRestaurant": "Mi restaurante"
+    "myRestaurant": "Mi restaurante",
+    "myReviews": "Mis reseñas"
   },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
@@ -117,5 +118,32 @@
     "oops": "¡Ups! Algo salió mal. Vuelve a intentarlo más tarde.",
     "invalidCredentials": "El email y contraseña ingresados no son correctos. Por favor, revisá tus datos.",
     "tryAgain": "Revisá los datos ingresados y volvé a intentar"
+  },
+  "FormErrors": {
+    "notEmpty": "Este campo no se puede dejar vacío",
+    "tooLong": "Demasiado largo",
+    "invalidEmail": "Corre electrónico inválido",
+    "invalidPassword": "Contraseña inválida. Debe contener al menos 8 caracteres, incluyendo números y mayúsculas",
+    "passwordMismatch": "Las contraseñas no coincied"
+  },
+  "Recovery": {
+    "title": "Recupera tu contraseña",
+    "mailSent": "¡Mail enviado!",
+    "passwordUpdated": "¡Contraseña actualizada!",
+    "submitEmailPrompt": "Te enviaremos un email para cambiar tu contraseña",
+    "checkInbox": "¡Revisa tu casilla y sigue el link!",
+    "updatePasswordPrompt": "Elige una nueva contraseña",
+    "success": "¡Tu contraseña fue correctamente actualizada!",
+    "sendEmail": "Enviar email",
+    "updatePassword": "Actualizar contraseña",
+    "token": "Token",
+    "password": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "showPassword": "Mostrar contraseña",
+    "emailNotFound": "No encontramos el correo. ¡Revisá los datos!",
+    "invalidToken": "El token ingresado es inválido. ¡Revisá los datos!",
+    "goToLogin": "Ir a inicio de sesión",
+    "noTokenProvided": "No se ha provisto un token",
+    "wrongUserId": "El usuario parece incorrecto. ¡Revisa tu link!"
   }
 }

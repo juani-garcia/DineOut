@@ -5,6 +5,7 @@ import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,14 +44,14 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private static final String REFRESH_TOKEN_HEADER = "DineOut-Refresh-Token",
-                                AUTH_HEADER = "DineOut-Authorization",
+                                JWT_HEADER = "DineOut-JWT",
                                 SEPARATOR = " ";
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        final String header = request.getHeader(AUTH_HEADER);
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(header == null) {
             LOGGER.debug("No authorization header, continuing...");
             chain.doFilter(request, response);
@@ -125,7 +126,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 User user = optionalUser.get();
 
-                context.response.setHeader(AUTH_HEADER, "Bearer "+context.jwtUtils.getToken(user));
+                context.response.setHeader(JWT_HEADER, "Bearer "+context.jwtUtils.getToken(user));
                 context.response.setHeader(REFRESH_TOKEN_HEADER, "Bearer "+context.jwtUtils.getRefreshToken(user));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
@@ -137,14 +138,19 @@ public class JwtFilter extends OncePerRequestFilter {
         BEARER {
             @Override
             boolean authorize(String token, ContextProvider context) {
-                if(!context.jwtUtils.isValidToken(token)) {
+                Optional<User> passwordRecoveryUser;
+                String username;
+                if(context.jwtUtils.isValidToken(token)) {
+                    username = context.jwtUtils.getUsername(token);
+                    LOGGER.debug("Authorizing {} by jwt", username);
+                } else if((passwordRecoveryUser = context.userService.getUserByPasswordResetToken(token)).isPresent()) {
+                    username = passwordRecoveryUser.get().getUsername();
+                    LOGGER.debug("Authorizing {} (recovery token)", username);
+                } else {
                     return unauthorized(context.response);
                 }
 
-                String username = context.jwtUtils.getUsername(token);
-                LOGGER.debug("Trying to authorize user {}", username);
                 UserDetails userDetails;
-
                 try {
                     userDetails = context.userDetailsService.loadUserByUsername(username);
                 } catch(UsernameNotFoundException e) {
@@ -159,7 +165,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     }
 
                     context.response.setHeader(
-                            AUTH_HEADER, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
+                            JWT_HEADER, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
                     );
                 }
 

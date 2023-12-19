@@ -23,6 +23,9 @@ public class Reservation {
     @JoinColumn(name = "user_mail", referencedColumnName = "username", nullable = false)
     private User owner;
 
+    @Column(name = "user_mail", insertable = false, updatable = false)
+    private String mail;
+
     @Column(nullable = false)
     private int amount;
 
@@ -89,7 +92,7 @@ public class Reservation {
     }
 
     public String getMail() {
-        return getOwner().getUsername();
+        return mail;
     }
 
     public String getDateString() {
@@ -120,4 +123,7 @@ public class Reservation {
         isConfirmed = true;
     }
 
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
 }

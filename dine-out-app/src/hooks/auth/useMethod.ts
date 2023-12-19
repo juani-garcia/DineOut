@@ -1,6 +1,6 @@
 import { useAuth } from './useAuth'
 import { useState } from 'react'
-import axios, { type AxiosResponse } from 'axios'
+import axios, { type AxiosResponse, HttpStatusCode } from 'axios'
 import type MethodRequestType from '@/types/MethodRequestType'
 import { useNavigate } from 'react-router-dom'
 import { DineOutHeaders } from '@/common/const'
@@ -16,29 +16,36 @@ export const useMethod = () => {
     setRefreshToken,
     logout
   } = useAuth()
+  const isTokenExpired = (token: string): boolean => {
+    const [, payloadBase64] = token.split('.')
+    const payload = JSON.parse(atob(payloadBase64))
+    return payload.exp * 1000 < Date.now()
+  }
 
   const navigate = useNavigate()
 
   async function requestMethod (request: MethodRequestType, retry: boolean = false): Promise<AxiosResponse> {
     setIsLoading(true)
 
-    const refreshToken = getRefreshToken()
-    const token = getToken()
-
+    let token = getToken()
+    if (token != null && isTokenExpired(token)) {
+      token = getRefreshToken()
+    }
     if (request.basic != null) {
       request.headers = {
-        [DineOutHeaders.AUTH_HEADER]: `Basic ${request.basic}`,
-        ...request.headers
+        ...request.headers,
+        Authorization: `Basic ${request.basic}`
       }
     } else if (token != null && !retry) {
       request.headers = {
         ...request.headers,
-        [DineOutHeaders.AUTH_HEADER]: `${token}`
+        Authorization: `${token}`
       }
-    } else if (refreshToken != null) {
+    } else if (request.passwordRecoveryToken != null) {
       request.headers = {
         ...request.headers,
-        [DineOutHeaders.AUTH_HEADER]: `${refreshToken}`
+        // Bearer is added because token is passed through params
+        Authorization: `Bearer ${request.passwordRecoveryToken.toString()}`
       }
     }
 
@@ -49,19 +56,28 @@ export const useMethod = () => {
       data: request.data,
       params: request.params
     }).then(response => {
-      if (response.headers[DineOutHeaders.AUTH_HEADER] != null) setToken(response.headers[DineOutHeaders.AUTH_HEADER])
-      if (response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER] != null) setRefreshToken(response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER])
+      if (response.headers[DineOutHeaders.JWT_HEADER] != null) {
+        setToken(response.headers[DineOutHeaders.JWT_HEADER])
+      }
+      if (response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER] != null) {
+        setRefreshToken(response.headers[DineOutHeaders.REFRESH_TOKEN_HEADER])
+      }
 
       setIsLoading(false)
       return response
     }
     ).catch(async e => {
-      if (e.response?.status === 404 || e.response?.status === 400) {
+      if (e.response?.status === HttpStatusCode.NotFound || e.response?.status === HttpStatusCode.BadRequest) {
         setIsLoading(false)
         return e.response
       }
+
+      if (e.response?.status === HttpStatusCode.Unauthorized && request.passwordRecoveryToken !== null) {
+        return e.response
+      }
+
       if (e.response?.status > 400 && e.response?.status < 500 && request.basic == null) {
-        if (token == null && refreshToken == null) {
+        if (token == null) {
           logout()
           setIsLoading(false)
           navigate('/login', {

@@ -4,16 +4,19 @@ import { type AxiosResponse } from 'axios'
 import { HttpMethod } from '@/types/enums/HTTPMethod'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useLogin () {
+export function useUpdatePassword () {
   const { isLoading, requestMethod } = useMethod()
 
-  async function login (username: string, password: string): Promise<AxiosResponse> {
+  async function updatePassword (password: string, token: string, userId: string): Promise<AxiosResponse> {
     return await requestMethod({
-      basic: btoa(username + ':' + password),
-      method: HttpMethod.HEAD,
-      url: paths.API_URL
+      method: HttpMethod.PATCH,
+      url: paths.USERS + `/${userId}`,
+      data: {
+        password
+      },
+      passwordRecoveryToken: token
     })
   }
 
-  return { isLoading, login }
+  return { isLoading, updatePassword }
 }
