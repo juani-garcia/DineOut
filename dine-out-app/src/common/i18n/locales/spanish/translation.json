@@ -142,5 +142,8 @@
     "emailNotFound": "No encontramos el correo. ¡Revisá los datos!",
     "invalidToken": "El token ingresado es inválido. ¡Revisá los datos!",
     "goToLogin": "Ir a inicio de sesión"
+  },
+  "Favorite": {
+    "error": "No pudimos marcarlo como favorito. Vuelve a intentar"
   }
 }

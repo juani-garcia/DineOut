@@ -178,5 +178,8 @@
     "emailNotFound": "The email was not found. Check the data!",
     "invalidToken": "Invalid token. Check the data!",
     "goToLogin": "Go to login"
+  },
+  "Favorite": {
+    "error": "Could not mark as favorite. Please try again"
   }
 }
