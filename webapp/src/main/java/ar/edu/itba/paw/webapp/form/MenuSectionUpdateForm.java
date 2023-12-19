@@ -7,6 +7,7 @@ public class MenuSectionUpdateForm extends MenuSectionForm {
 
     @NotNull
     // TODO: Add valid and all menuItems validation
+    // TODO: Consider if this should be list of URNs and then we parse
     private List<Long> menuItemsOrder;
 
     public List<Long> getMenuItemsOrder() {
