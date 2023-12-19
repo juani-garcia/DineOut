@@ -20,9 +20,9 @@ interface MenuSectionProps {
   editable?: boolean
   first?: boolean
   last?: boolean
-  onDelete?: (section: MenuSection) => void
-  onUp?: (section: MenuSection) => void
-  onDown?: (section: MenuSection) => void
+  onDelete: (section: MenuSection) => void
+  onUp: (section: MenuSection) => void
+  onDown: (section: MenuSection) => void
 }
 
 export default function MenuSectionComponent ({
@@ -67,11 +67,11 @@ export default function MenuSectionComponent ({
   }
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
-    // TODO: Handle
+    onUp(menuSection)
   }
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
-    // TODO: Handle
+    onDown(menuSection)
   }
 
   const handleItemDeletion = (menuItem: MenuItem): void => {

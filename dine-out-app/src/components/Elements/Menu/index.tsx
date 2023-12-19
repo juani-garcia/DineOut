@@ -13,9 +13,12 @@ interface MenuProps {
   menuSectionsURI: string
   editable?: boolean
   menuSectionsOrder: string[]
+  onDelete: (section: MenuSection) => void
+  onUp: (section: MenuSection) => void
+  onDown: (section: MenuSection) => void
 }
 
-export default function MenuComponent ({ menuSectionsURI, editable = false, menuSectionsOrder }: MenuProps): JSX.Element {
+export default function MenuComponent ({ menuSectionsURI, editable = false, menuSectionsOrder, onDelete, onUp, onDown }: MenuProps): JSX.Element {
   const { t } = useTranslation()
   const { isLoading, menuSections } = useMenuSections()
   const [menuSectionList, setMenuSectionList] = useState<MenuSection[]>([])
@@ -35,24 +38,15 @@ export default function MenuComponent ({ menuSectionsURI, editable = false, menu
   const handleSectionDeletion = (menuSection: MenuSection): void => {
     const newMenuSectionList = menuSectionList.filter(section => section.id !== menuSection.id)
     setMenuSectionList(newMenuSectionList)
+    onDelete(menuSection)
   }
 
   const handleSectionUp = (menuSection: MenuSection): void => {
-    const newList = [...menuSectionList]
-    // TODO: Update
-    //  const currentIndex = newList.indexOf(menuSection)
-    //  newList[currentIndex].ordering -= 1
-    //  newList[currentIndex - 1].ordering += 1
-    setMenuSectionList(newList)
+    onUp(menuSection)
   }
 
   const handleSectionDown = (menuSection: MenuSection): void => {
-    const newList = [...menuSectionList]
-    // TODO: Update
-    //  const currentIndex = newList.indexOf(menuSection)
-    //  newList[currentIndex].ordering += 1
-    //  newList[currentIndex + 1].ordering -= 1
-    setMenuSectionList(newList)
+    onDown(menuSection)
   }
 
   return (
@@ -82,13 +76,14 @@ export default function MenuComponent ({ menuSectionsURI, editable = false, menu
                       menuSectionList.length > 0
                         ? (
                                 <>
-                                    {menuSectionList.sort((s1, s2) => s1.id - s2.id).map(
-                                      (section) => (
+                                    {menuSectionList.sort((s1, s2) => menuSectionsOrder.indexOf(s1.self) - menuSectionsOrder.indexOf(s2.self)).map(
+                                      (section, index) => (
                                             <MenuSectionComponent
                                                 menuSection={section}
                                                 key={section.self}
                                                 editable={editable}
-                                                // TODO: Update last={section.ordering === menuSectionList.length - 1}
+                                                first={index === 0}
+                                                last={index === menuSectionList.length - 1}
                                                 onDelete={handleSectionDeletion}
                                                 onUp={handleSectionUp}
                                                 onDown={handleSectionDown}
