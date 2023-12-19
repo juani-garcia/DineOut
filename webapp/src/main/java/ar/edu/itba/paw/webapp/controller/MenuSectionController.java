@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.model.exceptions.MenuSectionNotFoundException;
 import ar.edu.itba.paw.service.MenuSectionService;
+import ar.edu.itba.paw.webapp.dto.MenuItemDTO;
 import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
 import ar.edu.itba.paw.webapp.form.MenuSectionForm;
 import ar.edu.itba.paw.webapp.form.MenuSectionUpdateForm;
@@ -85,7 +86,9 @@ public class MenuSectionController {
             @PathParam("id") final long menuSectionId,
             @Valid final MenuSectionUpdateForm menuSectionForm
     ) {
-        mss.update(menuSectionId, menuSectionForm.getName(), menuSectionForm.getMenuItemsOrder());
+        mss.update(menuSectionId,
+                menuSectionForm.getName(),
+                menuSectionForm.getMenuItemsOrder().stream().map(MenuItemDTO::getIdFromURI).collect(Collectors.toList()));
         return Response.ok().build();
     }
 

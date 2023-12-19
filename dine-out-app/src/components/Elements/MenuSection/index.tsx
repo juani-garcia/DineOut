@@ -18,15 +18,17 @@ import EditIcon from '@mui/icons-material/Edit'
 interface MenuSectionProps {
   menuSection: MenuSection
   editable?: boolean
+  first?: boolean
   last?: boolean
-  onDelete?: (section: MenuSection) => void
-  onUp?: (section: MenuSection) => void
-  onDown?: (section: MenuSection) => void
+  onDelete: (section: MenuSection) => void
+  onUp: (section: MenuSection) => void
+  onDown: (section: MenuSection) => void
 }
 
 export default function MenuSectionComponent ({
   menuSection,
   editable = false,
+  first = false,
   last = false,
   onDelete,
   onUp,
@@ -35,9 +37,11 @@ export default function MenuSectionComponent ({
   const { t } = useTranslation()
   const { isLoading, menuItems, deleteMenuItem } = useMenuItems()
   const [menuItemList, setMenuItemList] = useState<MenuItem[]>([])
-  const { moveSection } = useMenuSections()
+  const [menuItemsOrder, setMenuItemsOrder] = useState<string[]>([])
+  const { updateMenuSection } = useMenuSections()
 
   useEffect(() => {
+    setMenuItemsOrder(menuSection.menuItemsOrder)
     menuItems(menuSection.menuItemList).then((response) => {
       if (response.status !== 200) {
         setMenuItemList([])
@@ -63,50 +67,48 @@ export default function MenuSectionComponent ({
   }
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
-    moveSection(menuSection.self, true).then(response => {
-      if (response.status !== 200) {
-        return
-      }
-      if (onUp != null) {
-        onUp(menuSection)
-      }
-    }).catch(e => {
-      console.error(e)
-    })
+    onUp(menuSection)
   }
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
-    moveSection(menuSection.self, false).then(response => {
-      if (response.status !== 200) {
-        return
-      }
-      if (onDown != null) {
-        onDown(menuSection)
-      }
-    }).catch(e => {
-      console.error(e)
-    })
+    onDown(menuSection)
   }
 
   const handleItemDeletion = (menuItem: MenuItem): void => {
-    const newMenuItemList = menuItemList.filter(item => menuItem.ordering !== item.ordering)
+    const newMenuItemList = menuItemList.filter(item => menuItem.id !== item.id)
     setMenuItemList(newMenuItemList)
+    const newMenuItemsOrder = menuItemsOrder.filter(s => s !== menuItem.self)
+    setMenuItemsOrder(newMenuItemsOrder)
   }
 
   const handleItemUp = (menuItem: MenuItem): void => {
-    const newList = [...menuItemList]
-    const currentIndex = newList.indexOf(menuItem)
-    newList[currentIndex].ordering -= 1
-    newList[currentIndex - 1].ordering += 1
-    setMenuItemList(newList)
+    const newMenuItemsOrder = [...menuItemsOrder]
+    const currentIndex: number = menuItemsOrder.indexOf(menuItem.self)
+    newMenuItemsOrder[currentIndex - 1] = menuItem.self
+    newMenuItemsOrder[currentIndex] = menuItemsOrder[currentIndex - 1]
+    updateMenuSection(menuSection.self, menuSection.name, newMenuItemsOrder).then(responses => {
+      if (responses.status !== 200) {
+        return
+      }
+      setMenuItemsOrder(newMenuItemsOrder)
+    }).catch(e => {
+      console.error(e.response)
+    })
   }
 
   const handleItemDown = (menuItem: MenuItem): void => {
-    const newList = [...menuItemList]
-    const currentIndex = newList.indexOf(menuItem)
-    newList[currentIndex].ordering += 1
-    newList[currentIndex + 1].ordering -= 1
-    setMenuItemList(newList)
+    const newMenuItemsOrder = [...menuItemsOrder]
+    const currentIndex: number = menuItemsOrder.indexOf(menuItem.self)
+    newMenuItemsOrder[currentIndex + 1] = menuItem.self
+    newMenuItemsOrder[currentIndex] = menuItemsOrder[currentIndex + 1]
+    updateMenuSection(menuSection.self, menuSection.name, newMenuItemsOrder).then(responses => {
+      if (responses.status !== 200) {
+        return
+      }
+      setMenuItemsOrder(newMenuItemsOrder)
+    }).catch(e => {
+      console.error(e.response)
+    })
   }
 
   if (menuSection.id == null) {
@@ -118,7 +120,7 @@ export default function MenuSectionComponent ({
                 <MenuSectionTitle>{menuSection.name}</MenuSectionTitle>
                 {editable && (
                     <Stack direction='row'>
-                        <IconButton onClick={handleUp} color="secondary" disabled={menuSection.ordering === 0}>
+                        <IconButton onClick={handleUp} color="secondary" disabled={first}>
                             <ArrowUpwardIcon/>
                         </IconButton>
                         <IconButton onClick={handleDown} color="secondary" disabled={last}>
@@ -146,13 +148,14 @@ export default function MenuSectionComponent ({
                   : (
                       menuItemList.length > 0
                         ? (
-                            menuItemList.sort((m1, m2) => m1.ordering - m2.ordering).map(item => (
+                            menuItemList.sort((m1, m2) => menuItemsOrder.indexOf(m1.self) - menuItemsOrder.indexOf(m2.self)).map((item, index) => (
                                     <>
                                         <MenuItemComponent
                                             menuItem={item}
                                             key={item.self}
                                             editable={editable}
-                                            last={item.ordering + 1 === menuItemList.length}
+                                            first={index === 0}
+                                            last={index === menuItemList.length - 1}
                                             onDelete={handleItemDeletion}
                                             onUp={handleItemUp}
                                             onDown={handleItemDown}
