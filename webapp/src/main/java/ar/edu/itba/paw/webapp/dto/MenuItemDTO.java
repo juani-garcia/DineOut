@@ -35,6 +35,12 @@ public class MenuItemDTO {
         return dto;
     }
 
+    public static long getIdFromURI(URI uri) {
+        String path = uri.getPath();
+        String idStr = path.substring(path.lastIndexOf('/') + 1);
+        return Integer.parseInt(idStr);
+    }
+
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final MenuSection menuSection) {
         return MenuSectionDTO.getUriBuilder(uriInfo, menuSection).path("menu-items");
     }

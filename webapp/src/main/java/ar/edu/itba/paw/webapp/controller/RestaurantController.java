@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantUpdateForm;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
@@ -138,7 +139,7 @@ public class RestaurantController {
                 restaurantForm.getLng(),
                 restaurantForm.getCategories(),
                 restaurantForm.getShifts(),
-                restaurantForm.getMenuSectionsOrder(),
+                restaurantForm.getMenuSectionsOrder().stream().map(MenuSectionDTO::getIdFromURI).collect(Collectors.toList()),
                 null); // TODO: Refactor restaurant update service to not expect image
         return Response.ok().build();
     }

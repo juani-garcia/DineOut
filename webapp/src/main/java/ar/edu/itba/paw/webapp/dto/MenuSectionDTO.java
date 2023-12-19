@@ -16,7 +16,7 @@ public class MenuSectionDTO {
     private String name;
     private URI restaurant;
     private URI menuItemList;
-    private List<URI> menuItemOrder;
+    private List<URI> menuItemsOrder;
     private URI self;
 
     public static MenuSectionDTO fromMenuSection(final UriInfo uriInfo, final MenuSection menuSection) {
@@ -29,9 +29,15 @@ public class MenuSectionDTO {
         UriBuilder menuSectionUriBuilder = MenuSectionDTO.getUriBuilder(uriInfo, menuSection);
         dto.self = menuSectionUriBuilder.clone().build();
         dto.menuItemList = MenuItemDTO.getUriBuilder(uriInfo, menuSection).build();
-        dto.menuItemOrder = menuSection.getMenuItemList().stream().map(mi -> MenuItemDTO.getUriBuilder(uriInfo, mi).build()).collect(Collectors.toList());
+        dto.menuItemsOrder = menuSection.getMenuItemList().stream().map(mi -> MenuItemDTO.getUriBuilder(uriInfo, mi).build()).collect(Collectors.toList());
 
         return dto;
+    }
+
+    public static long getIdFromURI(URI uri) {
+        String path = uri.getPath();
+        String idStr = path.substring(path.lastIndexOf('/') + 1);
+        return Integer.parseInt(idStr);
     }
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Restaurant restaurant) {
@@ -74,12 +80,12 @@ public class MenuSectionDTO {
         this.menuItemList = menuItemList;
     }
 
-    public List<URI> getMenuItemOrder() {
-        return menuItemOrder;
+    public List<URI> getMenuItemsOrder() {
+        return menuItemsOrder;
     }
 
-    public void setMenuItemOrder(List<URI> menuItemOrder) {
-        this.menuItemOrder = menuItemOrder;
+    public void setMenuItemsOrder(List<URI> menuItemsOrder) {
+        this.menuItemsOrder = menuItemsOrder;
     }
 
     public URI getSelf() {
