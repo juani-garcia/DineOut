@@ -63,7 +63,8 @@
     "logout": "Cerrar sesión",
     "myReservations": "Mis reservas",
     "myRestaurant": "Mi restaurante",
-    "myReviews": "Mis reseñas"
+    "myReviews": "Mis reseñas",
+    "myFavorites": "Mis favoritos"
   },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
@@ -170,6 +171,7 @@
     "continue": "Continuar"
   },
   "Favorite": {
-    "error": "No pudimos marcarlo como favorito. Vuelve a intentar"
+    "error": "No pudimos marcarlo como favorito. Vuelve a intentar",
+    "title": "Mis favoritos"
   }
 }
