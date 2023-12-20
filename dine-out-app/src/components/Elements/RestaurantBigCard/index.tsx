@@ -109,6 +109,11 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
             variant: 'error'
           })
         })
+    } else {
+      navigate('/login', {
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        state: { from: localPaths.RESTAURANTS + '/' + restaurant.id + '/view' }
+      })
     }
   }
 
@@ -140,6 +145,22 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                             <StarBorderIcon key={index} color="primary"/>
                         ))}
                     </Rating>
+                    <>
+                        <button
+                            onClick={toggleFavorite}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              color: 'white',
+                              transform: 'scale(0.6)'
+                            }}
+                            disabled={isLoadingUpdate || isLoadingStatus}
+                        >
+                            {isFavorite ? <FavoriteIcon color="inherit" /> : <FavoriteBorderIcon color="inherit" />}
+                        </button>
+                        <p style={{ transform: 'scale(0.5)' }}>{ restaurant.favCount }</p>
+                    </>
                 </RatingContainer>
             </RestaurantHeader>
             <CardImageContainer className="card-image">
@@ -209,19 +230,6 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                                 <Button as={Link} to={`/reserve/${restaurant.id}`} style={{ marginLeft: 'auto' }}>
                                     {t('Reservation.prompt')}
                                 </Button>
-                                <button
-                                  onClick={toggleFavorite}
-                                  style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    color: 'white'
-                                  }}
-                                  disabled={isLoadingUpdate || isLoadingStatus}
-                                >
-                                  {isFavorite ? <FavoriteIcon color="inherit" /> : <FavoriteBorderIcon color="inherit" />}
-                                </button>
-                              <p>{ restaurant.favCount }</p>
                             </>
                         )
                       : (
