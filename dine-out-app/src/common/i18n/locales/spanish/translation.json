@@ -137,6 +137,8 @@
       "header": "Cuantas estrellas le pondrias al restaurant?",
       "review": "¡Contanos un poco mas de tu experiencia!"
     },
+    "message": "Reseña: ",
+    "empty": "No dejaste un texto con tu reseña",
     "submit": "Publica tu reseña",
     "cancel": "Cancelar",
     "confirmDelete": "¿Deseas eliminar esta reseña?",

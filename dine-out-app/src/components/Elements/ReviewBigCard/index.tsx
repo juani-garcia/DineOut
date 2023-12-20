@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ReviewBlackBoxContainer, ReviewTitle } from './styles'
+import { ReviewBlackBoxContainer, ReviewContainer, ReviewText, ReviewTitle } from './styles'
 import { Rating, RatingContainer } from '@/components/Elements/RestaurantCard/styles'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
@@ -77,6 +77,8 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                         ? <>
                                 {reviewList.map(review => (
                                     <>
+                                    <ReviewContainer>
+                                        <ReviewText>{review.review}</ReviewText>
                                         <RatingContainer>
                                             <Rating>
                                                 {[...Array(review.rating)].map((_, index) => (
@@ -87,8 +89,8 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                                                 ))}
                                             </Rating>
                                         </RatingContainer>
-                                        <h1>{review.review}</h1>
-                                        <Divider/>
+                                    </ReviewContainer>
+                                    <Divider/>
                                     </>
                                 ))}
                                 {

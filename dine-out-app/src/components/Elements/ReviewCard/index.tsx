@@ -8,7 +8,7 @@ import {
   Address, CardContent, CardImage, CardImageContainer, DeleteButton,
   Detail,
   Name,
-  NameAndZone, ReservationWhiteBoxContainer
+  NameAndZone
 } from '@/components/Elements/ReservationCard/styles'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ConfirmationModal from '@/components/Elements/ConfirmationModal'
@@ -18,6 +18,7 @@ import { Rating, RatingContainer } from '@/components/Elements/RestaurantCard/st
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { useDeleteReview } from '@/hooks/Reviews/useDeleteReview'
+import { MyReviewCardContainer } from '@/components/Elements/ReviewBigCard/styles'
 
 interface ReviewCardProps {
   review: Review
@@ -81,8 +82,7 @@ const ReservationCard = ({ forUser, deleteCallback, review }: ReviewCardProps): 
   }
 
   return (
-    <>
-      <ReservationWhiteBoxContainer>
+      <MyReviewCardContainer>
         {!isLoadingRestaurant && restaurant?.image != null && restaurant.image !== ''
           ? (
             <CardImageContainer className="card-image">
@@ -99,12 +99,39 @@ const ReservationCard = ({ forUser, deleteCallback, review }: ReviewCardProps): 
                 <>
                   <NameAndZone>
                     <Name className={'restaurant-name'}>{restaurant.name}</Name>
+                    { forUser
+                      ? (
+                            <ActionButtonsContainer>
+                              <DeleteButton
+                                  className="delete-button"
+                                  onClick={openDeleteModal}
+                                  disabled={isLoadingDelete}>
+                                <DeleteIcon/>
+                              </DeleteButton>
+                              <ConfirmationModal
+                                  title={t('Review.confirmDelete')}
+                                  open={isDeleteModalOpen}
+                                  onClose={closeDeleteModal}
+                                  onConfirm={onDeleteReview}/>
+                            </ActionButtonsContainer>
+                        )
+                      : (
+                            <></>
+                        )
+                    }
                   </NameAndZone>
                   <Detail>
-                    {restaurant.detail}
+                    {review.review.length === 0
+                      ? (
+                           <>{t('Review.empty')}</>
+                        )
+                      : (
+                    <>{t('Review.message')}{review.review}</>
+                        )}
+
                   </Detail>
                   <Address>
-                    {restaurant.address}
+                    &#128205;{restaurant.address}
                   </Address>
                 </>
                 )
@@ -123,33 +150,9 @@ const ReservationCard = ({ forUser, deleteCallback, review }: ReviewCardProps): 
                   ))}
                 </Rating>
               </RatingContainer>
-              <Detail>
-                {review.review}
-              </Detail>
             </>
-            { forUser
-              ? (
-                <ActionButtonsContainer>
-                  <DeleteButton
-                    className="delete-button"
-                    onClick={openDeleteModal}
-                    disabled={isLoadingDelete}>
-                    <DeleteIcon/>
-                  </DeleteButton>
-                  <ConfirmationModal
-                    title={t('Review.confirmDelete')}
-                    open={isDeleteModalOpen}
-                    onClose={closeDeleteModal}
-                    onConfirm={onDeleteReview}/>
-                </ActionButtonsContainer>
-                )
-              : (
-                <></>
-                )
-            }
           </CardContent>
-      </ReservationWhiteBoxContainer>
-    </>
+      </MyReviewCardContainer>
   )
 }
 

@@ -143,3 +143,38 @@ export const ReservationInfo = styled.div`
   justify-content: center;
   width: 100%;
 `
+
+export const MySpecialContainer = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  max-width: 1480px;
+  width: 90%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 993px) {
+    width: 90%;
+  }
+`
+
+export const MyVerySpecialContainer = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  max-width: 1480px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+`

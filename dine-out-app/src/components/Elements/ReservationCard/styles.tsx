@@ -48,6 +48,12 @@ export const DeleteButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.08);
+  }
 `
 
 export const ConfirmButton = styled.button`
@@ -109,7 +115,7 @@ export const NameAndZone = styled.div`
     margin-right: auto;
   }
 
-  > .restaurant-zone + .restaurant-name {
+  > .delete-button + .restaurant-name {
     margin-left: 0;
   }
 
