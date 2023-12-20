@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("restaurants/{restaurantId}/menu-sections/{msId}/menu-items")
+@Path("restaurants/{restaurantId}/menu-sections/{menuSectionId}/menu-items")
 @Component
 public class MenuItemController {
 
@@ -40,7 +40,7 @@ public class MenuItemController {
     @PathParam("restaurantId")
     private long restaurantId;
 
-    @PathParam("msId")
+    @PathParam("menuSectionId")
     private long menuSectionId;
 
     @GET
@@ -59,9 +59,10 @@ public class MenuItemController {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @PreAuthorize("@securityManager.isMenuSectionOwnerOfId(authentication, #menuSectionId)")
     public Response createMenuItem(
             @PathParam("restaurantId") final long restaurantId,
+            @PathParam("menuSectionId") final long menuSectionId,
             @Valid final MenuItemForm menuItemForm
     ) {
         final MenuItem menuItem = mis.create(
@@ -76,10 +77,10 @@ public class MenuItemController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{menuItemId}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response readMenuItem(
-            @PathParam("id") final long menuItemId
+            @PathParam("menuItemId") final long menuItemId
     ) {
         Optional<MenuItemDTO> maybeMenuItem = mis.getById(menuItemId).map(mi -> MenuItemDTO.fromMenuItem(uriInfo, mi));
         if (!maybeMenuItem.isPresent()) {
@@ -89,12 +90,12 @@ public class MenuItemController {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{menuItemId}")
     @Produces({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @PreAuthorize("@securityManager.isMenuItemOwnerOfId(authentication, #menuItemId)")
     public Response updateMenuItem(
             @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuItemId,
+            @PathParam("menuItemId") final long menuItemId,
             @Valid final MenuItemForm menuItemForm
     ) {
         mis.edit(
@@ -108,11 +109,11 @@ public class MenuItemController {
     }
 
     @DELETE
-    @Path("/{id}")
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @Path("/{menuItemId}")
+    @PreAuthorize("@securityManager.isMenuItemOwnerOfId(authentication, #menuItemId)")
     public Response deleteMenuItem(
             @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuItemId
+            @PathParam("menuItemId") final long menuItemId
     ) {
         mis.delete(menuItemId);
         return Response.noContent().build();
@@ -120,8 +121,8 @@ public class MenuItemController {
 
     @GET
     @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
-    @Path("/{id}/image")
-    public Response getMenuItemImage(@PathParam("id") final long menuItemId, @Context Request request) {
+    @Path("/{menuItemId}/image")
+    public Response getMenuItemImage(@PathParam("menuItemId") final long menuItemId, @Context Request request) {
         LOGGER.debug("Getting image for menu item with id {}", menuItemId);
         Optional<MenuItem> maybeMenuItem = mis.getById(menuItemId);
         if (! maybeMenuItem.isPresent()) {
@@ -137,11 +138,11 @@ public class MenuItemController {
 
     @PUT
     @Consumes({MediaType.MULTIPART_FORM_DATA})
-    @Path("/{id}/image")
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @Path("/{menuItemId}/image")
+    @PreAuthorize("@securityManager.isMenuItemOwnerOfId(authentication, #menuItemId)")
     public Response updateMenuItemImage(
             @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuItemId,
+            @PathParam("menuItemId") final long menuItemId,
             @FormDataParam("image") InputStream fileInputStream,
             @FormDataParam("image") FormDataContentDisposition fileMetaData
     ) throws IOException {
@@ -152,11 +153,11 @@ public class MenuItemController {
     }
 
     @DELETE
-    @Path("/{id}/image")
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @Path("/{menuItemId}/image")
+    @PreAuthorize("@securityManager.isMenuItemOwnerOfId(authentication, #menuItemId)")
     public Response deleteMenuItemImage(
             @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuItemId
+            @PathParam("menuItemId") final long menuItemId
     ) {
         mis.updateImage(menuItemId, null);
         return Response.ok().build();
