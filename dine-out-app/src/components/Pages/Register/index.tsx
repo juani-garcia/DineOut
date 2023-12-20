@@ -48,6 +48,7 @@ function Register (): JSX.Element {
   const { user } = useAuth()
   const location = useLocation()
   const { enqueueSnackbar } = useSnackbar()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   if (user !== null) navigate('/')
 
@@ -133,7 +134,7 @@ function Register (): JSX.Element {
                         />
                         <TextField
                             label={t('password')}
-                            type="password"
+                            type={ showPassword ? 'text' : 'password' }
                             fullWidth
                             margin="normal"
                             {...control.register('password')}
@@ -142,7 +143,7 @@ function Register (): JSX.Element {
                         />
                         <TextField
                             label={t('Register.confirmPassword')}
-                            type="password"
+                            type={ showPassword ? 'text' : 'password' }
                             fullWidth
                             margin="normal"
                             value={confirmPassword}
@@ -152,6 +153,14 @@ function Register (): JSX.Element {
                             variant="standard"
                             error={passwordError !== ''}
                             helperText={passwordError}
+                        />
+                        <FormControlLabel
+                          control={<Checkbox
+                            checked={showPassword}
+                            color="secondary"
+                            onChange={() => { setShowPassword(!showPassword) }}
+                          />}
+                          label={t('Recovery.showPassword')}
                         />
                         <FormControlLabel
                             control={<Checkbox color="secondary" {...control.register('isRestaurant')} />}
