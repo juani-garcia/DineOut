@@ -1,3 +1,5 @@
+import { test } from 'vitest'
+
 export class LocalStorageMock {
   private store: any
   readonly length: number = 1
@@ -28,5 +30,4 @@ export class LocalStorageMock {
 }
 
 // eslint-disable-next-line no-global-assign
-localStorage = new LocalStorageMock()
 test('', () => {})

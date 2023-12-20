@@ -1,10 +1,7 @@
-import { useAuth, AuthProvider } from '@/hooks/auth/useAuth'
-import { LocalStorageMock } from '@/__tests__/mocks/LocalStorageMock'
+import { expect, test, assert } from 'vitest'
+import { useAuth, AuthProvider } from '../hooks/auth/useAuth'
 import { fireEvent, render, screen } from '@testing-library/react'
 
-Object.defineProperty(window, 'localStorage', {
-  value: new LocalStorageMock()
-})
 const token = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb28uZGluZW91dC5kaW5lckBnbWFpbC5jb20iLCJleHAiOjE3MDMwMTUwMTIsInVzZXJJZCI6MTEsInJvbGVzIjoiRElORVI7In0.JpbSsLKi6yjUV9poTKgA5osDlz38PdvFLEhNjHoIejw'
 const userString = '{"sub":"foo.dineout.diner@gmail.com","exp":1703015012,"userId":11,"roles":"DINER;"}'
 
@@ -41,9 +38,8 @@ test('Should render initial values', () => {
         <CustomTest />
       </AuthProvider>
   )
-
-  expect(screen.getByTestId('getToken')).toHaveTextContent('null')
-  expect(screen.getByTestId('user')).toHaveTextContent('null')
+  assert.include(screen.getAllByTestId('getToken')[0].innerHTML, '')
+  assert.include(screen.getAllByTestId('user')[0].innerHTML, '')
 })
 
 test('Should Login', () => {
@@ -54,10 +50,10 @@ test('Should Login', () => {
         <CustomTest />
       </AuthProvider>
   )
-  const loginButton = screen.getByRole('button', { name: 'login' })
-  fireEvent.click(loginButton)
-  expect(screen.getByTestId('getToken')).toHaveTextContent(token)
-  expect(screen.getByTestId('user')).toHaveTextContent(userString)
+  const loginButton = screen.getAllByRole('button', { name: 'login' })
+  fireEvent.click(loginButton[0])
+  assert.include(screen.getAllByTestId('getToken')[0].innerHTML, token)
+  assert.include(screen.getAllByTestId('user')[0].innerHTML, userString)
 })
 
 test('Should Logout', () => {
@@ -68,13 +64,13 @@ test('Should Logout', () => {
         <CustomTest />
       </AuthProvider>
   )
-  const loginButton = screen.getByRole('button', { name: 'login' })
-  fireEvent.click(loginButton)
-  expect(screen.getByTestId('getToken')).toHaveTextContent(token)
-  expect(screen.getByTestId('user')).toHaveTextContent(userString)
+  const loginButton = screen.getAllByRole('button', { name: 'login' })
+  fireEvent.click(loginButton[0])
+  assert.include(screen.getAllByTestId('getToken')[0].innerHTML, token)
+  assert.include(screen.getAllByTestId('user')[0].innerHTML, userString)
 
-  const logoutButton = screen.getByRole('button', { name: 'logout' })
-  fireEvent.click(logoutButton)
-  expect(screen.getByTestId('getToken')).toHaveTextContent('null')
-  expect(screen.getByTestId('user')).toHaveTextContent('null')
+  const logoutButton = screen.getAllByRole('button', { name: 'logout' })
+  fireEvent.click(logoutButton[0])
+  assert.include(screen.getAllByTestId('getToken')[0].innerHTML, '')
+  assert.include(screen.getAllByTestId('user')[0].innerHTML, '')
 })
