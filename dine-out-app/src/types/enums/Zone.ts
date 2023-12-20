@@ -19,6 +19,9 @@ export class Zone {
     'Área de Promoción El Triángulo'
   )
 
+  static readonly RINCONDEMILBERG = new Zone('RINCONDEMILBERG', 'Rincón de Milberg')
+  static readonly GENERALPACHECO = new Zone('GENERALPACHECO', 'General Pacheco')
+
   static readonly AVELLANEDA = new Zone('AVELLANEDA', 'Avellaneda')
   static readonly BANFIELD = new Zone('BANFIELD', 'Banfield')
   static readonly BECCAR = new Zone('BECCAR', 'Beccar')

@@ -55,7 +55,7 @@ export default function WithMap ({ restaurant }: RestaurantMapProps): JSX.Elemen
                                     onLoad={(map) => {
                                       mapRef.current = map
                                       map.setCenter(center)
-                                      map.setZoom(11)
+                                      map.setZoom(14)
                                     }}
                                 >
                                     <MarkerF

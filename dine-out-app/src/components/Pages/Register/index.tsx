@@ -9,7 +9,7 @@ import { useRegister } from '@/hooks/auth/useRegister'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useSnackbar } from 'notistack'
-import { roles } from '@/common/const'
+import { localPaths } from '@/common/const'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,7 +33,8 @@ function Register (): JSX.Element {
       .refine((password) => {
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
         return regex.test(password)
-      }, t('Register.invalidPassword').toString())
+      }, t('Register.invalidPassword').toString()),
+    isRestaurant: z.boolean()
   })
 
   const { handleSubmit, control, formState: { errors } } = useForm({
@@ -48,26 +49,32 @@ function Register (): JSX.Element {
   const location = useLocation()
   const { enqueueSnackbar } = useSnackbar()
 
-  if (user !== null) navigate(-1)
+  if (user !== null) navigate('/')
 
   const onRegister = (data: any): void => {
     if (data.password !== confirmPassword) {
       setPasswordError(t('Register.passwordsDoNotMatch').toString())
     } else {
       setPasswordError('')
+      console.log(data)
       register(data.firstName, data.lastName, data.username, data.password, confirmPassword, data.isRestaurant)
         .then((response) => {
           if (response.status === 200 || response.status === 201) {
             login(data.username, data.password).then((response) => {
-              if (user != null) {
-                if (user.roles.includes(roles.RESTAURANT)) {
-                  navigate('/restaurant/register')
-                }
-                if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
-                  navigate(-1)
-                } else {
-                  navigate(location.state.from, { replace: true })
-                }
+              console.log(user)
+              console.log(response)
+              if (data.isRestaurant === true) {
+                console.log('1')
+                navigate(localPaths.RESTAURANTS + '/register', {
+                  state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
+                })
+                return
+              }
+              if (location.state?.from === null || location.state?.from === '' || location.state?.from === undefined) {
+                console.log('2')
+                navigate(-1)
+              } else {
+                navigate(location.state.from, { replace: true })
               }
             }).catch((e) => {
               enqueueSnackbar(t('Errors.oops'), {

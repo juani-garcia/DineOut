@@ -175,7 +175,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                         restaurant.categories.map(Category.fromName).map(category => (
                           (category != null) &&
                             <CategoryChip key={category.name} as={Link}
-                                          to={localPaths.RESTAURANTS + '?category=' + category.name}>{category.description}</CategoryChip>
+                                          to={localPaths.RESTAURANTS + '?category=' + category.name}>{t(category.description)}</CategoryChip>
                         ))
                     }
                 </CategoriesHolder>

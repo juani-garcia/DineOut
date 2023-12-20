@@ -91,7 +91,7 @@ export const NoReservationsText = styled.h1`
   text-align: center;
   margin: 2.8rem 0 2.8rem 0;
   font-size: 4.2rem;
-  line-height: 110%;
+  line-height: 100%;
   font-weight: 400;
 `
 

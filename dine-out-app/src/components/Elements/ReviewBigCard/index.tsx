@@ -11,6 +11,7 @@ import LoadingCircle from '@/components/Elements/LoadingCircle'
 import { DineOutHeaders } from '@/common/const'
 import { HttpStatusCode } from 'axios'
 import { useSearchParams } from 'react-router-dom'
+import { NoReservationsText } from '@/components/Pages/Reviews/styles'
 
 interface ReviewBigCardProps {
   reviewListURI: string
@@ -113,7 +114,7 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                                         )
                                 }
                             </>
-                        : <h1>{t('Reviews.empty')}</h1>
+                        : <NoReservationsText>{t('Reviews.empty')}</NoReservationsText>
                     )
                   : (
                         <LoadingCircle/>

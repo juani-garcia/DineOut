@@ -36,7 +36,7 @@
     "firstName": "First name:",
     "lastName": "Last name:",
     "isRestaurant": "I will use this account as a restaurant",
-    "redirectionToLogin": "Already have an account?",
+    "redirectionToLogin": "Already have an account? ",
     "passwordsDoNotMatch": "Passwords do not match",
     "firstNameEmpty": "First name is mandatory",
     "firstNameTooLong": "First name is too long",
@@ -127,7 +127,17 @@
   },
   "Reviews": {
     "prompt": "Leave a review",
-    "title": "Reviews"
+    "title": "Reviews",
+    "empty": "No reviews yet!"
+  },
+  "Review": {
+    "create": {
+      "title": "Leave a review!",
+      "header": "How many stars would you give the restaurant?",
+      "review": "Let other people know your experience!"
+    },
+    "submit": "Publish your review",
+    "cancel": "Cancel"
   },
   "Restaurant": {
     "opening-hours": "Opens:",
@@ -176,6 +186,18 @@
     "invalidEmail": "The email is invalid",
     "invalidPassword": "Invalid password. Must be at least 8 characters long, and contain capitals and numbers",
     "passwordMismatch": "Passwords don't match"
+  },
+  "Register-restaurant": {
+    "shifts": "Shifts",
+    "title": "Register your restaurant!",
+    "header": "Fill in this fields",
+    "name": "Name",
+    "email": "Your restaurant's email",
+    "detail": "Description",
+    "categories": "Categories"
+  },
+  "MapSearch": {
+    "location": "Type in the location of your restaurant"
   },
   "Recovery": {
     "title": "Recover your password",
