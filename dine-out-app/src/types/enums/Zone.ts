@@ -6,6 +6,8 @@ export class Zone {
     '20 de Junio'
   )
 
+  static readonly CRUCECITA = new Zone('CRUCECITA', 'Crucecita')
+  static readonly ELTALAR = new Zone('ELTALAR', 'El Talar')
   static readonly NUEVEDEABRIL = new Zone('NUEVEDEABRIL', '9 de Abril')
   static readonly ACASSUSO = new Zone('ACASSUSO', 'Acassuso')
   static readonly ADROGUE = new Zone('ADROGUE', 'Adrogué')

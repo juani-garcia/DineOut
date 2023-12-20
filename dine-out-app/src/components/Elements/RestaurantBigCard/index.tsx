@@ -42,6 +42,8 @@ import { enqueueSnackbar } from 'notistack'
 import { useUpdateFavorite } from '@/hooks/Favorites/useUpdateFavorite'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import WithMap from '@/components/Pages/Restaurant/withmap'
+import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -164,6 +166,9 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
             <ZoneContainer>
                 <Zone>&#128205;{restaurant.address}</Zone>
             </ZoneContainer>
+            <CustomGMapScriptLoad>
+                <WithMap restaurant={restaurant}/>
+            </CustomGMapScriptLoad>
             <CategoriesContainer>
                 <CategoriesHolder>
                     {
