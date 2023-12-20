@@ -3,6 +3,7 @@
   "login": "Iniciar sesión",
   "email": "Correo electrónico:",
   "password": "Contraseña:",
+  "forgot-password": "¿Olvidaste tu contraseña?",
   "Footer": {
     "project": "Un proyecto de ",
     "company": "Graphene"
@@ -47,18 +48,6 @@
     "passwordTooLong": "La contraseña es demasiado larga",
     "invalidPassword": "La contraseña debe contener al menos una minúscula, una mayúscula y un número, y tener 8 o más caracteres"
   },
-  "SearchBox": {
-    "search": "Buscar",
-    "category": "Categoria",
-    "where": "¿Dónde?",
-    "when": "¿Cuándo?",
-    "cleanFilters": "Limpiar filtros",
-    "anyCategory": "Cualquier categoria",
-    "anyTime": "¡Todo el dia!",
-    "anyWhere": "¡Donde sea!",
-    "searchBy": "Buscar por",
-    "none": "Ninguna"
-  },
   "Navbar": {
     "logout": "Cerrar sesión",
     "myReservations": "Mis reservas",
@@ -66,9 +55,52 @@
     "myReviews": "Mis reseñas",
     "myFavorites": "Mis favoritos"
   },
+  "SearchBox": {
+    "search": "Buscar",
+    "category": "Categoría",
+    "where": "¿Dónde?",
+    "when": "¿Cuándo?",
+    "cleanFilters": "Limpiar filtros",
+    "anyCategory": "Cualquier categoría",
+    "anyTime": "¡Todo el dia!",
+    "anyWhere": "¡Donde sea!",
+    "searchBy": "Buscar por",
+    "none": "Ninguna"
+  },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
     "choose": "Dejanos elegir un restaurante para vos"
+  },
+  "Shift": {
+    "morning": "Mañana",
+    "noon": "Mediodía",
+    "afternoon": "Tarde",
+    "evening": "Noche",
+    "full-description": "{{description}} (desde las {{startingHour}} hasta las {{closingHour}})"
+  },
+  "Category": {
+    "italian": "Italiana",
+    "american": "Americana",
+    "spanish": "Española",
+    "pizza": "Pizza",
+    "steakhouse": "Carnes",
+    "bar": "Bar",
+    "chinese": "China",
+    "viet_thai": "Viet Thai",
+    "burgers": "Hamburguesas",
+    "japanese": "Japopnesa",
+    "sushi": "Sushi",
+    "empanadas": "Empanadas",
+    "coffee": "Café",
+    "boulangerie": "Boulangerie",
+    "indian": "India",
+    "veggie": "Veggie",
+    "brewery": "Cervecería",
+    "mexican": "Mexicana",
+    "arabian": "Árabe",
+    "nikkei": "Nikkei",
+    "peruvian": "Peruana",
+    "gelato": "Helado"
   },
   "Reservation": {
     "title": "¡Completá el formulario para hacer una reserva!",
@@ -106,50 +138,24 @@
       "review": "¡Contanos un poco mas de tu experiencia!"
     },
     "submit": "Publica tu reseña",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "confirmDelete": "¿Deseas eliminar esta reseña?",
+    "deleteSuccessful": "Reseña eliminada"
   },
   "Restaurant": {
     "opening-hours": "Abre a las:",
     "exploreRestaurants": "¡Explora nuevos restaurantes!"
   },
-  "Shift": {
-    "morning": "Mañana",
-    "noon": "Mediodía",
-    "afternoon": "Tarde",
-    "evening": "Noche",
-    "full-description": "{{description}} (desde las {{startingHour}} hasta las {{closingHour}})"
-  },
-  "Category": {
-    "italian": "Italiana",
-    "american": "Americana",
-    "spanish": "Española",
-    "pizza": "Pizza",
-    "steakhouse": "Carnes",
-    "bar": "Bar", 
-    "chinese": "China",
-    "viet_thai": "Viet Thai",
-    "burgers": "Hamburguesas",
-    "japanese": "Japopnesa",
-    "sushi": "Sushi",
-    "empanadas": "Empanadas",
-    "coffee": "Café",
-    "boulangerie": "Boulangerie",
-    "indian": "India",
-    "veggie": "Veggie",
-    "brewery": "Cervecería",
-    "mexican": "Mexicana",
-    "arabian": "Árabe",
-    "nikkei": "Nikkei",
-    "peruvian": "Peruana",
-    "gelato": "Helado"
+  "Restaurants": {
+    "noRestaurants": "No hay restaurantes"
   },
   "MenuSection": {
-    "empty": "Esta seccion no tiene items.",
+    "empty": "Esta secciín no tiene items.",
     "form": {
-      "title": "Seccion",
-      "header": "Agrega una seccion nueva al menu",
-      "header-edit": "Edita la seccion",
-      "name": "Nombre de la seccion",
+      "title": "Sección",
+      "header": "Agrega una sección nueva al menu",
+      "header-edit": "Edita la sección",
+      "name": "Nombre de la sección",
       "submit": "Guardar"
     },
     "creation" : {
