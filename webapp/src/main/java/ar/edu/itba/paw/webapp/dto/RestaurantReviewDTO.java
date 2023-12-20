@@ -14,8 +14,8 @@ public class RestaurantReviewDTO {
     private long rating;
     private URI restaurant;
     private URI user;
-
     private URI self;
+
     public static RestaurantReviewDTO fromRestaurantReview(final UriInfo uriInfo, final RestaurantReview restaurantReview) {
         final RestaurantReviewDTO dto = new RestaurantReviewDTO();
 
