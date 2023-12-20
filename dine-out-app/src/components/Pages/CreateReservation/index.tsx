@@ -1,8 +1,8 @@
-import { MyContainer } from '@/components/Elements/utils/styles'
+import { MyContainer, Button } from '@/components/Elements/utils/styles'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Header, ReservationForm, ReservationWhiteBoxContainer } from './styles'
-import { Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useCreateReservation } from '@/hooks/Reservations/useCreateReservation'
 import { localPaths, paths, roles } from '@/common/const'
@@ -181,7 +181,7 @@ export default function Reservation ({ restaurant: restaurantProp }: Reservation
                                             <Button color="secondary" onClick={handleCancel}>
                                                 {t('Reservation.cancel')}
                                             </Button>
-                                            <Button type="submit" color="primary" sx={{ fontWeight: '500' }}>
+                                            <Button type="submit" color="primary">
                                                 {
                                                     isLoading
                                                       ? (
