@@ -15,13 +15,13 @@ if (container != null) {
   const root = createRoot(container) // createRoot(container!) if you use TypeScript
   // TODO: REMOVE ON DEPLOY StrictMode
   root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <I18nextProvider i18n={i18n}>
             <SnackbarProvider>
                 <App/>
             </SnackbarProvider>
         </I18nextProvider>
-    </React.StrictMode>
+    // </React.StrictMode>
   )
 }
 
