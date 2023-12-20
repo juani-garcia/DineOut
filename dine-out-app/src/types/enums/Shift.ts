@@ -5,10 +5,11 @@ export class Shift {
     const slots: string[] = []
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const range = (start: number, end: number) =>
-      Array.from(Array(end - start + 1).keys()).map((x) => x + start)
+      Array.from(Array(end - start).keys()).map((x) => x + start)
     range(shift.startingHour, shift.closingHour).forEach((hour) => {
-      slots.push(`${hour}:00`)
-      slots.push(`${hour}:30`)
+      const prefix = hour < 10 ? '0' : ''
+      slots.push(`${prefix}${hour}:00`)
+      slots.push(`${prefix}${hour}:30`)
     })
 
     return slots
@@ -19,7 +20,7 @@ export class Shift {
     shifts
       .map((shift) => this.getSlotsFromShift(shift))
       .forEach((newSlots) => slots.push(...newSlots)) // Use push to add elements to the array
-    return slots
+    return slots.sort()
   }
 
   static readonly MORNING = new Shift('MORNING', 'Shift.morning', 8, 12)
