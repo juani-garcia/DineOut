@@ -71,7 +71,7 @@ function App (): JSX.Element {
                                        element={<CreateReservation/>}/>
                                 <Route path="reservation"
                                        element={<Reservations/>}/>
-                                <Route path="favorites"
+                                <Route path="favorite"
                                        element={<Favorites/>}/>
                                 <Route path="review"
                                        element={<Reviews/>}/>
