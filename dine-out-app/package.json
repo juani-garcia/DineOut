@@ -11,11 +11,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
     "@react-google-maps/api": "2.19.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "@types/googlemaps": "^3.43.3",
-    "@types/jest": "^27.5.2",
     "@types/node": "^16.18.30",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
@@ -43,8 +39,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "build-prod": "react-app-rewired build && sed -i '1s/^/<%@ page session=\"false\" %> /' ./build/index.html",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "test": "vitest"
   },
   "eslintConfig": {
     "extends": [
@@ -72,6 +67,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^1.1.0"
   }
 }
