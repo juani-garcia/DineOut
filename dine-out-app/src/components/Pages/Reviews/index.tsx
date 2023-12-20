@@ -18,6 +18,7 @@ import type Review from '@/types/models/Review'
 import { useReviews } from '@/hooks/Reviews/useReviews'
 import { HttpStatusCode } from 'axios'
 import ReviewCard from '@/components/Elements/ReviewCard'
+import { MySpecialContainer, MyVerySpecialContainer } from '@/components/Pages/Reviews/styles'
 
 function Reviews (): JSX.Element {
   const { t } = useTranslation()
@@ -110,7 +111,7 @@ function Reviews (): JSX.Element {
   }
 
   return (
-    <>
+    <MySpecialContainer>
       <ReservationMainContainer>
         <ReservationCardHolder>
           <ReservationCardContainer>
@@ -150,6 +151,7 @@ function Reviews (): JSX.Element {
                   )
                 : (
                     <>
+                      <MyVerySpecialContainer>
                       {reviewList.map((review) => (
                         <ReviewCard
                             key={review.self}
@@ -159,6 +161,7 @@ function Reviews (): JSX.Element {
                               ? user.roles.includes(roles.DINER)
                               : false }/>
                       ))}
+                      </MyVerySpecialContainer>
                       {totalPages > 1
                         ? (
                           <Pagination
@@ -172,7 +175,7 @@ function Reviews (): JSX.Element {
                             boundaryCount={3}
                             sx={{
                               '& .MuiPaginationItem-root': {
-                                color: '#000000'
+                                color: '#FFFFFF'
                               }
                             }}/>
                           )
@@ -183,7 +186,7 @@ function Reviews (): JSX.Element {
                   )
             )}
       </ReservationCardsContainer>
-    </>
+    </MySpecialContainer>
   )
 }
 

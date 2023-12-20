@@ -137,6 +137,8 @@
       "header": "How many stars would you give the restaurant?",
       "review": "Let other people know your experience!"
     },
+    "message": "Review: ",
+    "empty": "You did not leave a text description with your review",
     "submit": "Publish your review",
     "cancel": "Cancel",
     "confirmDelete": "Are you sure you want to delete the review?",

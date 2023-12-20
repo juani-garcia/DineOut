@@ -124,3 +124,42 @@ export const ReservationCardsContainer = styled.div`
   width: 100%;
   box-sizing: inherit;
 `
+
+export const MySpecialContainerRes = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  max-width: 1480px;
+  width: 90%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 993px) {
+    width: 90%;
+  }
+`
+
+export const MyVerySpecialContainerRes = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  max-width: 1480px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 993px) {
+    width: 90%;
+  }
+`

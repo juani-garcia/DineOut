@@ -8,7 +8,7 @@ import {
   ReservationMainContainer,
   ReservationTitle,
   ShowPreviousContainer,
-  ReservationCardsContainer
+  ReservationCardsContainer, MySpecialContainerRes, MyVerySpecialContainerRes
 } from '@/components/Pages/Reservations/styles'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import type Reservation from '@/types/models/Reservation'
@@ -129,7 +129,7 @@ function Reservations (): JSX.Element {
   }
 
   return (
-    <>
+    <MySpecialContainerRes>
       <ReservationMainContainer>
         <ReservationCardHolder>
           <ReservationCardContainer>
@@ -167,6 +167,7 @@ function Reservations (): JSX.Element {
                   )
                 : (
                 <>
+                  <MyVerySpecialContainerRes>
                   {reservationList.map((reservation: Reservation) => (
                     <ReservationCard
                       reservation={reservation}
@@ -177,6 +178,7 @@ function Reservations (): JSX.Element {
                         ? user.roles.includes(roles.DINER)
                         : false }/>
                   ))}
+                  </MyVerySpecialContainerRes>
                   {totalPages > 1
                     ? (
                       <Pagination
@@ -190,7 +192,7 @@ function Reservations (): JSX.Element {
                         boundaryCount={3}
                         sx={{
                           '& .MuiPaginationItem-root': {
-                            color: '#000000'
+                            color: '#FFFFFF'
                           }
                         }}/>
                       )
@@ -201,7 +203,7 @@ function Reservations (): JSX.Element {
                   )
             )}
       </ReservationCardsContainer>
-    </>
+    </MySpecialContainerRes>
   )
 }
 
