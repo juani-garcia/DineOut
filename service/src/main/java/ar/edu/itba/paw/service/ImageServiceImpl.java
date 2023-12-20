@@ -72,7 +72,7 @@ public class ImageServiceImpl implements ImageService {
             ImageIO.write(imageBuff, "jpg", buffer);
 
             return buffer.toByteArray();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             throw new ImageIOException(e.getMessage());
         }
     }
