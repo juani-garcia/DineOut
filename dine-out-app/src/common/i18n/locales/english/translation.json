@@ -176,6 +176,10 @@
       "submit": "Save item"
     }
   },
+  "Edit-restaurant": {
+    "header": "Edit your restaurant"
+  },
+  "edit": "Save",
   "Errors": {
     "oops": "Oops! Something went wrong. Try again later.",
     "invalidCredentials": "The email and password sent are incorrect. Please check the data.",

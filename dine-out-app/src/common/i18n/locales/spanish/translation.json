@@ -143,6 +143,42 @@
     "peruvian": "Peruana",
     "gelato": "Helado"
   },
+  "MenuSection": {
+    "empty": "Esta seccion no tiene items.",
+    "form": {
+      "title": "Seccion",
+      "header": "Agrega una seccion nueva al menu",
+      "header-edit": "Edita la seccion",
+      "name": "Nombre de la seccion",
+      "submit": "Guardar"
+    },
+    "creation" : {
+      "prompt": "Agregar seccion"
+    }
+  },
+  "Menu": {
+    "title": "Menu",
+    "empty": "El restaurant todavia no cargo un menu"
+  },
+  "MenuItem": {
+    "creation": {
+      "prompt":"Agregar item"
+    },
+    "form": {
+      "title": "Menu item",
+      "header": "Agregar un item al menu",
+      "header-edit": "Edita este item",
+      "name": "Nombre del item",
+      "detail": "Detalle",
+      "price": "Precio",
+      "section": "A que seccion pertenece?",
+      "submit": "Guardar"
+    }
+  },
+  "Edit-restaurant": {
+    "header": "Edita los datos de tu restaurante"
+  },
+  "edit": "Guardar",
   "Errors": {
     "oops": "¡Ups! Algo salió mal. Vuelve a intentarlo más tarde.",
     "invalidCredentials": "El email y contraseña ingresados no son correctos. Por favor, revisá tus datos.",
