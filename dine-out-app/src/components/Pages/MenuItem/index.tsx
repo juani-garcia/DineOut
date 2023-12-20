@@ -33,7 +33,7 @@ export default function MenuItemCreation (): JSX.Element {
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: window.location.pathname }
+        state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
       })
     } else if (!user.roles.includes(roles.RESTAURANT)) {
       navigate('/')

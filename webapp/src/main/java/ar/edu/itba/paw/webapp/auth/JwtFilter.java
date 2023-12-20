@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.UserRole;
 import ar.edu.itba.paw.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,13 +22,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -46,7 +43,8 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtUtils = jwtu;
     }
 
-    private static final String REFRESH_CUSTOM_HEADER = "X-Refresh-Token",
+    private static final String REFRESH_TOKEN_HEADER = "DineOut-Refresh-Token",
+                                JWT_HEADER = "DineOut-JWT",
                                 SEPARATOR = " ";
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtFilter.class);
 
@@ -92,7 +90,13 @@ public class JwtFilter extends OncePerRequestFilter {
             @Override
             boolean authorize(String token, ContextProvider context) {
                 boolean error = false;
-                String decoded = new String(Base64.getDecoder().decode(token));
+                String decoded;
+                try {
+                    decoded = new String(Base64.getDecoder().decode(token));
+                } catch (IllegalArgumentException e) {
+                    LOGGER.debug("Header not valid as Base64: {}", e.getMessage());
+                    return unauthorized(context.response);
+                }
                 LOGGER.debug("Decoded credentials: {}", decoded);
                 String[] credentials = decoded.split(":", 2);
 
@@ -122,25 +126,31 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 User user = optionalUser.get();
 
-                context.response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer "+context.jwtUtils.getToken(user));
-                context.response.setHeader(REFRESH_CUSTOM_HEADER, "Bearer "+context.jwtUtils.getRefreshToken(user));
+                context.response.setHeader(JWT_HEADER, "Bearer "+context.jwtUtils.getToken(user));
+                context.response.setHeader(REFRESH_TOKEN_HEADER, "Bearer "+context.jwtUtils.getRefreshToken(user));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                LOGGER.debug("Authorized user {}", userDetails.getUsername());
                 return !error;
             }
         },
         BEARER {
             @Override
             boolean authorize(String token, ContextProvider context) {
-                if(!context.jwtUtils.isValidToken(token)) {
+                Optional<User> passwordRecoveryUser;
+                String username;
+                if(context.jwtUtils.isValidToken(token)) {
+                    username = context.jwtUtils.getUsername(token);
+                    LOGGER.debug("Authorizing {} by jwt", username);
+                } else if((passwordRecoveryUser = context.userService.getUserByPasswordResetToken(token)).isPresent()) {
+                    username = passwordRecoveryUser.get().getUsername();
+                    LOGGER.debug("Authorizing {} (recovery token)", username);
+                } else {
                     return unauthorized(context.response);
                 }
 
-                String username = context.jwtUtils.getUsername(token);
-                LOGGER.debug("Trying to authorize user {}", username);
                 UserDetails userDetails;
-
                 try {
                     userDetails = context.userDetailsService.loadUserByUsername(username);
                 } catch(UsernameNotFoundException e) {
@@ -155,7 +165,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     }
 
                     context.response.setHeader(
-                            HttpHeaders.AUTHORIZATION, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
+                            JWT_HEADER, "Bearer " + context.jwtUtils.getToken(maybeUser.get())
                     );
                 }
 
@@ -165,6 +175,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(context.request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                LOGGER.debug("Authorized user {}", username);
                 return true;
             }
         },

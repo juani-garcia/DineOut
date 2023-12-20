@@ -3,6 +3,7 @@
   "login": "Iniciar sesión",
   "email": "Correo electrónico:",
   "password": "Contraseña:",
+  "forgot-password": "¿Olvidaste tu contraseña?",
   "Footer": {
     "project": "Un proyecto de ",
     "company": "Graphene"
@@ -35,7 +36,7 @@
     "firstName": "Nombre:",
     "lastName": "Apellido:",
     "isRestaurant": "Usaré esta cuenta para un restaurante.",
-    "redirectionToLogin": "¿Ya tienes cuenta?",
+    "redirectionToLogin": "¿Ya tienes cuenta? ",
     "passwordsDoNotMatch": "Las contraseñas no coinciden.",
     "firstNameEmpty": "El nombre es obligatorio",
     "firstNameTooLong": "El nombre es demasiado largo",
@@ -47,40 +48,28 @@
     "passwordTooLong": "La contraseña es demasiado larga",
     "invalidPassword": "La contraseña debe contener al menos una minúscula, una mayúscula y un número, y tener 8 o más caracteres"
   },
+  "Navbar": {
+    "logout": "Cerrar sesión",
+    "myReservations": "Mis reservas",
+    "myRestaurant": "Mi restaurante",
+    "myReviews": "Mis reseñas",
+    "myFavorites": "Mis favoritos"
+  },
   "SearchBox": {
     "search": "Buscar",
-    "category": "Categoria",
+    "category": "Categoría",
     "where": "¿Dónde?",
     "when": "¿Cuándo?",
     "cleanFilters": "Limpiar filtros",
-    "anyCategory": "Cualquier categoria",
+    "anyCategory": "Cualquier categoría",
     "anyTime": "¡Todo el dia!",
     "anyWhere": "¡Donde sea!",
     "searchBy": "Buscar por",
     "none": "Ninguna"
   },
-  "Navbar": {
-    "logout": "Cerrar sesión",
-    "myReservations": "Mis reservas",
-    "myRestaurant": "Mi restaurante"
-  },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
     "choose": "Dejanos elegir un restaurante para vos"
-  },
-  "Reservation": {
-    "title": "¡Completá el formulario para hacer una reserva!",
-    "amount": "Comensales",
-    "date": "Fecha",
-    "time": "Hora",
-    "comments": "Comentarios",
-    "cancel": "Cancela la reserva",
-    "submit": "¡Reservá!",
-    "prompt": "¡Haz una reserva!"
-  },
-  "Reviews": {
-    "prompt": "Deja una reseña",
-    "title": "Reseñas"
   },
   "Shift": {
     "morning": "Mañana",
@@ -95,7 +84,7 @@
     "spanish": "Española",
     "pizza": "Pizza",
     "steakhouse": "Carnes",
-    "bar": "Bar", 
+    "bar": "Bar",
     "chinese": "China",
     "viet_thai": "Viet Thai",
     "burgers": "Hamburguesas",
@@ -113,9 +102,143 @@
     "peruvian": "Peruana",
     "gelato": "Helado"
   },
+  "Reservation": {
+    "title": "¡Completá el formulario para hacer una reserva!",
+    "amount": "Comensales",
+    "date": "Fecha",
+    "time": "Hora",
+    "comments": "Comentarios",
+    "cancel": "Cancela la reserva",
+    "submit": "¡Reservá!",
+    "prompt": "¡Haz una reserva!",
+    "reservations": "Reservas próximas",
+    "showPast": "Mostrar reservas pasadas",
+    "pastReservations": "Reservas pasadas",
+    "showNext": "Mostrar reservas próximas",
+    "awaitingConfirmation": "Aguardando confirmación del restaurante",
+    "isConfirmed": "¡Reserva confirmada!",
+    "for": "Para",
+    "on": "el",
+    "noReservations": "No encontramos reservas",
+    "forOwner": "Reserva para ",
+    "confirmDelete": "¿Deseas eliminar esta reserva?",
+    "confirmConfirm": "¿Deseas confirmar esta reserva?",
+    "confirmSuccessful": "Reserva confirmada",
+    "deleteSuccessful": "Reserva eliminada"
+  },
+  "Reviews": {
+    "prompt": "Deja una reseña",
+    "title": "Reseñas",
+    "empty": "Todavia nadie dejo una reseña."
+  },
+  "Review": {
+    "create": {
+      "title": "¡Deja una reseña!",
+      "header": "Cuantas estrellas le pondrias al restaurant?",
+      "review": "¡Contanos un poco mas de tu experiencia!"
+    },
+    "message": "Reseña: ",
+    "empty": "No dejaste un texto con tu reseña",
+    "submit": "Publica tu reseña",
+    "cancel": "Cancelar",
+    "confirmDelete": "¿Deseas eliminar esta reseña?",
+    "deleteSuccessful": "Reseña eliminada"
+  },
+  "Restaurant": {
+    "opening-hours": "Abre a las:",
+    "exploreRestaurants": "¡Explora nuevos restaurantes!"
+  },
+  "Restaurants": {
+    "noRestaurants": "No hay restaurantes"
+  },
+  "MenuSection": {
+    "empty": "Esta secciín no tiene items.",
+    "form": {
+      "title": "Sección",
+      "header": "Agrega una sección nueva al menu",
+      "header-edit": "Edita la sección",
+      "name": "Nombre de la sección",
+      "submit": "Guardar"
+    },
+    "creation" : {
+      "prompt": "Agregar seccion"
+    }
+  },
+  "Menu": {
+    "title": "Menu",
+    "empty": "El restaurant todavia no cargo un menu"
+  },
+  "MenuItem": {
+    "creation": {
+      "prompt":"Agregar item"
+    },
+    "form": {
+      "title": "Menu item",
+      "header": "Agregar un item al menu",
+      "header-edit": "Edita este item",
+      "name": "Nombre del item",
+      "detail": "Detalle",
+      "price": "Precio",
+      "section": "A que seccion pertenece?",
+      "submit": "Guardar"
+    }
+  },
+  "Edit-restaurant": {
+    "header": "Edita los datos de tu restaurante"
+  },
+  "edit": "Guardar",
   "Errors": {
     "oops": "¡Ups! Algo salió mal. Vuelve a intentarlo más tarde.",
     "invalidCredentials": "El email y contraseña ingresados no son correctos. Por favor, revisá tus datos.",
     "tryAgain": "Revisá los datos ingresados y volvé a intentar"
+  },
+  "FormErrors": {
+    "notEmpty": "Este campo no se puede dejar vacío",
+    "tooLong": "Demasiado largo",
+    "invalidEmail": "Corre electrónico inválido",
+    "invalidPassword": "Contraseña inválida. Debe contener al menos 8 caracteres, incluyendo números y mayúsculas",
+    "passwordMismatch": "Las contraseñas no coincied"
+  },
+  "Register-restaurant": {
+    "shifts": "Horarios",
+    "title": "¡Registra tu restaurante!",
+    "header": "Completa estos datos",
+    "name": "Nombre",
+    "email": "Mail de tu restaurante",
+    "detail": "Descripcion",
+    "categories": "Categorias"
+
+  },
+  "MapSearch": {
+    "location": "Ingresa la ubicacion de tu restaurante"
+  },
+  "Recovery": {
+    "title": "Recupera tu contraseña",
+    "mailSent": "¡Mail enviado!",
+    "passwordUpdated": "¡Contraseña actualizada!",
+    "submitEmailPrompt": "Te enviaremos un email para cambiar tu contraseña",
+    "checkInbox": "¡Revisa tu casilla y sigue el link!",
+    "updatePasswordPrompt": "Elige una nueva contraseña",
+    "success": "¡Tu contraseña fue correctamente actualizada!",
+    "sendEmail": "Enviar email",
+    "updatePassword": "Actualizar contraseña",
+    "token": "Token",
+    "password": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "showPassword": "Mostrar contraseña",
+    "emailNotFound": "No encontramos el correo. ¡Revisá los datos!",
+    "invalidToken": "El token ingresado es inválido. ¡Revisá los datos!",
+    "goToLogin": "Ir a inicio de sesión",
+    "noTokenProvided": "No se ha provisto un token",
+    "wrongUserId": "El usuario parece incorrecto. ¡Revisa tu link!"
+  },
+  "Confirmation": {
+    "actionIrreversible": "La acción que estás por hacer no es reversible",
+    "goBack": "Ir atrás",
+    "continue": "Continuar"
+  },
+  "Favorite": {
+    "error": "No pudimos marcarlo como favorito. Vuelve a intentar",
+    "title": "Mis favoritos"
   }
 }

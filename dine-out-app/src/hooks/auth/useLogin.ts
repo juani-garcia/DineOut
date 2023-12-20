@@ -10,7 +10,7 @@ export function useLogin () {
   async function login (username: string, password: string): Promise<AxiosResponse> {
     return await requestMethod({
       basic: btoa(username + ':' + password),
-      method: HttpMethod.OPTIONS,
+      method: HttpMethod.HEAD,
       url: paths.API_URL
     })
   }

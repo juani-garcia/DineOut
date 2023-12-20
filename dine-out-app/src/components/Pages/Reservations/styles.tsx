@@ -87,7 +87,7 @@ export const PastToggle = styled.a`
 `
 
 export const NoReservationsText = styled.h1`
-  color: ${(props) => props.theme.defaultLight};
+  color: ;
   text-align: center;
   margin: 2.8rem 0 2.8rem 0;
   font-size: 4.2rem;
@@ -106,6 +106,8 @@ export const ExploreRestaurantsText = styled.h6`
   font-weight: 400;
   box-sizing: inherit;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
 
   transition: all 0.2s ease-in-out;
 
@@ -114,12 +116,50 @@ export const ExploreRestaurantsText = styled.h6`
   }
 `
 
-export const ReservationInfo = styled.div`
-  padding: 24px;
-  border-radius: 0 0 2px 2px;
+export const ReservationCardsContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
+  box-sizing: inherit;
+`
+
+export const MySpecialContainerRes = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  max-width: 1480px;
+  width: 90%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 993px) {
+    width: 90%;
+  }
+`
+
+export const MyVerySpecialContainerRes = styled.div`
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  max-width: 1480px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: inherit;
+
+  @media only screen and (min-width: 601px) {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 993px) {
+    width: 90%;
+  }
 `

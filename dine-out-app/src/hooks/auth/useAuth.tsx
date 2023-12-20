@@ -2,6 +2,7 @@ import React, { createContext, type ReactNode, useContext, useState } from 'reac
 import type User from '@/types/models/User'
 import type AuthContextType from '@/types/AuthContextType'
 import jwtDecode from 'jwt-decode'
+import { roles } from '@/common/const'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const AuthContext = createContext<AuthContextType>(null!)
@@ -26,6 +27,24 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
     setUser((prevUser) => {
       if (prevUser != null) {
         return { ...prevUser, restaurantId: resId }
+      }
+      return null
+    })
+  }
+
+  const setRoleRestaurant = (): void => {
+    setUser((prevUser) => {
+      if (prevUser != null) {
+        return { ...prevUser, roles: roles.RESTAURANT }
+      }
+      return null
+    })
+  }
+
+  const setRoleDiner = (): void => {
+    setUser((prevUser) => {
+      if (prevUser != null) {
+        return { ...prevUser, roles: roles.DINER }
       }
       return null
     })
@@ -58,6 +77,8 @@ export function AuthProvider ({ children }: { children: ReactNode }) {
     user,
     setUser,
     setUserRestaurantId,
+    setRoleRestaurant,
+    setRoleDiner,
     getToken,
     setToken,
     getRefreshToken,

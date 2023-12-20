@@ -17,5 +17,6 @@ export default interface Restaurant {
   shifts: string[]
   categories: string[]
   menuSections: string
+  menuSectionsOrder: string[]
   reviews: string
 }

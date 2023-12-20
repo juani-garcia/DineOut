@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.RestaurantNotFoundException;
 import ar.edu.itba.paw.service.RestaurantService;
+import ar.edu.itba.paw.webapp.dto.MenuSectionDTO;
+import ar.edu.itba.paw.webapp.form.RestaurantUpdateForm;
 import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.RestaurantDTO;
 import ar.edu.itba.paw.webapp.form.RestaurantForm;
@@ -21,8 +24,7 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Path("restaurants")
@@ -50,13 +52,22 @@ public class RestaurantController {
             @QueryParam("category") final Category category,
             @QueryParam("zone") final Zone zone,
             @QueryParam("shift") final Shift shift,
-            @QueryParam("favoriteOf") final Long favoriteOf
+            @QueryParam("favoriteOf") final Long favoriteOf,
+            @QueryParam("recommendedFor") final Long recommendedFor
     ) {
         LOGGER.debug("GET to /restaurants with page={}, match={}, category={}, zone={}, shift={}, favoriteOf={}",
                 page, match, category, zone, shift, favoriteOf);
-        // TODO: Check validation of params (min for page, enums in range)
 
-        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(page, match, category, shift, zone, favoriteOf);
+        final FilterParams params = new FilterParams()
+                .setPage(page)
+                .setMatch(match)
+                .setCategory(category)
+                .setZone(zone)
+                .setShift(shift)
+                .setFavoriteOf(favoriteOf)
+                .setRecommendedFor(recommendedFor);
+
+        final PagedQuery<Restaurant> restaurantPagedQuery = rs.filter(params);
 
         if (restaurantPagedQuery.getContent().isEmpty()) {
             return Response.noContent().build();
@@ -106,7 +117,7 @@ public class RestaurantController {
     public Response getRestaurant(@PathParam("id") final long restaurantID) {
         Optional<RestaurantDTO> maybeRestaurant = rs.getById(restaurantID).map(r -> RestaurantDTO.fromRestaurant(uriInfo, r));
         if (! maybeRestaurant.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new RestaurantNotFoundException();
         }
          return Response.ok(maybeRestaurant.get()).build();
     }
@@ -117,7 +128,7 @@ public class RestaurantController {
     @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
     public Response updateRestaurant(
             @PathParam("id") final long restaurantId,
-            @Valid final RestaurantForm restaurantForm
+            @Valid final RestaurantUpdateForm restaurantForm
     ) { // TODO: Remove image from form
         rs.updateCurrentRestaurant(restaurantForm.getName(),
                 restaurantForm.getAddress(),
@@ -128,6 +139,7 @@ public class RestaurantController {
                 restaurantForm.getLng(),
                 restaurantForm.getCategories(),
                 restaurantForm.getShifts(),
+                restaurantForm.getMenuSectionsOrder().stream().map(MenuSectionDTO::getIdFromURI).collect(Collectors.toList()),
                 null); // TODO: Refactor restaurant update service to not expect image
         return Response.ok().build();
     }
@@ -135,17 +147,17 @@ public class RestaurantController {
     @GET
     @Produces({org.springframework.http.MediaType.IMAGE_JPEG_VALUE, org.springframework.http.MediaType.IMAGE_PNG_VALUE})
     @Path("/{id}/image")
-    public Response getRestaurantImage(@PathParam("id") final long restaurantID) {
+    public Response getRestaurantImage(@PathParam("id") final long restaurantID, @Context Request request) {
         Optional<Restaurant> maybeRestaurant = rs.getById(restaurantID);
         if (! maybeRestaurant.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new RestaurantNotFoundException();
         }
         Restaurant restaurant = maybeRestaurant.get();
         if (restaurant.getImage() == null) {
             LOGGER.debug("There is no image");
             return Response.noContent().build();
         }
-        return Response.ok(restaurant.getImage().getSource()).build();
+        return ResponseUtils.addCacheToImage(request, restaurant.getImage());
     }
 
     @PUT

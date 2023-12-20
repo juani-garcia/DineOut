@@ -2,19 +2,21 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.PagedQuery;
 import ar.edu.itba.paw.model.Reservation;
-import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
 import ar.edu.itba.paw.service.ReservationService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
-import ar.edu.itba.paw.webapp.utils.ResponseUtils;
 import ar.edu.itba.paw.webapp.dto.ReservationDTO;
 import ar.edu.itba.paw.webapp.form.ReservationConfirmationForm;
 import ar.edu.itba.paw.webapp.form.ReservationForm;
+import ar.edu.itba.paw.webapp.utils.PATCH;
+import ar.edu.itba.paw.webapp.utils.ResponseUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -31,9 +33,13 @@ public class ReservationController {
     private final ReservationService rs;
     private final SecurityService ss;
     private final UserService us;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
     @Context
     private UriInfo uriInfo;
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     public ReservationController(final ReservationService rs, final SecurityService ss, final UserService us) {
@@ -44,28 +50,23 @@ public class ReservationController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
     public Response readReservations(
             @QueryParam("page") @DefaultValue("1") @Min(value = 1) final int page,
-            @QueryParam("userId") final Long userId,
+            @QueryParam("userId") final Long owner,
             @QueryParam("past") @DefaultValue("false") final boolean past
     ) {
-        if (userId == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+        LOGGER.debug("Reading reservations for user {}", owner);
 
-        boolean isDiner = us.isDiner(ss.getCurrentUser().orElseThrow(UnauthenticatedUserException::new).getId());
-
-        final PagedQuery<Reservation> reservationPagedQuery = isDiner ? rs.getAllForCurrentUser(page, past) : rs.getAllForCurrentRestaurant(page, past);
-        if (reservationPagedQuery.getContent().isEmpty()) {
+        final PagedQuery<Reservation> result = rs.getForUser(owner, page, past);
+        if (result.getContent().isEmpty()) {
             return Response.noContent().build();
         }
-        final List<ReservationDTO> reservationDTOList = reservationPagedQuery.getContent()
+        final List<ReservationDTO> reservationDTOList = result.getContent()
                 .stream().map(r -> ReservationDTO.fromReservation(uriInfo, r))
                 .collect(Collectors.toList());
         Response.ResponseBuilder responseBuilder = Response.ok(new GenericEntity<List<ReservationDTO>>(reservationDTOList){});
         return ResponseUtils.addLinksFromPagedQuery(
-                reservationPagedQuery,
+                result,
                 uriInfo.getRequestUriBuilder(),
                 responseBuilder).build();
     }
@@ -82,14 +83,14 @@ public class ReservationController {
                 reservationForm.getAmount(),
                 reservationForm.getLocalDateTime(),
                 reservationForm.getComments(),
-                uriInfo.getBaseUri().getPath() // TODO: Check if this replaces: uriInfo.getRequestURL().toString().replace(request.getServletPath(), "")
+                getBaseURL() // TODO: Check if this replaces: uriInfo.getRequestURL().toString().replace(request.getServletPath(), "")
         );
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(reservation.getId())).build();
         return Response.created(location).build();
     }
 
 
-    @PatchMapping
+    @PATCH
     @Path("/{id}")
     @PreAuthorize("@securityManager.isReservationRestaurant(authentication, #reservationId)")
     public Response updateRestaurantConfirmation(
@@ -97,7 +98,7 @@ public class ReservationController {
             @Valid ReservationConfirmationForm reservationConfirmationForm
     ) {
         // TODO: Should we support unconfirmation?
-        rs.confirm(reservationId, uriInfo.getBaseUri().getPath());
+        rs.confirm(reservationId, getBaseURL());
         return Response.ok().build();
     }
 
@@ -109,8 +110,12 @@ public class ReservationController {
             @PathParam("id") final long reservationId
     ) {
         // TODO: Check contextPath
-        rs.delete(reservationId, uriInfo.getBaseUri().getPath());
+        rs.delete(reservationId, getBaseURL());
         return Response.noContent().build();
+    }
+
+    private String getBaseURL() {
+        return env.getProperty("url.base");
     }
 
 }

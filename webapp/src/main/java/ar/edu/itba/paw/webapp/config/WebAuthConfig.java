@@ -92,11 +92,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().headers().cacheControl().disable()
             .and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/restaurants/**").anonymous()
-                .antMatchers(HttpMethod.GET, "/reviews/**").anonymous()
-                .antMatchers(HttpMethod.POST, "/users/").anonymous()
-                .antMatchers(HttpMethod.POST, "/users/password-recovery-token").anonymous()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/reviews/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").permitAll() // consider anonymous
+                .antMatchers(HttpMethod.POST, "/users/password-recovery-token").permitAll() // consider anonymous
+                .antMatchers(HttpMethod.PUT, "/users/password-recovery-token/**").permitAll() // consider anonymous
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
             .and().exceptionHandling()
                 .accessDeniedHandler((request, response, ex) -> response.setStatus(Response.Status.FORBIDDEN.getStatusCode()))
@@ -112,7 +113,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         cors.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         cors.setAllowedMethods(Collections.singletonList("*"));
         cors.setAllowedHeaders(Collections.singletonList("*"));
-        cors.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh-Token", "X-Total-Pages", "Location", "Link"));
+        cors.setExposedHeaders(Arrays.asList(
+                "DineOut-JWT",
+                "DineOut-Refresh-Token",
+                "DineOut-Total-Pages",
+                "Location",
+                "Link"
+        ));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
         return source;

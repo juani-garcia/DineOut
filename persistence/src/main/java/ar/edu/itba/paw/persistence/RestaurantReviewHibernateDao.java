@@ -24,8 +24,8 @@ public class RestaurantReviewHibernateDao implements RestaurantReviewDao {
     }
 
     @Override
-    public void delete(final long menuSectionId) {
-        em.remove(em.find(MenuSection.class, menuSectionId));
+    public void delete(final long reviewId) {
+        em.remove(em.find(RestaurantReview.class, reviewId));
     }
 
     @Override

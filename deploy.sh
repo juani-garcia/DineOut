@@ -13,9 +13,7 @@ fi
 
 echo "Import successful."
 
-# mvn clean package
 echo "Building..."
-
 mvn clean package
 
 if [ $? -ne 0 ]
@@ -29,9 +27,15 @@ echo "Build successful."
 # Deploy to pampero
 echo "Deploying..."
 
-scp webapp/target/webapp.war "${PAMPERO_USER}"@pampero.it.itba.edu.ar:~/app.war
+scp -o IdentitiesOnly=True webapp/target/webapp.war "${PAMPERO_USER}"@pampero.it.itba.edu.ar:~/app.war
 
-ssh "${PAMPERO_USER}"@pampero.it.itba.edu.ar << EOF
+if [ $? -ne 0 ]
+then
+  echo "Deploy failed."
+  exit 3
+fi
+
+ssh -o IdentitiesOnly=True "${PAMPERO_USER}"@pampero.it.itba.edu.ar << EOF
   export SSHPASS="${PAW_PAMPERO_PASS}"
   sshpass -e sftp -oBatchMode=no -b - paw-2022a-10@10.16.1.110 << !
     cd web

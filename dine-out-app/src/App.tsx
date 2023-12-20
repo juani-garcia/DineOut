@@ -18,6 +18,9 @@ import CreateReview from '@/components/Pages/CreateReview'
 import Error from '@/components/Pages/Error'
 import Reservations from '@/components/Pages/Reservations'
 import EditRestaurant from '@/components/Pages/EditRestaurant'
+import PasswordRecovery from '@/components/Pages/PasswordRecovery'
+import Reviews from '@/components/Pages/Reviews'
+import Favorites from '@/components/Pages/Favorites'
 
 function App (): JSX.Element {
   return (
@@ -40,6 +43,12 @@ function App (): JSX.Element {
                                     <Route path=":id">
                                         <Route path="view" element={<Restaurant/>}/>
                                         <Route path="review" element={<CreateReview/>}/>
+                                        <Route
+                                            path=""
+                                            element={
+                                                <Error/>
+                                            }
+                                        />
                                     </Route>
                                     <Route path="register"
                                            element={<RegisterRestaurant/>}/>
@@ -51,17 +60,27 @@ function App (): JSX.Element {
                                            element={<MenuSection/>}/>
                                     <Route path="item"
                                            element={<MenuItem/>}/>
+                                    <Route
+                                        path=""
+                                        element={
+                                            <Error/>
+                                        }
+                                    />
                                 </Route>
                                 <Route path="reserve/:id"
                                        element={<CreateReservation/>}/>
                                 <Route path="reservation"
                                        element={<Reservations/>}/>
+                                <Route path="favorite"
+                                       element={<Favorites/>}/>
+                                <Route path="review"
+                                       element={<Reviews/>}/>
                                 <Route path="register"
                                        element={<Register/>}/>
                                 <Route path="login"
                                        element={<Login/>}/>
-                                <Route path="forgot_my_password"
-                                       element={<>Forgot My Password</>}/>
+                                <Route path="password-recovery"
+                                       element={<PasswordRecovery/>}/>
                                 <Route
                                     path="error"
                                     element={

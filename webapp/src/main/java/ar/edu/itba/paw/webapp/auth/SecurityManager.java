@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.model.MenuSection;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.service.ReservationService;
-import ar.edu.itba.paw.service.RestaurantReviewService;
-import ar.edu.itba.paw.service.RestaurantService;
-import ar.edu.itba.paw.service.UserService;
+import ar.edu.itba.paw.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -19,14 +18,18 @@ public class SecurityManager {
 
     private final UserService userService;
     private final RestaurantService restaurantService;
+    private final MenuSectionService menuSectionService;
+    private final MenuItemService menuItemService;
     private final RestaurantReviewService restaurantReviewService;
     private final ReservationService reservationService;
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityManager.class);
 
     @Autowired
-    public SecurityManager(UserService userService, RestaurantService restaurantService, ReservationService reservationService, RestaurantReviewService restaurantReviewService) {
+    public SecurityManager(UserService userService, RestaurantService restaurantService, MenuSectionService menuSectionService, MenuItemService menuItemService, ReservationService reservationService, RestaurantReviewService restaurantReviewService) {
         this.userService = userService;
         this.restaurantService = restaurantService;
+        this.menuSectionService = menuSectionService;
+        this.menuItemService = menuItemService;
         this.reservationService = reservationService;
         this.restaurantReviewService = restaurantReviewService;
     }
@@ -40,8 +43,7 @@ public class SecurityManager {
             return false;
         }
         LOGGER.debug("Authenticated user: {}", auth.getName());
-
-        return userService.getByUsername(auth.getName()).filter(user -> user.getId() == id).isPresent();
+        return userService.getByUsername(auth.getName()).filter(user -> Objects.equals(user.getId(), id)).isPresent();
     }
 
     public boolean isRestaurantOwnerWithoutRestaurant(Authentication auth) {
@@ -64,6 +66,22 @@ public class SecurityManager {
                 .isPresent();
     }
 
+    public boolean isMenuSectionOwnerOfId(Authentication auth, final Long id) {
+        if (id == null)
+            return false;
+        return menuSectionService.getById(id)
+                .filter(s -> s.getRestaurant().getUser().getUsername().equals(auth.getName()))
+                .isPresent();
+    }
+
+    public boolean isMenuItemOwnerOfId(Authentication auth, final Long id) {
+        if (id == null)
+            return false;
+        return menuItemService.getById(id)
+                .filter(i -> i.getSection().getRestaurant().getUser().getUsername().equals(auth.getName()))
+                .isPresent();
+    }
+
     public boolean isReviewOwner(Authentication auth, final long reviewId) {
         return restaurantReviewService.getById(reviewId)
                 .filter(rr -> rr.getUser().getUsername().equals(auth.getName()))
@@ -72,7 +90,7 @@ public class SecurityManager {
 
     public boolean isReservationRestaurant(Authentication auth, final long reservationId) {
         return reservationService.getById(reservationId)
-                .filter(r -> r.getOwner().getUsername().equals(auth.getName()))
+                .filter(r -> r.getRestaurant().getUser().getUsername().equals(auth.getName()))
                 .isPresent();
     }
 

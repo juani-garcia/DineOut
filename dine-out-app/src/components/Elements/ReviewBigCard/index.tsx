@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ReviewBlackBoxContainer, ReviewTitle } from './styles'
+import { ReviewBlackBoxContainer, ReviewContainer, ReviewText, ReviewTitle } from './styles'
 import { Rating, RatingContainer } from '@/components/Elements/RestaurantCard/styles'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
@@ -8,6 +8,10 @@ import { Divider, Pagination } from '@mui/material'
 import type Review from '@/types/models/Review'
 import useReviewList from '@/hooks/Reviews/useReviewList'
 import LoadingCircle from '@/components/Elements/LoadingCircle'
+import { DineOutHeaders } from '@/common/const'
+import { HttpStatusCode } from 'axios'
+import { useSearchParams } from 'react-router-dom'
+import { NoReservationsText } from '@/components/Pages/Reviews/styles'
 
 interface ReviewBigCardProps {
   reviewListURI: string
@@ -18,6 +22,7 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
   const { isLoading, requestReviewList } = useReviewList()
   const [reviewList, setReviewsList] = useState<Review[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
+  const [queryParams, setQueryParams] = useSearchParams()
 
   useEffect(() => {
     if (getPageFromURI(reviewListURI) === 0) {
@@ -29,8 +34,15 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
         return
       }
 
-      setTotalPages(Number(response.headers['x-total-pages']))
-      setReviewsList(response.data as Review[])
+      setTotalPages(Number(response.headers[DineOutHeaders.TOTAL_PAGES_HEADER]))
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (response.status === HttpStatusCode.NoContent) {
+        setPage(1)
+        setReviewsList([])
+      } else {
+        setReviewsList(response.data as Review[])
+      }
     }).catch(e => {
       console.error(e.response)
     })
@@ -41,6 +53,9 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
     const searchParams = url.searchParams
     searchParams.set('page', String(page))
     setReviewListURI(url.toString())
+    const existingParams = new URLSearchParams(queryParams.toString())
+    existingParams.set('pageReview', String(page))
+    setQueryParams(existingParams)
   }
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number): void => {
@@ -62,6 +77,8 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                         ? <>
                                 {reviewList.map(review => (
                                     <>
+                                    <ReviewContainer>
+                                        <ReviewText>{review.review}</ReviewText>
                                         <RatingContainer>
                                             <Rating>
                                                 {[...Array(review.rating)].map((_, index) => (
@@ -72,8 +89,8 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                                                 ))}
                                             </Rating>
                                         </RatingContainer>
-                                        <h1>{review.review}</h1>
-                                        <Divider/>
+                                    </ReviewContainer>
+                                    <Divider/>
                                     </>
                                 ))}
                                 {
@@ -99,7 +116,7 @@ export default function ReviewBigCard ({ reviewListURI: initialreviewListURI }: 
                                         )
                                 }
                             </>
-                        : <h1>{t('Reviews.empty')}</h1>
+                        : <NoReservationsText>{t('Reviews.empty')}</NoReservationsText>
                     )
                   : (
                         <LoadingCircle/>

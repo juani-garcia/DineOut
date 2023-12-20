@@ -8,10 +8,20 @@ import {
 } from '@/components/Elements/ParallaxRecommend/styles'
 import { ChooseP } from '@/components/Elements/utils/styles'
 import { useTranslation } from 'react-i18next'
+import { useRestaurants } from '@/hooks/Restaurants/useRestaurants'
+import { useSnackbar } from 'notistack'
+import type Restaurant from '@/types/models/Restaurant'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/auth/useAuth'
+import { localPaths, roles } from '@/common/const'
 
 function ParallaxRecommend (): JSX.Element {
   const { t } = useTranslation()
+  const { restaurants } = useRestaurants()
   const parallaxRef = useRef(null)
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+  const { user } = useAuth()
 
   useEffect(() => {
     const handleScroll = (): void => {
@@ -51,8 +61,32 @@ function ParallaxRecommend (): JSX.Element {
     }
   }, [])
 
+  const recommendedHandler = (): void => {
+    const searchParams = new URLSearchParams()
+    if ((user?.roles.includes(roles.DINER)) === true) {
+      searchParams.append('recommendedFor', user.userId.toString())
+    }
+    restaurants(searchParams)
+      .then((response) => {
+        if (response.status >= 400) {
+          navigate('/error?status=' + response.status.toString())
+        }
+        const restaurantList = response.data as Restaurant[]
+        if (restaurantList.length === 0) {
+          navigate(localPaths.RESTAURANTS) // Show there are no restaurants
+        }
+        const randomIndex = Math.floor(Math.random() * restaurantList.length)
+        const randomRestaurant = restaurantList[randomIndex]
+        navigate(localPaths.RESTAURANTS + '/' + randomRestaurant.id.toString() + '/view')
+      }).catch((e) => {
+        enqueueSnackbar(t('Errors.oops'), {
+          variant: 'error'
+        })
+      })
+  }
+
   return (<ParallaxContainer id="parallax-container" className="parallax-container" ref={parallaxRef}>
-        <ParallaxCardRecommend>
+        <ParallaxCardRecommend onClick={recommendedHandler}>
             <GroovyRecommend>{t('Parallax.dontKnow')}</GroovyRecommend>
             <ChooseP>{t('Parallax.choose')}</ChooseP>
         </ParallaxCardRecommend>

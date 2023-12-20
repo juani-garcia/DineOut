@@ -9,7 +9,9 @@ export const paths = {
 export const localPaths = {
   RESTAURANTS: '/restaurant',
   RESERVATION: '/reservation',
-  REVIEWS: '/review'
+  REVIEWS: '/review',
+  RESERVE: '/reserve',
+  FAVORITES: '/favorite'
 }
 
 export const roles = {
@@ -17,4 +19,10 @@ export const roles = {
   RESTAURANT: 'RESTAURANT',
   DINER: 'DINER',
   BASIC_USER: 'BASIC_USER'
+}
+
+export const DineOutHeaders = {
+  JWT_HEADER: 'dineout-jwt',
+  REFRESH_TOKEN_HEADER: 'dineout-refresh-token',
+  TOTAL_PAGES_HEADER: 'dineout-total-pages'
 }

@@ -58,7 +58,7 @@ export default function MenuSectionCreation (): JSX.Element {
       if (menuSection == null) {
         return
       }
-      updateMenuSection(menuSection.self, data.name).then(responses => {
+      updateMenuSection(menuSection.self, data.name, menuSection.menuItemsOrder).then(responses => {
         if (responses.status !== 200) {
           return
         }

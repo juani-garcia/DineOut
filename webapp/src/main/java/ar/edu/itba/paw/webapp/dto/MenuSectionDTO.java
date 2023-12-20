@@ -15,8 +15,8 @@ public class MenuSectionDTO {
     private Long id;
     private String name;
     private URI restaurant;
-    private long ordering;
     private URI menuItemList;
+    private List<URI> menuItemsOrder;
     private URI self;
 
     public static MenuSectionDTO fromMenuSection(final UriInfo uriInfo, final MenuSection menuSection) {
@@ -26,12 +26,20 @@ public class MenuSectionDTO {
         dto.name = menuSection.getName();
         UriBuilder restaurantUriBuilder = RestaurantDTO.getUriBuilder(uriInfo, menuSection.getRestaurant());
         dto.restaurant = restaurantUriBuilder.clone().build();
-        dto.ordering = menuSection.getOrdering();
         UriBuilder menuSectionUriBuilder = MenuSectionDTO.getUriBuilder(uriInfo, menuSection);
         dto.self = menuSectionUriBuilder.clone().build();
         dto.menuItemList = MenuItemDTO.getUriBuilder(uriInfo, menuSection).build();
+        dto.menuItemsOrder = menuSection.getMenuItemList().stream().map(mi -> MenuItemDTO.getUriBuilder(uriInfo, mi).build()).collect(Collectors.toList());
 
         return dto;
+    }
+
+    public static long getIdFromURI(URI uri) {
+        if (uri == null)
+            throw new IllegalArgumentException("Cannot get id from null URI");
+        String path = uri.getPath();
+        String idStr = path.substring(path.lastIndexOf('/') + 1);
+        return Integer.parseInt(idStr);
     }
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Restaurant restaurant) {
@@ -66,20 +74,20 @@ public class MenuSectionDTO {
         this.restaurant = restaurant;
     }
 
-    public long getOrdering() {
-        return ordering;
-    }
-
-    public void setOrdering(long ordering) {
-        this.ordering = ordering;
-    }
-
     public URI getMenuItemList() {
         return menuItemList;
     }
 
     public void setMenuItemList(URI menuItemList) {
         this.menuItemList = menuItemList;
+    }
+
+    public List<URI> getMenuItemsOrder() {
+        return menuItemsOrder;
+    }
+
+    public void setMenuItemsOrder(List<URI> menuItemsOrder) {
+        this.menuItemsOrder = menuItemsOrder;
     }
 
     public URI getSelf() {

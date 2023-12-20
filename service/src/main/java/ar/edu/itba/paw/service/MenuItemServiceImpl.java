@@ -76,9 +76,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     public void edit(final long menuItemId, final String name,
                      final String detail, final double price,
                      final long menuSectionId) {
+        LOGGER.debug("Validating item id...");
         final MenuItem menuItem = validateItem(menuItemId);
+        LOGGER.debug("Getting menu section od if {} ...", menuSectionId);
         final MenuSection menuSection = menuSectionService.getById(menuSectionId).orElseThrow(IllegalArgumentException::new);
 
+        LOGGER.debug("Updating menu item...");
         menuItem.setName(name);
         menuItem.setDetail(detail);
         menuItem.setPrice(price);
@@ -123,6 +126,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public void updateImage(final long menuItemId, final byte[] image) {
         final MenuItem menuItem = validateItem(menuItemId);
         Image oldImage = menuItem.getImage();
+        // TODO: Move code below to function in image service
         if (image != null && image.length > 0) { // There is new image
             if (oldImage == null) { // There is no old image
                 LOGGER.debug("Creating image for menu item {}", menuItemId);

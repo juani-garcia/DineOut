@@ -1,15 +1,13 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import ar.edu.itba.paw.model.Category;
-import ar.edu.itba.paw.model.Restaurant;
-import ar.edu.itba.paw.model.Shift;
-import ar.edu.itba.paw.model.Zone;
+import ar.edu.itba.paw.model.*;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RestaurantDTO {
     private Long id;
@@ -30,6 +28,7 @@ public class RestaurantDTO {
     private Set<Shift> shifts;
     private Set<Category> categories;
     private URI menuSections;
+    private List<URI> menuSectionsOrder;
     private URI reviews;
 
     public static RestaurantDTO fromRestaurant(final UriInfo uriInfo, final Restaurant restaurant) {
@@ -50,11 +49,14 @@ public class RestaurantDTO {
         dto.self = restaurantUriBuilder.clone().build();
         dto.owner = UserDTO.getUriBuilder(uriInfo, restaurant.getUser()).build();
         if (restaurant.getImage() != null)
-            dto.image = restaurantUriBuilder.clone().path("image").build();
+            dto.image = RestaurantDTO.getUriBuilderForImage(uriInfo, restaurant).build();
         dto.zone = restaurant.getZone();
         dto.shifts = restaurant.getShifts();
         dto.categories = restaurant.getCategories();
         dto.menuSections = MenuSectionDTO.getUriBuilder(uriInfo, restaurant).build();
+        dto.menuSectionsOrder = restaurant.getMenuSectionList().stream()
+                .map(ms -> MenuSectionDTO.getUriBuilder(uriInfo, ms).build())
+                .collect(Collectors.toList());
         dto.reviews = RestaurantReviewDTO.getUriBuilderForRestaurant(uriInfo, restaurant).build();
 
         return dto;
@@ -66,6 +68,14 @@ public class RestaurantDTO {
 
     public static UriBuilder getUriBuilder(final UriInfo uriInfo, final Restaurant restaurant) {
         return RestaurantDTO.getUriBuilder(uriInfo).path(String.valueOf(restaurant.getId()));
+    }
+
+    public static UriBuilder getUriBuilderForImage(final UriInfo uriInfo, final Restaurant restaurant) {
+        return RestaurantDTO.getUriBuilder(uriInfo, restaurant).path("image");
+    }
+
+    public static UriBuilder getUriBuilderForUserFavorites(final UriInfo uriInfo, final User user) {
+        return RestaurantDTO.getUriBuilder(uriInfo).queryParam("favoriteOf", user.getId());
     }
 
     public Long getId() {
@@ -202,6 +212,14 @@ public class RestaurantDTO {
 
     public void setMenuSections(URI menuSections) {
         this.menuSections = menuSections;
+    }
+
+    public List<URI> getMenuSectionsOrder() {
+        return menuSectionsOrder;
+    }
+
+    public void setMenuSectionsOrder(List<URI> menuSectionsOrder) {
+        this.menuSectionsOrder = menuSectionsOrder;
     }
 
     public URI getReviews() {

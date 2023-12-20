@@ -1,32 +1,46 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.FavoriteNotFoundException;
 import ar.edu.itba.paw.model.exceptions.UnauthenticatedUserException;
+import ar.edu.itba.paw.model.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.service.FavoriteService;
 import ar.edu.itba.paw.service.SecurityService;
 import ar.edu.itba.paw.service.UserService;
 import ar.edu.itba.paw.webapp.dto.UserDTO;
 import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.utils.PATCH;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
 
 @Path("users")
 @Component
 public class UserController {
+
     private final UserService userService;
     private final SecurityService securityService;
     private final FavoriteService favoriteService;
 
     @Context
     private UriInfo uriInfo;
+
+    @Autowired
+    private Environment env;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserService userService, SecurityService securityService, FavoriteService favoriteService) {
@@ -44,7 +58,7 @@ public class UserController {
                 userForm.getFirstName(),
                 userForm.getLastName(),
                 userForm.getIsRestaurant(),
-                uriInfo.getPath());
+                getBaseURL());
         final URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(newUser.getId())).build();
         return Response.created(location).build();
     }
@@ -55,7 +69,7 @@ public class UserController {
     public Response readUser(@PathParam("id") final long userId) {
         Optional<UserDTO> maybeUser = userService.getById(userId).map(u -> UserDTO.fromUser(uriInfo, u));
         if (! maybeUser.isPresent()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new UserNotFoundException();
         }
         return Response.ok(maybeUser.get()).build();
     }
@@ -76,7 +90,7 @@ public class UserController {
                 user.get(),
                 userProfileEditForm.getFirstName(),
                 userProfileEditForm.getLastName(),
-                uriInfo.getPath()
+                getBaseURL()
         );
         return Response.ok().build();
     }
@@ -85,16 +99,18 @@ public class UserController {
     @Path("/password-recovery-token")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createPasswordRecoveryToken(@Valid PasswordRecoveryForm passwordRecoveryForm) {
-        userService.createPasswordResetTokenByUsername(passwordRecoveryForm.getUsername(), uriInfo.getPath());
+        userService.createPasswordResetTokenByUsername(passwordRecoveryForm.getUsername(), getBaseURL());
         return Response.ok().build();
     }
 
-    @PUT
-    @Path("/password-recovery-token/{token}")
+    @PATCH
+    @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response editPasswordByToken(@Valid NewPasswordForm newPasswordForm,
-                                        @PathParam("token") String token) {
-        userService.changePasswordByUserToken(newPasswordForm.getToken(), newPasswordForm.getPassword());
+    @PreAuthorize("@securityManager.isUserOfId(authentication, #userId)")
+    public Response editPasswordByToken(@PathParam("id") Long userId,
+            @Valid NewPasswordForm newPasswordForm) {
+        final User user = securityService.checkCurrentUser(userId);
+        userService.editPassword(user, newPasswordForm.getPassword());
         return Response.ok().build();
     }
 
@@ -106,7 +122,7 @@ public class UserController {
     ) {
         final boolean favorite = favoriteService.isFavoriteOfUser(userId, restaurantId);
         if (!favorite) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new FavoriteNotFoundException();
         }
         return Response.ok().build();
     }
@@ -121,6 +137,10 @@ public class UserController {
             ) {
         favoriteService.set(restaurantId, userId, fm.isUpVote());
         return Response.ok().build();
+    }
+
+    private String getBaseURL() {
+        return env.getProperty("url.base");
     }
 
 }

@@ -16,6 +16,7 @@ export const styledTheme = {
   boldWeight: '700',
   lightWeight: '300',
   defaultRed: '#F54242',
+  defaultSuccess: '#0b6623',
   black: '#000000'
 }
 

@@ -10,6 +10,8 @@ public interface SecurityService {
 
     Optional<User> getCurrentUser();
 
+    User checkCurrentUser(Long userId);
+
     boolean isLoggedIn();
 
     String validatePasswordResetToken(String token);

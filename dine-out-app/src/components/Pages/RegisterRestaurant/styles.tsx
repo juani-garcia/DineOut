@@ -3,7 +3,10 @@ import { WhiteBoxContainer } from '@/components/Elements/utils/styles'
 
 export const RegisterRestaurantWhiteBoxContainer = styled(WhiteBoxContainer)`
   width: 90%;
-  
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 `
 
 export const RegisterRestaurantForm = styled.div`
@@ -11,7 +14,6 @@ export const RegisterRestaurantForm = styled.div`
   justify-content: center;
   flex-direction: column;
   width: 50%;
-  margin-left: 25%;
   padding: 1.5rem 0;
 `
 

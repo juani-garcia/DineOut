@@ -9,18 +9,20 @@ import { Link } from 'react-router-dom'
 import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import useImage from '@/hooks/Images/useImage'
+import { CardImage } from '@/components/Elements/MenuItem/styles'
 
 interface MenuItemProps {
   menuItem: MenuItem
   editable?: boolean
+  first?: boolean
   last?: boolean
   onDelete?: (menuItem: MenuItem) => void
   onUp?: (menuItem: MenuItem) => void
   onDown?: (menuItem: MenuItem) => void
 }
 
-export default function MenuItemComponent ({ menuItem, editable = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
-  const { deleteMenuItem, moveItem } = useMenuItems()
+export default function MenuItemComponent ({ menuItem, editable = false, first = false, last = false, onDelete, onUp, onDown }: MenuItemProps): JSX.Element {
+  const { deleteMenuItem } = useMenuItems()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [imagePreview, setImagePreview] = useState<string | undefined>((menuItem.image === '') ? undefined : menuItem.image)
   const { updateImage, deleteImage } = useImage()
@@ -39,25 +41,15 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
   }
 
   const handleUp: React.MouseEventHandler<HTMLButtonElement> = e => {
-    moveItem(menuItem.self, true).then(response => {
-      if (response.status !== 200) { return }
-      if (onUp != null) {
-        onUp(menuItem)
-      }
-    }).catch(e => {
-      console.error(e)
-    })
+    if (onUp !== null && onUp !== undefined) {
+      onUp(menuItem)
+    }
   }
 
   const handleDown: React.MouseEventHandler<HTMLButtonElement> = e => {
-    moveItem(menuItem.self, false).then(response => {
-      if (response.status !== 200) { return }
-      if (onDown != null) {
-        onDown(menuItem)
-      }
-    }).catch(e => {
-      console.error(e)
-    })
+    if (onDown !== null && onDown !== undefined) {
+      onDown(menuItem)
+    }
   }
 
   const handleUpdateImage: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -88,15 +80,16 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
 
   return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Stack>
-              {(imagePreview !== undefined) && <img style={{ flex: 1 }} src={imagePreview} alt={menuItem.name}/>}
+            <Stack direction='row'
+                   justifyContent='center'
+                   alignItems='center'
+                   width='25%'
+                   height='100%'
+            >
               {editable && (
-                <Stack direction='row'
-                  justifyContent='flex-start'
-                  alignItems='center'
-                >
+                  <>
                   <Input
-                    style={{ display: 'hidden', visibility: 'collapse', width: '39px' }}
+                    style={{ display: 'hidden', visibility: 'collapse', width: '5%' }}
                     type='file'
                     name='image'
                     inputRef={fileInputRef}
@@ -104,7 +97,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                     endAdornment={(
                       <>
                           <IconButton
-                            style={{ display: 'block', visibility: 'visible' }}
+                            style={{ display: 'block', visibility: 'visible', marginTop: '40px' }}
                             onClick={() => fileInputRef.current?.click()}
                             color="secondary"
                             aria-label="delete"
@@ -114,13 +107,14 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
                       </>
                     )}
                   />
-                  <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete">
-                    <DeleteIcon/>
-                  </IconButton>
-                </Stack>
+                    {(imagePreview !== undefined) && <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete" style={{ marginTop: '30px' }}>
+                      <DeleteIcon/>
+                    </IconButton>}
+                </>
               )}
+              {(imagePreview !== undefined) && <CardImage src={imagePreview} alt={menuItem.name}/>}
             </Stack>
-            <div style={{ flex: 10, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 10, display: 'flex', flexDirection: 'column', width: '50%' }}>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <h3>{menuItem.name}</h3>
                     <p>$ {menuItem.price.toFixed(2)}</p>
@@ -129,7 +123,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, last = 
             </div>
             {editable && (
                     <Stack>
-                      <IconButton onClick={handleUp} color="secondary" disabled={menuItem.ordering === 0}>
+                      <IconButton onClick={handleUp} color="secondary" disabled={first}>
                           <ArrowUpwardIcon/>
                       </IconButton>
                       <IconButton onClick={handleDown} color="secondary" disabled={last}>

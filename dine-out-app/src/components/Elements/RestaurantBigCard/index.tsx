@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type Restaurant from '@/types/models/Restaurant'
 import {
   ButtonsContainer,
@@ -26,16 +26,24 @@ import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import Category from '@/types/enums/Category'
 import { Shift } from '@/types/enums/Shift'
-import { t } from 'i18next'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/auth/useAuth'
-import { roles } from '@/common/const'
+import { localPaths, roles } from '@/common/const'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import { Input } from '@mui/material'
 import useImage from '@/hooks/Images/useImage'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { useFavoriteStatus } from '@/hooks/Favorites/useFavoriteStatus'
+import { HttpStatusCode } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { enqueueSnackbar } from 'notistack'
+import { useUpdateFavorite } from '@/hooks/Favorites/useUpdateFavorite'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import WithMap from '@/components/Pages/Restaurant/withmap'
+import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 
 interface RestaurantBigCardProps {
   restaurant: Restaurant
@@ -43,10 +51,30 @@ interface RestaurantBigCardProps {
 
 export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProps): JSX.Element {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const isOwner = user?.restaurantId === restaurant.id
   const [imagePreview, setImagePreview] = useState<string | undefined>(restaurant?.image)
   const { updateImage, deleteImage } = useImage()
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
+  const { isLoading: isLoadingStatus, checkFavorite } = useFavoriteStatus()
+  const { isLoading: isLoadingUpdate, updateFavorite } = useUpdateFavorite()
+
+  useEffect(() => {
+    if (user !== null) {
+      checkFavorite(user, restaurant.id)
+        .then(response => {
+          if (response.status === HttpStatusCode.Ok) {
+            setIsFavorite(true)
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
+        })
+    }
+  }, [])
 
   const handleUpdate: React.ChangeEventHandler<HTMLInputElement> = event => {
     if (event.target.files == null) {
@@ -61,6 +89,32 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
     }).catch(e => {
       console.error(e.response) // TODO: Toast
     })
+  }
+
+  const toggleFavorite = (): void => {
+    if (user !== null) {
+      updateFavorite(user, restaurant.id, !isFavorite)
+        .then(response => {
+          if (response.status === HttpStatusCode.Ok) {
+            restaurant.favCount += isFavorite ? -1 : 1
+            setIsFavorite(!isFavorite)
+          } else {
+            enqueueSnackbar(t('Favorite.error'), {
+              variant: 'warning'
+            })
+          }
+        })
+        .catch(() => {
+          enqueueSnackbar(t('Errors.oops'), {
+            variant: 'error'
+          })
+        })
+    } else {
+      navigate('/login', {
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        state: { from: localPaths.RESTAURANTS + '/' + restaurant.id + '/view' }
+      })
+    }
   }
 
   const handleDeletion: React.MouseEventHandler<HTMLButtonElement> = event => {
@@ -91,6 +145,22 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                             <StarBorderIcon key={index} color="primary"/>
                         ))}
                     </Rating>
+                    <>
+                        <button
+                            onClick={toggleFavorite}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              color: 'white',
+                              transform: 'scale(0.6)'
+                            }}
+                            disabled={isLoadingUpdate || isLoadingStatus}
+                        >
+                            {isFavorite ? <FavoriteIcon color="inherit" /> : <FavoriteBorderIcon color="inherit" />}
+                        </button>
+                        <p style={{ transform: 'scale(0.5)' }}>{ restaurant.favCount }</p>
+                    </>
                 </RatingContainer>
             </RestaurantHeader>
             <CardImageContainer className="card-image">
@@ -117,13 +187,16 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
             <ZoneContainer>
                 <Zone>&#128205;{restaurant.address}</Zone>
             </ZoneContainer>
+            <CustomGMapScriptLoad>
+                <WithMap restaurant={restaurant}/>
+            </CustomGMapScriptLoad>
             <CategoriesContainer>
                 <CategoriesHolder>
                     {
                         restaurant.categories.map(Category.fromName).map(category => (
                           (category != null) &&
                             <CategoryChip key={category.name} as={Link}
-                                          to={'/restaurants?category=' + category.name}>{category.description}</CategoryChip>
+                                          to={localPaths.RESTAURANTS + '?category=' + category.name}>{t(category.description)}</CategoryChip>
                         ))
                     }
                 </CategoriesHolder>
@@ -167,7 +240,7 @@ export default function RestaurantBigCard ({ restaurant }: RestaurantBigCardProp
                                             <>
                                                 <Button onClick={() => {
                                                   navigate('/register', {
-                                                    state: { from: window.location.pathname }
+                                                    state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
                                                   })
                                                 }}>
                                                     {t('registerToReserve')}

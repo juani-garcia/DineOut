@@ -1,7 +1,7 @@
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Header, RegisterRestaurantForm, RegisterRestaurantWhiteBoxContainer } from './styles'
+import { RegisterRestaurantForm, RegisterRestaurantWhiteBoxContainer } from './styles'
 import {
   Button,
   Checkbox,
@@ -22,7 +22,7 @@ import { Zone } from '@/types/enums/Zone'
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { roles } from '@/common/const'
+import { localPaths, roles } from '@/common/const'
 import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 import { Autocomplete, GoogleMap, MarkerF } from '@react-google-maps/api'
 import { MapSearchContainer } from '@/components/Elements/MapSearch/styles'
@@ -73,7 +73,7 @@ export default function WithMap (): JSX.Element {
   useEffect(() => {
     if (user === null) {
       navigate('/login', {
-        state: { from: '/restaurant/register' }
+        state: { from: localPaths.RESTAURANTS + '/register' }
       })
     } else if (!user.roles.includes(roles.RESTAURANT)) {
       navigate('/')
@@ -146,7 +146,7 @@ export default function WithMap (): JSX.Element {
       setError(HttpStatusCode.Unauthorized)
       return
     }
-    updateRestaurant(user?.restaurantId, data.name, selectedLocation.address, data.email, data.detail, selectedLocation.zone?.name ?? '', selectedLocation.lat, selectedLocation.lng, data.categories, data.shifts).then(
+    updateRestaurant(user?.restaurantId, data.name, selectedLocation.address, data.email, data.detail, selectedLocation.zone?.name ?? '', selectedLocation.lat, selectedLocation.lng, data.categories, data.shifts, restaurant?.menuSectionsOrder ?? []).then(
       (response) => {
         if (response.status === 200 || response.status === 201) {
           navigate('/restaurant/' + user.restaurantId.toString() + '/view')
@@ -203,7 +203,7 @@ export default function WithMap (): JSX.Element {
 
   return (
         <MyContainer>
-            <Title>{t('Register-restaurant')}</Title>
+            <Title>{t('Edit-restaurant.header')}</Title>
             <RegisterRestaurantWhiteBoxContainer>
                 {
                     (isLoadingRestaurant)
@@ -214,7 +214,6 @@ export default function WithMap (): JSX.Element {
                             <>
                                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                                 <RegisterRestaurantForm onSubmit={handleSubmit(onSubmit)}>
-                                    <Header>{t('Register-restaurant.header')}</Header>
                                     {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                                     <FormControl component="form"
                                                  sx={{
@@ -289,7 +288,13 @@ export default function WithMap (): JSX.Element {
                                                 {...control.register('categories')}
                                                 onChange={handleCategoryChange}
                                                 renderValue={(selected) => {
-                                                  return selected.map(category => Category.values.find(otherC => otherC.name === category)?.description).join(', ')
+                                                  return selected.map(category => {
+                                                    const categoryNameToBeTranslated = Category.fromName(category)?.description
+                                                    if (categoryNameToBeTranslated === undefined) {
+                                                      return 'undefined'
+                                                    }
+                                                    return t(categoryNameToBeTranslated)
+                                                  }).join(', ')
                                                 }}
                                                 className='overflow_ellipsis width_100'
                                             >
@@ -318,7 +323,13 @@ export default function WithMap (): JSX.Element {
                                                 {...control.register('shifts')}
                                                 onChange={handleShiftChange}
                                                 renderValue={(selected) => {
-                                                  return selected.map(shift => Shift.values.find(otherS => otherS.name === shift)?.description).join(', ')
+                                                  return selected.map(shift => {
+                                                    const shiftNameToBeTranslated = Shift.fromName(shift)?.description
+                                                    if (shiftNameToBeTranslated === undefined) {
+                                                      return 'undefined'
+                                                    }
+                                                    return t(shiftNameToBeTranslated)
+                                                  }).join(', ')
                                                 }}
                                                 className='overflow_ellipsis width_100'
                                             >
@@ -342,7 +353,7 @@ export default function WithMap (): JSX.Element {
                                               : (
                                                     <Button type="submit" variant="contained" color="primary"
                                                             sx={{ marginTop: '20px' }}>
-                                                        {t('register')}
+                                                        {t('edit')}
                                                     </Button>
                                                 )
                                         }

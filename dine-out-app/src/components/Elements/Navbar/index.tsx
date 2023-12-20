@@ -34,7 +34,7 @@ function Navbar (): JSX.Element {
                         <ListItem>
                             <RegisterButton onClick={() => {
                               navigate('/register', {
-                                state: { from: window.location.pathname }
+                                state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
                               })
                             }}>
                                 {t('register')}
@@ -43,7 +43,7 @@ function Navbar (): JSX.Element {
                         <ListItem>
                             <LoginButton onClick={() => {
                               navigate('/login', {
-                                state: { from: window.location.pathname }
+                                state: { from: window.location.pathname.replace('/paw-2022a-10', '') + window.location.search }
                               })
                             }}>
                                 {t('login')}
@@ -54,6 +54,11 @@ function Navbar (): JSX.Element {
                         <ListItem>
                             <Button as={Link} to={localPaths.RESERVATION}>
                               {t('Navbar.myReservations')}
+                            </Button>
+                        </ListItem>
+                        <ListItem>
+                            <Button as={Link} to={localPaths.REVIEWS}>
+                                {t('Navbar.myReviews')}
                             </Button>
                         </ListItem>
                         {(user?.roles.includes(roles.RESTAURANT))
@@ -69,7 +74,11 @@ function Navbar (): JSX.Element {
                                 </ListItem>
                             )
                           : (
-                                <></>
+                              <ListItem>
+                                <Button as={Link} to={localPaths.FAVORITES}>
+                                  {t('Navbar.myFavorites')}
+                                </Button>
+                              </ListItem>
                             )
                         }
                         <ListItem><LogoutButton onClick={() => {

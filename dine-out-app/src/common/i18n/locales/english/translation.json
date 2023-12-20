@@ -36,7 +36,7 @@
     "firstName": "First name:",
     "lastName": "Last name:",
     "isRestaurant": "I will use this account as a restaurant",
-    "redirectionToLogin": "Already have an account?",
+    "redirectionToLogin": "Already have an account? ",
     "passwordsDoNotMatch": "Passwords do not match",
     "firstNameEmpty": "First name is mandatory",
     "firstNameTooLong": "First name is too long",
@@ -51,7 +51,9 @@
   "Navbar": {
     "logout": "Log out",
     "myReservations": "My reservations",
-    "myRestaurant": "My restaurant"
+    "myRestaurant": "My restaurant",
+    "myReviews": "My reviews",
+    "myFavorites": "My favorites"
   },
   "SearchBox": {
     "search": "Search",
@@ -108,14 +110,46 @@
     "comments": "Comments",
     "cancel": "Cancel this reservation",
     "submit": "Reserve!",
-    "prompt": "Make a reservation!"
+    "prompt": "Make a reservation!",
+    "reservations": "Next reservations",
+    "showPast": "Show past reservations",
+    "pastReservations": "Past reservations",
+    "showNext": "Show next reservations",
+    "awaitingConfirmation": "Awaiting confirmation from the restaurant",
+    "isConfirmed": "Reservation is confirmed",
+    "for": "For",
+    "on": "on",
+    "noReservations": "We couldn't find reservations",
+    "forOwner": "Reservation for ",
+    "confirmDelete": "Are you sure you want to delete the reservation?",
+    "confirmConfirm": "Are you sure you want to confirm the reservation?",
+    "confirmSuccessful": "Reservation confirmed",
+    "deleteSuccessful": "Reservation deleted"
   },
   "Reviews": {
     "prompt": "Leave a review",
-    "title": "Reviews"
+    "title": "Reviews",
+    "empty": "No reviews yet!"
+  },
+  "Review": {
+    "create": {
+      "title": "Leave a review!",
+      "header": "How many stars would you give the restaurant?",
+      "review": "Let other people know your experience!"
+    },
+    "message": "Review: ",
+    "empty": "You did not leave a text description with your review",
+    "submit": "Publish your review",
+    "cancel": "Cancel",
+    "confirmDelete": "Are you sure you want to delete the review?",
+    "deleteSuccessful": "Review deleted"
   },
   "Restaurant": {
-    "opening-hours": "Opens:"
+    "opening-hours": "Opens:",
+    "exploreRestaurants": "Explore new restaurants!"
+  },
+  "Restaurants": {
+    "noRestaurants": "No restaurants"
   },
   "MenuSection": {
     "empty": "This section has no items",
@@ -149,9 +183,61 @@
       "submit": "Save item"
     }
   },
+  "Edit-restaurant": {
+    "header": "Edit your restaurant"
+  },
+  "edit": "Save",
   "Errors": {
     "oops": "Oops! Something went wrong. Try again later.",
     "invalidCredentials": "The email and password sent are incorrect. Please check the data.",
     "tryAgain": "Check the data and try again"
+  },
+  "FormErrors": {
+    "notEmpty": "This field cannot be left empty",
+    "tooLong": "Too long",
+    "invalidEmail": "The email is invalid",
+    "invalidPassword": "Invalid password. Must be at least 8 characters long, and contain capitals and numbers",
+    "passwordMismatch": "Passwords don't match"
+  },
+  "Register-restaurant": {
+    "shifts": "Shifts",
+    "title": "Register your restaurant!",
+    "header": "Fill in this fields",
+    "name": "Name",
+    "email": "Your restaurant's email",
+    "detail": "Description",
+    "categories": "Categories"
+  },
+  "MapSearch": {
+    "location": "Type in the location of your restaurant"
+  },
+  "Recovery": {
+    "title": "Recover your password",
+    "mailSent": "Mail sent!",
+    "passwordUpdated": "Password updated!",
+    "submitEmailPrompt": "We'll send you an email with a link to update your password",
+    "checkInbox": "Go check your inbox and follow the link!",
+    "updatePasswordPrompt": "Choose a new password",
+    "success": "Your password was successfully updated!",
+    "sendEmail": "Send email",
+    "updatePassword": "Update password",
+    "token": "Token",
+    "password": "New password",
+    "confirmPassword": "Confirm password",
+    "showPassword": "Show password",
+    "emailNotFound": "The email was not found. Check the data!",
+    "invalidToken": "Invalid token. Check the data!",
+    "goToLogin": "Go to login",
+    "noTokenProvided": "No token provided",
+    "wrongUserId": "The user seems wrong. Check your link!"
+  },
+  "Confirmation": {
+    "actionIrreversible": "The action you are about to perform is not reversible",
+    "goBack": "Go back",
+    "continue": "Continue"
+  },
+  "Favorite": {
+    "error": "Could not mark as favorite. Please try again",
+    "title": "My favorites"
   }
 }

@@ -11,19 +11,27 @@ import java.time.LocalDateTime;
 public class ReservationDTO {
     private Long id;
     private URI restaurant;
-    private URI owner;
+    private String mail, ownerFirstName, ownerLastName;
     private int amount;
     private LocalDateTime dateTime;
     private String comments;
     private boolean isConfirmed;
     private URI self;
 
+    public ReservationDTO() {
+    }
+
     public static ReservationDTO fromReservation(final UriInfo uriInfo, final Reservation reservation) {
         final ReservationDTO dto = new ReservationDTO();
 
         dto.id = reservation.getId();
         dto.restaurant = RestaurantDTO.getUriBuilder(uriInfo, reservation.getRestaurant()).build();
-        dto.owner = UserDTO.getUriBuilder(uriInfo, reservation.getOwner()).build();
+        if(reservation.getOwner() != null) {
+            dto.ownerFirstName = reservation.getOwner().getFirstName();
+            dto.ownerLastName = reservation.getOwner().getLastName();
+        } else {
+            dto.mail = reservation.getMail();
+        }
         dto.amount = reservation.getAmount();
         dto.dateTime = reservation.getDateTime();
         dto.comments = reservation.getComments();
@@ -41,6 +49,10 @@ public class ReservationDTO {
         return ReservationDTO.getUriBuilder(uriInfo).path(String.valueOf(reservation.getId()));
     }
 
+    public static UriBuilder getUriBuilderByUser(final UriInfo uriInfo, final User user) {
+        return ReservationDTO.getUriBuilder(uriInfo).queryParam("owner", user.getId());
+    }
+
     public Long getId() {
         return id;
     }
@@ -55,14 +67,6 @@ public class ReservationDTO {
 
     public void setRestaurant(URI restaurant) {
         this.restaurant = restaurant;
-    }
-
-    public URI getOwner() {
-        return owner;
-    }
-
-    public void setOwner(URI owner) {
-        this.owner = owner;
     }
 
     public int getAmount() {
@@ -101,7 +105,31 @@ public class ReservationDTO {
         return self;
     }
 
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     public void setSelf(URI self) {
         this.self = self;
+    }
+
+    public String getOwnerFirstName() {
+        return ownerFirstName;
+    }
+
+    public void setOwnerFirstName(String ownerFirstName) {
+        this.ownerFirstName = ownerFirstName;
+    }
+
+    public String getOwnerLastName() {
+        return ownerLastName;
+    }
+
+    public void setOwnerLastName(String ownerLastName) {
+        this.ownerLastName = ownerLastName;
     }
 }
