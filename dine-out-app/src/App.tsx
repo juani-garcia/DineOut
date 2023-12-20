@@ -20,6 +20,7 @@ import Reservations from '@/components/Pages/Reservations'
 import EditRestaurant from '@/components/Pages/EditRestaurant'
 import PasswordRecovery from '@/components/Pages/PasswordRecovery'
 import Reviews from '@/components/Pages/Reviews'
+import Favorites from '@/components/Pages/Favorites'
 
 function App (): JSX.Element {
   return (
@@ -70,6 +71,8 @@ function App (): JSX.Element {
                                        element={<CreateReservation/>}/>
                                 <Route path="reservation"
                                        element={<Reservations/>}/>
+                                <Route path="favorite"
+                                       element={<Favorites/>}/>
                                 <Route path="review"
                                        element={<Reviews/>}/>
                                 <Route path="register"

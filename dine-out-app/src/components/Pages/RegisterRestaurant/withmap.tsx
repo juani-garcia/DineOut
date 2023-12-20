@@ -48,8 +48,8 @@ export default function WithMap (): JSX.Element {
   const { handleSubmit, control } = useForm()
   const [selectedCategories, setselectedCategories] = useState<string[]>([])
   const [selectedShifts, setSelectedShifts] = useState<string[]>([])
-  const { isLoading, createRestaurant } = useCreateRestaurant()
-  const { user, setUserRestaurantId } = useAuth()
+  const { createRestaurant } = useCreateRestaurant()
+  const { user, setUserRestaurantId, setRoleRestaurant } = useAuth()
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const [selectedLocation, setSelectedLocation] = useState<LocationType>({
@@ -105,7 +105,7 @@ export default function WithMap (): JSX.Element {
           const resId = parseInt(locationHeader[locationHeader.length - 1])
           if (resId === null || resId === undefined) return
           setUserRestaurantId(resId)
-          console.log(isLoading)
+          setRoleRestaurant()
           redirect('/restaurant/' + resId.toString() + '/view')
         } else {
           enqueueSnackbar(t('Errors.tryAgain'), {
@@ -140,8 +140,9 @@ export default function WithMap (): JSX.Element {
     if (place.geometry != null) {
       const { lat, lng } = place.geometry.location ?? new google.maps.LatLng({ lat: 0, lng: 0 })
 
-      console.log(place.vicinity)
       console.log(place)
+      console.log(place.vicinity)
+      console.log(Zone.fromDescription(place.vicinity ?? 'El Talar'))
       setSelectedLocation({
         lat: lat(),
         lng: lng(),
@@ -160,7 +161,7 @@ export default function WithMap (): JSX.Element {
 
   return (
         <MyContainer>
-            <Title>{t('Register-restaurant')}</Title>
+            <Title>{t('Register-restaurant.title')}</Title>
             <RegisterRestaurantWhiteBoxContainer>
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <RegisterRestaurantForm onSubmit={handleSubmit(onSubmit)}>
@@ -238,7 +239,13 @@ export default function WithMap (): JSX.Element {
                                 {...control.register('categories')}
                                 onChange={handleCategoryChange}
                                 renderValue={(selected) => {
-                                  return selected.map(category => Category.values.find(otherC => otherC.name === category)?.description).join(', ')
+                                  return selected.map(category => {
+                                    const categoryNameToBeTranslated = Category.fromName(category)?.description
+                                    if (categoryNameToBeTranslated === undefined) {
+                                      return 'undefined'
+                                    }
+                                    return t(categoryNameToBeTranslated)
+                                  }).join(', ')
                                 }}
                                 className='overflow_ellipsis width_100'
                             >
@@ -266,7 +273,13 @@ export default function WithMap (): JSX.Element {
                                 {...control.register('shifts')}
                                 onChange={handleShiftChange}
                                 renderValue={(selected) => {
-                                  return selected.map(shift => Shift.values.find(otherS => otherS.name === shift)?.description).join(', ')
+                                  return selected.map(shift => {
+                                    const shiftNameToBeTranslated = Shift.fromName(shift)?.description
+                                    if (shiftNameToBeTranslated === undefined) {
+                                      return 'undefined'
+                                    }
+                                    return t(shiftNameToBeTranslated)
+                                  }).join(', ')
                                 }}
                                 className='overflow_ellipsis width_100'
                             >

@@ -152,6 +152,8 @@ export const CategoriesHolder = styled.div`
   scrollbar-width: none;
   overflow-x: auto;
   box-sizing: inherit;
+  justify-content: center;
+  align-items: center;
 `
 
 export const Category = styled.a`

@@ -147,7 +147,7 @@ function Reviews (): JSX.Element {
                                 ? (
                                         <>
                                             <NoReservationsText>
-                                                No hay ninguna review
+                                              {t('Reviews.empty')}
                                             </NoReservationsText>
                                           {((user?.roles.includes(roles.DINER)) === true)
                                             ? (

@@ -35,7 +35,7 @@
     "firstName": "Nombre:",
     "lastName": "Apellido:",
     "isRestaurant": "Usaré esta cuenta para un restaurante.",
-    "redirectionToLogin": "¿Ya tienes cuenta?",
+    "redirectionToLogin": "¿Ya tienes cuenta? ",
     "passwordsDoNotMatch": "Las contraseñas no coinciden.",
     "firstNameEmpty": "El nombre es obligatorio",
     "firstNameTooLong": "El nombre es demasiado largo",
@@ -63,7 +63,8 @@
     "logout": "Cerrar sesión",
     "myReservations": "Mis reservas",
     "myRestaurant": "Mi restaurante",
-    "myReviews": "Mis reseñas"
+    "myReviews": "Mis reseñas",
+    "myFavorites": "Mis favoritos"
   },
   "Parallax": {
     "dontKnow": "¿No sabés qué comer?",
@@ -95,7 +96,17 @@
   },
   "Reviews": {
     "prompt": "Deja una reseña",
-    "title": "Reseñas"
+    "title": "Reseñas",
+    "empty": "Todavia nadie dejo una reseña."
+  },
+  "Review": {
+    "create": {
+      "title": "¡Deja una reseña!",
+      "header": "Cuantas estrellas le pondrias al restaurant?",
+      "review": "¡Contanos un poco mas de tu experiencia!"
+    },
+    "submit": "Publica tu reseña",
+    "cancel": "Cancelar"
   },
   "Restaurant": {
     "opening-hours": "Abre a las:",
@@ -144,6 +155,19 @@
     "invalidPassword": "Contraseña inválida. Debe contener al menos 8 caracteres, incluyendo números y mayúsculas",
     "passwordMismatch": "Las contraseñas no coincied"
   },
+  "Register-restaurant": {
+    "shifts": "Horarios",
+    "title": "¡Registra tu restaurante!",
+    "header": "Completa estos datos",
+    "name": "Nombre",
+    "email": "Mail de tu restaurante",
+    "detail": "Descripcion",
+    "categories": "Categorias"
+
+  },
+  "MapSearch": {
+    "location": "Ingresa la ubicacion de tu restaurante"
+  },
   "Recovery": {
     "title": "Recupera tu contraseña",
     "mailSent": "¡Mail enviado!",
@@ -170,6 +194,7 @@
     "continue": "Continuar"
   },
   "Favorite": {
-    "error": "No pudimos marcarlo como favorito. Vuelve a intentar"
+    "error": "No pudimos marcarlo como favorito. Vuelve a intentar",
+    "title": "Mis favoritos"
   }
 }

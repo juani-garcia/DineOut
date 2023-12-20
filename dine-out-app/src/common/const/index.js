@@ -10,7 +10,8 @@ export const localPaths = {
   RESTAURANTS: '/restaurant',
   RESERVATION: '/reservation',
   REVIEWS: '/review',
-  RESERVE: '/reserve'
+  RESERVE: '/reserve',
+  FAVORITES: '/favorite'
 }
 
 export const roles = {
