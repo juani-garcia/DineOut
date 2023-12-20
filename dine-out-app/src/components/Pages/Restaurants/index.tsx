@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import RestaurantCard from '@/components/Elements/RestaurantCard'
 import { MyContainer } from '@/components/Elements/utils/styles'
 import SearchBox from '@/components/Elements/SearchBox'
 import { useRestaurants } from '@/hooks/Restaurants/useRestaurants'
 import type Restaurant from '@/types/models/Restaurant'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Button, CircularProgress, Pagination } from '@mui/material'
-import {
-  NoRestaurantsContainer,
-  NoRestaurantsText,
-  RestaurantCardsContainer
-} from '@/components/Pages/Restaurants/styles'
-import RestaurantsMap from '@/components/Elements/RestaurantsMap'
+import { CircularProgress } from '@mui/material'
 import CustomGMapScriptLoad from '@/components/Elements/CustomGMapScriptLoad/CustomGMapScriptLoad'
 import Error from '@/components/Pages/Error'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { DineOutHeaders } from '@/common/const'
 import { HttpStatusCode } from 'axios'
+import RestaurantCardLayout from '@/components/Elements/RestaurantCardLayout'
 
 function Restaurants (): JSX.Element {
   const { t } = useTranslation()
@@ -25,15 +19,9 @@ function Restaurants (): JSX.Element {
   const [restaurantList, setRestaurantList] = useState<Restaurant[]>([])
   const [queryParams, setQueryParams] = useSearchParams()
   const [totalPages, setTotalPages] = useState(1)
-  const [useMap, setUseMap] = useState(JSON.parse(localStorage.getItem('useMap') ?? 'false') as boolean)
   const navigate = useNavigate()
   const [error, setError] = useState<number | null>(null)
   const { enqueueSnackbar } = useSnackbar()
-
-  const toggleMap = (): void => {
-    localStorage.setItem('useMap', JSON.stringify(!useMap))
-    setUseMap(!useMap)
-  }
 
   useEffect(() => {
     restaurants(queryParams).then((response) => {
@@ -78,64 +66,14 @@ function Restaurants (): JSX.Element {
             <CustomGMapScriptLoad>
                 {isLoading
                   ? (
-                        <CircularProgress color="secondary" size="100px"/>
+                    <CircularProgress color="secondary" size="100px"/>
                     )
                   : (
-                      restaurantList.length === 0
-                        ? (
-                                <NoRestaurantsContainer>
-                                    <NoRestaurantsText>
-                                        No encontramos ningún restaurante
-                                    </NoRestaurantsText>
-                                </NoRestaurantsContainer>
-                          )
-                        : (
-                                <>
-                                    <Button onClick={toggleMap}>Toggle map</Button>
-                                    {
-                                        useMap
-                                          ? (
-                                                <>
-                                                    <div style={{ marginTop: '30px' }}/>
-                                                    <RestaurantsMap restaurantList={restaurantList}/>
-                                                    <div style={{ marginBottom: '30px' }}/>
-                                                </>
-                                            )
-                                          : (
-                                                <RestaurantCardsContainer>
-                                                    {
-                                                        restaurantList.map((restaurant: Restaurant) => (
-                                                            <RestaurantCard key={restaurant.self} restaurant={restaurant}/>
-                                                        ))
-                                                    }
-                                                </RestaurantCardsContainer>
-                                            )
-                                    }
-                                    {
-                                        totalPages > 1
-                                          ? (
-                                                <Pagination
-                                                    count={totalPages}
-                                                    page={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
-                                                    onChange={handlePageChange}
-                                                    size="large"
-                                                    showFirstButton
-                                                    showLastButton
-                                                    siblingCount={3}
-                                                    boundaryCount={3}
-                                                    sx={{
-                                                      '& .MuiPaginationItem-root': {
-                                                        color: '#FFFFFF'
-                                                      }
-                                                    }}
-                                                />
-                                            )
-                                          : (
-                                                <></>
-                                            )
-                                    }
-                                </>
-                          )
+                      <RestaurantCardLayout
+                        restaurantList={restaurantList}
+                        totalPages={totalPages}
+                        currentPage={Number((queryParams.get('page') !== '') ? queryParams.get('page') : 1)}
+                        pageChangeCallback={handlePageChange} />
                     )
                 }
             </CustomGMapScriptLoad>
