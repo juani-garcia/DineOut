@@ -52,7 +52,8 @@
     "logout": "Log out",
     "myReservations": "My reservations",
     "myRestaurant": "My restaurant",
-    "myReviews": "My reviews"
+    "myReviews": "My reviews",
+    "myFavorites": "My favorites"
   },
   "SearchBox": {
     "search": "Search",
@@ -225,6 +226,7 @@
     "continue": "Continue"
   },
   "Favorite": {
-    "error": "Could not mark as favorite. Please try again"
+    "error": "Could not mark as favorite. Please try again",
+    "title": "My favorites"
   }
 }
