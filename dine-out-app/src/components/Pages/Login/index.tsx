@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MyContainer, Title } from '@/components/Elements/utils/styles'
 import { useTranslation } from 'react-i18next'
 import { LinkTo, LoginForm, LoginWhiteBoxContainer, RedirectionFooter } from './styles'
-import { Button, FormControl, TextField } from '@mui/material'
+import { Button, Checkbox, FormControl, FormControlLabel, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -33,6 +33,7 @@ function Login (): JSX.Element {
   const location = useLocation()
   const { user } = useAuth()
   const { enqueueSnackbar } = useSnackbar()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   if (user !== null) navigate(-1)
 
@@ -79,12 +80,20 @@ function Login (): JSX.Element {
                         />
                         <TextField
                             label={t('password')}
-                            type="password"
+                            type={ showPassword ? 'text' : 'password' }
                             fullWidth
                             margin="normal"
                             {...control.register('password')}
                             variant="standard"
                             helperText={errors?.password?.message?.toString()}
+                        />
+                        <FormControlLabel
+                          control={<Checkbox
+                            checked={showPassword}
+                            color="secondary"
+                            onChange={() => { setShowPassword(!showPassword) }}
+                          />}
+                          label={t('Recovery.showPassword')}
                         />
                         <Button type="submit" variant="contained" color="primary">
                             {t('login')}
