@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import { useMenuItems } from '@/hooks/Restaurants/useMenuItems'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import useImage from '@/hooks/Images/useImage'
+import { CardImage } from '@/components/Elements/MenuItem/styles'
 
 interface MenuItemProps {
   menuItem: MenuItem
@@ -79,15 +80,16 @@ export default function MenuItemComponent ({ menuItem, editable = false, first =
 
   return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Stack>
-              {(imagePreview !== undefined) && <img style={{ flex: 1 }} src={imagePreview} alt={menuItem.name}/>}
+            <Stack direction='row'
+                   justifyContent='center'
+                   alignItems='center'
+                   width='25%'
+                   height='100%'
+            >
               {editable && (
-                <Stack direction='row'
-                  justifyContent='flex-start'
-                  alignItems='center'
-                >
+                  <>
                   <Input
-                    style={{ display: 'hidden', visibility: 'collapse', width: '39px' }}
+                    style={{ display: 'hidden', visibility: 'collapse', width: '5%' }}
                     type='file'
                     name='image'
                     inputRef={fileInputRef}
@@ -95,7 +97,7 @@ export default function MenuItemComponent ({ menuItem, editable = false, first =
                     endAdornment={(
                       <>
                           <IconButton
-                            style={{ display: 'block', visibility: 'visible' }}
+                            style={{ display: 'block', visibility: 'visible', marginTop: '40px' }}
                             onClick={() => fileInputRef.current?.click()}
                             color="secondary"
                             aria-label="delete"
@@ -105,13 +107,14 @@ export default function MenuItemComponent ({ menuItem, editable = false, first =
                       </>
                     )}
                   />
-                  <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete">
+                  <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete" style={{ marginTop: '30px' }}>
                     <DeleteIcon/>
                   </IconButton>
-                </Stack>
+                </>
               )}
+              {(imagePreview !== undefined) && <CardImage src={imagePreview} alt={menuItem.name}/>}
             </Stack>
-            <div style={{ flex: 10, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 10, display: 'flex', flexDirection: 'column', width: '50%' }}>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <h3>{menuItem.name}</h3>
                     <p>$ {menuItem.price.toFixed(2)}</p>

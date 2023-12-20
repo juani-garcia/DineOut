@@ -3,7 +3,7 @@ import { useState } from 'react'
 import axios, { type AxiosResponse, HttpStatusCode } from 'axios'
 import type MethodRequestType from '@/types/MethodRequestType'
 import { useNavigate } from 'react-router-dom'
-import { DineOutHeaders } from '@/common/const'
+import { DineOutHeaders } from '../../common/const'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useMethod = () => {
