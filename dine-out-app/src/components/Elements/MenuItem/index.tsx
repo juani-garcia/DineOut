@@ -107,9 +107,9 @@ export default function MenuItemComponent ({ menuItem, editable = false, first =
                       </>
                     )}
                   />
-                  <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete" style={{ marginTop: '30px' }}>
-                    <DeleteIcon/>
-                  </IconButton>
+                    {(imagePreview !== undefined) && <IconButton onClick={handleDeleteImage} color="secondary" aria-label="delete" style={{ marginTop: '30px' }}>
+                      <DeleteIcon/>
+                    </IconButton>}
                 </>
               )}
               {(imagePreview !== undefined) && <CardImage src={imagePreview} alt={menuItem.name}/>}
