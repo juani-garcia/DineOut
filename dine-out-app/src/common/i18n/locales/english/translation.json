@@ -138,11 +138,16 @@
       "review": "Let other people know your experience!"
     },
     "submit": "Publish your review",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirmDelete": "Are you sure you want to delete the review?",
+    "deleteSuccessful": "Review deleted"
   },
   "Restaurant": {
     "opening-hours": "Opens:",
     "exploreRestaurants": "Explore new restaurants!"
+  },
+  "Restaurants": {
+    "noRestaurants": "No restaurants"
   },
   "MenuSection": {
     "empty": "This section has no items",

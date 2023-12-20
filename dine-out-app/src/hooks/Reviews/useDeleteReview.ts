@@ -6,7 +6,7 @@ import { HttpMethod } from '@/types/enums/HTTPMethod'
 export function useDeleteReview () {
   const { isLoading, requestMethod } = useMethod()
 
-  async function deleteReview (reservation: string, restaurantId: number, rating: number, review: string): Promise<AxiosResponse> {
+  async function deleteReview (reservation: string): Promise<AxiosResponse> {
     return await requestMethod({
       method: HttpMethod.DELETE,
       url: reservation

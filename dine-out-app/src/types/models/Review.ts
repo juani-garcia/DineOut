@@ -7,4 +7,5 @@ export default interface Review {
   restaurant: string
   user: string
   restaurantObj: Restaurant
+  self: string
 }

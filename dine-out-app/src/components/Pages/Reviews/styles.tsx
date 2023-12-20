@@ -1,5 +1,25 @@
 import styled from 'styled-components'
 
+export const ReviewContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  width: 90%;
+  margin: 0 auto;
+`
+
+export const ReviewColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  width: 90%;
+  margin: 0 auto;
+`
+
 export const ReservationMainContainer = styled.div`
   display: flex;
   flex-direction: column;
