@@ -74,7 +74,11 @@ function Navbar (): JSX.Element {
                                 </ListItem>
                             )
                           : (
-                                <></>
+                              <ListItem>
+                                <Button as={Link} to={localPaths.FAVORITES}>
+                                  {t('Navbar.myFavorites')}
+                                </Button>
+                              </ListItem>
                             )
                         }
                         <ListItem><LogoutButton onClick={() => {
