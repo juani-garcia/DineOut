@@ -30,6 +30,7 @@ public class UserForm {
     @NotNull
     private String confirmPassword;
 
+    @NotNull
     private Boolean isRestaurant = false;
 
     public String getUsername() {

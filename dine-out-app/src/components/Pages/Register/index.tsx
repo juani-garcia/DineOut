@@ -26,7 +26,7 @@ function Register (): JSX.Element {
       .max(64, t('Register.lastNameTooLing').toString()),
     username: z.string()
       .email(t('Register.invalidUsername').toString())
-      .max(64, t('Reguster.usernameTooLong').toString()),
+      .max(64, t('Register.usernameTooLong').toString()),
     password: z.string()
       .min(1, t('Register.passwordEmpty').toString())
       .max(64, t('Register.passwordTooLong').toString())
