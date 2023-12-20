@@ -65,10 +65,10 @@ public class MenuSectionController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{menuSectionId}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response readMenuSection(
-            @PathParam("id") final long menuSectionId
+            @PathParam("menuSectionId") final long menuSectionId
     ) {
         Optional<MenuSectionDTO> maybeMenuSection = mss.getById(menuSectionId).map(ms -> MenuSectionDTO.fromMenuSection(uriInfo, ms));
         if (! maybeMenuSection.isPresent()) {
@@ -78,12 +78,12 @@ public class MenuSectionController {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{menuSectionId}")
     @Consumes({MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @PreAuthorize("@securityManager.isMenuSectionOwnerOfId(authentication, #menuSectionId)")
     public Response updateMenuSection(
             @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuSectionId,
+            @PathParam("menuSectionId") final long menuSectionId,
             @Valid final MenuSectionUpdateForm menuSectionForm
     ) {
         mss.update(menuSectionId,
@@ -93,11 +93,11 @@ public class MenuSectionController {
     }
 
     @DELETE
-    @Path("/{id}")
-    @PreAuthorize("@securityManager.isRestaurantOwnerOfId(authentication, #restaurantId)")
+    @Path("/{menuSectionId}")
+    @PreAuthorize("@securityManager.isMenuSectionOwnerOfId(authentication, #menuSectionId)")
     public Response deleteMenuSection(
             @PathParam("restaurantId") final long restaurantId,
-            @PathParam("id") final long menuSectionId
+            @PathParam("menuSectionId") final long menuSectionId
     ) {
         mss.delete(menuSectionId);
         return Response.noContent().build();
